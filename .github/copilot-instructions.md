@@ -53,6 +53,15 @@ This file documents the project's history, architectural decisions, and coding s
 - **Implementation**: If a download results in an empty file (0 bytes) or fails, the script must clean up (delete) the partial/empty file and exit with a non-zero status code.
 - **Logging**: Use standard `logging` library. Format is simplified to `%(levelname)s: %(message)s`.
 
+### 6. Testing Strategy
+- **Framework**: `pytest` with `pytest-mock` and `pytest-cov`.
+- **Structure**: 4-Level Testing Strategy.
+    1.  **Unit**: Logic isolation (e.g., ID extraction). Fast, no I/O.
+    2.  **CLI**: Argument parsing and help output.
+    3.  **Integration**: Mocked network requests. Verifies file handling and flow without internet.
+    4.  **Live**: Real E2E tests against Web Stores. Marked with `@pytest.mark.live`.
+- **Execution**: `make test` (Levels 1-3), `make test-live` (Level 4).
+
 ## Development Workflow
 - **Setup**: `make setup` (creates venv, installs package in editable mode `pip install -e .`).
 - **Run**: `fext download <browser> <url>` or `fext search firefox <query>`.
