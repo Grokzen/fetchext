@@ -8,37 +8,37 @@ This repository is an experiment in **100% Vibe Coding** - all code is generated
 
 ### 🧪 Experimental Setup
 
-*   **IDE**: VSCode Insider program (required for Agent integration) 💻
-*   **AI Model**: Gemini 2.0 Flash or Grok 3 Beta (exclusively) 🧠
-*   **Approach**: Zero manual intervention - all development is Agent-driven ⚡
+* **IDE**: VSCode Insider program (required for Agent integration) 💻
+* **AI Model**: Gemini 2.0 Flash or Grok 3 Beta (exclusively) 🧠
+* **Approach**: Zero manual intervention - all development is Agent-driven ⚡
 
 ### 📜 100% Vibe Coding Policy
 
 This project serves as a proof-of-concept for fully automated software development:
 
-*   **No Manual Code**: All code changes must be produced by the Agent. 🚫✋
-*   **Rejection Criteria**: Manual submissions or changes from other AI models will be rejected. ❌
-*   **Quality Control**: The Agent maintains consistent coding standards and patterns. ✅
-*   **Evolution**: The codebase grows and adapts through iterative Agent interactions. 🌱
+* **No Manual Code**: All code changes must be produced by the Agent. 🚫✋
+* **Rejection Criteria**: Manual submissions or changes from other AI models will be rejected. ❌
+* **Quality Control**: The Agent maintains consistent coding standards and patterns. ✅
+* **Evolution**: The codebase grows and adapts through iterative Agent interactions. 🌱
 
 ### 📝 Submission Guidelines
 
 To participate in this experiment:
 
-*   Use only VSCode Insider with Gemini 2.0 Flash or Grok 3 Beta for any interactions.
-*   Allow the Agent to handle all code modifications.
-*   Manual pull requests will be declined to preserve the purity of the experiment.
-*   Report issues or request features through Agent-mediated channels. 🗣️
+* Use only VSCode Insider with Gemini 2.0 Flash or Grok 3 Beta for any interactions.
+* Allow the Agent to handle all code modifications.
+* Manual pull requests will be declined to preserve the purity of the experiment.
+* Report issues or request features through Agent-mediated channels. 🗣️
 
 This repository demonstrates the potential of fully automated development workflows while maintaining high code quality and consistency.
 
 ## 📋 Requirements
 
-*   Python 3.11 or higher 🐍
+* Python 3.11 or higher 🐍
 
 ## 🛠️ Setup
 
-1.  **Create a virtual environment and install the package:**
+1. **Create a virtual environment and install the package:**
 
     ```bash
     make setup
@@ -52,8 +52,8 @@ The CLI requires two arguments: the browser type and the extension URL.
 fext <browser> <url>
 ```
 
-*   **browser**: `chrome` (or `c`), `edge` (or `e`), `firefox` (or `f`) 🌐
-*   **url**: The URL of the extension in the respective web store. 🔗
+* **browser**: `chrome` (or `c`), `edge` (or `e`), `firefox` (or `f`) 🌐
+* **url**: The URL of the extension in the respective web store. 🔗
 
 ### 💡 Examples
 
@@ -150,9 +150,9 @@ make build
 
 A `Makefile` is provided for convenience:
 
-*   `make setup`: Create virtual environment and install dependencies (including build tools).
-*   `make run`: Run the script.
-*   `make lint`: Run linting checks.
-*   `make format`: Format the code.
-*   `make build`: Build the package.
-*   `make clean`: Remove temporary files, virtual environment, and build artifacts. 🗑️
+* `make setup`: Create virtual environment and install dependencies (including build tools).
+* `make run`: Run the script.
+* `make lint`: Run linting checks.
+* `make format`: Format the code.
+* `make build`: Build the package.
+* `make clean`: Remove temporary files, virtual environment, and build artifacts. 🗑️
