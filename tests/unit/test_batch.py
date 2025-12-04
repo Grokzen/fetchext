@@ -41,7 +41,8 @@ class TestBatchProcessor:
             processor._process_line("chrome abc", tmp_path)
             
             mock_instance.extract_id.assert_called_with("abc")
-            mock_instance.download.assert_called_with("abc", tmp_path)
+            # Verify show_progress=False is passed
+            mock_instance.download.assert_called_with("abc", tmp_path, show_progress=False)
 
     def test_process_line_invalid_format(self, tmp_path, caplog):
         processor = BatchProcessor()

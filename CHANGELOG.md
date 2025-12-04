@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Progress Bars**: Integrated `tqdm` to display progress bars for file downloads and batch processing.
+- **Dependencies**: Added `tqdm` to `pyproject.toml` and `requirements-dev.txt`.
 - **Parallel Batch Downloading**: `fext batch` now supports downloading multiple extensions simultaneously.
 - **CLI Argument**: Added `-w` / `--workers` flag to `fext batch` to control the number of concurrent downloads (default: 4).
 - **Makefile Target**: Added `make test-batch-cli` for smoke testing batch downloads without pytest.
@@ -16,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Batch Processing**: Updated `BatchProcessor` to show a main "Batch Progress" bar and disable individual file download bars during batch operations.
+- **Downloaders**: Updated `ChromeDownloader`, `EdgeDownloader`, and `FirefoxDownloader` to support an optional `show_progress` argument.
 - **Performance**: Refactored `BatchProcessor` to use `concurrent.futures.ThreadPoolExecutor` for improved speed when processing large batch files.
 - **Documentation**: Updated `README.md` and `ROADMAP.md` to reflect parallel batch capabilities.
 

@@ -1,6 +1,7 @@
 import logging
 import concurrent.futures
 from pathlib import Path
+from tqdm import tqdm
 from .downloaders import ChromeDownloader, EdgeDownloader, FirefoxDownloader
 
 logger = logging.getLogger(__name__)
@@ -32,12 +33,15 @@ class BatchProcessor:
                 for line in valid_lines
             ]
             
-            # Wait for all tasks to complete
-            for future in concurrent.futures.as_completed(futures):
-                try:
-                    future.result()
-                except Exception as e:
-                    logger.error(f"Unexpected error in worker thread: {e}")
+            # Wait for all tasks to complete with a progress bar
+            with tqdm(total=len(futures), desc="Batch Progress", unit="ext") as pbar:
+                for future in concurrent.futures.as_completed(futures):
+                    try:
+                        future.result()
+                    except Exception as e:
+                        logger.error(f"Unexpected error in worker thread: {e}")
+                    finally:
+                        pbar.update(1)
 
     def _process_line(self, line, output_dir):
         # Format: <browser> <url_or_id>
@@ -63,6 +67,7 @@ class BatchProcessor:
         try:
             extension_id = downloader.extract_id(url_or_id)
             logger.info(f"Batch: Downloading {browser} extension {extension_id}...")
-            downloader.download(extension_id, output_dir)
+            # Disable individual progress bars in batch mode
+            downloader.download(extension_id, output_dir, show_progress=False)
         except Exception as e:
             logger.error(f"Error downloading {browser} extension '{url_or_id}': {e}")

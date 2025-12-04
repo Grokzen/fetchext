@@ -19,7 +19,7 @@ class TestBatchParallelism:
             mock_instance = MockDownloader.return_value
             mock_instance.extract_id.side_effect = lambda x: x # Return ID as is
             
-            def slow_download(id, output_dir):
+            def slow_download(id, output_dir, show_progress=True):
                 time.sleep(1.0)
                 
             mock_instance.download.side_effect = slow_download

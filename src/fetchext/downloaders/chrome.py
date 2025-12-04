@@ -2,6 +2,7 @@ import re
 import logging
 import requests
 from urllib.parse import urlparse
+from tqdm import tqdm
 from .base import BaseDownloader
 
 logger = logging.getLogger(__name__)
@@ -22,7 +23,7 @@ class ChromeDownloader(BaseDownloader):
 
         raise ValueError("Could not extract extension ID from Chrome Web Store URL")
 
-    def download(self, extension_id, output_dir):
+    def download(self, extension_id, output_dir, show_progress=True):
         download_url = (
             f"https://clients2.google.com/service/update2/crx"
             f"?response=redirect&prodversion=131.0&acceptformat=crx2,crx3&x=id%3D{extension_id}%26uc"
@@ -42,10 +43,24 @@ class ChromeDownloader(BaseDownloader):
                     filename = filenames[0]
 
             output_path = output_dir / filename
+            total_size = int(response.headers.get('content-length', 0))
 
             with output_path.open("wb") as f:
-                for chunk in response.iter_content(chunk_size=8192):
-                    f.write(chunk)
+                if show_progress:
+                    with tqdm(
+                        total=total_size,
+                        unit='B',
+                        unit_scale=True,
+                        unit_divisor=1024,
+                        desc=filename,
+                        leave=False
+                    ) as bar:
+                        for chunk in response.iter_content(chunk_size=8192):
+                            f.write(chunk)
+                            bar.update(len(chunk))
+                else:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        f.write(chunk)
 
             if not output_path.exists() or output_path.stat().st_size == 0:
                 if output_path.exists():

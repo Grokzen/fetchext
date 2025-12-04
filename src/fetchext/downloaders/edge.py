@@ -2,6 +2,7 @@ import re
 import logging
 import requests
 from urllib.parse import urlparse
+from tqdm import tqdm
 from .base import BaseDownloader
 
 logger = logging.getLogger(__name__)
@@ -24,7 +25,7 @@ class EdgeDownloader(BaseDownloader):
 
         raise ValueError("Could not extract extension ID from Edge Add-ons URL")
 
-    def download(self, extension_id, output_dir):
+    def download(self, extension_id, output_dir, show_progress=True):
         # Edge uses a similar update protocol to Chrome
         download_url = (
             f"https://edge.microsoft.com/extensionwebstorebase/v1/crx"
@@ -45,10 +46,24 @@ class EdgeDownloader(BaseDownloader):
                     filename = filenames[0]
 
             output_path = output_dir / filename
+            total_size = int(response.headers.get('content-length', 0))
 
             with output_path.open("wb") as f:
-                for chunk in response.iter_content(chunk_size=8192):
-                    f.write(chunk)
+                if show_progress:
+                    with tqdm(
+                        total=total_size,
+                        unit='B',
+                        unit_scale=True,
+                        unit_divisor=1024,
+                        desc=filename,
+                        leave=False
+                    ) as bar:
+                        for chunk in response.iter_content(chunk_size=8192):
+                            f.write(chunk)
+                            bar.update(len(chunk))
+                else:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        f.write(chunk)
 
             if not output_path.exists() or output_path.stat().st_size == 0:
                 if output_path.exists():

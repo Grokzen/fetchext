@@ -7,6 +7,6 @@ class BaseDownloader(ABC):
         pass
 
     @abstractmethod
-    def download(self, extension_id, output_dir):
+    def download(self, extension_id, output_dir, show_progress=True):
         """Download the extension and return the file path."""
         pass

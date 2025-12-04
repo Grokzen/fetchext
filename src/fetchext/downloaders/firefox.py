@@ -2,6 +2,7 @@ import logging
 import requests
 from pathlib import Path
 from urllib.parse import urlparse
+from tqdm import tqdm
 from .base import BaseDownloader
 
 logger = logging.getLogger(__name__)
@@ -22,7 +23,7 @@ class FirefoxDownloader(BaseDownloader):
 
         raise ValueError("Could not extract extension slug from Firefox Add-ons URL")
 
-    def download(self, extension_id, output_dir):
+    def download(self, extension_id, output_dir, show_progress=True):
         # Use AMO API to get the download URL
         # extension_id here is the slug (e.g., 'ublock-origin')
         api_url = f"https://addons.mozilla.org/api/v5/addons/addon/{extension_id}/"
@@ -49,10 +50,24 @@ class FirefoxDownloader(BaseDownloader):
             response.raise_for_status()
 
             output_path = output_dir / filename
+            total_size = int(response.headers.get('content-length', 0))
 
             with output_path.open("wb") as f:
-                for chunk in response.iter_content(chunk_size=8192):
-                    f.write(chunk)
+                if show_progress:
+                    with tqdm(
+                        total=total_size,
+                        unit='B',
+                        unit_scale=True,
+                        unit_divisor=1024,
+                        desc=filename,
+                        leave=False
+                    ) as bar:
+                        for chunk in response.iter_content(chunk_size=8192):
+                            f.write(chunk)
+                            bar.update(len(chunk))
+                else:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        f.write(chunk)
 
             if not output_path.exists() or output_path.stat().st_size == 0:
                 if output_path.exists():

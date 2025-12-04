@@ -2,7 +2,7 @@
 
 ## 🎨 UX Polish
 
-- [ ] **Progress Bars**: Integrate `tqdm` to show download progress, especially for large extensions.
+- [x] **Progress Bars**: Integrate `tqdm` to show download progress, especially for large extensions.
 - [ ] **Rich Output**: Use the `rich` library to format the `inspect` command output (tables, colors) and general CLI logs.
 
 ## ⚡ Performance
