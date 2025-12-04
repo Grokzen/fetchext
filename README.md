@@ -1,42 +1,42 @@
-# fetchext
+# 📦 fetchext
 
-A Python CLI tool to download browser extensions (Chrome, Edge, Firefox).
+A Python CLI tool to download browser extensions (Chrome, Edge, Firefox) directly from their web stores. 🚀
 
-## Development and Agent Tooling
+## 🤖 Development and Agent Tooling
 
-This repository is an experiment in **100% Vibe Coding** - all code is generated, maintained, and evolved exclusively through Agent tooling. No manual coding is permitted.
+This repository is an experiment in **100% Vibe Coding** - all code is generated, maintained, and evolved exclusively through Agent tooling. No manual coding is permitted. ✨
 
-### Experimental Setup
+### 🧪 Experimental Setup
 
-*   **IDE**: VSCode Insider program (required for Agent integration)
-*   **AI Model**: Gemini 2.0 Flash or Grok 3 Beta (exclusively)
-*   **Approach**: Zero manual intervention - all development is Agent-driven
+*   **IDE**: VSCode Insider program (required for Agent integration) 💻
+*   **AI Model**: Gemini 2.0 Flash or Grok 3 Beta (exclusively) 🧠
+*   **Approach**: Zero manual intervention - all development is Agent-driven ⚡
 
-### 100% Vibe Coding Policy
+### 📜 100% Vibe Coding Policy
 
 This project serves as a proof-of-concept for fully automated software development:
 
-*   **No Manual Code**: All code changes must be produced by the Agent.
-*   **Rejection Criteria**: Manual submissions or changes from other AI models will be rejected.
-*   **Quality Control**: The Agent maintains consistent coding standards and patterns.
-*   **Evolution**: The codebase grows and adapts through iterative Agent interactions.
+*   **No Manual Code**: All code changes must be produced by the Agent. 🚫✋
+*   **Rejection Criteria**: Manual submissions or changes from other AI models will be rejected. ❌
+*   **Quality Control**: The Agent maintains consistent coding standards and patterns. ✅
+*   **Evolution**: The codebase grows and adapts through iterative Agent interactions. 🌱
 
-### Submission Guidelines
+### 📝 Submission Guidelines
 
 To participate in this experiment:
 
 *   Use only VSCode Insider with Gemini 2.0 Flash or Grok 3 Beta for any interactions.
 *   Allow the Agent to handle all code modifications.
 *   Manual pull requests will be declined to preserve the purity of the experiment.
-*   Report issues or request features through Agent-mediated channels.
+*   Report issues or request features through Agent-mediated channels. 🗣️
 
 This repository demonstrates the potential of fully automated development workflows while maintaining high code quality and consistency.
 
-## Requirements
+## 📋 Requirements
 
-*   Python 3.11 or higher
+*   Python 3.11 or higher 🐍
 
-## Setup
+## 🛠️ Setup
 
 1.  **Create a virtual environment and install the package:**
 
@@ -44,7 +44,7 @@ This repository demonstrates the potential of fully automated development workfl
     make setup
     ```
 
-## Usage
+## 🚀 Usage
 
 The CLI requires two arguments: the browser type and the extension URL.
 
@@ -52,12 +52,12 @@ The CLI requires two arguments: the browser type and the extension URL.
 fext <browser> <url>
 ```
 
-*   **browser**: `chrome` (or `c`), `edge` (or `e`), `firefox` (or `f`)
-*   **url**: The URL of the extension in the respective web store.
+*   **browser**: `chrome` (or `c`), `edge` (or `e`), `firefox` (or `f`) 🌐
+*   **url**: The URL of the extension in the respective web store. 🔗
 
-### Examples
+### 💡 Examples
 
-**Chrome:**
+**Chrome:** 🌈
 
 ```bash
 fext chrome https://chromewebstore.google.com/detail/ublock-origin-lite/ddkjiahejlhfcafbddmgiahcphecmpfh
@@ -65,21 +65,21 @@ fext chrome https://chromewebstore.google.com/detail/ublock-origin-lite/ddkjiahe
 fext c https://chromewebstore.google.com/detail/ublock-origin-lite/ddkjiahejlhfcafbddmgiahcphecmpfh
 ```
 
-**Edge:**
+**Edge:** 🌊
 
 ```bash
 fext edge https://microsoftedge.microsoft.com/addons/detail/ublock-origin/odfafepnkmbhccpbejgmiehpchacaeak
 ```
 
-**Firefox:**
+**Firefox:** 🦊
 
 ```bash
 fext firefox https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/
 ```
 
-The extension will be downloaded to the current directory.
+The extension will be downloaded to the current directory. 📥
 
-### Inspecting Extensions
+### 🔍 Inspecting Extensions
 
 You can inspect the metadata (manifest) of a downloaded extension file (`.crx` or `.xpi`) using the `inspect` command.
 
@@ -93,9 +93,9 @@ fext inspect <path_to_file>
 fext inspect ublock-origin.crx
 ```
 
-This will print details like Name, Version, Description, and Permissions.
+This will print details like Name, Version, Description, and Permissions. 📄
 
-### Batch Downloading
+### 📦 Batch Downloading
 
 You can download multiple extensions at once using a batch file.
 
@@ -120,9 +120,9 @@ firefox https://addons.mozilla.org/en-US/firefox/addon/postman_interceptor/
 fext batch my_extensions.txt -o downloads/
 ```
 
-## Development
+## 💻 Development
 
-### Linting and Formatting
+### 🧹 Linting and Formatting
 
 This project uses [Ruff](https://github.com/astral-sh/ruff) for linting and formatting.
 
@@ -138,7 +138,7 @@ To format the code:
 make format
 ```
 
-### Building the Package
+### 🏗️ Building the Package
 
 To build the package for distribution (creates `dist/` directory with wheel and sdist):
 
@@ -146,7 +146,7 @@ To build the package for distribution (creates `dist/` directory with wheel and 
 make build
 ```
 
-### Makefile
+### ⚙️ Makefile
 
 A `Makefile` is provided for convenience:
 
@@ -155,4 +155,4 @@ A `Makefile` is provided for convenience:
 *   `make lint`: Run linting checks.
 *   `make format`: Format the code.
 *   `make build`: Build the package.
-*   `make clean`: Remove temporary files, virtual environment, and build artifacts.
+*   `make clean`: Remove temporary files, virtual environment, and build artifacts. 🗑️
