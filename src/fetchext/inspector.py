@@ -2,6 +2,8 @@ import json
 import zipfile
 import logging
 from pathlib import Path
+from rich.table import Table
+from .console import console
 
 logger = logging.getLogger(__name__)
 
@@ -53,22 +55,23 @@ class ExtensionInspector:
                 raise ValueError("Could not parse file as extension archive")
 
     def _print_manifest_details(self, manifest):
-        print("Extension Details:")
-        print(f"  Name: {manifest.get('name', 'N/A')}")
-        print(f"  Version: {manifest.get('version', 'N/A')}")
-        print(f"  Manifest Version: {manifest.get('manifest_version', 'N/A')}")
-        print(f"  Description: {manifest.get('description', 'N/A')}")
-        
+        table = Table(title="Extension Details", show_header=True, header_style="bold magenta")
+        table.add_column("Field", style="cyan", no_wrap=True)
+        table.add_column("Value", style="green")
+
+        table.add_row("Name", manifest.get('name', 'N/A'))
+        table.add_row("Version", manifest.get('version', 'N/A'))
+        table.add_row("Manifest Version", str(manifest.get('manifest_version', 'N/A')))
+        table.add_row("Description", manifest.get('description', 'N/A'))
+
         permissions = manifest.get('permissions', [])
         if permissions:
-            print("  Permissions:")
-            for p in permissions:
-                print(f"    - {p}")
+            table.add_row("Permissions", "\n".join(f"- {p}" for p in permissions))
         else:
-            print("  Permissions: None")
-        
+            table.add_row("Permissions", "None")
+
         host_permissions = manifest.get('host_permissions', [])
         if host_permissions:
-            print("  Host Permissions:")
-            for p in host_permissions:
-                print(f"    - {p}")
+            table.add_row("Host Permissions", "\n".join(f"- {p}" for p in host_permissions))
+        
+        console.print(table)

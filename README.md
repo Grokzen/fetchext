@@ -79,7 +79,34 @@ fext firefox https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/
 
 The extension will be downloaded to the current directory. 📥
 
-### 🔍 Inspecting Extensions
+### � Searching Extensions
+
+You can search for extensions directly from the CLI (currently supports Firefox).
+
+```bash
+fext search firefox <query>
+```
+
+**Example Output:**
+
+```bash
+$ fext search firefox ublock
+
+[15:59:23] INFO     Starting fetchext...
+                                                                  Search Results for 'ublock'
+┏━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Name                   ┃ Slug                ┃ GUID                                   ┃ URL                                                                 ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ uBlock Origin          │ ublock-origin       │ uBlock0@raymondhill.net                │ https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/       │
+│ Block Site             │ block-website       │ {54e2eb33-18eb-46ad-a4e4-1329c29f6e17} │ https://addons.mozilla.org/en-US/firefox/addon/block-website/       │
+│ AdGuard AdBlocker      │ adguard-adblocker   │ adguardadblocker@adguard.com           │ https://addons.mozilla.org/en-US/firefox/addon/adguard-adblocker/   │
+│ LeechBlock NG          │ leechblock-ng       │ leechblockng@proginosko.com            │ https://addons.mozilla.org/en-US/firefox/addon/leechblock-ng/       │
+│ AdBlocker for YouTube™ │ adblock-for-youtube │ jid1-q4sG8pYhq8KGHs@jetpack            │ https://addons.mozilla.org/en-US/firefox/addon/adblock-for-youtube/ │
+└────────────────────────┴─────────────────────┴────────────────────────────────────────┴─────────────────────────────────────────────────────────────────────┘
+[15:59:24] INFO     Script finished successfully.
+```
+
+### �🔍 Inspecting Extensions
 
 You can inspect the metadata (manifest) of a downloaded extension file (`.crx` or `.xpi`) using the `inspect` command.
 

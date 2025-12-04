@@ -2,7 +2,9 @@ import logging
 import requests
 from pathlib import Path
 from urllib.parse import urlparse
-from tqdm import tqdm
+from rich.table import Table
+from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn, DownloadColumn, TransferSpeedColumn
+from ..console import console
 from .base import BaseDownloader
 
 logger = logging.getLogger(__name__)
@@ -54,17 +56,20 @@ class FirefoxDownloader(BaseDownloader):
 
             with output_path.open("wb") as f:
                 if show_progress:
-                    with tqdm(
-                        total=total_size,
-                        unit='B',
-                        unit_scale=True,
-                        unit_divisor=1024,
-                        desc=filename,
-                        leave=False
-                    ) as bar:
+                    with Progress(
+                        SpinnerColumn(),
+                        TextColumn("[progress.description]{task.description}"),
+                        BarColumn(),
+                        TaskProgressColumn(),
+                        DownloadColumn(),
+                        TransferSpeedColumn(),
+                        console=console,
+                        transient=True
+                    ) as progress:
+                        task = progress.add_task(filename, total=total_size)
                         for chunk in response.iter_content(chunk_size=8192):
                             f.write(chunk)
-                            bar.update(len(chunk))
+                            progress.update(task, advance=len(chunk))
                 else:
                     for chunk in response.iter_content(chunk_size=8192):
                         f.write(chunk)
@@ -91,19 +96,27 @@ class FirefoxDownloader(BaseDownloader):
 
             results = response.json().get("results", [])
             if results:
-                print(f"Found {len(results)} results for '{query}':")
+                table = Table(title=f"Search Results for '{query}'", show_header=True, header_style="bold magenta")
+                table.add_column("Name", style="cyan")
+                table.add_column("Slug", style="green")
+                table.add_column("GUID", style="yellow")
+                table.add_column("URL", style="blue")
+
                 for result in results[:5]:  # Show top 5
-                    name = result.get('name', {}).get('en-US', 'Unknown Name')
+                    name_obj = result.get('name')
+                    if isinstance(name_obj, dict):
+                        name = name_obj.get('en-US', 'Unknown Name')
+                    else:
+                        name = str(name_obj) if name_obj else 'Unknown Name'
+                        
                     slug = result.get('slug', 'N/A')
                     guid = result.get('guid', 'N/A')
                     url = result.get('url', 'N/A')
-                    print(f"- {name}")
-                    print(f"  Slug: {slug}")
-                    print(f"  GUID: {guid}")
-                    print(f"  URL: {url}")
-                    print("")
+                    table.add_row(name, slug, guid, url)
+                
+                console.print(table)
             else:
-                print(f"No results found for '{query}'.")
+                console.print(f"[yellow]No results found for '{query}'.[/yellow]")
 
         except requests.RequestException as e:
             logger.error(f"Failed to search for extension: {e}")

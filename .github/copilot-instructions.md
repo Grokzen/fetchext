@@ -12,7 +12,7 @@ This file documents the project's history, architectural decisions, and coding s
 
 - **Language**: Python 3.11+
 - **Build System**: `setuptools` (configured via `pyproject.toml`)
-- **Dependencies**: `requests`, `tqdm` (minimal dependencies preferred)
+- **Dependencies**: `requests`, `rich` (minimal dependencies preferred)
 - **Linting/Formatting**: `ruff`
 - **Task Management**: `Makefile`
 - **Type Hints**: **FORBIDDEN**. Do not use Python type hints (e.g., `def foo(x: int) -> str:`). Keep code dynamic and clean.

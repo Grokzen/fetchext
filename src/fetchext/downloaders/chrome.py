@@ -2,7 +2,8 @@ import re
 import logging
 import requests
 from urllib.parse import urlparse
-from tqdm import tqdm
+from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn, DownloadColumn, TransferSpeedColumn
+from ..console import console
 from .base import BaseDownloader
 
 logger = logging.getLogger(__name__)
@@ -47,17 +48,20 @@ class ChromeDownloader(BaseDownloader):
 
             with output_path.open("wb") as f:
                 if show_progress:
-                    with tqdm(
-                        total=total_size,
-                        unit='B',
-                        unit_scale=True,
-                        unit_divisor=1024,
-                        desc=filename,
-                        leave=False
-                    ) as bar:
+                    with Progress(
+                        SpinnerColumn(),
+                        TextColumn("[progress.description]{task.description}"),
+                        BarColumn(),
+                        TaskProgressColumn(),
+                        DownloadColumn(),
+                        TransferSpeedColumn(),
+                        console=console,
+                        transient=True
+                    ) as progress:
+                        task = progress.add_task(filename, total=total_size)
                         for chunk in response.iter_content(chunk_size=8192):
                             f.write(chunk)
-                            bar.update(len(chunk))
+                            progress.update(task, advance=len(chunk))
                 else:
                     for chunk in response.iter_content(chunk_size=8192):
                         f.write(chunk)

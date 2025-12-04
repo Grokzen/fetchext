@@ -3,5 +3,5 @@ ruff
 pytest
 pytest-mock
 pytest-cov
-tqdm
 pyfakefs
+rich

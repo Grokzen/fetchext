@@ -2,19 +2,20 @@ import sys
 import logging
 import argparse
 from pathlib import Path
+from rich.logging import RichHandler
 from .downloaders import ChromeDownloader, EdgeDownloader, FirefoxDownloader
 from .inspector import ExtensionInspector
 from .batch import BatchProcessor
+from .console import console
 
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
-    format="%(levelname)s: %(message)s",
-    handlers=[
-        logging.StreamHandler(sys.stdout)
-    ]
+    format="%(message)s",
+    datefmt="[%X]",
+    handlers=[RichHandler(console=console, rich_tracebacks=True)]
 )
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("fetchext")
 
 def main():
     """

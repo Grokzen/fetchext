@@ -5,12 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.0] - 2025-12-04
+## [0.3.0] - 2025-12-04
 
 ### Added
 
+- **Rich Output**: Replaced `tqdm` and standard logging with `rich` for beautiful console output, progress bars, and tables.
 - **Progress Bars**: Integrated `tqdm` to display progress bars for file downloads and batch processing.
-- **Dependencies**: Added `tqdm` to `pyproject.toml` and `requirements-dev.txt`.
+- **Dependencies**: Added `rich` to `pyproject.toml` and `requirements-dev.txt`.
 - **Parallel Batch Downloading**: `fext batch` now supports downloading multiple extensions simultaneously.
 - **CLI Argument**: Added `-w` / `--workers` flag to `fext batch` to control the number of concurrent downloads (default: 4).
 - **Makefile Target**: Added `make test-batch-cli` for smoke testing batch downloads without pytest.
@@ -19,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Dependencies**: Replaced `tqdm` with `rich` in `pyproject.toml` and `requirements-dev.txt`.
+- **Inspector**: Updated `inspect` command to display manifest data in a formatted table.
+- **Search**: Updated `search` command (Firefox) to display results in a formatted table.
 - **Batch Processing**: Updated `BatchProcessor` to show a main "Batch Progress" bar and disable individual file download bars during batch operations.
 - **Downloaders**: Updated `ChromeDownloader`, `EdgeDownloader`, and `FirefoxDownloader` to support an optional `show_progress` argument.
 - **Performance**: Refactored `BatchProcessor` to use `concurrent.futures.ThreadPoolExecutor` for improved speed when processing large batch files.

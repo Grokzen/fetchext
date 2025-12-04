@@ -1,7 +1,8 @@
 import logging
 import concurrent.futures
 from pathlib import Path
-from tqdm import tqdm
+from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn, TimeRemainingColumn
+from .console import console
 from .downloaders import ChromeDownloader, EdgeDownloader, FirefoxDownloader
 
 logger = logging.getLogger(__name__)
@@ -26,22 +27,31 @@ class BatchProcessor:
 
         logger.info(f"Processing {len(valid_lines)} items with {max_workers} workers...")
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-            # Submit all tasks
-            futures = [
-                executor.submit(self._process_line, line, output_dir)
-                for line in valid_lines
-            ]
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            BarColumn(),
+            TaskProgressColumn(),
+            TimeRemainingColumn(),
+            console=console,
+            transient=True
+        ) as progress:
+            task_id = progress.add_task("Batch Progress", total=len(valid_lines))
             
-            # Wait for all tasks to complete with a progress bar
-            with tqdm(total=len(futures), desc="Batch Progress", unit="ext") as pbar:
+            with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+                # Submit all tasks
+                futures = [
+                    executor.submit(self._process_line, line, output_dir)
+                    for line in valid_lines
+                ]
+                
                 for future in concurrent.futures.as_completed(futures):
                     try:
                         future.result()
                     except Exception as e:
                         logger.error(f"Unexpected error in worker thread: {e}")
                     finally:
-                        pbar.update(1)
+                        progress.advance(task_id)
 
     def _process_line(self, line, output_dir):
         # Format: <browser> <url_or_id>

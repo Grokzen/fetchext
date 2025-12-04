@@ -2,13 +2,11 @@
 
 ## 🚀 v0.3.0: Inspection & UX Polish
 
-- [ ] **Rich Output**: Integrate `rich` library.
-  - [ ] Replace `print()` statements in `ExtensionInspector` with `rich.console.Console` and `rich.table.Table`.
-  - [ ] Style CLI logs and error messages.
-- [ ] **Proper CRX Parsing**: Implement a robust CRX3 parser.
-  - [ ] Remove the "find ZIP header" hack.
-  - [ ] Read CRX3 header (Magic `Cr24`, Version, Header Length) to correctly locate the ZIP payload.
-  - [ ] Support reading large files without loading them entirely into memory.
+- [x] **Rich Output**: Integrate `rich` library.
+  - [x] Replace `print()` statements in `ExtensionInspector` with `rich.console.Console` and `rich.table.Table`.
+  - [x] Style CLI logs and error messages.
+- [ ] **Metadata Sidecars**: Add `--save-metadata` flag.
+  - [ ] Save a `metadata.json` alongside the extension containing download timestamp, source URL, and version.
 
 ## 📦 v0.4.0: File Management & Utilities
 
@@ -16,11 +14,13 @@
   - [ ] Automatically unzip the downloaded extension into a folder named after the extension ID or name.
 - [ ] **Extract Command**: Add `fext extract <file>` subcommand.
   - [ ] Allow extracting existing `.crx` or `.xpi` files.
-- [ ] **Metadata Sidecars**: Add `--save-metadata` flag.
-  - [ ] Save a `metadata.json` alongside the extension containing download timestamp, source URL, and version.
 
 ## 🔄 v0.5.0: Updates & Maintenance
 
+- [ ] **Proper CRX Parsing**: Implement a robust CRX3 parser.
+  - [ ] Remove the "find ZIP header" hack.
+  - [ ] Read CRX3 header (Magic `Cr24`, Version, Header Length) to correctly locate the ZIP payload.
+  - [ ] Support reading large files without loading them entirely into memory.
 - [ ] **Update Checker**: Add `fext check <file>` command.
   - [ ] Extract ID and Version from a local file.
   - [ ] Query the respective Web Store to check if a newer version is available.
