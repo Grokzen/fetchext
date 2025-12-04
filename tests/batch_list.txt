@@ -1,0 +1,8 @@
+# Chrome Postman Interceptor
+chrome https://chromewebstore.google.com/detail/postman-interceptor/aicmkgpgakddgnaphhhpliifpcfhicfo
+
+# Edge Postman Interceptor
+edge https://microsoftedge.microsoft.com/addons/detail/postman-interceptor/nbjbemmokmdpdokpnbfpdfbikmhgilmc
+
+# Firefox Postman Interceptor
+firefox https://addons.mozilla.org/en-US/firefox/addon/postman_interceptor/
