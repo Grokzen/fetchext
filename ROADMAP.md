@@ -7,7 +7,7 @@
 
 ## ⚡ Performance
 
-- [ ] **Parallel Batch Downloading**: Use `concurrent.futures.ThreadPoolExecutor` in `BatchProcessor` to download multiple extensions simultaneously.
+- [x] **Parallel Batch Downloading**: Use `concurrent.futures.ThreadPoolExecutor` in `BatchProcessor` to download multiple extensions simultaneously.
 
 ## 🌍 Cross-Platform Support
 

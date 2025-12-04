@@ -55,4 +55,8 @@ test-legacy-downloads:
 	# Firefox (URL)
 	fext download firefox https://addons.mozilla.org/en-US/firefox/addon/postman_interceptor/ -o downloads/
 
+test-batch-cli:
+	# Test batch processing using the CLI directly
+	fext batch tests/batch_list.txt -o downloads/batch_output/ --workers 4
+
 ci: lint build test

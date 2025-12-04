@@ -129,3 +129,16 @@ This project serves as a proof-of-concept for fully automated software developme
     3.  Wait for user to request a commit.
     4.  When requested, execute the **Pre-Commit Protocol** before committing.
     5.  Write a clear, descriptive commit message following the project's history style.
+
+### 3. Changelog Maintenance
+- **Rule**: **ALWAYS UPDATE CHANGELOG.md**.
+- **When**: Whenever a new feature, bug fix, or significant change is implemented.
+- **Format**: Follow [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+- **Structure**:
+    - Group changes under the current "Unreleased" or new version header.
+    - Use subsections: `### Added`, `### Changed`, `### Deprecated`, `### Removed`, `### Fixed`, `### Security`.
+- **Action**:
+    1.  Check `CHANGELOG.md` for the current state.
+    2.  Add a concise, bulleted entry describing the change.
+    3.  If releasing a new version, update `pyproject.toml` version as well.
+    4.  Ensure `CHANGELOG.md` passes markdown linting (no duplicate headers within the same section, correct spacing).

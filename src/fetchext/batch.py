@@ -1,11 +1,12 @@
 import logging
+import concurrent.futures
 from pathlib import Path
 from .downloaders import ChromeDownloader, EdgeDownloader, FirefoxDownloader
 
 logger = logging.getLogger(__name__)
 
 class BatchProcessor:
-    def process(self, file_path, output_dir):
+    def process(self, file_path, output_dir, max_workers=4):
         path = Path(file_path)
         if not path.exists():
             raise FileNotFoundError(f"Batch file not found: {path}")
@@ -16,15 +17,27 @@ class BatchProcessor:
         with path.open('r') as f:
             lines = f.readlines()
 
-        for line in lines:
-            line = line.strip()
-            if not line or line.startswith("#"):
-                continue
+        # Filter valid lines first
+        valid_lines = [
+            line.strip() for line in lines
+            if line.strip() and not line.strip().startswith("#")
+        ]
 
-            try:
-                self._process_line(line, output_dir)
-            except Exception as e:
-                logger.error(f"Failed to process line '{line}': {e}")
+        logger.info(f"Processing {len(valid_lines)} items with {max_workers} workers...")
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+            # Submit all tasks
+            futures = [
+                executor.submit(self._process_line, line, output_dir)
+                for line in valid_lines
+            ]
+            
+            # Wait for all tasks to complete
+            for future in concurrent.futures.as_completed(futures):
+                try:
+                    future.result()
+                except Exception as e:
+                    logger.error(f"Unexpected error in worker thread: {e}")
 
     def _process_line(self, line, output_dir):
         # Format: <browser> <url_or_id>

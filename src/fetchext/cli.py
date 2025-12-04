@@ -60,6 +60,12 @@ def main():
         default=Path("."),
         help="Directory to save the downloaded extensions"
     )
+    batch_parser.add_argument(
+        "-w", "--workers",
+        type=int,
+        default=4,
+        help="Number of parallel workers (default: 4)"
+    )
 
     args = parser.parse_args()
 
@@ -74,7 +80,7 @@ def main():
 
         if args.command in ["batch", "b"]:
             processor = BatchProcessor()
-            processor.process(args.file, args.output_dir)
+            processor.process(args.file, args.output_dir, max_workers=args.workers)
             logger.info("Batch processing finished successfully.")
             return
 

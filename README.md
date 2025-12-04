@@ -100,8 +100,13 @@ This will print details like Name, Version, Description, and Permissions. 📄
 You can download multiple extensions at once using a batch file.
 
 ```bash
-fext batch <path_to_file> [-o <output_dir>]
+fext batch <path_to_file> [-o <output_dir>] [-w <workers>]
 ```
+
+**Arguments:**
+
+* `-o`, `--output`: Directory to save downloaded files (default: current directory).
+* `-w`, `--workers`: Number of parallel downloads (default: 4).
 
 **Batch File Format:**
 
@@ -117,7 +122,7 @@ firefox https://addons.mozilla.org/en-US/firefox/addon/postman_interceptor/
 **Example:**
 
 ```bash
-fext batch my_extensions.txt -o downloads/
+fext batch my_extensions.txt -o downloads/ -w 8
 ```
 
 ## 💻 Development
