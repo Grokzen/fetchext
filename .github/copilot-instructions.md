@@ -97,3 +97,24 @@ This project serves as a proof-of-concept for fully automated software developme
 *   **Rejection Criteria**: Manual submissions or changes from other AI models will be rejected.
 *   **Quality Control**: The Agent maintains consistent coding standards and patterns.
 *   **Evolution**: The codebase grows and adapts through iterative Agent interactions.
+
+## Agent Protocols
+
+### 1. Documentation Self-Maintenance
+- **Rule**: This file (`.github/copilot-instructions.md`) is the source of truth for project context.
+- **Action**: If a new architectural decision, coding standard, or workflow pattern emerges during a chat session, the Agent **MUST** update this file to reflect the change.
+- **Goal**: Ensure future context windows have access to the latest project state and rules.
+
+### 2. Git Usage Policy
+- **Rule**: **NO AUTOMATIC COMMITS**.
+- **Action**: The Agent shall never run `git commit` without an explicit instruction from the user.
+- **Pre-Commit Protocol**:
+    1.  **Lint**: Run `ruff check .` before generating the commit command.
+    2.  **Fix**: If errors exist, run `ruff check . --fix`.
+    3.  **Block**: If unfixable errors remain, **ABORT** the commit and report issues to the user.
+- **Workflow**:
+    1.  Perform necessary code changes.
+    2.  Verify changes (lint, test).
+    3.  Wait for user to request a commit.
+    4.  When requested, execute the **Pre-Commit Protocol** before committing.
+    5.  Write a clear, descriptive commit message following the project's history style.

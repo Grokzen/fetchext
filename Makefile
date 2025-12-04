@@ -1,13 +1,13 @@
 .PHONY: setup run lint format clean build
 
 VENV = .venv
-PYTHON = python
+PYTHON ?= python3
 PIP = pip
 
 setup:
-	python3 -m venv $(VENV)
+	$(PYTHON) -m venv $(VENV)
 	$(VENV)/bin/pip install -e .
-	$(VENV)/bin/pip install build ruff
+	$(VENV)/bin/pip install -r requirements-dev.txt
 
 run:
 	$(PYTHON) -m fetchext.cli $(URL)
