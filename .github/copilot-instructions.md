@@ -118,9 +118,11 @@ This project serves as a proof-of-concept for fully automated software developme
 - **Rule**: **NO AUTOMATIC COMMITS**.
 - **Action**: The Agent shall never run `git commit` without an explicit instruction from the user.
 - **Pre-Commit Protocol**:
-    1.  **Lint**: Run `ruff check .` before generating the commit command.
-    2.  **Fix**: If errors exist, run `ruff check . --fix`.
-    3.  **Block**: If unfixable errors remain, **ABORT** the commit and report issues to the user.
+    1.  **Lint Python**: Run `ruff check .`.
+    2.  **Fix Python**: If errors exist, run `ruff check . --fix`.
+    3.  **Lint Markdown**: Run `npx markdownlint-cli@0.31.1 "**/*.md"`.
+    4.  **Fix Markdown**: If errors exist, run `npx markdownlint-cli@0.31.1 "**/*.md" --fix`.
+    5.  **Block**: If unfixable errors remain in either, **ABORT** the commit and report issues to the user.
 - **Workflow**:
     1.  Perform necessary code changes.
     2.  Verify changes (lint, test).
