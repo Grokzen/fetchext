@@ -19,4 +19,4 @@
 
 ## 🧪 Testing
 
-- [ ] **Mocked File System**: Use `pyfakefs` in unit tests to avoid creating real temporary files on disk.
+- [x] **Mocked File System**: Use `pyfakefs` in unit tests to avoid creating real temporary files on disk.

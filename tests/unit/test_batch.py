@@ -1,11 +1,14 @@
 from unittest.mock import MagicMock, patch
+from pathlib import Path
 from fetchext.batch import BatchProcessor
 
 class TestBatchProcessor:
-    def test_process_calls_executor(self, tmp_path):
+    def test_process_calls_executor(self, fs):
         # Create a dummy batch file
+        tmp_path = Path("/tmp/test_batch")
+        fs.create_dir(tmp_path)
         batch_file = tmp_path / "batch.txt"
-        batch_file.write_text("chrome abc\nedge def")
+        fs.create_file(batch_file, contents="chrome abc\nedge def")
         
         processor = BatchProcessor()
         
@@ -31,7 +34,9 @@ class TestBatchProcessor:
             # Verify submit was called twice
             assert mock_executor_instance.submit.call_count == 2
 
-    def test_process_line_chrome(self, tmp_path):
+    def test_process_line_chrome(self, fs):
+        tmp_path = Path("/tmp/test_batch")
+        fs.create_dir(tmp_path)
         processor = BatchProcessor()
         
         with patch("fetchext.batch.ChromeDownloader") as MockDownloader:
@@ -44,12 +49,16 @@ class TestBatchProcessor:
             # Verify show_progress=False is passed
             mock_instance.download.assert_called_with("abc", tmp_path, show_progress=False)
 
-    def test_process_line_invalid_format(self, tmp_path, caplog):
+    def test_process_line_invalid_format(self, fs, caplog):
+        tmp_path = Path("/tmp/test_batch")
+        fs.create_dir(tmp_path)
         processor = BatchProcessor()
         processor._process_line("invalid_line", tmp_path)
         assert "Invalid line format" in caplog.text
 
-    def test_process_line_unsupported_browser(self, tmp_path, caplog):
+    def test_process_line_unsupported_browser(self, fs, caplog):
+        tmp_path = Path("/tmp/test_batch")
+        fs.create_dir(tmp_path)
         processor = BatchProcessor()
         processor._process_line("safari abc", tmp_path)
         assert "Unsupported browser" in caplog.text

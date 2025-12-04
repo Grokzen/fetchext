@@ -64,11 +64,11 @@ This file documents the project's history, architectural decisions, and coding s
 
 ### 6. Testing Strategy
 
-- **Framework**: `pytest` with `pytest-mock` and `pytest-cov`.
+- **Framework**: `pytest` with `pytest-mock`, `pytest-cov`, and `pyfakefs`.
 - **Structure**: 4-Level Testing Strategy.
     1. **Unit**: Logic isolation (e.g., ID extraction). Fast, no I/O.
     2. **CLI**: Argument parsing and help output.
-    3. **Integration**: Mocked network requests. Verifies file handling and flow without internet.
+    3. **Integration**: Mocked network requests and file system (using `pyfakefs`). Verifies file handling and flow without internet or real disk usage.
     4. **Live**: Real E2E tests against Web Stores. Marked with `@pytest.mark.live`.
 - **Execution**: `make test` (Levels 1-3), `make test-live` (Level 4).
 

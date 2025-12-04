@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **CLI Argument**: Added `-w` / `--workers` flag to `fext batch` to control the number of concurrent downloads (default: 4).
 - **Makefile Target**: Added `make test-batch-cli` for smoke testing batch downloads without pytest.
 - **Integration Tests**: Added `tests/integration/test_batch_parallel.py` to verify parallel execution performance.
+- **Testing**: Added `pyfakefs` to `requirements-dev.txt` and integrated it into unit and integration tests to mock file system operations.
 
 ### Changed
 
@@ -22,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Downloaders**: Updated `ChromeDownloader`, `EdgeDownloader`, and `FirefoxDownloader` to support an optional `show_progress` argument.
 - **Performance**: Refactored `BatchProcessor` to use `concurrent.futures.ThreadPoolExecutor` for improved speed when processing large batch files.
 - **Documentation**: Updated `README.md` and `ROADMAP.md` to reflect parallel batch capabilities.
+- **Testing**: Refactored unit and integration tests to use `pyfakefs` instead of real temporary files, improving test isolation and speed.
 
 ## [0.1.0] - 2025-12-04
 

@@ -1,16 +1,19 @@
 import time
 from unittest.mock import patch
+from pathlib import Path
 from fetchext.batch import BatchProcessor
 
 class TestBatchParallelism:
-    def test_parallel_execution_speed(self, tmp_path):
+    def test_parallel_execution_speed(self, fs):
         """
         Verify that 4 tasks taking 1 second each finish in ~1 second with 4 workers,
         proving they ran in parallel.
         """
+        tmp_path = Path("/tmp/test_parallel")
+        fs.create_dir(tmp_path)
         batch_file = tmp_path / "parallel_test.txt"
         # Create 4 lines
-        batch_file.write_text("\n".join([f"chrome id_{i}" for i in range(4)]))
+        fs.create_file(batch_file, contents="\n".join([f"chrome id_{i}" for i in range(4)]))
         
         processor = BatchProcessor()
         
