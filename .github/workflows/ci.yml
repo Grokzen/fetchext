@@ -33,5 +33,8 @@ jobs:
     - name: Build package
       run: make build
 
-    - name: Test downloads
-      run: make test-downloads
+    - name: Run Unit & Integration Tests
+      run: make test
+
+    - name: Run Live E2E Tests
+      run: make test-live

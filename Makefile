@@ -29,7 +29,20 @@ clean:
 	rm -rf dist
 	rm -rf downloads/
 
-test-downloads:
+test:
+	$(PYTHON) -m pytest -m "not live"
+
+test-live:
+	$(PYTHON) -m pytest -m "live"
+
+test-all:
+	$(PYTHON) -m pytest
+
+test-coverage:
+	$(PYTHON) -m pytest --cov=src/fetchext --cov-report=term-missing
+
+# Legacy tests (kept for reference, but CI should use pytest)
+test-legacy-downloads:
 	# Test downloads postman extensions to validate all three downloads works
 	# Chrome (URL)
 	fext download chrome https://chromewebstore.google.com/detail/postman-interceptor/aicmkgpgakddgnaphhhpliifpcfhicfo -o downloads/
@@ -42,14 +55,4 @@ test-downloads:
 	# Firefox (URL)
 	fext download firefox https://addons.mozilla.org/en-US/firefox/addon/postman_interceptor/ -o downloads/
 
-test-inspect:
-	# Inspect the downloaded files (assumes test-downloads has run)
-	fext inspect downloads/aicmkgpgakddgnaphhhpliifpcfhicfo.crx
-	fext inspect downloads/nbjbemmokmdpdokpnbfpdfbikmhgilmc.crx
-	fext inspect downloads/postman_interceptor-3.2.1.xpi
-
-test-batch:
-	# Test batch download
-	fext batch tests/batch_list.txt -o downloads/batch_output/
-
-ci: lint build test-downloads test-inspect test-batch
+ci: lint build test

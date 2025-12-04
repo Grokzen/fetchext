@@ -58,14 +58,14 @@ This file documents the project's history, architectural decisions, and coding s
 - **Run**: `fext download <browser> <url>` or `fext search firefox <query>`.
 - **Build**: `make build` (uses `build` module to generate wheels/sdist).
 - **Lint**: `make lint` / `make format`.
-- **Test**: `make test-downloads` (runs live download tests for all supported browsers).
-- **CI**: `make ci` (runs lint, build, and test-downloads).
+- **Test**: `make test` (Unit/CLI/Integration) and `make test-live` (E2E).
+- **CI**: `make ci` (runs lint, build, and tests).
 
 ## CI/CD
 - **Platform**: GitHub Actions
 - **Workflow**: `.github/workflows/ci.yml`
 - **Matrix**: Python 3.11, 3.12, 3.13
-- **Steps**: Lint (ruff), Build, Test Downloads (live integration test).
+- **Steps**: Lint (ruff), Build, Test (pytest).
 
 ## History & Evolution
 1.  **Inception**: Started as a single script `main.py`.
@@ -73,9 +73,9 @@ This file documents the project's history, architectural decisions, and coding s
 3.  **Renaming**: Renamed from `chrome-extension-downloader` to `fetchext` (`fext`).
 4.  **Multi-Browser Support**: Refactored to support Chrome, Edge, and Firefox using a modular downloader architecture.
 5.  **CI/CD Integration**: Added GitHub Actions workflow and Makefile targets for automated testing and validation.
+6.  **Testing Overhaul**: Implemented comprehensive 4-level testing strategy (Unit, CLI, Integration, Live) using `pytest`.
 
 ## Future Considerations
-- **Testing**: No unit tests exist yet. Future work should add `pytest`.
 - **Publishing**: The project is configured for PyPI publishing.
 - **Version Support**: Strictly targeting Python 3.11+.
 
