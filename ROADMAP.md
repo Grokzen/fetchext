@@ -15,32 +15,44 @@
 - [x] **User-Agent Rotation**: Avoid blocking (Network).
   - [x] Randomize User-Agent headers for requests to Web Stores.
 
-## ⚙️ v0.6.0: Distribution & Integration
+## ⚙️ v0.6.0: Automation & Integration
 
-- [ ] **Update Checker**: Add `fext check <file>` command (CLI).
-  - [ ] Extract ID and Version from a local file and query Web Store for updates.
-- [ ] **Library Mode**: Ensure `fetchext` is import-friendly (Architecture).
-  - [ ] Refactor `cli.py` logic into reusable service classes.
-  - [ ] Add `__all__` exports to `__init__.py`.
+*Focus: Making `fext` scriptable and embeddable.*
+
+- [ ] **Library Mode**: Decouple CLI from core logic (Architecture).
+  - [ ] Ensure `import fetchext` allows programmatic access to downloaders and parsers.
 - [ ] **JSON Output**: Machine-readable output (CLI).
-  - [ ] Add `--json` flag to `search` and `inspect` commands for piping to `jq` or other tools.
+  - [ ] Add `--json` flag to `search`, `inspect`, and `check` commands.
+- [ ] **Update Checker**: Add `fext check <file_or_dir>` command (CLI).
+  - [ ] Extract ID/Version from local files and query Web Store for updates.
 - [ ] **PyPI Publishing**: Automated release workflow (CI/CD).
-  - [ ] Create GitHub Action to publish to PyPI on tag creation.
-- [ ] **Cross-Platform CI**: Expand testing matrix (CI/CD).
-  - [ ] Add `windows-latest` and `macos-latest` to GitHub Actions.
+  - [ ] Finalize build pipeline to publish to PyPI on tag creation.
 
-## 🧠 v0.7.0: Insight & Security
+## 🧠 v0.7.0: Deep Analysis
 
-- [ ] **Manifest V3 Analysis**: Check MV3 compatibility (Analysis).
-  - [ ] Warn if an extension is using deprecated MV2 features.
-- [ ] **Permission Risk Scoring**: Analyze permissions (Analysis).
-  - [ ] Assign a "risk score" based on requested permissions (e.g., `<all_urls>`, `cookies`).
+*Focus: Security research and inspection capabilities.*
+
 - [ ] **Source Preview**: List contents without extracting (CLI).
-  - [ ] Add `fext preview <file>` to show file structure tree.
-- [ ] **Dependency Audit**: Scan for vulnerable libraries (Security).
-  - [ ] Basic check for known vulnerable JS library filenames or hashes.
-- [ ] **Documentation Site**: Publish project docs (Docs).
-  - [ ] Generate and publish MkDocs/Sphinx site to GitHub Pages.
+  - [ ] Add `fext preview <file>` to show file structure tree using streaming parser.
+- [ ] **Manifest V3 Auditor**: Check MV3 compatibility (Analysis).
+  - [ ] Report on MV2 vs MV3 status and deprecated APIs.
+- [ ] **Diff Command**: Compare two versions (CLI).
+  - [ ] Add `fext diff <old.crx> <new.crx>` to show changed files and permissions.
+- [ ] **Permission Risk Scoring**: Analyze permissions (Analysis).
+  - [ ] Assign "Privacy Risk" score based on requested permissions.
+
+## 🏢 v0.8.0: Enterprise & Scale
+
+*Focus: Managing local repositories and bulk workflows.*
+
+- [ ] **Local Update Server**: Generate update manifests (Enterprise).
+  - [ ] Create `update.xml` / `updates.json` for self-hosted extension updates.
+- [ ] **Mirror Mode**: Sync local folder with ID list (Workflow).
+  - [ ] Add `fext mirror <list_file>` to keep a local repository up to date.
+- [ ] **Dependency Scanner**: Scan for vulnerable libraries (Security).
+  - [ ] Check internal JS files for known vulnerable library signatures.
+- [ ] **Plugin Hooks**: Extensibility system (Architecture).
+  - [ ] Support pre/post-download hooks (e.g., virus scan, git commit).
 
 ## ✅ Completed
 
