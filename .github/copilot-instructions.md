@@ -72,6 +72,11 @@ This file documents the project's history, architectural decisions, and coding s
     4. **Live**: Real E2E tests against Web Stores. Marked with `@pytest.mark.live`.
 - **Execution**: `make test` (Levels 1-3), `make test-live` (Level 4).
 
+### 7. CRX Parsing
+
+- **Decision**: Use `CrxDecoder` and `PartialFileReader` for robust CRX3 parsing.
+- **Reasoning**: Avoids loading entire files into memory and searching for ZIP signatures, which is inefficient and error-prone. Supports streaming-like access to the embedded ZIP archive.
+
 ## Development Workflow
 
 - **Setup**: `make setup` (creates venv, installs package in editable mode `pip install -e .`).

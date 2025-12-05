@@ -1,6 +1,6 @@
 import zipfile
-from io import BytesIO
 from pathlib import Path
+from .crx import CrxDecoder, PartialFileReader
 
 def open_extension_archive(file_path):
     """
@@ -11,17 +11,28 @@ def open_extension_archive(file_path):
     if not path.exists():
         raise FileNotFoundError(f"File not found: {path}")
 
+    # Determine offset using robust CRX parsing
+    offset = CrxDecoder.get_zip_offset(path)
+    
+    # Open file
+    f = open(path, 'rb')
+    
+    # Get total size to calculate slice size
+    f.seek(0, 2)
+    total_size = f.tell()
+    
+    # Create wrapper
+    # Size of the slice is Total - Offset
+    # We pass close_underlying=True so that when the ZipFile is closed (which closes the wrapper),
+    # the underlying file handle is also closed.
+    wrapper = PartialFileReader(f, offset, total_size - offset, close_underlying=True)
+    
     try:
-        # Try opening as a standard zip first
-        return zipfile.ZipFile(path, 'r')
+        return zipfile.ZipFile(wrapper, 'r')
     except zipfile.BadZipFile:
-        # Try to find the ZIP start offset (CRX header handling)
-        with open(path, 'rb') as f:
-            content = f.read()
-            # ZIP local file header signature is 0x04034b50
-            zip_start = content.find(b'PK\x03\x04')
-            if zip_start == -1:
-                raise ValueError("Not a valid ZIP or CRX file")
-            
-            # Return a ZipFile wrapping the BytesIO of the content from offset
-            return zipfile.ZipFile(BytesIO(content[zip_start:]), 'r')
+        wrapper.close()
+        # If offset was 0, it might be a CRX that we failed to detect or a corrupted file
+        # If offset was > 0, it might be a corrupted CRX
+        # We can try the old fallback if we really want, but the goal is to remove hacks.
+        # Let's just raise.
+        raise ValueError("Not a valid ZIP or CRX file")
