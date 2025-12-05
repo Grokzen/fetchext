@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Proper CRX Parsing**: Implemented a robust CRX3 parser (`CrxDecoder`) and `PartialFileReader` to handle CRX files without loading them entirely into memory.
 - **Network Resilience**: Added automatic retries with exponential backoff for network requests to handle transient failures (5xx errors, connection issues).
+- **Config File**: Added support for a user configuration file (`~/.config/fext/config.toml`) to set default values for download directory, worker count, and flags.
 
 ## [0.3.0] - 2025-12-04
 

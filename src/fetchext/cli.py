@@ -10,6 +10,7 @@ from .inspector import ExtensionInspector
 from .batch import BatchProcessor
 from .console import console
 from .utils import open_extension_archive
+from .config import load_config
 
 # Configure logging
 logging.basicConfig(
@@ -24,6 +25,16 @@ def main():
     """
     Main entry point of the script.
     """
+    # Load configuration
+    config = load_config()
+    general_config = config.get("general", {})
+    batch_config = config.get("batch", {})
+
+    default_output_dir = Path(general_config.get("download_dir", "."))
+    default_workers = batch_config.get("workers", 4)
+    default_save_metadata = general_config.get("save_metadata", False)
+    default_extract = general_config.get("extract", False)
+
     parser = argparse.ArgumentParser(description="Download or search for browser extensions.")
     subparsers = parser.add_subparsers(dest="command", required=True, help="Command to execute")
 
@@ -38,17 +49,19 @@ def main():
     download_parser.add_argument(
         "-o", "--output-dir",
         type=Path,
-        default=Path("."),
-        help="Directory to save the downloaded extension"
+        default=default_output_dir,
+        help=f"Directory to save the downloaded extension (default: {default_output_dir})"
     )
     download_parser.add_argument(
         "-m", "--save-metadata",
         action="store_true",
+        default=default_save_metadata,
         help="Save metadata to a JSON file alongside the extension"
     )
     download_parser.add_argument(
         "-x", "--extract",
         action="store_true",
+        default=default_extract,
         help="Automatically extract the extension to a folder"
     )
 
@@ -80,14 +93,14 @@ def main():
     batch_parser.add_argument(
         "-o", "--output-dir",
         type=Path,
-        default=Path("."),
-        help="Directory to save the downloaded extensions"
+        default=default_output_dir,
+        help=f"Directory to save the downloaded extensions (default: {default_output_dir})"
     )
     batch_parser.add_argument(
         "-w", "--workers",
         type=int,
-        default=4,
-        help="Number of parallel workers (default: 4)"
+        default=default_workers,
+        help=f"Number of parallel workers (default: {default_workers})"
     )
 
     args = parser.parse_args()
