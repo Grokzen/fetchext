@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Proper CRX Parsing**: Implemented a robust CRX3 parser (`CrxDecoder`) and `PartialFileReader` to handle CRX files without loading them entirely into memory.
+- **Network Resilience**: Added automatic retries with exponential backoff for network requests to handle transient failures (5xx errors, connection issues).
 
 ## [0.3.0] - 2025-12-04
 

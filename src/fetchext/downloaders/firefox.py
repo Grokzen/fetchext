@@ -5,6 +5,7 @@ from urllib.parse import urlparse
 from rich.table import Table
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn, DownloadColumn, TransferSpeedColumn
 from ..console import console
+from ..network import get_session
 from .base import BaseDownloader
 
 logger = logging.getLogger(__name__)
@@ -33,25 +34,26 @@ class FirefoxDownloader(BaseDownloader):
         logger.info(f"Fetching metadata for Firefox extension {extension_id}...")
 
         try:
-            # Get metadata
-            meta_response = requests.get(api_url)
-            meta_response.raise_for_status()
-            data = meta_response.json()
+            with get_session() as session:
+                # Get metadata
+                meta_response = session.get(api_url)
+                meta_response.raise_for_status()
+                data = meta_response.json()
 
-            # Get the latest version file URL
-            if "current_version" in data and "file" in data["current_version"]:
-                download_url = data["current_version"]["file"]["url"]
-                filename = Path(urlparse(download_url).path).name
-            else:
-                raise RuntimeError("Could not find download URL in metadata")
+                # Get the latest version file URL
+                if "current_version" in data and "file" in data["current_version"]:
+                    download_url = data["current_version"]["file"]["url"]
+                    filename = Path(urlparse(download_url).path).name
+                else:
+                    raise RuntimeError("Could not find download URL in metadata")
 
-            logger.info(f"Downloading from {download_url}...")
+                logger.info(f"Downloading from {download_url}...")
 
-            # Download file
-            response = requests.get(download_url, stream=True)
-            response.raise_for_status()
+                # Download file
+                response = session.get(download_url, stream=True)
+                response.raise_for_status()
 
-            output_path = output_dir / filename
+                output_path = output_dir / filename
             total_size = int(response.headers.get('content-length', 0))
 
             with output_path.open("wb") as f:
@@ -91,10 +93,11 @@ class FirefoxDownloader(BaseDownloader):
         params = {"q": query, "app": "firefox", "type": "extension"}
 
         try:
-            response = requests.get(url, params=params)
-            response.raise_for_status()
+            with get_session() as session:
+                response = session.get(url, params=params)
+                response.raise_for_status()
 
-            results = response.json().get("results", [])
+                results = response.json().get("results", [])
             if results:
                 table = Table(title=f"Search Results for '{query}'", show_header=True, header_style="bold magenta")
                 table.add_column("Name", style="cyan")

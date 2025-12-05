@@ -4,6 +4,7 @@ import requests
 from urllib.parse import urlparse
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn, DownloadColumn, TransferSpeedColumn
 from ..console import console
+from ..network import get_session
 from .base import BaseDownloader
 
 logger = logging.getLogger(__name__)
@@ -36,10 +37,11 @@ class EdgeDownloader(BaseDownloader):
         logger.info(f"Downloading Edge extension {extension_id}...")
 
         try:
-            response = requests.get(download_url, stream=True)
-            response.raise_for_status()
+            with get_session() as session:
+                response = session.get(download_url, stream=True)
+                response.raise_for_status()
 
-            filename = f"{extension_id}.crx"
+                filename = f"{extension_id}.crx"
             if "content-disposition" in response.headers:
                 cd = response.headers["content-disposition"]
                 filenames = re.findall('filename="(.+)"', cd)

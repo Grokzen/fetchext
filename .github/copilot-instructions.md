@@ -77,6 +77,11 @@ This file documents the project's history, architectural decisions, and coding s
 - **Decision**: Use `CrxDecoder` and `PartialFileReader` for robust CRX3 parsing.
 - **Reasoning**: Avoids loading entire files into memory and searching for ZIP signatures, which is inefficient and error-prone. Supports streaming-like access to the embedded ZIP archive.
 
+### 8. Network Resilience
+
+- **Decision**: Use `requests.adapters.HTTPAdapter` with `urllib3.util.retry.Retry` for all network requests.
+- **Reasoning**: Provides automatic retries with backoff for transient failures (5xx, connection errors) without adding external dependencies like `tenacity`.
+
 ## Development Workflow
 
 - **Setup**: `make setup` (creates venv, installs package in editable mode `pip install -e .`).

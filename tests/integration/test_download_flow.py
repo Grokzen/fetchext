@@ -5,13 +5,17 @@ from fetchext.downloaders.chrome import ChromeDownloader
 
 class TestDownloadFlow:
     def test_chrome_download_success(self, fs, mocker):
-        # Mock requests.get
+        # Mock session
+        mock_session = mocker.MagicMock()
         mock_response = mocker.Mock()
         mock_response.iter_content = lambda chunk_size: [b"fake_content"]
         mock_response.headers = {"content-disposition": 'attachment; filename="extension.crx"'}
         mock_response.raise_for_status = mocker.Mock()
+        mock_session.get.return_value = mock_response
+        mock_session.__enter__.return_value = mock_session
+        mock_session.__exit__.return_value = None
         
-        mocker.patch("requests.get", return_value=mock_response)
+        mocker.patch("fetchext.downloaders.chrome.get_session", return_value=mock_session)
 
         downloader = ChromeDownloader()
         extension_id = "abcdefghijklmnop"
@@ -25,8 +29,13 @@ class TestDownloadFlow:
         assert output_path.name == "extension.crx"
 
     def test_chrome_download_404(self, fs, mocker):
-        # Mock requests.get to raise HTTPError
-        mocker.patch("requests.get", side_effect=requests.HTTPError("404 Not Found"))
+        # Mock session to raise HTTPError
+        mock_session = mocker.MagicMock()
+        mock_session.get.side_effect = requests.HTTPError("404 Not Found")
+        mock_session.__enter__.return_value = mock_session
+        mock_session.__exit__.return_value = None
+        
+        mocker.patch("fetchext.downloaders.chrome.get_session", return_value=mock_session)
 
         downloader = ChromeDownloader()
         extension_id = "invalid_id"
@@ -37,13 +46,17 @@ class TestDownloadFlow:
             downloader.download(extension_id, output_dir)
 
     def test_chrome_download_empty_file_cleanup(self, fs, mocker):
-        # Mock requests.get to return empty content
+        # Mock session to return empty content
+        mock_session = mocker.MagicMock()
         mock_response = mocker.Mock()
         mock_response.iter_content = lambda chunk_size: [] # Empty content
         mock_response.headers = {}
         mock_response.raise_for_status = mocker.Mock()
+        mock_session.get.return_value = mock_response
+        mock_session.__enter__.return_value = mock_session
+        mock_session.__exit__.return_value = None
 
-        mocker.patch("requests.get", return_value=mock_response)
+        mocker.patch("fetchext.downloaders.chrome.get_session", return_value=mock_session)
 
         downloader = ChromeDownloader()
         extension_id = "empty_extension"
