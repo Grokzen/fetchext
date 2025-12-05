@@ -34,8 +34,8 @@
 
 - [x] **Source Preview**: List contents without extracting (CLI).
   - [x] Add `fext preview <file>` to show file structure tree using streaming parser.
-- [ ] **Manifest V3 Auditor**: Check MV3 compatibility (Analysis).
-  - [ ] Report on MV2 vs MV3 status and deprecated APIs.
+- [x] **Manifest V3 Auditor**: Check MV3 compatibility (Analysis).
+  - [x] Report on MV2 vs MV3 status and deprecated APIs.
 - [ ] **Diff Command**: Compare two versions (CLI).
   - [ ] Add `fext diff <old.crx> <new.crx>` to show changed files and permissions.
 - [ ] **Permission Risk Scoring**: Analyze permissions (Analysis).

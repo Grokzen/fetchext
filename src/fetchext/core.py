@@ -8,6 +8,7 @@ from .batch import BatchProcessor
 from .utils import open_extension_archive
 from .console import console, print_manifest_table, print_search_results_table
 from .preview import build_file_tree
+from .auditor import ExtensionAuditor
 
 logger = logging.getLogger("fetchext")
 
@@ -242,6 +243,46 @@ def preview_extension(file_path):
         
     except Exception as e:
         logger.error(f"Preview failed: {e}")
+        raise
+
+def audit_extension(file_path, json_output=False):
+    """
+    Audit an extension for MV3 compatibility.
+    """
+    file_path = Path(file_path)
+    if not file_path.exists():
+        raise FileNotFoundError(f"File not found: {file_path}")
+
+    auditor = ExtensionAuditor()
+    try:
+        report = auditor.audit(file_path)
+        
+        if json_output:
+            # Convert dataclass to dict
+            from dataclasses import asdict
+            console.print_json(data=asdict(report))
+        else:
+            # Print report
+            console.print(f"[bold]Manifest Version:[/bold] {report.manifest_version}")
+            if report.is_mv3:
+                console.print("[bold green]MV3 Compatible[/bold green]")
+            else:
+                console.print("[bold yellow]MV2 Legacy[/bold yellow]")
+                
+            if report.issues:
+                console.print("\n[bold]Issues:[/bold]")
+                for issue in report.issues:
+                    color = "red" if issue.severity == "error" else "yellow" if issue.severity == "warning" else "blue"
+                    loc = f"{issue.file}"
+                    if issue.line:
+                        loc += f":{issue.line}"
+                    console.print(f"[{color}]• {issue.message}[/{color}] ([dim]{loc}[/dim])")
+            else:
+                console.print("\n[bold green]No issues found.[/bold green]")
+                
+        return report
+    except Exception as e:
+        logger.error(f"Audit failed: {e}")
         raise
 
 def extract_extension(file_path, output_dir=None, show_progress=True):

@@ -42,3 +42,10 @@ class TestCLI:
             main()
             mock_preview.assert_called_once_with('test.crx')
 
+    def test_audit_command(self):
+        with patch.object(sys, 'argv', ['fext', 'audit', 'test.crx']), \
+             patch('fetchext.core.audit_extension') as mock_audit:
+            main()
+            mock_audit.assert_called_once_with('test.crx', json_output=False)
+
+

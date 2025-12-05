@@ -119,6 +119,15 @@ def main():
     preview_parser = subparsers.add_parser("preview", aliases=["p"], help="Preview extension contents")
     preview_parser.add_argument("file", help="Path to the .crx or .xpi file")
 
+    # Audit subcommand
+    audit_parser = subparsers.add_parser("audit", aliases=["a"], help="Audit extension for MV3 compatibility")
+    audit_parser.add_argument("file", help="Path to the .crx or .xpi file")
+    audit_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output results as JSON"
+    )
+
     # Batch subcommand
     batch_parser = subparsers.add_parser("batch", aliases=["b"], help="Download extensions from a batch file")
     batch_parser.add_argument("file", help="Path to the batch file containing URLs")
@@ -166,6 +175,10 @@ def main():
 
         if args.command in ["preview", "p"]:
             core.preview_extension(args.file)
+            return
+
+        if args.command in ["audit", "a"]:
+            core.audit_extension(args.file, json_output=args.json)
             return
 
         if args.command in ["batch", "b"]:
