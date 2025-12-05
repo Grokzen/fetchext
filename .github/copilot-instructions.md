@@ -12,7 +12,7 @@ This file documents the project's history, architectural decisions, and coding s
 
 - **Language**: Python 3.11+
 - **Build System**: `setuptools` (configured via `pyproject.toml`)
-- **Dependencies**: `requests`, `rich` (minimal dependencies preferred)
+- **Dependencies**: `requests`, `rich`, `cryptography` (minimal dependencies preferred)
 - **Linting/Formatting**: `ruff`
 - **Task Management**: `Makefile`
 - **Type Hints**: **FORBIDDEN**. Do not use Python type hints (e.g., `def foo(x: int) -> str:`). Keep code dynamic and clean.
@@ -90,6 +90,11 @@ This file documents the project's history, architectural decisions, and coding s
   - `src/fetchext/cli.py`: Handles argument parsing, logging setup, and calls `core` functions.
   - `src/fetchext/__init__.py`: Exports the public API.
 - **Reasoning**: Allows `fetchext` to be used as a library in other projects, not just as a CLI tool.
+
+### 10. Minimal Protobuf Parsing
+
+- **Decision**: Use a custom, lightweight Protobuf decoder (`src/fetchext/protobuf.py`) instead of the full `protobuf` library.
+- **Reasoning**: The CRX3 header structure is simple enough to parse manually (Length-Delimited fields). This avoids adding a heavy dependency and complex build steps (compiling `.proto` files) while still allowing robust signature verification.
 
 ## Development Workflow
 
