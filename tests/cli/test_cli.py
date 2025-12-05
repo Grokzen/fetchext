@@ -35,3 +35,10 @@ class TestCLI:
             assert excinfo.value.code != 0
             captured = capsys.readouterr()
             assert "invalid choice: 'invalid'" in captured.err
+
+    def test_preview_command(self):
+        with patch.object(sys, 'argv', ['fext', 'preview', 'test.crx']), \
+             patch('fetchext.core.preview_extension') as mock_preview:
+            main()
+            mock_preview.assert_called_once_with('test.crx')
+

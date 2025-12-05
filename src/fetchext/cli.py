@@ -115,6 +115,10 @@ def main():
         help="Output results as JSON"
     )
 
+    # Preview subcommand
+    preview_parser = subparsers.add_parser("preview", aliases=["p"], help="Preview extension contents")
+    preview_parser.add_argument("file", help="Path to the .crx or .xpi file")
+
     # Batch subcommand
     batch_parser = subparsers.add_parser("batch", aliases=["b"], help="Download extensions from a batch file")
     batch_parser.add_argument("file", help="Path to the batch file containing URLs")
@@ -158,6 +162,10 @@ def main():
 
         if args.command in ["check", "c"]:
             core.check_update(args.file, json_output=args.json)
+            return
+
+        if args.command in ["preview", "p"]:
+            core.preview_extension(args.file)
             return
 
         if args.command in ["batch", "b"]:

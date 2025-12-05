@@ -7,6 +7,7 @@ from .inspector import ExtensionInspector
 from .batch import BatchProcessor
 from .utils import open_extension_archive
 from .console import console, print_manifest_table, print_search_results_table
+from .preview import build_file_tree
 
 logger = logging.getLogger("fetchext")
 
@@ -223,6 +224,25 @@ def check_update(file_path, json_output=False):
              console.print(f"[yellow]Status: {result['status']}[/yellow] {name} ({local_version} vs {remote_version})")
 
     return result
+
+def preview_extension(file_path):
+    """
+    Preview the contents of an extension archive without extracting.
+    """
+    file_path = Path(file_path)
+    if not file_path.exists():
+        raise FileNotFoundError(f"File not found: {file_path}")
+
+    try:
+        with open_extension_archive(file_path) as zf:
+            file_list = zf.namelist()
+            
+        tree = build_file_tree(file_list, file_path.name)
+        console.print(tree)
+        
+    except Exception as e:
+        logger.error(f"Preview failed: {e}")
+        raise
 
 def extract_extension(file_path, output_dir=None, show_progress=True):
     """

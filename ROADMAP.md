@@ -32,8 +32,8 @@
 
 *Focus: Security research and inspection capabilities.*
 
-- [ ] **Source Preview**: List contents without extracting (CLI).
-  - [ ] Add `fext preview <file>` to show file structure tree using streaming parser.
+- [x] **Source Preview**: List contents without extracting (CLI).
+  - [x] Add `fext preview <file>` to show file structure tree using streaming parser.
 - [ ] **Manifest V3 Auditor**: Check MV3 compatibility (Analysis).
   - [ ] Report on MV2 vs MV3 status and deprecated APIs.
 - [ ] **Diff Command**: Compare two versions (CLI).
