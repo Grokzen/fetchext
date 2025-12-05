@@ -40,6 +40,8 @@
   - [ ] Add `fext diff <old.crx> <new.crx>` to show changed files and permissions.
 - [ ] **Permission Risk Scoring**: Analyze permissions (Analysis).
   - [ ] Assign "Privacy Risk" score based on requested permissions.
+- [ ] **Signature Verification**: Verify CRX integrity (Security).
+  - [ ] Validate the cryptographic signature of the CRX file against its public key.
 
 ## 🏢 v0.8.0: Enterprise & Scale
 
@@ -53,6 +55,8 @@
   - [ ] Check internal JS files for known vulnerable library signatures.
 - [ ] **Plugin Hooks**: Extensibility system (Architecture).
   - [ ] Support pre/post-download hooks (e.g., virus scan, git commit).
+- [ ] **S3 Storage Support**: Cloud backend (Storage).
+  - [ ] Support downloading and mirroring extensions directly to AWS S3 / MinIO buckets.
 
 ## ✅ Completed
 
