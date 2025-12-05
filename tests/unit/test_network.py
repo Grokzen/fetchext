@@ -1,6 +1,6 @@
 import requests
 from requests.adapters import HTTPAdapter
-from fetchext.network import get_session
+from fetchext.network import get_session, USER_AGENTS
 
 def test_get_session_defaults():
     session = get_session()
@@ -30,3 +30,21 @@ def test_get_session_custom_config():
 def test_session_mounts():
     session = get_session()
     assert session.get_adapter("http://example.com") is session.get_adapter("https://example.com")
+
+def test_get_session_has_user_agent():
+    """Test that the session has a User-Agent header."""
+    session = get_session()
+    assert "User-Agent" in session.headers
+    assert session.headers["User-Agent"] in USER_AGENTS
+
+def test_get_session_rotates_user_agent():
+    """Test that multiple calls to get_session return different User-Agents (probabilistic)."""
+    # This test is probabilistic, but with 8 agents, the chance of getting the same one 
+    # 10 times in a row is extremely low.
+    agents = set()
+    for _ in range(20):
+        session = get_session()
+        agents.add(session.headers["User-Agent"])
+    
+    # We expect to see at least 2 different agents
+    assert len(agents) > 1
