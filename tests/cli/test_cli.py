@@ -60,6 +60,16 @@ class TestCLI:
             main()
             mock_risk.assert_called_once_with('test.crx', json_output=False)
 
+    def test_verify_command(self):
+        with patch.object(sys, 'argv', ['fext', 'verify', 'test.crx']), \
+             patch('fetchext.core.verify_signature') as mock_verify:
+            mock_verify.return_value = True
+            with pytest.raises(SystemExit) as excinfo:
+                main()
+            assert excinfo.value.code == 0
+            mock_verify.assert_called_once_with('test.crx', json_output=False)
+
+
 
 
 

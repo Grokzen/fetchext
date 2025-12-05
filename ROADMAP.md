@@ -40,8 +40,8 @@
   - [x] Add `fext diff <old.crx> <new.crx>` to show changed files and permissions.
 - [x] **Permission Risk Scoring**: Analyze permissions (Analysis).
   - [x] Assign "Privacy Risk" score based on requested permissions.
-- [ ] **Signature Verification**: Verify CRX integrity (Security).
-  - [ ] Validate the cryptographic signature of the CRX file against its public key.
+- [x] **Signature Verification**: Verify CRX integrity (Security).
+  - [x] Validate the cryptographic signature of the CRX file against its public key.
 
 ## 🏢 v0.8.0: Enterprise & Scale
 

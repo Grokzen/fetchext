@@ -147,6 +147,15 @@ def main():
         help="Output results as JSON"
     )
 
+    # Verify subcommand
+    verify_parser = subparsers.add_parser("verify", help="Verify CRX signature")
+    verify_parser.add_argument("file", help="Path to the .crx file")
+    verify_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output results as JSON"
+    )
+
     # Batch subcommand
     batch_parser = subparsers.add_parser("batch", aliases=["b"], help="Download extensions from a batch file")
     batch_parser.add_argument("file", help="Path to the batch file containing URLs")
@@ -207,6 +216,12 @@ def main():
         if args.command in ["risk", "r"]:
             core.analyze_risk(args.file, json_output=args.json)
             return
+
+        if args.command == "verify":
+            if core.verify_signature(args.file, json_output=args.json):
+                sys.exit(0)
+            else:
+                sys.exit(1)
 
         if args.command in ["batch", "b"]:
             core.batch_download(args.file, args.output_dir, workers=args.workers, show_progress=show_progress)

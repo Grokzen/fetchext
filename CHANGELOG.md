@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Manifest V3 Auditor**: Added `fext audit <file>` command to check for MV3 compatibility and deprecated APIs.
 - **Diff Command**: Added `fext diff <old> <new>` command to compare two extension versions.
 - **Risk Analysis**: Added `fext risk <file>` command to analyze permission risks and assign a privacy score.
+- **Signature Verification**: Added `fext verify <file>` command to cryptographically verify CRX3 signatures.
 
 ## [0.6.0] - 2025-12-05
 

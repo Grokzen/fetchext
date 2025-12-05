@@ -21,6 +21,7 @@ classifiers = [
 dependencies = [
     "requests",
     "rich",
+    "cryptography",
 ]
 
 [project.scripts]

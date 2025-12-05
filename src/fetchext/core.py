@@ -11,6 +11,7 @@ from .preview import build_file_tree
 from .auditor import ExtensionAuditor
 from .diff import ExtensionDiffer
 from .risk import RiskAnalyzer
+from .verifier import CrxVerifier
 
 logger = logging.getLogger("fetchext")
 
@@ -389,6 +390,41 @@ def analyze_risk(file_path, json_output=False):
     except Exception as e:
         logger.error(f"Risk analysis failed: {e}")
         raise
+
+def verify_signature(file_path, json_output=False):
+    """
+    Verify the cryptographic signature of a CRX file.
+    """
+    file_path = Path(file_path)
+    if not file_path.exists():
+        raise FileNotFoundError(f"File not found: {file_path}")
+        
+    verifier = CrxVerifier()
+    try:
+        is_valid = verifier.verify(file_path)
+        
+        result = {
+            "file": str(file_path),
+            "verified": is_valid,
+            "algorithm": "RSA-SHA256"
+        }
+        
+        if json_output:
+            console.print_json(data=result)
+        else:
+            if is_valid:
+                console.print("[bold green]Signature Verified[/bold green] (RSA-SHA256)")
+            else:
+                console.print("[bold red]Verification Failed[/bold red]")
+                
+        return is_valid
+    except Exception as e:
+        logger.error(f"Verification failed: {e}")
+        if json_output:
+             console.print_json(data={"file": str(file_path), "verified": False, "error": str(e)})
+        else:
+             console.print(f"[bold red]Verification Error:[/bold red] {e}")
+        return False
 
 def extract_extension(file_path, output_dir=None, show_progress=True):
     """
