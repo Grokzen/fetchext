@@ -163,3 +163,12 @@ This project serves as a proof-of-concept for fully automated software developme
     2. Add a concise, bulleted entry describing the change under the current version.
     3. If (and only if) instructed to release a new version, update `pyproject.toml` version as well.
     4. Ensure `CHANGELOG.md` passes markdown linting (no duplicate headers within the same section, correct spacing).
+
+### 4. README Consistency Protocol
+
+- **Rule**: Documentation must never lag behind code.
+- **Trigger**: Any modification to `cli.py`, addition of flags, or change in user-facing behavior.
+- **Action**:
+    1. Update `README.md` immediately after implementing the feature.
+    2. Ensure usage examples are copy-pasteable and correct.
+    3. Verify that `fext --help` output aligns with documented commands.
