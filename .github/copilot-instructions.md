@@ -75,7 +75,7 @@ This file documents the project's history, architectural decisions, and coding s
 ## Development Workflow
 
 - **Setup**: `make setup` (creates venv, installs package in editable mode `pip install -e .`).
-- **Run**: `fext download <browser> <url> [--save-metadata]` or `fext search firefox <query>`.
+- **Run**: `fext download <browser> <url> [--save-metadata] [--extract]` or `fext search firefox <query>`.
 - **Build**: `make build` (uses `build` module to generate wheels/sdist).
 - **Lint**: `make lint` / `make format`.
 - **Test**: `make test` (Unit/CLI/Integration) and `make test-live` (E2E).

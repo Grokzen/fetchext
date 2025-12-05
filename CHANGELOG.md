@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Auto-Extraction**: Added `--extract` / `-x` flag to `download` command to automatically unzip the downloaded extension.
 - **Metadata Sidecars**: Added `--save-metadata` / `-m` flag to `download` command to save extension details (ID, name, version, source, timestamp) to a JSON file.
 - **Rich Output**: Replaced `tqdm` and standard logging with `rich` for beautiful console output, progress bars, and tables.
 - **Progress Bars**: Integrated `tqdm` to display progress bars for file downloads and batch processing.

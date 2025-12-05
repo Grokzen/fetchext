@@ -9,6 +9,7 @@ from .downloaders import ChromeDownloader, EdgeDownloader, FirefoxDownloader
 from .inspector import ExtensionInspector
 from .batch import BatchProcessor
 from .console import console
+from .utils import open_extension_archive
 
 # Configure logging
 logging.basicConfig(
@@ -44,6 +45,11 @@ def main():
         "-m", "--save-metadata",
         action="store_true",
         help="Save metadata to a JSON file alongside the extension"
+    )
+    download_parser.add_argument(
+        "-x", "--extract",
+        action="store_true",
+        help="Automatically extract the extension to a folder"
     )
 
     # Search subcommand
@@ -137,6 +143,24 @@ def main():
                     logger.info(f"Metadata saved to {metadata_path}")
                 except Exception as e:
                     logger.warning(f"Failed to generate metadata: {e}")
+
+            if args.extract:
+                logger.info("Extracting extension...")
+                try:
+                    # Determine extract directory
+                    # Use filename stem (e.g. ublock_origin-1.68.0)
+                    extract_dir = output_dir / output_path.stem
+                    if extract_dir.exists():
+                        logger.warning(f"Extraction directory {extract_dir} already exists. Overwriting...")
+                    
+                    extract_dir.mkdir(parents=True, exist_ok=True)
+                    
+                    with open_extension_archive(output_path) as zf:
+                        zf.extractall(extract_dir)
+                        
+                    logger.info(f"Successfully extracted to {extract_dir}")
+                except Exception as e:
+                    logger.error(f"Failed to extract extension: {e}")
 
         elif args.command in ["search", "s"]:
             if not hasattr(downloader, 'search'):

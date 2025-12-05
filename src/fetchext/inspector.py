@@ -1,49 +1,24 @@
 import json
-import zipfile
 import logging
-from io import BytesIO
-from pathlib import Path
 from rich.table import Table
 from .console import console
+from .utils import open_extension_archive
 
 logger = logging.getLogger(__name__)
 
 class ExtensionInspector:
     def get_manifest(self, file_path):
-        path = Path(file_path)
-        if not path.exists():
-            raise FileNotFoundError(f"File not found: {path}")
-
         try:
-            with zipfile.ZipFile(path, 'r') as zf:
+            with open_extension_archive(file_path) as zf:
                 if "manifest.json" not in zf.namelist():
                     raise ValueError("manifest.json not found in archive")
 
                 with zf.open("manifest.json") as f:
                     return json.load(f)
 
-        except zipfile.BadZipFile:
-            # CRX files might have a header before the ZIP content
-            # This is a simple fallback to try and find the start of the ZIP
-            try:
-                with open(path, 'rb') as f:
-                    content = f.read()
-                    # ZIP local file header signature is 0x04034b50
-                    zip_start = content.find(b'PK\x03\x04')
-                    if zip_start == -1:
-                        raise ValueError("Not a valid ZIP or CRX file")
-                    
-                    # Read into BytesIO from offset
-                    f.seek(zip_start)
-                    with zipfile.ZipFile(BytesIO(f.read()), 'r') as zf:
-                         if "manifest.json" not in zf.namelist():
-                            raise ValueError("manifest.json not found in archive")
-                         with zf.open("manifest.json") as f_manifest:
-                            return json.load(f_manifest)
-
-            except Exception as e:
-                logger.error(f"Failed to inspect file: {e}")
-                raise ValueError("Could not parse file as extension archive")
+        except Exception as e:
+            logger.error(f"Failed to inspect file: {e}")
+            raise ValueError("Could not parse file as extension archive") from e
 
     def inspect(self, file_path):
         try:
