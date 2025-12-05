@@ -2,14 +2,14 @@
 
 ## 🛠️ v0.5.0: Core Reliability & Configuration
 
-- [ ] **Proper CRX Parsing**: Implement a robust CRX3 parser (Internals).
-  - [ ] Remove the "find ZIP header" hack in `utils.py`.
-  - [ ] Read CRX3 header (Magic `Cr24`, Version, Header Length) to correctly locate the ZIP payload.
-  - [ ] Support reading large files without loading them entirely into memory (streaming).
-- [ ] **Network Resilience**: Add retry logic with backoff (Network).
-  - [ ] Implement `tenacity` or custom retry loop for network requests in downloaders.
-- [ ] **Config File**: Add support for a user configuration file (Config).
-  - [ ] Load settings from `~/.config/fext/config.toml` (e.g., default download dir, worker count).
+- [x] **Proper CRX Parsing**: Implement a robust CRX3 parser (Internals).
+  - [x] Remove the "find ZIP header" hack in `utils.py`.
+  - [x] Read CRX3 header (Magic `Cr24`, Version, Header Length) to correctly locate the ZIP payload.
+  - [x] Support reading large files without loading them entirely into memory (streaming).
+- [x] **Network Resilience**: Add retry logic with backoff (Network).
+  - [x] Implement `tenacity` or custom retry loop for network requests in downloaders.
+- [x] **Config File**: Add support for a user configuration file (Config).
+  - [x] Load settings from `~/.config/fext/config.toml` (e.g., default download dir, worker count).
 - [ ] **Verbose/Quiet Mode**: Add global logging control (CLI).
   - [ ] Implement `-v` (debug) and `-q` (errors only) flags.
 - [ ] **User-Agent Rotation**: Avoid blocking (Network).

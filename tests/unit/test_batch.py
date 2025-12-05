@@ -50,6 +50,8 @@ class TestBatchProcessor:
             mock_instance.download.assert_called_with("abc", tmp_path, show_progress=False)
 
     def test_process_line_invalid_format(self, fs, caplog):
+        import logging
+        caplog.set_level(logging.WARNING)
         tmp_path = Path("/tmp/test_batch")
         fs.create_dir(tmp_path)
         processor = BatchProcessor()
@@ -57,6 +59,8 @@ class TestBatchProcessor:
         assert "Invalid line format" in caplog.text
 
     def test_process_line_unsupported_browser(self, fs, caplog):
+        import logging
+        caplog.set_level(logging.WARNING)
         tmp_path = Path("/tmp/test_batch")
         fs.create_dir(tmp_path)
         processor = BatchProcessor()

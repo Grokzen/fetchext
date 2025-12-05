@@ -8,7 +8,7 @@ from .downloaders import ChromeDownloader, EdgeDownloader, FirefoxDownloader
 logger = logging.getLogger(__name__)
 
 class BatchProcessor:
-    def process(self, file_path, output_dir, max_workers=4):
+    def process(self, file_path, output_dir, max_workers=4, show_progress=True):
         path = Path(file_path)
         if not path.exists():
             raise FileNotFoundError(f"Batch file not found: {path}")
@@ -27,30 +27,36 @@ class BatchProcessor:
 
         logger.info(f"Processing {len(valid_lines)} items with {max_workers} workers...")
 
-        with Progress(
-            SpinnerColumn(),
-            TextColumn("[progress.description]{task.description}"),
-            BarColumn(),
-            TaskProgressColumn(),
-            TimeRemainingColumn(),
-            console=console,
-            transient=True
-        ) as progress:
-            task_id = progress.add_task("Batch Progress", total=len(valid_lines))
+        if show_progress:
+            with Progress(
+                SpinnerColumn(),
+                TextColumn("[progress.description]{task.description}"),
+                BarColumn(),
+                TaskProgressColumn(),
+                TimeRemainingColumn(),
+                console=console,
+                transient=True
+            ) as progress:
+                task_id = progress.add_task("Batch Progress", total=len(valid_lines))
+                self._run_threads(valid_lines, output_dir, max_workers, progress, task_id)
+        else:
+            self._run_threads(valid_lines, output_dir, max_workers, None, None)
+
+    def _run_threads(self, valid_lines, output_dir, max_workers, progress, task_id):
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+            # Submit all tasks
+            futures = [
+                executor.submit(self._process_line, line, output_dir)
+                for line in valid_lines
+            ]
             
-            with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-                # Submit all tasks
-                futures = [
-                    executor.submit(self._process_line, line, output_dir)
-                    for line in valid_lines
-                ]
-                
-                for future in concurrent.futures.as_completed(futures):
-                    try:
-                        future.result()
-                    except Exception as e:
-                        logger.error(f"Unexpected error in worker thread: {e}")
-                    finally:
+            for future in concurrent.futures.as_completed(futures):
+                try:
+                    future.result()
+                except Exception as e:
+                    logger.error(f"Unexpected error in worker thread: {e}")
+                finally:
+                    if progress:
                         progress.advance(task_id)
 
     def _process_line(self, line, output_dir):

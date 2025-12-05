@@ -36,6 +36,20 @@ def main():
     default_extract = general_config.get("extract", False)
 
     parser = argparse.ArgumentParser(description="Download or search for browser extensions.")
+    
+    # Global logging flags
+    logging_group = parser.add_mutually_exclusive_group()
+    logging_group.add_argument(
+        "-v", "--verbose",
+        action="store_true",
+        help="Enable verbose logging (DEBUG level)"
+    )
+    logging_group.add_argument(
+        "-q", "--quiet",
+        action="store_true",
+        help="Enable quiet mode (ERROR level only, no progress bars)"
+    )
+
     subparsers = parser.add_subparsers(dest="command", required=True, help="Command to execute")
 
     # Download subcommand
@@ -105,13 +119,27 @@ def main():
 
     args = parser.parse_args()
 
-    logger.info("Starting fetchext...")
+    # Configure logging based on flags
+    if args.verbose:
+        logger.setLevel(logging.DEBUG)
+        # Also set root logger or handler level if needed, but basicConfig set handler
+        logging.getLogger().setLevel(logging.DEBUG)
+    elif args.quiet:
+        logger.setLevel(logging.ERROR)
+        logging.getLogger().setLevel(logging.ERROR)
+    
+    # Determine if progress bars should be shown
+    show_progress = not args.quiet
+
+    if not args.quiet:
+        logger.info("Starting fetchext...")
 
     try:
         if args.command in ["inspect", "i"]:
             inspector = ExtensionInspector()
             inspector.inspect(args.file)
-            logger.info("Inspection finished successfully.")
+            if not args.quiet:
+                logger.info("Inspection finished successfully.")
             return
 
         if args.command in ["extract", "x"]:
@@ -129,19 +157,22 @@ def main():
             
             extract_dir.mkdir(parents=True, exist_ok=True)
             
-            logger.info(f"Extracting {file_path} to {extract_dir}...")
+            if not args.quiet:
+                logger.info(f"Extracting {file_path} to {extract_dir}...")
             try:
                 with open_extension_archive(file_path) as zf:
                     zf.extractall(extract_dir)
-                logger.info("Extraction finished successfully.")
+                if not args.quiet:
+                    logger.info("Extraction finished successfully.")
             except Exception as e:
                 logger.error(f"Extraction failed: {e}")
             return
 
         if args.command in ["batch", "b"]:
             processor = BatchProcessor()
-            processor.process(args.file, args.output_dir, max_workers=args.workers)
-            logger.info("Batch processing finished successfully.")
+            processor.process(args.file, args.output_dir, max_workers=args.workers, show_progress=show_progress)
+            if not args.quiet:
+                logger.info("Batch processing finished successfully.")
             return
 
         downloader = None
@@ -157,16 +188,18 @@ def main():
 
         if args.command in ["download", "d"]:
             extension_id = downloader.extract_id(args.url)
-            logger.info(f"Extracted ID/Slug: {extension_id}")
+            if not args.quiet:
+                logger.info(f"Extracted ID/Slug: {extension_id}")
 
             output_dir = args.output_dir
             if not output_dir.exists():
                 output_dir.mkdir(parents=True, exist_ok=True)
 
-            output_path = downloader.download(extension_id, output_dir)
+            output_path = downloader.download(extension_id, output_dir, show_progress=show_progress)
             
             if args.save_metadata:
-                logger.info("Generating metadata sidecar...")
+                if not args.quiet:
+                    logger.info("Generating metadata sidecar...")
                 try:
                     inspector = ExtensionInspector()
                     manifest = inspector.get_manifest(output_path)
@@ -186,12 +219,14 @@ def main():
                     with open(metadata_path, "w") as f:
                         json.dump(metadata, f, indent=2)
                         
-                    logger.info(f"Metadata saved to {metadata_path}")
+                    if not args.quiet:
+                        logger.info(f"Metadata saved to {metadata_path}")
                 except Exception as e:
                     logger.warning(f"Failed to generate metadata: {e}")
 
             if args.extract:
-                logger.info("Extracting extension...")
+                if not args.quiet:
+                    logger.info("Extracting extension...")
                 try:
                     # Determine extract directory
                     # Use filename stem (e.g. ublock_origin-1.68.0)
@@ -204,7 +239,8 @@ def main():
                     with open_extension_archive(output_path) as zf:
                         zf.extractall(extract_dir)
                         
-                    logger.info(f"Successfully extracted to {extract_dir}")
+                    if not args.quiet:
+                        logger.info(f"Successfully extracted to {extract_dir}")
                 except Exception as e:
                     logger.error(f"Failed to extract extension: {e}")
 
@@ -213,7 +249,8 @@ def main():
                  raise ValueError(f"Search not supported for {args.browser}")
             downloader.search(args.query)
 
-        logger.info("Script finished successfully.")
+        if not args.quiet:
+            logger.info("Script finished successfully.")
     except Exception as e:
         logger.error(f"An error occurred: {e}")
         sys.exit(1)
