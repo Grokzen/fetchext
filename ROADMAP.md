@@ -19,8 +19,8 @@
 
 *Focus: Making `fext` scriptable and embeddable.*
 
-- [ ] **Library Mode**: Decouple CLI from core logic (Architecture).
-  - [ ] Ensure `import fetchext` allows programmatic access to downloaders and parsers.
+- [x] **Library Mode**: Decouple CLI from core logic (Architecture).
+  - [x] Ensure `import fetchext` allows programmatic access to downloaders and parsers.
 - [ ] **JSON Output**: Machine-readable output (CLI).
   - [ ] Add `--json` flag to `search`, `inspect`, and `check` commands.
 - [ ] **Update Checker**: Add `fext check <file_or_dir>` command (CLI).
