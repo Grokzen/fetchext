@@ -79,6 +79,28 @@ fext firefox https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/
 
 The extension will be downloaded to the current directory. 📥
 
+### ⚙️ Advanced Options
+
+**Save Metadata:** 📝
+
+Save extension details (ID, name, version, source, timestamp) to a JSON file alongside the extension.
+
+```bash
+fext download chrome <url> --save-metadata
+# or
+fext download chrome <url> -m
+```
+
+**Auto-Extract:** 📂
+
+Automatically unzip the downloaded extension into a folder.
+
+```bash
+fext download chrome <url> --extract
+# or
+fext download chrome <url> -x
+```
+
 ### � Searching Extensions
 
 You can search for extensions directly from the CLI (currently supports Firefox).
@@ -122,7 +144,23 @@ fext inspect ublock-origin.crx
 
 This will print details like Name, Version, Description, and Permissions. 📄
 
-### 📦 Batch Downloading
+### � Extracting Extensions
+
+You can extract an existing extension file (`.crx` or `.xpi`) using the `extract` command.
+
+```bash
+fext extract <path_to_file> [-o <output_dir>]
+```
+
+**Example:**
+
+```bash
+fext extract ublock-origin.crx
+```
+
+This will extract the contents into a folder named `ublock-origin` in the current directory.
+
+### �📦 Batch Downloading
 
 You can download multiple extensions at once using a batch file.
 
