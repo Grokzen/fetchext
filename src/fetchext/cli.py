@@ -1,16 +1,11 @@
 import sys
-import json
 import logging
 import argparse
 from pathlib import Path
-from datetime import datetime, timezone
 from rich.logging import RichHandler
-from .downloaders import ChromeDownloader, EdgeDownloader, FirefoxDownloader
-from .inspector import ExtensionInspector
-from .batch import BatchProcessor
 from .console import console
-from .utils import open_extension_archive
 from .config import load_config
+from . import core
 
 # Configure logging
 logging.basicConfig(
@@ -122,7 +117,6 @@ def main():
     # Configure logging based on flags
     if args.verbose:
         logger.setLevel(logging.DEBUG)
-        # Also set root logger or handler level if needed, but basicConfig set handler
         logging.getLogger().setLevel(logging.DEBUG)
     elif args.quiet:
         logger.setLevel(logging.ERROR)
@@ -136,118 +130,29 @@ def main():
 
     try:
         if args.command in ["inspect", "i"]:
-            inspector = ExtensionInspector()
-            inspector.inspect(args.file)
-            if not args.quiet:
-                logger.info("Inspection finished successfully.")
+            core.inspect_extension(args.file, show_progress=show_progress)
             return
 
         if args.command in ["extract", "x"]:
-            file_path = Path(args.file)
-            if not file_path.exists():
-                raise FileNotFoundError(f"File not found: {file_path}")
-            
-            if args.output_dir:
-                extract_dir = args.output_dir
-            else:
-                extract_dir = Path(".") / file_path.stem
-                
-            if extract_dir.exists() and any(extract_dir.iterdir()):
-                 logger.warning(f"Extraction directory {extract_dir} is not empty.")
-            
-            extract_dir.mkdir(parents=True, exist_ok=True)
-            
-            if not args.quiet:
-                logger.info(f"Extracting {file_path} to {extract_dir}...")
-            try:
-                with open_extension_archive(file_path) as zf:
-                    zf.extractall(extract_dir)
-                if not args.quiet:
-                    logger.info("Extraction finished successfully.")
-            except Exception as e:
-                logger.error(f"Extraction failed: {e}")
+            core.extract_extension(args.file, args.output_dir, show_progress=show_progress)
             return
 
         if args.command in ["batch", "b"]:
-            processor = BatchProcessor()
-            processor.process(args.file, args.output_dir, max_workers=args.workers, show_progress=show_progress)
-            if not args.quiet:
-                logger.info("Batch processing finished successfully.")
+            core.batch_download(args.file, args.output_dir, workers=args.workers, show_progress=show_progress)
             return
 
-        downloader = None
-        if args.browser in ["chrome", "c"]:
-            downloader = ChromeDownloader()
-        elif args.browser in ["edge", "e"]:
-            downloader = EdgeDownloader()
-        elif args.browser in ["firefox", "f"]:
-            downloader = FirefoxDownloader()
-
-        if not downloader:
-            raise ValueError("Unsupported browser type")
-
         if args.command in ["download", "d"]:
-            extension_id = downloader.extract_id(args.url)
-            if not args.quiet:
-                logger.info(f"Extracted ID/Slug: {extension_id}")
-
-            output_dir = args.output_dir
-            if not output_dir.exists():
-                output_dir.mkdir(parents=True, exist_ok=True)
-
-            output_path = downloader.download(extension_id, output_dir, show_progress=show_progress)
-            
-            if args.save_metadata:
-                if not args.quiet:
-                    logger.info("Generating metadata sidecar...")
-                try:
-                    inspector = ExtensionInspector()
-                    manifest = inspector.get_manifest(output_path)
-                    
-                    metadata = {
-                        "id": extension_id,
-                        "name": manifest.get("name", "Unknown"),
-                        "version": manifest.get("version", "Unknown"),
-                        "source_url": args.url,
-                        "download_timestamp": datetime.now(timezone.utc).isoformat(),
-                        "filename": output_path.name
-                    }
-                    
-                    # Save as <filename>.json (e.g. extension.crx.json)
-                    metadata_path = output_path.with_suffix(output_path.suffix + ".json")
-                    
-                    with open(metadata_path, "w") as f:
-                        json.dump(metadata, f, indent=2)
-                        
-                    if not args.quiet:
-                        logger.info(f"Metadata saved to {metadata_path}")
-                except Exception as e:
-                    logger.warning(f"Failed to generate metadata: {e}")
-
-            if args.extract:
-                if not args.quiet:
-                    logger.info("Extracting extension...")
-                try:
-                    # Determine extract directory
-                    # Use filename stem (e.g. ublock_origin-1.68.0)
-                    extract_dir = output_dir / output_path.stem
-                    if extract_dir.exists():
-                        logger.warning(f"Extraction directory {extract_dir} already exists. Overwriting...")
-                    
-                    extract_dir.mkdir(parents=True, exist_ok=True)
-                    
-                    with open_extension_archive(output_path) as zf:
-                        zf.extractall(extract_dir)
-                        
-                    if not args.quiet:
-                        logger.info(f"Successfully extracted to {extract_dir}")
-                except Exception as e:
-                    logger.error(f"Failed to extract extension: {e}")
+            core.download_extension(
+                args.browser,
+                args.url,
+                args.output_dir,
+                save_metadata=args.save_metadata,
+                extract=args.extract,
+                show_progress=show_progress
+            )
 
         elif args.command in ["search", "s"]:
-            if not hasattr(downloader, 'search'):
-                 raise ValueError(f"Search not supported for {args.browser}")
-            downloader.search(args.query)
+            core.search_extension(args.browser, args.query)
 
         if not args.quiet:
             logger.info("Script finished successfully.")

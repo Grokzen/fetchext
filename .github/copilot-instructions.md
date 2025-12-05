@@ -82,6 +82,15 @@ This file documents the project's history, architectural decisions, and coding s
 - **Decision**: Use `requests.adapters.HTTPAdapter` with `urllib3.util.retry.Retry` for all network requests.
 - **Reasoning**: Provides automatic retries with backoff for transient failures (5xx, connection errors) without adding external dependencies like `tenacity`.
 
+### 9. Library Mode Architecture
+
+- **Decision**: Decouple CLI logic from core functionality.
+- **Structure**:
+  - `src/fetchext/core.py`: Contains high-level functions (`download_extension`, `search_extension`, etc.) that can be imported and used by other Python scripts.
+  - `src/fetchext/cli.py`: Handles argument parsing, logging setup, and calls `core` functions.
+  - `src/fetchext/__init__.py`: Exports the public API.
+- **Reasoning**: Allows `fetchext` to be used as a library in other projects, not just as a CLI tool.
+
 ## Development Workflow
 
 - **Setup**: `make setup` (creates venv, installs package in editable mode `pip install -e .`).
