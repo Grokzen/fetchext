@@ -21,8 +21,8 @@
 
 - [x] **Library Mode**: Decouple CLI from core logic (Architecture).
   - [x] Ensure `import fetchext` allows programmatic access to downloaders and parsers.
-- [ ] **JSON Output**: Machine-readable output (CLI).
-  - [ ] Add `--json` flag to `search`, `inspect`, and `check` commands.
+- [x] **JSON Output**: Machine-readable output (CLI).
+  - [x] Add `--json` flag to `search`, `inspect`, and `check` commands.
 - [ ] **Update Checker**: Add `fext check <file_or_dir>` command (CLI).
   - [ ] Extract ID/Version from local files and query Web Store for updates.
 - [ ] **PyPI Publishing**: Automated release workflow (CI/CD).
