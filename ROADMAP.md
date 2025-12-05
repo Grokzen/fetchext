@@ -55,8 +55,21 @@
   - [ ] Check internal JS files for known vulnerable library signatures.
 - [ ] **Plugin Hooks**: Extensibility system (Architecture).
   - [ ] Support pre/post-download hooks (e.g., virus scan, git commit).
-- [ ] **S3 Storage Support**: Cloud backend (Storage).
-  - [ ] Support downloading and mirroring extensions directly to AWS S3 / MinIO buckets.
+
+## 🖥️ v0.9.0: Interactive & Ecosystem
+
+*Focus: Enhanced user experience and deployment options.*
+
+- [ ] **Interactive TUI**: Terminal User Interface (CLI).
+  - [ ] Add `fext ui` for browsing and downloading using `textual` or `rich`.
+- [ ] **Docker Support**: Official Container Image (DevOps).
+  - [ ] Provide a `Dockerfile` and publish to GHCR for easy CI usage.
+- [ ] **Configuration Wizard**: Interactive setup (CLI).
+  - [ ] Add `fext setup` to guide users through creating the config file.
+- [ ] **Format Converter**: Repackaging tools (Core).
+  - [ ] Add `fext convert` to switch between raw source, CRX, and ZIP formats.
+- [ ] **Repository Statistics**: Local repo insights (Analysis).
+  - [ ] Add `fext stats` to visualize storage usage and permission trends.
 
 ## ✅ Completed
 
