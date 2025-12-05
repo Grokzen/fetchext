@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.6.0] - 2025-12-05
 
+### Added
+
+- **JSON Output**: Added `--json` flag to `search` and `inspect` commands to output machine-readable JSON.
+
 ### Changed
 
 - **Library Mode**: Refactored core logic into `src/fetchext/core.py` to allow programmatic usage of `fetchext` as a library.

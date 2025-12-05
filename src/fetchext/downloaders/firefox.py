@@ -2,7 +2,6 @@ import logging
 import requests
 from pathlib import Path
 from urllib.parse import urlparse
-from rich.table import Table
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn, DownloadColumn, TransferSpeedColumn
 from ..console import console
 from ..network import get_session
@@ -97,29 +96,7 @@ class FirefoxDownloader(BaseDownloader):
                 response = session.get(url, params=params)
                 response.raise_for_status()
 
-                results = response.json().get("results", [])
-            if results:
-                table = Table(title=f"Search Results for '{query}'", show_header=True, header_style="bold magenta")
-                table.add_column("Name", style="cyan")
-                table.add_column("Slug", style="green")
-                table.add_column("GUID", style="yellow")
-                table.add_column("URL", style="blue")
-
-                for result in results[:5]:  # Show top 5
-                    name_obj = result.get('name')
-                    if isinstance(name_obj, dict):
-                        name = name_obj.get('en-US', 'Unknown Name')
-                    else:
-                        name = str(name_obj) if name_obj else 'Unknown Name'
-                        
-                    slug = result.get('slug', 'N/A')
-                    guid = result.get('guid', 'N/A')
-                    url = result.get('url', 'N/A')
-                    table.add_row(name, slug, guid, url)
-                
-                console.print(table)
-            else:
-                console.print(f"[yellow]No results found for '{query}'.[/yellow]")
+                return response.json().get("results", [])
 
         except requests.RequestException as e:
             logger.error(f"Failed to search for extension: {e}")

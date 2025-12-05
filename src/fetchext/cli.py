@@ -82,10 +82,20 @@ def main():
         help="The browser type (only firefox/f supported for search)"
     )
     search_parser.add_argument("query", help="The search query")
+    search_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output results as JSON"
+    )
 
     # Inspect subcommand
     inspect_parser = subparsers.add_parser("inspect", aliases=["i"], help="Inspect an extension file")
     inspect_parser.add_argument("file", help="Path to the .crx or .xpi file")
+    inspect_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output results as JSON"
+    )
 
     # Extract subcommand
     extract_parser = subparsers.add_parser("extract", aliases=["x"], help="Extract an extension file")
@@ -130,7 +140,7 @@ def main():
 
     try:
         if args.command in ["inspect", "i"]:
-            core.inspect_extension(args.file, show_progress=show_progress)
+            core.inspect_extension(args.file, show_progress=show_progress, json_output=args.json)
             return
 
         if args.command in ["extract", "x"]:
@@ -152,7 +162,7 @@ def main():
             )
 
         elif args.command in ["search", "s"]:
-            core.search_extension(args.browser, args.query)
+            core.search_extension(args.browser, args.query, json_output=args.json)
 
         if not args.quiet:
             logger.info("Script finished successfully.")

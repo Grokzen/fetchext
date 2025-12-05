@@ -6,6 +6,7 @@ from .downloaders import ChromeDownloader, EdgeDownloader, FirefoxDownloader
 from .inspector import ExtensionInspector
 from .batch import BatchProcessor
 from .utils import open_extension_archive
+from .console import console, print_manifest_table, print_search_results_table
 
 logger = logging.getLogger("fetchext")
 
@@ -69,7 +70,7 @@ def download_extension(browser, url, output_dir, save_metadata=False, extract=Fa
 
     return output_path
 
-def search_extension(browser, query):
+def search_extension(browser, query, json_output=False):
     """
     Search for an extension.
     """
@@ -80,16 +81,30 @@ def search_extension(browser, query):
     if not hasattr(downloader, 'search'):
          raise ValueError(f"Search not supported for {browser}")
     
-    downloader.search(query)
+    results = downloader.search(query)
+    
+    if json_output:
+        console.print_json(data=results)
+    else:
+        print_search_results_table(query, results)
+    
+    return results
 
-def inspect_extension(file_path, show_progress=True):
+def inspect_extension(file_path, show_progress=True, json_output=False):
     """
     Inspect an extension file.
     """
     inspector = ExtensionInspector()
-    inspector.inspect(file_path)
-    if show_progress:
-        logger.info("Inspection finished successfully.")
+    manifest = inspector.get_manifest(file_path)
+    
+    if json_output:
+        console.print_json(data=manifest)
+    else:
+        print_manifest_table(manifest)
+        if show_progress:
+            logger.info("Inspection finished successfully.")
+    
+    return manifest
 
 def extract_extension(file_path, output_dir=None, show_progress=True):
     """

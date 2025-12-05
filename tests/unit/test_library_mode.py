@@ -25,6 +25,7 @@ def test_download_extension_call(mocker):
 def test_search_extension_call(mocker):
     """Verify search_extension calls the correct downloader."""
     mock_downloader = mocker.Mock()
+    mock_downloader.search.return_value = []  # Return empty list
     mocker.patch("fetchext.core.FirefoxDownloader", return_value=mock_downloader)
     
     fetchext.search_extension("firefox", "query")
