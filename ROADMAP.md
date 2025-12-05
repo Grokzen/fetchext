@@ -23,10 +23,10 @@
   - [x] Ensure `import fetchext` allows programmatic access to downloaders and parsers.
 - [x] **JSON Output**: Machine-readable output (CLI).
   - [x] Add `--json` flag to `search`, `inspect`, and `check` commands.
-- [ ] **Update Checker**: Add `fext check <file_or_dir>` command (CLI).
-  - [ ] Extract ID/Version from local files and query Web Store for updates.
-- [ ] **PyPI Publishing**: Automated release workflow (CI/CD).
-  - [ ] Finalize build pipeline to publish to PyPI on tag creation.
+- [x] **Update Checker**: Add `fext check <file_or_dir>` command (CLI).
+  - [x] Extract ID/Version from local files and query Web Store for updates.
+- [x] **PyPI Publishing**: Automated release workflow (CI/CD).
+  - [x] Finalize build pipeline to publish to PyPI on tag creation.
 
 ## 🧠 v0.7.0: Deep Analysis
 

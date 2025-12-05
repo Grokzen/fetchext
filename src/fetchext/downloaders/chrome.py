@@ -25,6 +25,34 @@ class ChromeDownloader(BaseDownloader):
 
         raise ValueError("Could not extract extension ID from Chrome Web Store URL")
 
+    def get_latest_version(self, extension_id):
+        # Chrome doesn't have a simple JSON API for version checking without downloading XML
+        # We can use the update URL to get the XML and parse it, but that's complex.
+        # Alternatively, we can HEAD the download URL and check if it redirects or exists, 
+        # but that doesn't give the version number easily without parsing the CRX header or XML.
+        
+        # Using the update check XML API
+        url = "https://clients2.google.com/service/update2/crx"
+        params = {
+            "x": f"id={extension_id}&uc",
+            "prodversion": "131.0",
+            "acceptformat": "crx2,crx3"
+        }
+        
+        try:
+            with get_session() as session:
+                response = session.get(url, params=params)
+                response.raise_for_status()
+                # Simple regex to find version in XML response
+                # <updatecheck codebase="..." version="1.2.3" />
+                match = re.search(r'version="([0-9.]+)"', response.text)
+                if match:
+                    return match.group(1)
+                return None
+        except requests.RequestException as e:
+            logger.warning(f"Failed to check version for {extension_id}: {e}")
+            return None
+
     def download(self, extension_id, output_dir, show_progress=True):
         download_url = (
             f"https://clients2.google.com/service/update2/crx"

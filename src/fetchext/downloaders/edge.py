@@ -27,6 +27,28 @@ class EdgeDownloader(BaseDownloader):
 
         raise ValueError("Could not extract extension ID from Edge Add-ons URL")
 
+    def get_latest_version(self, extension_id):
+        # Edge update URL
+        url = "https://edge.microsoft.com/extensionwebstorebase/v1/crx"
+        params = {
+            "x": f"id={extension_id}&installsource=ondemand&uc",
+            "prod": "chromiumcrx",
+            "prodchannel": ""
+        }
+        
+        try:
+            with get_session() as session:
+                response = session.get(url, params=params)
+                response.raise_for_status()
+                # Simple regex to find version in XML response
+                match = re.search(r'version="([0-9.]+)"', response.text)
+                if match:
+                    return match.group(1)
+                return None
+        except requests.RequestException as e:
+            logger.warning(f"Failed to check version for {extension_id}: {e}")
+            return None
+
     def download(self, extension_id, output_dir, show_progress=True):
         # Edge uses a similar update protocol to Chrome
         download_url = (

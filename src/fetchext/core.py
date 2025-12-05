@@ -106,6 +106,124 @@ def inspect_extension(file_path, show_progress=True, json_output=False):
     
     return manifest
 
+def check_update(file_path, json_output=False):
+    """
+    Check if an extension file has an update available.
+    """
+    file_path = Path(file_path)
+    if not file_path.exists():
+        raise FileNotFoundError(f"File not found: {file_path}")
+
+    inspector = ExtensionInspector()
+    manifest = inspector.get_manifest(file_path)
+    
+    local_version = manifest.get("version")
+    name = manifest.get("name", "Unknown")
+    
+    # Try to infer ID and browser from metadata sidecar if it exists
+    metadata_path = file_path.with_suffix(file_path.suffix + ".json")
+    extension_id = None
+    browser = None
+    
+    if metadata_path.exists():
+        try:
+            with open(metadata_path, "r") as f:
+                metadata = json.load(f)
+                extension_id = metadata.get("id")
+                source_url = metadata.get("source_url", "")
+                browser = metadata.get("browser") # Trust metadata if present
+                
+                if not browser:
+                    if "chrome.google.com" in source_url or "chromewebstore.google.com" in source_url:
+                        browser = "chrome"
+                    elif "microsoftedge.microsoft.com" in source_url:
+                        browser = "edge"
+                    elif "addons.mozilla.org" in source_url:
+                        browser = "firefox"
+        except Exception:
+            pass
+            
+    # Fallback: Try to infer from update_url in manifest (Chrome/Edge)
+    if not extension_id:
+        update_url = manifest.get("update_url", "")
+        if "clients2.google.com" in update_url:
+            # This is generic for Chrome extensions, but doesn't give us the ID directly usually
+            # unless we parse the key, which is hard.
+            # However, if the filename is the ID (common pattern), use that.
+            if len(file_path.stem) == 32:
+                extension_id = file_path.stem
+                browser = "chrome"
+        elif "edge.microsoft.com" in update_url:
+             if len(file_path.stem) == 32:
+                extension_id = file_path.stem
+                browser = "edge"
+    
+    # Fallback: Firefox ID is often in browser_specific_settings
+    if not extension_id:
+        bss = manifest.get("browser_specific_settings", {}).get("gecko", {})
+        if "id" in bss:
+            extension_id = bss["id"]
+            browser = "firefox"
+
+    if not extension_id or not browser:
+        # Last ditch: check filename for 32-char ID
+        if len(file_path.stem) == 32:
+             # Ambiguous between Chrome and Edge, default to Chrome?
+             extension_id = file_path.stem
+             browser = "chrome" # Best guess
+        else:
+             raise ValueError("Could not determine extension ID or source browser. Please ensure metadata sidecar exists.")
+
+    downloader = get_downloader(browser)
+    remote_version = downloader.get_latest_version(extension_id)
+    
+    result = {
+        "name": name,
+        "id": extension_id,
+        "browser": browser,
+        "local_version": local_version,
+        "remote_version": remote_version,
+        "update_available": False,
+        "status": "unknown"
+    }
+    
+    if remote_version:
+        # Simple string comparison might fail for semver (1.10 < 1.2), but let's assume standard versioning
+        # Better to use packaging.version
+        try:
+            from packaging import version
+            v_local = version.parse(local_version)
+            v_remote = version.parse(remote_version)
+            if v_remote > v_local:
+                result["update_available"] = True
+                result["status"] = "update_available"
+            elif v_remote == v_local:
+                result["status"] = "up_to_date"
+            else:
+                result["status"] = "local_is_newer"
+        except ImportError:
+            # Fallback to string comparison if packaging not available (though it should be in env)
+             if remote_version != local_version:
+                 result["update_available"] = True # Naive
+                 result["status"] = "update_available" # Naive
+    else:
+        result["status"] = "check_failed"
+
+    if json_output:
+        console.print_json(data=result)
+    else:
+        # Print human readable
+        if result["status"] == "update_available":
+            console.print(f"[bold green]Update Available![/bold green] {name} ({local_version} -> {remote_version})")
+        elif result["status"] == "up_to_date":
+            console.print(f"[bold blue]Up to date.[/bold blue] {name} ({local_version})")
+        elif result["status"] == "check_failed":
+            console.print(f"[bold red]Failed to check for updates.[/bold red] {name}")
+        else:
+             console.print(f"[yellow]Status: {result['status']}[/yellow] {name} ({local_version} vs {remote_version})")
+
+    return result
+
 def extract_extension(file_path, output_dir=None, show_progress=True):
     """
     Extract an extension archive.

@@ -10,3 +10,7 @@ class BaseDownloader(ABC):
     def download(self, extension_id, output_dir, show_progress=True):
         """Download the extension and return the file path."""
         pass
+
+    def get_latest_version(self, extension_id):
+        """Get the latest version of the extension from the store."""
+        raise NotImplementedError("Version check not implemented for this browser")

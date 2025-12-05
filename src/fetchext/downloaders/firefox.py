@@ -87,6 +87,20 @@ class FirefoxDownloader(BaseDownloader):
             logger.error(f"Failed to download extension: {e}")
             raise
 
+    def get_latest_version(self, extension_id):
+        api_url = f"https://addons.mozilla.org/api/v5/addons/addon/{extension_id}/"
+        try:
+            with get_session() as session:
+                response = session.get(api_url)
+                response.raise_for_status()
+                data = response.json()
+                if "current_version" in data:
+                    return data["current_version"]["version"]
+                return None
+        except requests.RequestException as e:
+            logger.warning(f"Failed to check version for {extension_id}: {e}")
+            return None
+
     def search(self, query):
         url = "https://addons.mozilla.org/api/v5/addons/search/"
         params = {"q": query, "app": "firefox", "type": "extension"}

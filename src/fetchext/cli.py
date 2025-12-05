@@ -106,6 +106,15 @@ def main():
         help="Directory to extract to (default: <filename_stem> in current dir)"
     )
 
+    # Check subcommand
+    check_parser = subparsers.add_parser("check", aliases=["c"], help="Check for updates")
+    check_parser.add_argument("file", help="Path to the .crx or .xpi file")
+    check_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output results as JSON"
+    )
+
     # Batch subcommand
     batch_parser = subparsers.add_parser("batch", aliases=["b"], help="Download extensions from a batch file")
     batch_parser.add_argument("file", help="Path to the batch file containing URLs")
@@ -145,6 +154,10 @@ def main():
 
         if args.command in ["extract", "x"]:
             core.extract_extension(args.file, args.output_dir, show_progress=show_progress)
+            return
+
+        if args.command in ["check", "c"]:
+            core.check_update(args.file, json_output=args.json)
             return
 
         if args.command in ["batch", "b"]:

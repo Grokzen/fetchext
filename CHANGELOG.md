@@ -9,7 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Update Checker**: Added `check` subcommand to check for updates of local extension files against the Web Store.
 - **JSON Output**: Added `--json` flag to `search` and `inspect` commands to output machine-readable JSON.
+- **PyPI Publishing**: Added GitHub Actions workflow to automatically publish releases to PyPI on tag creation.
 
 ### Changed
 
