@@ -48,4 +48,11 @@ class TestCLI:
             main()
             mock_audit.assert_called_once_with('test.crx', json_output=False)
 
+    def test_diff_command(self):
+        with patch.object(sys, 'argv', ['fext', 'diff', 'old.crx', 'new.crx']), \
+             patch('fetchext.core.diff_extensions') as mock_diff:
+            main()
+            mock_diff.assert_called_once_with('old.crx', 'new.crx', json_output=False)
+
+
 

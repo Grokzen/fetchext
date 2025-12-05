@@ -9,6 +9,7 @@ from .utils import open_extension_archive
 from .console import console, print_manifest_table, print_search_results_table
 from .preview import build_file_tree
 from .auditor import ExtensionAuditor
+from .diff import ExtensionDiffer
 
 logger = logging.getLogger("fetchext")
 
@@ -283,6 +284,60 @@ def audit_extension(file_path, json_output=False):
         return report
     except Exception as e:
         logger.error(f"Audit failed: {e}")
+        raise
+
+def diff_extensions(old_path, new_path, json_output=False):
+    """
+    Compare two extension archives.
+    """
+    old_path = Path(old_path)
+    new_path = Path(new_path)
+    
+    if not old_path.exists():
+        raise FileNotFoundError(f"File not found: {old_path}")
+    if not new_path.exists():
+        raise FileNotFoundError(f"File not found: {new_path}")
+
+    differ = ExtensionDiffer()
+    try:
+        report = differ.diff(old_path, new_path)
+        
+        if json_output:
+            from dataclasses import asdict
+            console.print_json(data=asdict(report))
+        else:
+            console.print("[bold]Diff Report[/bold]")
+            console.print(f"Old Version: {report.old_version} -> New Version: {report.new_version}")
+            
+            if report.manifest_changes:
+                console.print("\n[bold]Manifest Changes:[/bold]")
+                for key, (old, new) in report.manifest_changes.items():
+                    console.print(f"  [yellow]{key}[/yellow]: {old} -> {new}")
+            
+            if report.added_files:
+                console.print(f"\n[bold green]Added Files ({len(report.added_files)}):[/bold green]")
+                for f in report.added_files[:10]:
+                    console.print(f"  + {f}")
+                if len(report.added_files) > 10:
+                    console.print(f"  ... and {len(report.added_files) - 10} more")
+                    
+            if report.removed_files:
+                console.print(f"\n[bold red]Removed Files ({len(report.removed_files)}):[/bold red]")
+                for f in report.removed_files[:10]:
+                    console.print(f"  - {f}")
+                if len(report.removed_files) > 10:
+                    console.print(f"  ... and {len(report.removed_files) - 10} more")
+                    
+            if report.modified_files:
+                console.print(f"\n[bold blue]Modified Files ({len(report.modified_files)}):[/bold blue]")
+                for f in report.modified_files[:10]:
+                    console.print(f"  ~ {f}")
+                if len(report.modified_files) > 10:
+                    console.print(f"  ... and {len(report.modified_files) - 10} more")
+                    
+        return report
+    except Exception as e:
+        logger.error(f"Diff failed: {e}")
         raise
 
 def extract_extension(file_path, output_dir=None, show_progress=True):

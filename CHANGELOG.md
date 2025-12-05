@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Source Preview**: Added `fext preview <file>` command to list extension contents without extracting.
 - **Manifest V3 Auditor**: Added `fext audit <file>` command to check for MV3 compatibility and deprecated APIs.
+- **Diff Command**: Added `fext diff <old> <new>` command to compare two extension versions.
 
 ## [0.6.0] - 2025-12-05
 

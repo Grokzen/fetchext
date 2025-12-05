@@ -128,6 +128,16 @@ def main():
         help="Output results as JSON"
     )
 
+    # Diff subcommand
+    diff_parser = subparsers.add_parser("diff", help="Compare two extension versions")
+    diff_parser.add_argument("old_file", help="Path to the old .crx or .xpi file")
+    diff_parser.add_argument("new_file", help="Path to the new .crx or .xpi file")
+    diff_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output results as JSON"
+    )
+
     # Batch subcommand
     batch_parser = subparsers.add_parser("batch", aliases=["b"], help="Download extensions from a batch file")
     batch_parser.add_argument("file", help="Path to the batch file containing URLs")
@@ -179,6 +189,10 @@ def main():
 
         if args.command in ["audit", "a"]:
             core.audit_extension(args.file, json_output=args.json)
+            return
+
+        if args.command == "diff":
+            core.diff_extensions(args.old_file, args.new_file, json_output=args.json)
             return
 
         if args.command in ["batch", "b"]:
