@@ -10,8 +10,8 @@
   - [x] Implement `tenacity` or custom retry loop for network requests in downloaders.
 - [x] **Config File**: Add support for a user configuration file (Config).
   - [x] Load settings from `~/.config/fext/config.toml` (e.g., default download dir, worker count).
-- [ ] **Verbose/Quiet Mode**: Add global logging control (CLI).
-  - [ ] Implement `-v` (debug) and `-q` (errors only) flags.
+- [x] **Verbose/Quiet Mode**: Add global logging control (CLI).
+  - [x] Implement `-v` (debug) and `-q` (errors only) flags.
 - [ ] **User-Agent Rotation**: Avoid blocking (Network).
   - [ ] Randomize User-Agent headers for requests to Web Stores.
 
