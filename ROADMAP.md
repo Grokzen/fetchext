@@ -5,8 +5,8 @@
 - [x] **Rich Output**: Integrate `rich` library.
   - [x] Replace `print()` statements in `ExtensionInspector` with `rich.console.Console` and `rich.table.Table`.
   - [x] Style CLI logs and error messages.
-- [ ] **Metadata Sidecars**: Add `--save-metadata` flag.
-  - [ ] Save a `metadata.json` alongside the extension containing download timestamp, source URL, and version.
+- [x] **Metadata Sidecars**: Add `--save-metadata` flag.
+  - [x] Save a `metadata.json` alongside the extension containing download timestamp, source URL, and version.
 
 ## 📦 v0.4.0: File Management & Utilities
 

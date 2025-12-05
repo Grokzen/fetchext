@@ -1,6 +1,7 @@
 import json
 import zipfile
 import logging
+from io import BytesIO
 from pathlib import Path
 from rich.table import Table
 from .console import console
@@ -8,7 +9,7 @@ from .console import console
 logger = logging.getLogger(__name__)
 
 class ExtensionInspector:
-    def inspect(self, file_path):
+    def get_manifest(self, file_path):
         path = Path(file_path)
         if not path.exists():
             raise FileNotFoundError(f"File not found: {path}")
@@ -19,8 +20,7 @@ class ExtensionInspector:
                     raise ValueError("manifest.json not found in archive")
 
                 with zf.open("manifest.json") as f:
-                    manifest = json.load(f)
-                    self._print_manifest_details(manifest)
+                    return json.load(f)
 
         except zipfile.BadZipFile:
             # CRX files might have a header before the ZIP content
@@ -33,26 +33,24 @@ class ExtensionInspector:
                     if zip_start == -1:
                         raise ValueError("Not a valid ZIP or CRX file")
                     
-                    # We can't easily use zipfile on a memory buffer with an offset without BytesIO
-                    # But for CRX3, the header is complex. 
-                    # Let's try a simpler approach: many CRX files are just ZIPs or have a small header.
-                    # If standard ZipFile failed, it might be a CRX with a header.
-                    # Python's zipfile module is strict.
-                    
-                    # Alternative: Read into BytesIO from offset
-                    from io import BytesIO
+                    # Read into BytesIO from offset
                     f.seek(zip_start)
                     with zipfile.ZipFile(BytesIO(f.read()), 'r') as zf:
                          if "manifest.json" not in zf.namelist():
                             raise ValueError("manifest.json not found in archive")
                          with zf.open("manifest.json") as f_manifest:
-                            manifest = json.load(f_manifest)
-                            self._print_manifest_details(manifest)
-                            return
+                            return json.load(f_manifest)
 
             except Exception as e:
                 logger.error(f"Failed to inspect file: {e}")
                 raise ValueError("Could not parse file as extension archive")
+
+    def inspect(self, file_path):
+        try:
+            manifest = self.get_manifest(file_path)
+            self._print_manifest_details(manifest)
+        except Exception as e:
+            logger.error(f"Inspection failed: {e}")
 
     def _print_manifest_details(self, manifest):
         table = Table(title="Extension Details", show_header=True, header_style="bold magenta")

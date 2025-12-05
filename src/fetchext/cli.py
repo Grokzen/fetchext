@@ -1,7 +1,9 @@
 import sys
+import json
 import logging
 import argparse
 from pathlib import Path
+from datetime import datetime, timezone
 from rich.logging import RichHandler
 from .downloaders import ChromeDownloader, EdgeDownloader, FirefoxDownloader
 from .inspector import ExtensionInspector
@@ -37,6 +39,11 @@ def main():
         type=Path,
         default=Path("."),
         help="Directory to save the downloaded extension"
+    )
+    download_parser.add_argument(
+        "-m", "--save-metadata",
+        action="store_true",
+        help="Save metadata to a JSON file alongside the extension"
     )
 
     # Search subcommand
@@ -104,7 +111,33 @@ def main():
             if not output_dir.exists():
                 output_dir.mkdir(parents=True, exist_ok=True)
 
-            downloader.download(extension_id, output_dir)
+            output_path = downloader.download(extension_id, output_dir)
+            
+            if args.save_metadata:
+                logger.info("Generating metadata sidecar...")
+                try:
+                    inspector = ExtensionInspector()
+                    manifest = inspector.get_manifest(output_path)
+                    
+                    metadata = {
+                        "id": extension_id,
+                        "name": manifest.get("name", "Unknown"),
+                        "version": manifest.get("version", "Unknown"),
+                        "source_url": args.url,
+                        "download_timestamp": datetime.now(timezone.utc).isoformat(),
+                        "filename": output_path.name
+                    }
+                    
+                    # Save as <filename>.json (e.g. extension.crx.json)
+                    metadata_path = output_path.with_suffix(output_path.suffix + ".json")
+                    
+                    with open(metadata_path, "w") as f:
+                        json.dump(metadata, f, indent=2)
+                        
+                    logger.info(f"Metadata saved to {metadata_path}")
+                except Exception as e:
+                    logger.warning(f"Failed to generate metadata: {e}")
+
         elif args.command in ["search", "s"]:
             if not hasattr(downloader, 'search'):
                  raise ValueError(f"Search not supported for {args.browser}")
