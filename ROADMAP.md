@@ -12,8 +12,8 @@
   - [x] Load settings from `~/.config/fext/config.toml` (e.g., default download dir, worker count).
 - [x] **Verbose/Quiet Mode**: Add global logging control (CLI).
   - [x] Implement `-v` (debug) and `-q` (errors only) flags.
-- [ ] **User-Agent Rotation**: Avoid blocking (Network).
-  - [ ] Randomize User-Agent headers for requests to Web Stores.
+- [x] **User-Agent Rotation**: Avoid blocking (Network).
+  - [x] Randomize User-Agent headers for requests to Web Stores.
 
 ## ⚙️ v0.6.0: Distribution & Integration
 
