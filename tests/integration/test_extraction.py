@@ -33,3 +33,31 @@ def test_auto_extraction(fs, mocker):
     assert extract_dir.is_dir()
     assert (extract_dir / "manifest.json").exists()
     assert (extract_dir / "script.js").exists()
+
+def test_extract_command(fs):
+    # Create a fake zip file
+    file_path = Path("test.crx")
+    with zipfile.ZipFile(file_path, 'w') as zf:
+        zf.writestr("manifest.json", "{}")
+    
+    # Run extract command
+    with patch("sys.argv", ["fext", "extract", "test.crx"]):
+        main()
+        
+    # Check default output dir
+    assert Path("test").exists()
+    assert (Path("test") / "manifest.json").exists()
+    
+def test_extract_command_custom_output(fs):
+    # Create a fake zip file
+    file_path = Path("test.crx")
+    with zipfile.ZipFile(file_path, 'w') as zf:
+        zf.writestr("manifest.json", "{}")
+        
+    # Run extract command with -o
+    with patch("sys.argv", ["fext", "extract", "test.crx", "-o", "custom_dir"]):
+        main()
+        
+    # Check custom output dir
+    assert Path("custom_dir").exists()
+    assert (Path("custom_dir") / "manifest.json").exists()

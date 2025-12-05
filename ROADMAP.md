@@ -12,8 +12,8 @@
 
 - [x] **Auto-Extraction**: Add `--extract` / `-x` flag to `download` command.
   - [x] Automatically unzip the downloaded extension into a folder named after the extension ID or name.
-- [ ] **Extract Command**: Add `fext extract <file>` subcommand.
-  - [ ] Allow extracting existing `.crx` or `.xpi` files.
+- [x] **Extract Command**: Add `fext extract <file>` subcommand.
+  - [x] Allow extracting existing `.crx` or `.xpi` files.
 
 ## 🔄 v0.5.0: Updates & Maintenance
 

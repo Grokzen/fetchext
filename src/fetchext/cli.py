@@ -65,6 +65,15 @@ def main():
     inspect_parser = subparsers.add_parser("inspect", aliases=["i"], help="Inspect an extension file")
     inspect_parser.add_argument("file", help="Path to the .crx or .xpi file")
 
+    # Extract subcommand
+    extract_parser = subparsers.add_parser("extract", aliases=["x"], help="Extract an extension file")
+    extract_parser.add_argument("file", help="Path to the .crx or .xpi file")
+    extract_parser.add_argument(
+        "-o", "--output-dir",
+        type=Path,
+        help="Directory to extract to (default: <filename_stem> in current dir)"
+    )
+
     # Batch subcommand
     batch_parser = subparsers.add_parser("batch", aliases=["b"], help="Download extensions from a batch file")
     batch_parser.add_argument("file", help="Path to the batch file containing URLs")
@@ -90,6 +99,30 @@ def main():
             inspector = ExtensionInspector()
             inspector.inspect(args.file)
             logger.info("Inspection finished successfully.")
+            return
+
+        if args.command in ["extract", "x"]:
+            file_path = Path(args.file)
+            if not file_path.exists():
+                raise FileNotFoundError(f"File not found: {file_path}")
+            
+            if args.output_dir:
+                extract_dir = args.output_dir
+            else:
+                extract_dir = Path(".") / file_path.stem
+                
+            if extract_dir.exists() and any(extract_dir.iterdir()):
+                 logger.warning(f"Extraction directory {extract_dir} is not empty.")
+            
+            extract_dir.mkdir(parents=True, exist_ok=True)
+            
+            logger.info(f"Extracting {file_path} to {extract_dir}...")
+            try:
+                with open_extension_archive(file_path) as zf:
+                    zf.extractall(extract_dir)
+                logger.info("Extraction finished successfully.")
+            except Exception as e:
+                logger.error(f"Extraction failed: {e}")
             return
 
         if args.command in ["batch", "b"]:
