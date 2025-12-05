@@ -38,8 +38,8 @@
   - [x] Report on MV2 vs MV3 status and deprecated APIs.
 - [x] **Diff Command**: Compare two versions (CLI).
   - [x] Add `fext diff <old.crx> <new.crx>` to show changed files and permissions.
-- [ ] **Permission Risk Scoring**: Analyze permissions (Analysis).
-  - [ ] Assign "Privacy Risk" score based on requested permissions.
+- [x] **Permission Risk Scoring**: Analyze permissions (Analysis).
+  - [x] Assign "Privacy Risk" score based on requested permissions.
 - [ ] **Signature Verification**: Verify CRX integrity (Security).
   - [ ] Validate the cryptographic signature of the CRX file against its public key.
 

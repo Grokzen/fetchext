@@ -10,6 +10,7 @@ from .console import console, print_manifest_table, print_search_results_table
 from .preview import build_file_tree
 from .auditor import ExtensionAuditor
 from .diff import ExtensionDiffer
+from .risk import RiskAnalyzer
 
 logger = logging.getLogger("fetchext")
 
@@ -338,6 +339,55 @@ def diff_extensions(old_path, new_path, json_output=False):
         return report
     except Exception as e:
         logger.error(f"Diff failed: {e}")
+        raise
+
+def analyze_risk(file_path, json_output=False):
+    """
+    Analyze the privacy risk of an extension.
+    """
+    file_path = Path(file_path)
+    if not file_path.exists():
+        raise FileNotFoundError(f"File not found: {file_path}")
+
+    analyzer = RiskAnalyzer()
+    try:
+        report = analyzer.analyze(file_path)
+        
+        if json_output:
+            from dataclasses import asdict
+            console.print_json(data=asdict(report))
+        else:
+            # Color code the max level
+            level_color = {
+                "Critical": "red",
+                "High": "orange1",
+                "Medium": "yellow",
+                "Low": "blue",
+                "Safe": "green"
+            }.get(report.max_level, "white")
+            
+            console.print("[bold]Risk Analysis Report[/bold]")
+            console.print(f"Overall Risk Level: [{level_color} bold]{report.max_level}[/{level_color} bold]")
+            console.print(f"Total Risk Score: {report.total_score}")
+            
+            if report.risky_permissions:
+                console.print("\n[bold]Risky Permissions:[/bold]")
+                for p in report.risky_permissions:
+                    p_color = {
+                        "Critical": "red",
+                        "High": "orange1",
+                        "Medium": "yellow",
+                        "Low": "blue"
+                    }.get(p.level, "white")
+                    console.print(f"  [{p_color}]• {p.permission}[/{p_color}] (Score: {p.score}) - [dim]{p.description}[/dim]")
+            
+            if report.safe_permissions:
+                console.print(f"\n[bold green]Safe/Unknown Permissions ({len(report.safe_permissions)}):[/bold green]")
+                console.print(f"  {', '.join(report.safe_permissions)}")
+                
+        return report
+    except Exception as e:
+        logger.error(f"Risk analysis failed: {e}")
         raise
 
 def extract_extension(file_path, output_dir=None, show_progress=True):

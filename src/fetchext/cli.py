@@ -138,6 +138,15 @@ def main():
         help="Output results as JSON"
     )
 
+    # Risk subcommand
+    risk_parser = subparsers.add_parser("risk", aliases=["r"], help="Analyze permission risk")
+    risk_parser.add_argument("file", help="Path to the .crx or .xpi file")
+    risk_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output results as JSON"
+    )
+
     # Batch subcommand
     batch_parser = subparsers.add_parser("batch", aliases=["b"], help="Download extensions from a batch file")
     batch_parser.add_argument("file", help="Path to the batch file containing URLs")
@@ -193,6 +202,10 @@ def main():
 
         if args.command == "diff":
             core.diff_extensions(args.old_file, args.new_file, json_output=args.json)
+            return
+
+        if args.command in ["risk", "r"]:
+            core.analyze_risk(args.file, json_output=args.json)
             return
 
         if args.command in ["batch", "b"]:

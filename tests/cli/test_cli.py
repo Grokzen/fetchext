@@ -54,5 +54,12 @@ class TestCLI:
             main()
             mock_diff.assert_called_once_with('old.crx', 'new.crx', json_output=False)
 
+    def test_risk_command(self):
+        with patch.object(sys, 'argv', ['fext', 'risk', 'test.crx']), \
+             patch('fetchext.core.analyze_risk') as mock_risk:
+            main()
+            mock_risk.assert_called_once_with('test.crx', json_output=False)
+
+
 
 
