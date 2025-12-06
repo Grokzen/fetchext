@@ -1,6 +1,5 @@
 from textual.app import App, ComposeResult
-from textual.containers import Container
-from textual.widgets import Header, Footer, Input, DataTable, Static
+from textual.widgets import Header, Footer, Input, DataTable
 from fetchext.core import search_extension, download_extension
 import logging
 

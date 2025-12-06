@@ -1,15 +1,15 @@
 import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 # Skip if textual is not installed
 textual = pytest.importorskip("textual")
-from textual.widgets import Input, DataTable
-from fetchext.tui import ExtensionApp
+from textual.widgets import Input, DataTable  # noqa: E402
+from fetchext.tui import ExtensionApp  # noqa: E402
 
 @pytest.mark.asyncio
 async def test_tui_app_structure():
     app = ExtensionApp()
-    async with app.run_test() as pilot:
+    async with app.run_test():
         assert app.query_one(Input)
         assert app.query_one(DataTable)
 

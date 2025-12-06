@@ -209,7 +209,7 @@ def main():
     )
 
     # UI subcommand
-    ui_parser = subparsers.add_parser("ui", help="Launch interactive TUI")
+    subparsers.add_parser("ui", help="Launch interactive TUI")
 
     args = parser.parse_args()
 
