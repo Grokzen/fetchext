@@ -1,6 +1,8 @@
+import time
 import requests
+from unittest.mock import patch, MagicMock
 from requests.adapters import HTTPAdapter
-from fetchext.network import get_session, USER_AGENTS
+from fetchext.network import get_session, USER_AGENTS, RateLimitedSession
 
 def test_get_session_defaults():
     session = get_session()
@@ -48,3 +50,40 @@ def test_get_session_rotates_user_agent():
     
     # We expect to see at least 2 different agents
     assert len(agents) > 1
+
+def test_rate_limited_session():
+    # Set a delay of 0.1 seconds
+    session = RateLimitedSession(delay=0.1)
+    
+    start_time = time.time()
+    
+    # Mock the super().request to avoid actual network calls
+    with patch("requests.Session.request") as mock_request:
+        mock_request.return_value = MagicMock(status_code=200)
+        
+        # Make 3 requests
+        session.get("http://example.com")
+        session.get("http://example.com")
+        session.get("http://example.com")
+        
+    end_time = time.time()
+    duration = end_time - start_time
+    
+    # Should take at least 0.2 seconds (wait before 2nd and 3rd request)
+    assert duration >= 0.2
+
+def test_get_session_config():
+    with patch("fetchext.network.load_config") as mock_config:
+        mock_config.return_value = {"network": {"rate_limit_delay": 0.5}}
+        
+        session = get_session()
+        assert isinstance(session, RateLimitedSession)
+        assert session.delay == 0.5
+
+def test_get_session_default_delay():
+    with patch("fetchext.network.load_config") as mock_config:
+        mock_config.return_value = {}
+        
+        session = get_session()
+        assert isinstance(session, RateLimitedSession)
+        assert session.delay == 0.0
