@@ -279,6 +279,11 @@ def get_parser():
         help="Calculate entropy of files to detect obfuscation/packing"
     )
     analyze_parser.add_argument(
+        "--domains",
+        action="store_true",
+        help="Extract domains and URLs from source code"
+    )
+    analyze_parser.add_argument(
         "--json",
         action="store_true",
         help="Output results as JSON"
@@ -475,6 +480,35 @@ def main():
                     console.print(table)
                     if len(sorted_files) > 20:
                         console.print(f"\n... and {len(sorted_files) - 20} more files.")
+            
+            elif args.domains:
+                from .analysis.domains import analyze_domains
+                import json
+                from rich.table import Table
+                
+                results = analyze_domains(Path(args.file))
+                
+                if args.json:
+                    print(json.dumps(results, indent=2))
+                else:
+                    console.print(f"[bold]Domain Analysis for {args.file}[/bold]")
+                    
+                    console.print(f"\n[bold cyan]Unique Domains ({len(results['domains'])}):[/bold cyan]")
+                    if results["domains"]:
+                        for domain in results["domains"]:
+                            console.print(f"  - {domain}")
+                    else:
+                        console.print("  [yellow]No domains found.[/yellow]")
+                        
+                    console.print(f"\n[bold cyan]URLs ({len(results['urls'])}):[/bold cyan]")
+                    if results["urls"]:
+                        # Show top 50 URLs to avoid spamming
+                        for url in results["urls"][:50]:
+                            console.print(f"  - {url}")
+                        if len(results["urls"]) > 50:
+                            console.print(f"  ... and {len(results['urls']) - 50} more.")
+                    else:
+                        console.print("  [yellow]No URLs found.[/yellow]")
             return
 
         if args.command == "locales":

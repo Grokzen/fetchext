@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Pre-commit Hook**: Added `.pre-commit-hooks.yaml` for integration with pre-commit.
 - **Permission Explainer**: Added `fext explain <permission>` command to provide detailed descriptions and risk assessments for extension permissions.
 - **Entropy Analysis**: Added `fext analyze --entropy <file>` to calculate Shannon entropy of files within an extension to detect obfuscation or packing.
+- **Domain Extractor**: Added `fext analyze --domains <file>` to extract all URLs and domains from extension source code for network forensics.
 
 ## [0.7.0] - 2025-12-06
 

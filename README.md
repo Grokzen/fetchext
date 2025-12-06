@@ -339,6 +339,20 @@ fext analyze --entropy <file>
 fext analyze --entropy ublock-origin.crx
 ```
 
+### 🌐 Domain Extractor
+
+Extract all URLs and domains from the extension's source code (JS, HTML, CSS, JSON) to identify network activity.
+
+```bash
+fext analyze --domains <file>
+```
+
+**Example:**
+
+```bash
+fext analyze --domains ublock-origin.crx
+```
+
 ### 📄 Documentation & Completion
 
 **Man Page:**
