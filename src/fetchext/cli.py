@@ -267,6 +267,21 @@ def get_parser():
         help="Output results as JSON"
     )
 
+    # Optimize subcommand
+    optimize_parser = subparsers.add_parser("optimize", help="Optimize images in an extension")
+    optimize_parser.add_argument("directory", type=Path, help="Path to the extension directory")
+    optimize_parser.add_argument(
+        "-q", "--quality",
+        type=int,
+        default=85,
+        help="Image quality (1-100, default: 85)"
+    )
+    optimize_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output results as JSON"
+    )
+
     # UI subcommand
     subparsers.add_parser("ui", help="Launch interactive TUI")
 
@@ -577,6 +592,23 @@ def main():
                         str(item["size"])
                     )
                 console.print(table)
+            return
+
+        if args.command == "optimize":
+            from .optimizer import optimize_extension
+            import json
+            
+            results = optimize_extension(args.directory, quality=args.quality)
+            
+            if args.json:
+                print(json.dumps(results, indent=2))
+            else:
+                console.print(f"[bold]Optimization Results for {args.directory}[/bold]")
+                console.print(f"Total Files: {results['total_files']}")
+                console.print(f"Optimized Files: {results['optimized_files']}")
+                console.print(f"Original Size: {results['original_size'] / 1024:.2f} KB")
+                console.print(f"New Size: {results['new_size'] / 1024:.2f} KB")
+                console.print(f"Saved: {results['saved_bytes'] / 1024:.2f} KB ({(results['saved_bytes'] / results['original_size'] * 100) if results['original_size'] > 0 else 0:.1f}%)")
             return
 
         if args.command == "ui":
