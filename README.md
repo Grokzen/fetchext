@@ -257,6 +257,16 @@ fext report ublock-origin.crx
 
 This will generate `ublock-origin_REPORT.md` in the current directory.
 
+### ⚙️ Configuration Wizard
+
+Interactively set up or update your configuration file (`~/.config/fext/config.toml`).
+
+```bash
+fext setup
+```
+
+This wizard will guide you through setting default download directory, worker count, and other preferences.
+
 ## 💻 Development
 
 ### 🧹 Linting and Formatting

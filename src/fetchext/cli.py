@@ -220,6 +220,9 @@ def main():
     # UI subcommand
     subparsers.add_parser("ui", help="Launch interactive TUI")
 
+    # Setup subcommand
+    subparsers.add_parser("setup", help="Run configuration wizard")
+
     args = parser.parse_args()
 
     # Configure logging based on flags
@@ -297,6 +300,11 @@ def main():
         if args.command == "ui":
             from .tui import run_tui
             run_tui()
+            return
+
+        if args.command == "setup":
+            from .setup import run_setup
+            run_setup()
             return
 
         if args.command in ["download", "d"]:
