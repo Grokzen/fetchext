@@ -241,6 +241,22 @@ fext scan ublock-origin.crx
 
 This will list detected libraries and flag any with known vulnerabilities.
 
+### 📊 Markdown Reports
+
+Generate a comprehensive Markdown report for an extension, including metadata, risk analysis, and file structure.
+
+```bash
+fext report <file> [-o <output_file>]
+```
+
+**Example:**
+
+```bash
+fext report ublock-origin.crx
+```
+
+This will generate `ublock-origin_REPORT.md` in the current directory.
+
 ## 💻 Development
 
 ### 🧹 Linting and Formatting

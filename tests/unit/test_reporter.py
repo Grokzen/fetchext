@@ -1,0 +1,103 @@
+import pytest
+from unittest.mock import MagicMock, patch
+from pathlib import Path
+from fetchext.reporter import MarkdownReporter
+from fetchext.risk import RiskReport, PermissionRisk
+
+@pytest.fixture
+def mock_inspector():
+    with patch("fetchext.reporter.ExtensionInspector") as mock:
+        yield mock.return_value
+
+@pytest.fixture
+def mock_risk_analyzer():
+    with patch("fetchext.reporter.RiskAnalyzer") as mock:
+        yield mock.return_value
+
+@pytest.fixture
+def mock_open_archive():
+    with patch("fetchext.reporter.open_extension_archive") as mock:
+        yield mock
+
+class TestMarkdownReporter:
+    def test_init_file_not_found(self):
+        with pytest.raises(FileNotFoundError):
+            MarkdownReporter(Path("non_existent.crx"))
+
+    def test_generate_report(self, fs, mock_inspector, mock_risk_analyzer, mock_open_archive):
+        # Setup fake file
+        fake_file = Path("test.crx")
+        fs.create_file(fake_file, contents="fake content")
+        
+        # Setup mocks
+        mock_inspector.get_manifest.return_value = {
+            "name": "Test Ext",
+            "version": "1.0",
+            "description": "A test extension",
+            "author": "Tester",
+            "manifest_version": 3
+        }
+        
+        mock_risk_analyzer.analyze.return_value = RiskReport(
+            total_score=10,
+            max_level="High",
+            risky_permissions=[
+                PermissionRisk("tabs", 7, "High", "Access tabs")
+            ],
+            safe_permissions=["storage"]
+        )
+        
+        # Mock zip file listing
+        mock_zip = MagicMock()
+        mock_zip.namelist.return_value = ["manifest.json", "background.js", "icons/icon.png"]
+        mock_open_archive.return_value.__enter__.return_value = mock_zip
+        
+        reporter = MarkdownReporter(fake_file)
+        report = reporter.generate()
+        
+        assert "# Extension Report: Test Ext" in report
+        assert "**Version** | 1.0" in report
+        assert "**Overall Risk Level:** 🟠 **High**" in report
+        assert "| `tabs` | High | 7 | Access tabs |" in report
+        assert "`storage`" in report
+        assert "manifest.json" in report
+        assert "background.js" in report
+
+    def test_save_report(self, fs, mock_inspector, mock_risk_analyzer, mock_open_archive):
+        fake_file = Path("test.crx")
+        fs.create_file(fake_file, contents="fake content")
+        
+        mock_inspector.get_manifest.return_value = {"name": "Test"}
+        mock_risk_analyzer.analyze.return_value = RiskReport(0, "Safe")
+        mock_zip = MagicMock()
+        mock_zip.namelist.return_value = []
+        mock_open_archive.return_value.__enter__.return_value = mock_zip
+        
+        reporter = MarkdownReporter(fake_file)
+        output_path = Path("report.md")
+        reporter.save(output_path)
+        
+        assert output_path.exists()
+        content = output_path.read_text()
+        assert "# Extension Report: Test" in content
+
+    def test_tree_generation(self, fs):
+        # Test the internal tree generation logic
+        fake_file = Path("test.crx")
+        fs.create_file(fake_file)
+        
+        # We don't need full mocks for this unit test of a private method if we access it directly,
+        # but we need to instantiate the class.
+        # We can just patch the init to avoid side effects or use the mocks.
+        with patch("fetchext.reporter.ExtensionInspector"), \
+             patch("fetchext.reporter.RiskAnalyzer"):
+            reporter = MarkdownReporter(fake_file)
+            
+            file_list = ["a.txt", "b/c.txt", "b/d.txt"]
+            tree_text = reporter._generate_tree_text(file_list)
+            
+            assert "a.txt" in tree_text
+            assert "b" in tree_text
+            assert "c.txt" in tree_text
+            assert "d.txt" in tree_text
+            assert "├──" in tree_text or "└──" in tree_text

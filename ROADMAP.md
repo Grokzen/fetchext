@@ -58,9 +58,9 @@
 - [x] **Rate Limiting**: Respect Web Store limits (Network).
   - [x] Add configurable request delays to prevent IP bans during bulk operations.
 
-## 🖥️ v0.9.0: Interactive & Ecosystem
+## 🖥️ v0.9.0: Reporting & Usability
 
-*Focus: Enhanced user experience and deployment options.*
+*Focus: Enhanced user experience and data portability.*
 
 - [x] **Interactive TUI**: Terminal User Interface (CLI).
   - [x] Add `fext ui` for browsing and downloading using `textual` or `rich`.
@@ -72,6 +72,8 @@
   - [ ] Add `fext convert` to switch between raw source, CRX, and ZIP formats.
 - [ ] **Repository Statistics**: Local repo insights (Analysis).
   - [ ] Add `fext stats` to visualize storage usage and permission trends.
+- [ ] **CSV Export**: Data portability (CLI).
+  - [ ] Add `--csv` flag to `search` and `scan` commands for spreadsheet integration.
 
 ## 🚀 v1.0.0: Stability & Production
 
@@ -87,6 +89,21 @@
   - [ ] Publish a static documentation site (MkDocs) to GitHub Pages.
 - [ ] **Signed Releases**: Supply chain security (Security).
   - [ ] Implement Sigstore or GPG signing for PyPI packages and git tags.
+
+## 🔬 v1.1.0: Advanced Analysis & Ecosystem
+
+*Focus: Deep code inspection and developer integration.*
+
+- [ ] **Complexity Analysis**: Code quality metrics (Analysis).
+  - [ ] Add `fext analyze --complexity <file>` to calculate cyclomatic complexity of JS files (detect obfuscation).
+- [ ] **Locale Inspector**: Internationalization support (Analysis).
+  - [ ] Add `fext locales <file>` to extract and list all supported locales and messages.
+- [ ] **Docker Image**: Containerized deployment (Deployment).
+  - [ ] Publish official `Dockerfile` and GHCR image for CI/CD usage.
+- [ ] **Pre-commit Hook**: Developer workflow integration (Integration).
+  - [ ] Add `.pre-commit-hooks.yaml` to allow using `fext audit` in pre-commit pipelines.
+- [ ] **Permission Explainer**: Educational tooling (Docs).
+  - [ ] Add `fext explain <permission>` to provide human-readable context for manifest permissions.
 
 ## ✅ Completed
 

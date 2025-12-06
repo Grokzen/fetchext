@@ -165,6 +165,15 @@ def main():
         help="Output results as JSON"
     )
 
+    # Report subcommand
+    report_parser = subparsers.add_parser("report", help="Generate a Markdown report")
+    report_parser.add_argument("file", help="Path to the .crx or .xpi file")
+    report_parser.add_argument(
+        "-o", "--output",
+        type=Path,
+        help="Output file path (default: <filename>_REPORT.md)"
+    )
+
     # Update Manifest subcommand
     manifest_parser = subparsers.add_parser("update-manifest", aliases=["um"], help="Generate update manifest for local extensions")
     manifest_parser.add_argument("directory", type=Path, help="Directory containing extension files")
@@ -264,6 +273,10 @@ def main():
 
         if args.command == "scan":
             core.scan_extension(args.file, json_output=args.json)
+            return
+
+        if args.command == "report":
+            core.generate_report(args.file, args.output)
             return
 
         if args.command in ["update-manifest", "um"]:

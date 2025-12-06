@@ -519,3 +519,28 @@ def scan_extension(file_path, json_output=False):
         logger.error(f"Scan failed: {e}")
         raise
 
+def generate_report(file_path, output_path=None):
+    """
+    Generate a Markdown report for an extension.
+    """
+    from .reporter import MarkdownReporter
+    
+    file_path = Path(file_path)
+    if not file_path.exists():
+        raise FileNotFoundError(f"File not found: {file_path}")
+
+    reporter = MarkdownReporter(file_path)
+    try:
+        if output_path:
+            output_path = Path(output_path)
+        else:
+            # Default to <filename>_REPORT.md
+            output_path = Path(f"{file_path.name}_REPORT.md")
+            
+        reporter.save(output_path)
+        logger.info(f"Report saved to {output_path}")
+        return output_path
+    except Exception as e:
+        logger.error(f"Report generation failed: {e}")
+        raise
+

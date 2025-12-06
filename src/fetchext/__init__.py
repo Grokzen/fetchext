@@ -4,7 +4,8 @@ from .core import (
     search_extension,
     inspect_extension,
     extract_extension,
-    batch_download
+    batch_download,
+    generate_report
 )
 
 __all__ = [
@@ -13,5 +14,6 @@ __all__ = [
     "search_extension",
     "inspect_extension",
     "extract_extension",
-    "batch_download"
+    "batch_download",
+    "generate_report"
 ]
