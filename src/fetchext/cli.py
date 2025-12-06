@@ -362,6 +362,25 @@ def get_parser():
         help="Skip confirmation"
     )
 
+    # History subcommand
+    history_parser = subparsers.add_parser("history", help="View download history")
+    history_parser.add_argument(
+        "--limit",
+        type=int,
+        default=20,
+        help="Number of entries to show (default: 20)"
+    )
+    history_parser.add_argument(
+        "--clear",
+        action="store_true",
+        help="Clear the history"
+    )
+    history_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output results as JSON"
+    )
+
     return parser
 
 def main():
@@ -776,6 +795,47 @@ def main():
                 dry_run=args.dry_run,
                 force=args.force
             )
+            return
+
+        if args.command == "history":
+            from .history import HistoryManager
+            from rich.table import Table
+            import json
+            
+            manager = HistoryManager()
+            
+            if args.clear:
+                manager.clear()
+                console.print("[green]History cleared.[/green]")
+                return
+            
+            entries = manager.get_entries(limit=args.limit)
+            
+            if args.json:
+                print(json.dumps(entries, indent=2))
+            else:
+                if not entries:
+                    console.print("[yellow]No history found.[/yellow]")
+                else:
+                    table = Table(show_header=True, header_style="bold magenta")
+                    table.add_column("Timestamp")
+                    table.add_column("Action")
+                    table.add_column("ID")
+                    table.add_column("Browser")
+                    table.add_column("Version")
+                    table.add_column("Status")
+                    
+                    for entry in entries:
+                        status_color = "green" if entry.get("status") == "success" else "red"
+                        table.add_row(
+                            entry.get("timestamp", "")[:19].replace("T", " "),
+                            entry.get("action", ""),
+                            entry.get("id", ""),
+                            entry.get("browser", ""),
+                            entry.get("version") or "-",
+                            f"[{status_color}]{entry.get('status', '')}[/{status_color}]"
+                        )
+                    console.print(table)
             return
 
         if args.command in ["download", "d"]:

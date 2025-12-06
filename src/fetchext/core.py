@@ -14,6 +14,7 @@ from .risk import RiskAnalyzer
 from .verifier import CrxVerifier
 from .hooks import HookManager, HookContext
 from .config import get_config_path
+from .history import HistoryManager
 
 logger = logging.getLogger("fetchext")
 
@@ -89,6 +90,24 @@ def download_extension(browser, url, output_dir, save_metadata=False, extract=Fa
 
     # Run post-download hook
     hook_manager.run_hook("post_download", ctx)
+
+    # Log to history
+    try:
+        history = HistoryManager()
+        version = None
+        if save_metadata and 'metadata' in locals():
+            version = metadata.get("version")
+        
+        history.add_entry(
+            action="download",
+            extension_id=extension_id,
+            browser=browser,
+            version=version,
+            status="success",
+            path=str(output_path)
+        )
+    except Exception as e:
+        logger.warning(f"Failed to update history: {e}")
 
     if extract:
         extract_extension(output_path, output_dir / output_path.stem, show_progress=show_progress)
@@ -489,6 +508,39 @@ def extract_extension(file_path, output_dir=None, show_progress=True):
             zf.extractall(extract_dir)
         if show_progress:
             logger.info(f"Successfully extracted to {extract_dir}")
+
+        # Log to history
+        try:
+            # Try to find metadata sidecar
+            metadata_path = file_path.with_suffix(file_path.suffix + ".json")
+            extension_id = "unknown"
+            browser = "unknown"
+            version = None
+            
+            if metadata_path.exists():
+                with open(metadata_path, "r") as f:
+                    meta = json.load(f)
+                    extension_id = meta.get("id", "unknown")
+                    source_url = meta.get("source_url", "")
+                    if "google.com" in source_url:
+                        browser = "chrome"
+                    elif "microsoft.com" in source_url:
+                        browser = "edge"
+                    elif "mozilla.org" in source_url:
+                        browser = "firefox"
+                    version = meta.get("version")
+            
+            HistoryManager().add_entry(
+                action="extract",
+                extension_id=extension_id,
+                browser=browser,
+                version=version,
+                status="success",
+                path=str(extract_dir)
+            )
+        except Exception:
+            pass
+
     except Exception as e:
         logger.error(f"Extraction failed: {e}")
         raise
