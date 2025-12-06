@@ -12,6 +12,8 @@ from .auditor import ExtensionAuditor
 from .diff import ExtensionDiffer
 from .risk import RiskAnalyzer
 from .verifier import CrxVerifier
+from .hooks import HookManager, HookContext
+from .config import get_config_path
 
 logger = logging.getLogger("fetchext")
 
@@ -37,12 +39,24 @@ def download_extension(browser, url, output_dir, save_metadata=False, extract=Fa
     if show_progress:
         logger.info(f"Extracted ID/Slug: {extension_id}")
 
+    # Initialize hooks
+    config_dir = get_config_path().parent
+    hooks_dir = config_dir / "hooks"
+    hook_manager = HookManager(hooks_dir)
+
+    # Run pre-download hook
+    ctx = HookContext(extension_id=extension_id, browser=browser)
+    hook_manager.run_hook("pre_download", ctx)
+
     output_dir = Path(output_dir)
     if not output_dir.exists():
         output_dir.mkdir(parents=True, exist_ok=True)
 
     output_path = downloader.download(extension_id, output_dir, show_progress=show_progress)
     
+    # Update context with result
+    ctx.file_path = output_path
+
     if save_metadata:
         if show_progress:
             logger.info("Generating metadata sidecar...")
@@ -59,6 +73,9 @@ def download_extension(browser, url, output_dir, save_metadata=False, extract=Fa
                 "filename": output_path.name
             }
             
+            # Add metadata to hook context
+            ctx.metadata = metadata
+            
             # Save as <filename>.json (e.g. extension.crx.json)
             metadata_path = output_path.with_suffix(output_path.suffix + ".json")
             
@@ -69,6 +86,9 @@ def download_extension(browser, url, output_dir, save_metadata=False, extract=Fa
                 logger.info(f"Metadata saved to {metadata_path}")
         except Exception as e:
             logger.warning(f"Failed to generate metadata: {e}")
+
+    # Run post-download hook
+    hook_manager.run_hook("post_download", ctx)
 
     if extract:
         extract_extension(output_path, output_dir / output_path.stem, show_progress=show_progress)

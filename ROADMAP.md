@@ -47,12 +47,12 @@
 
 *Focus: Managing local repositories and bulk workflows.*
 
-- [ ] **Local Update Server**: Generate update manifests (Enterprise).
-  - [ ] Create `update.xml` / `updates.json` for self-hosted extension updates.
-- [ ] **Mirror Mode**: Sync local folder with ID list (Workflow).
-  - [ ] Add `fext mirror <list_file>` to keep a local repository up to date.
-- [ ] **Dependency Scanner**: Scan for vulnerable libraries (Security).
-  - [ ] Check internal JS files for known vulnerable library signatures.
+- [x] **Local Update Server**: Generate update manifests (Enterprise).
+  - [x] Create `update.xml` / `updates.json` for self-hosted extension updates.
+- [x] **Mirror Mode**: Sync local folder with ID list (Workflow).
+  - [x] Add `fext mirror <list_file>` to keep a local repository up to date.
+- [x] **Dependency Scanner**: Scan for vulnerable libraries (Security).
+  - [x] Check internal JS files for known vulnerable library signatures.
 - [ ] **Plugin Hooks**: Extensibility system (Architecture).
   - [ ] Support pre/post-download hooks (e.g., virus scan, git commit).
 - [ ] **Rate Limiting**: Respect Web Store limits (Network).
