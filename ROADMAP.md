@@ -117,8 +117,8 @@
   - [x] Integrate `yara-python` to scan extensions against a database of malicious signatures.
 - [x] **Config Management**: CLI settings control (CLI).
   - [x] Add `fext config set <key> <value>` and `fext config get <key>` to manage settings.
-- [ ] **Cache Management**: Disk usage control (Core).
-  - [ ] Add `fext clean` to clear temporary download caches and build artifacts.
+- [x] **Cache Management**: Disk usage control (Core).
+  - [x] Add `fext clean` to clear temporary download caches and build artifacts.
 
 ## 🛡️ v1.3.0: Developer Experience & Quality
 
