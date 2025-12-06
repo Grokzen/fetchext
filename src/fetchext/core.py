@@ -464,3 +464,38 @@ def batch_download(file_path, output_dir, workers=4, show_progress=True):
     processor.process(file_path, output_dir, max_workers=workers, show_progress=show_progress)
     if show_progress:
         logger.info("Batch processing finished successfully.")
+
+def scan_extension(file_path, json_output=False):
+    """
+    Scan an extension for vulnerable dependencies.
+    """
+    from .scanner import DependencyScanner
+    from dataclasses import asdict
+    
+    file_path = Path(file_path)
+    if not file_path.exists():
+        raise FileNotFoundError(f"File not found: {file_path}")
+
+    scanner = DependencyScanner()
+    try:
+        report = scanner.scan(file_path)
+        
+        if json_output:
+            console.print_json(data=asdict(report))
+        else:
+            console.print(f"[bold]Dependency Scan Report:[/bold] {report.file}")
+            if not report.libraries:
+                console.print("[green]No known libraries detected.[/green]")
+            else:
+                for lib in report.libraries:
+                    status = "[red]VULNERABLE[/red]" if lib.vulnerable else "[green]OK[/green]"
+                    console.print(f"  • [bold]{lib.name}[/bold] v{lib.version} ({status})")
+                    console.print(f"    Path: [dim]{lib.path}[/dim]")
+                    if lib.vulnerable:
+                        console.print(f"    Advisory: [red]{lib.advisory}[/red]")
+                        
+        return report
+    except Exception as e:
+        logger.error(f"Scan failed: {e}")
+        raise
+

@@ -156,6 +156,15 @@ def main():
         help="Output results as JSON"
     )
 
+    # Scan subcommand
+    scan_parser = subparsers.add_parser("scan", help="Scan extension for vulnerable dependencies")
+    scan_parser.add_argument("file", help="Path to the .crx or .xpi file")
+    scan_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output results as JSON"
+    )
+
     # Update Manifest subcommand
     manifest_parser = subparsers.add_parser("update-manifest", aliases=["um"], help="Generate update manifest for local extensions")
     manifest_parser.add_argument("directory", type=Path, help="Directory containing extension files")
@@ -249,6 +258,10 @@ def main():
                 sys.exit(0)
             else:
                 sys.exit(1)
+
+        if args.command == "scan":
+            core.scan_extension(args.file, json_output=args.json)
+            return
 
         if args.command in ["update-manifest", "um"]:
             from .server import generate_update_manifest

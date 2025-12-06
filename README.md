@@ -225,6 +225,22 @@ fext mirror <list_file> [--output-dir <dir>] [--prune]
 fext mirror my_extensions.txt -o ./mirror --prune
 ```
 
+### 🛡️ Dependency Scanner
+
+Scan an extension file for known vulnerable third-party libraries (e.g., jQuery, Lodash).
+
+```bash
+fext scan <file> [--json]
+```
+
+**Example:**
+
+```bash
+fext scan ublock-origin.crx
+```
+
+This will list detected libraries and flag any with known vulnerabilities.
+
 ## 💻 Development
 
 ### 🧹 Linting and Formatting

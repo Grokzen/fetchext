@@ -41,6 +41,7 @@ This file documents the project's history, architectural decisions, and coding s
       __init__.py
       cli.py
       mirror.py
+      scanner.py
       server.py
   pyproject.toml
   Makefile
