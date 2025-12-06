@@ -12,7 +12,8 @@ This file documents the project's history, architectural decisions, and coding s
 
 - **Language**: Python 3.11+
 - **Build System**: `setuptools` (configured via `pyproject.toml`)
-- **Dependencies**: `requests`, `rich`, `cryptography` (minimal dependencies preferred)
+- **Dependencies**: `requests`, `rich`, `cryptography`, `textual`, `lizard`, `tomli-w`, `Pillow` (minimal dependencies preferred)
+- **Optional Dependencies**: `yara-python` (for security scanning)
 - **Linting/Formatting**: `ruff`
 - **Task Management**: `Makefile`
 - **Type Hints**: **FORBIDDEN**. Do not use Python type hints (e.g., `def foo(x: int) -> str:`). Keep code dynamic and clean.
@@ -32,6 +33,15 @@ This file documents the project's history, architectural decisions, and coding s
   ```text
   src/
     fetchext/
+      analysis/
+        __init__.py
+        complexity.py
+        domains.py
+        entropy.py
+        explainer.py
+        graph.py
+        locales.py
+        yara.py
       downloaders/
         __init__.py
         base.py
@@ -39,10 +49,33 @@ This file documents the project's history, architectural decisions, and coding s
         edge.py
         firefox.py
       __init__.py
+      auditor.py
+      batch.py
       cli.py
+      config.py
+      console.py
+      core.py
+      crx.py
+      diff.py
+      history.py
+      hooks.py
+      inspector.py
       mirror.py
+      network.py
+      optimizer.py
+      plugins.py
+      preview.py
+      protobuf.py
+      risk.py
       scanner.py
+      schemas.py
+      secrets.py
       server.py
+      setup.py
+      tui.py
+      tutorial.py
+      utils.py
+      verifier.py
   pyproject.toml
   Makefile
   ```
@@ -94,10 +127,20 @@ This file documents the project's history, architectural decisions, and coding s
   - `src/fetchext/__init__.py`: Exports the public API.
 - **Reasoning**: Allows `fetchext` to be used as a library in other projects, not just as a CLI tool.
 
-### 10. Minimal Protobuf Parsing
+### 11. Analysis Module
 
-- **Decision**: Use a custom, lightweight Protobuf decoder (`src/fetchext/protobuf.py`) instead of the full `protobuf` library.
-- **Reasoning**: The CRX3 header structure is simple enough to parse manually (Length-Delimited fields). This avoids adding a heavy dependency and complex build steps (compiling `.proto` files) while still allowing robust signature verification.
+- **Decision**: Group specialized analysis logic in `src/fetchext/analysis/`.
+- **Reasoning**: Keeps the root package clean and organizes complex analysis features (complexity, entropy, domains, graphs) into their own modules.
+
+### 12. TUI Integration
+
+- **Decision**: Use `textual` for interactive interfaces (`ui`, `tutorial`).
+- **Reasoning**: Provides a rich, terminal-based UI experience that is distinct from the standard CLI output, suitable for browsing and learning.
+
+### 13. Image Optimization
+
+- **Decision**: Use `Pillow` for image processing.
+- **Reasoning**: Standard library for Python image manipulation, robust and widely supported, enabling lossless compression features.
 
 ## Development Workflow
 
@@ -124,6 +167,9 @@ This file documents the project's history, architectural decisions, and coding s
 4. **Multi-Browser Support**: Refactored to support Chrome, Edge, and Firefox using a modular downloader architecture.
 5. **CI/CD Integration**: Added GitHub Actions workflow and Makefile targets for automated testing and validation.
 6. **Testing Overhaul**: Implemented comprehensive 4-level testing strategy (Unit, CLI, Integration, Live) using `pytest`.
+7. **Advanced Analysis**: Added deep inspection tools (complexity, entropy, domains, YARA) and forensic capabilities (timeline, graph).
+8. **Local Serving**: Added capabilities to host and mirror extensions locally (`serve`, `mirror`, `update-manifest`).
+9. **User Experience**: Enhanced UX with TUI (`ui`), interactive tutorial (`tutorial`), and rich CLI output.
 
 ## Future Considerations
 
