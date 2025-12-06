@@ -145,8 +145,8 @@
   - [x] Add `fext serve` to host the local repository as a Chrome Update Server (HTTP).
 - [x] **Dependency Graph**: Internal structure (Analysis).
   - [x] Generate DOT/Graphviz graphs of internal file dependencies/imports.
-- [ ] **Image Optimizer**: Asset reduction (Core).
-  - [ ] Add `fext optimize` to strip metadata from extension images to save space.
+- [x] **Image Optimizer**: Asset reduction (Core).
+  - [x] Add `fext optimize` to strip metadata from extension images to save space.
 - [ ] **Interactive Tutorial**: Onboarding (Docs).
   - [ ] Add `fext tutorial` TUI walkthrough to teach users how to use the tool.
 
