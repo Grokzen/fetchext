@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Documentation Site**: Added MkDocs-based documentation site configuration and `make docs-build` target.
 - **Signed Releases**: Added infrastructure for GPG signing of releases (`make sign`, `make release`).
 - **Complexity Analysis**: Added `fext analyze --complexity` to calculate cyclomatic complexity of JavaScript files.
+- **Locale Inspector**: Added `fext locales` command to inspect supported locales and message counts.
 
 ## [0.7.0] - 2025-12-06
 

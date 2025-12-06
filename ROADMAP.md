@@ -96,8 +96,8 @@
 
 - [x] **Complexity Analysis**: Code quality metrics (Analysis).
   - [x] Add `fext analyze --complexity <file>` to calculate cyclomatic complexity of JS files (detect obfuscation).
-- [ ] **Locale Inspector**: Internationalization support (Analysis).
-  - [ ] Add `fext locales <file>` to extract and list all supported locales and messages.
+- [x] **Locale Inspector**: Internationalization support (Analysis).
+  - [x] Add `fext locales <file>` to extract and list all supported locales and messages.
 - [ ] **Docker Image**: Containerized deployment (Deployment).
   - [ ] Publish official `Dockerfile` and GHCR image for CI/CD usage.
 - [ ] **Pre-commit Hook**: Developer workflow integration (Integration).

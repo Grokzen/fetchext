@@ -100,3 +100,11 @@ Analyze extension code.
 ```bash
 fext analyze <file> [--complexity] [--json]
 ```
+
+### `locales`
+
+Inspect extension locales.
+
+```bash
+fext locales <file> [--json]
+```

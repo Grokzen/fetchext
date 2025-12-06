@@ -278,6 +278,15 @@ def get_parser():
         action="store_true",
         help="Output results as JSON"
     )
+
+    # Locales subcommand
+    locales_parser = subparsers.add_parser("locales", help="Inspect extension locales")
+    locales_parser.add_argument("file", help="Path to the .crx or .xpi file")
+    locales_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output results as JSON"
+    )
     
     return parser
 
@@ -412,6 +421,40 @@ def main():
                         console.print(table)
                     else:
                         console.print("\n[green]No high complexity functions found.[/green]")
+            return
+
+        if args.command == "locales":
+            from .analysis.locales import inspect_locales
+            import json
+            from rich.table import Table
+            
+            results = inspect_locales(Path(args.file))
+            
+            if args.json:
+                print(json.dumps(results, indent=2))
+            else:
+                console.print(f"[bold]Locales for {args.file}[/bold]")
+                if results["default_locale"]:
+                    console.print(f"Default Locale: [cyan]{results['default_locale']}[/cyan]")
+                else:
+                    console.print("Default Locale: [yellow]Not specified[/yellow]")
+                
+                console.print(f"Supported Locales: {len(results['supported_locales'])}")
+                
+                if results["supported_locales"]:
+                    table = Table(show_header=True, header_style="bold magenta")
+                    table.add_column("Locale")
+                    table.add_column("Messages")
+                    table.add_column("Status")
+                    
+                    for locale in sorted(results["supported_locales"]):
+                        details = results["details"][locale]
+                        status = "[red]Error[/red]" if "error" in details else "[green]OK[/green]"
+                        count = str(details.get("message_count", 0))
+                        table.add_row(locale, count, status)
+                    console.print(table)
+                else:
+                    console.print("[yellow]No locales found in _locales directory.[/yellow]")
             return
 
         if args.command in ["download", "d"]:
