@@ -109,10 +109,10 @@
 
 *Focus: Malware detection and forensic analysis.*
 
-- [ ] **Entropy Analysis**: Obfuscation detection (Analysis).
-  - [ ] Add `fext analyze --entropy <file>` to detect high-entropy strings (potential packed code or secrets).
-- [ ] **Domain Extractor**: Network forensics (Analysis).
-  - [ ] Add `fext analyze --domains <file>` to extract all URLs and domains from source code.
+- [x] **Entropy Analysis**: Obfuscation detection (Analysis).
+  - [x] Add `fext analyze --entropy <file>` to detect high-entropy strings (potential packed code or secrets).
+- [x] **Domain Extractor**: Network forensics (Analysis).
+  - [x] Add `fext analyze --domains <file>` to extract all URLs and domains from source code.
 - [ ] **YARA Rules**: Malware matching (Security).
   - [ ] Integrate `yara-python` to scan extensions against a database of malicious signatures.
 - [ ] **Config Management**: CLI settings control (CLI).

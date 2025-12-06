@@ -25,6 +25,11 @@ dependencies = [
     "lizard",
 ]
 
+[project.optional-dependencies]
+security = [
+    "yara-python",
+]
+
 [project.scripts]
 fext = "fetchext.cli:main"
 

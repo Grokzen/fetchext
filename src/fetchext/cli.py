@@ -284,6 +284,11 @@ def get_parser():
         help="Extract domains and URLs from source code"
     )
     analyze_parser.add_argument(
+        "--yara",
+        type=Path,
+        help="Path to YARA rules file to scan against"
+    )
+    analyze_parser.add_argument(
         "--json",
         action="store_true",
         help="Output results as JSON"
@@ -509,6 +514,46 @@ def main():
                             console.print(f"  ... and {len(results['urls']) - 50} more.")
                     else:
                         console.print("  [yellow]No URLs found.[/yellow]")
+            
+            elif args.yara:
+                from .analysis.yara import YaraScanner
+                import json
+                from rich.table import Table
+                
+                try:
+                    scanner = YaraScanner(args.yara)
+                    results = scanner.scan_archive(Path(args.file))
+                    
+                    if args.json:
+                        print(json.dumps(results, indent=2))
+                    else:
+                        console.print(f"[bold]YARA Scan for {args.file}[/bold]")
+                        console.print(f"Rules: {args.yara}")
+                        
+                        if results:
+                            for filename, matches in results.items():
+                                console.print(f"\n[bold cyan]File: {filename}[/bold cyan]")
+                                table = Table(show_header=True, header_style="bold magenta")
+                                table.add_column("Rule")
+                                table.add_column("Tags")
+                                table.add_column("Meta")
+                                
+                                for match in matches:
+                                    table.add_row(
+                                        match["rule"],
+                                        ", ".join(match["tags"]),
+                                        str(match["meta"])
+                                    )
+                                console.print(table)
+                        else:
+                            console.print("\n[green]No YARA matches found.[/green]")
+                            
+                except ImportError as e:
+                    console.print(f"[red]{e}[/red]")
+                    sys.exit(1)
+                except Exception as e:
+                    console.print(f"[red]Error during YARA scan: {e}[/red]")
+                    sys.exit(1)
             return
 
         if args.command == "locales":
