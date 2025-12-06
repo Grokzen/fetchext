@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Timeline View**: Added `fext timeline <file>` command to visualize file modification times within an extension archive for forensic analysis.
+- **Local Server**: Added `fext serve` command to host the local repository as a Chrome Update Server (HTTP).
 
 ## [1.3.0] - 2025-12-06
 

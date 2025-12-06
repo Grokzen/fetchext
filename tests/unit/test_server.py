@@ -83,3 +83,26 @@ def test_generate_update_manifest_mixed(tmp_path, mock_inspector, mock_crx_decod
     # Verify both exist
     assert (d / "update.xml").exists()
     assert (d / "updates.json").exists()
+
+def test_run_server(tmp_path, mocker):
+    # Mock socketserver.TCPServer
+    mock_server = mocker.patch("fetchext.server.socketserver.TCPServer")
+    mock_server_instance = mock_server.return_value
+    mock_server_instance.__enter__.return_value = mock_server_instance
+    
+    # Mock os.chdir
+    mock_chdir = mocker.patch("fetchext.server.os.chdir")
+    
+    from fetchext.server import run_server
+    
+    # Create a dummy directory
+    d = tmp_path / "serve_dir"
+    d.mkdir()
+    
+    # Run server (it should call serve_forever)
+    run_server(d, port=9000)
+    
+    # Verify
+    mock_chdir.assert_called_with(d.resolve())
+    mock_server.assert_called_once()
+    mock_server_instance.serve_forever.assert_called_once()

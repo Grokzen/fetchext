@@ -186,6 +186,26 @@ def get_parser():
         help="Output file path (default: <filename>_REPORT.md)"
     )
 
+    # Serve subcommand
+    serve_parser = subparsers.add_parser("serve", help="Host local repository as update server")
+    serve_parser.add_argument(
+        "-d", "--directory",
+        type=Path,
+        default=Path("."),
+        help="Directory to serve (default: current directory)"
+    )
+    serve_parser.add_argument(
+        "--host",
+        default="127.0.0.1",
+        help="Host to bind to (default: 127.0.0.1)"
+    )
+    serve_parser.add_argument(
+        "-p", "--port",
+        type=int,
+        default=8000,
+        help="Port to listen on (default: 8000)"
+    )
+
     # Update Manifest subcommand
     manifest_parser = subparsers.add_parser("update-manifest", aliases=["um"], help="Generate update manifest for local extensions")
     manifest_parser.add_argument("directory", type=Path, help="Directory containing extension files")
@@ -480,6 +500,11 @@ def main():
 
         if args.command == "report":
             core.generate_report(args.file, args.output)
+            return
+
+        if args.command == "serve":
+            from .server import run_server
+            run_server(args.directory, args.host, args.port)
             return
 
         if args.command in ["update-manifest", "um"]:

@@ -226,6 +226,20 @@ fext update-manifest ./downloads --base-url http://localhost:8000/extensions
 
 This will generate `update.xml` (for Chrome/Edge) and/or `updates.json` (for Firefox) in the `./downloads` directory.
 
+### 🌐 Local Server
+
+Host your local repository as a simple HTTP server. This is useful for testing updates or serving extensions to local browsers.
+
+```bash
+fext serve [-d <directory>] [--host <host>] [-p <port>]
+```
+
+**Example:**
+
+```bash
+fext serve -d ./downloads -p 8080
+```
+
 ### 🪞 Mirror Mode
 
 Synchronize a local directory with a list of extensions. This command will download missing extensions, update existing ones, and optionally remove files not in the list.

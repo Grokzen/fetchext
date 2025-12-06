@@ -1,6 +1,9 @@
 import json
 import logging
 import xml.etree.ElementTree as ET
+import http.server
+import socketserver
+import os
 from pathlib import Path
 from typing import List, Dict, Optional
 from .inspector import ExtensionInspector
@@ -121,3 +124,25 @@ def _generate_firefox_json(extensions: List[Dict], base_url: str) -> str:
         }
         
     return json.dumps({"addons": addons}, indent=2)
+
+def run_server(directory: Path, host: str = "127.0.0.1", port: int = 8000):
+    """
+    Starts a simple HTTP server to serve extensions and update manifests.
+    """
+    directory = Path(directory).resolve()
+    if not directory.exists():
+        raise FileNotFoundError(f"Directory not found: {directory}")
+    
+    # Change to the directory to serve files relative to it
+    os.chdir(directory)
+    
+    handler = http.server.SimpleHTTPRequestHandler
+    
+    with socketserver.TCPServer((host, port), handler) as httpd:
+        logger.info(f"Serving extensions from {directory}")
+        logger.info(f"Server running at http://{host}:{port}")
+        logger.info("Press Ctrl+C to stop.")
+        try:
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            logger.info("\nServer stopped.")

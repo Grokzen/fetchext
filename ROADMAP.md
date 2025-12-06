@@ -141,8 +141,8 @@
 
 - [x] **Timeline View**: Forensic timeline (Analysis).
   - [x] Add `fext timeline <file>` to visualize file modification times within the archive.
-- [ ] **Local Server**: Simple hosting (CLI).
-  - [ ] Add `fext serve` to host the local repository as a Chrome Update Server (HTTP).
+- [x] **Local Server**: Simple hosting (CLI).
+  - [x] Add `fext serve` to host the local repository as a Chrome Update Server (HTTP).
 - [ ] **Dependency Graph**: Internal structure (Analysis).
   - [ ] Generate DOT/Graphviz graphs of internal file dependencies/imports.
 - [ ] **Image Optimizer**: Asset reduction (Core).
