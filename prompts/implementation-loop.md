@@ -1,15 +1,41 @@
 # Implementation Loop Prompt
 
-All right, lets go on an adventure. You have a roadmap with items in it. Each implementation loops goal is to complete all items within the next release after the one that is most recently cmopleted. I want you to work on this loop until you have completed all items within that release and after completed all items then you can finish up and report back. Each item should be implemented one by one in sequence given the loop below.
+**Objective**: Complete **ALL** remaining items for the current target release version in `ROADMAP.md`.
 
-First you figure out the next major item to work on based on the roadmap.
-Next you analyze the repo current state and you build a plan file. This file should be written to disk and compared to before, it should remain and not be removed. I want all major features to be tracked based on the plans that was used to implement a given feature.
-After the plan is made, review and ensure you have all parts there to implement the plan.
-Next i want you do start implementing the plan, code, tests, documentation, testing and everything.
-Remember that testing is not only pytest but as well testing in the terminal and analyze the output.
-When you done the first pass on the code i want you to analyze and review the changes to ensure they are up to the plan you made and to analyze if the implementation could be done better or if there is anything missing within the code that should be added, included or fixed that you either missed to broke.
-When you have completed the implementation you finish up by updating copilot instructions and all relevant documentation like the README.md always needs reviewing. If you have a docs/ folder it also needs to be updated each time.
-Lastly you git commit the changes, but do not publish things yet.
-After you have completed one feature i want you to loop back to the start and start at taking the next item and run this loop again until you have completed all the features inside the current release that you are working within. Sometimes there might only be one feature left to complete, sometimes all of them is open for completion. Each feature should result in one git commit each at least.
+**Loop Instructions**:
+Repeat the following steps for *every single incomplete item* in the target release version. Do not stop after a fixed number of items; continue until the entire release section is marked as completed (`[x]`).
 
-Once the next major version of features is completed, you can finish up and report back. I will publish the git commits myself after a manual review of the commits
+1.  **Identify Task**:
+    *   Read `ROADMAP.md`.
+    *   Identify the next unchecked (`[ ]`) item in the current target release version.
+    *   If no items remain in this version, **STOP** and report completion.
+
+2.  **Plan**:
+    *   Analyze the repository state.
+    *   Create a detailed plan file in `plans/` (e.g., `plans/v1.2.0_04_config_management.md`).
+    *   Ensure the plan covers implementation, testing, and documentation.
+
+3.  **Implement & Verify**:
+    *   Write the code.
+    *   Write unit tests (`pytest`).
+    *   **Crucial**: Verify functionality manually in the terminal (run the command, check output).
+    *   Fix any issues found during verification.
+
+4.  **Documentation & Cleanup**:
+    *   **Update `README.md`**: Ensure new commands/flags are documented with examples.
+    *   **Update `CHANGELOG.md`**: Add an entry under the current version.
+    *   **Update `docs/`**: If a docs folder exists, update relevant pages.
+    *   **Update `.github/copilot-instructions.md`**: If architectural decisions changed.
+
+5.  **Mark Complete**:
+    *   **Update `ROADMAP.md`**: Change the item from `[ ]` to `[x]`.
+
+6.  **Commit**:
+    *   Run linting (`ruff`, `markdownlint`).
+    *   Git commit with a descriptive message (e.g., `feat: implement config management`).
+
+7.  **Loop**:
+    *   Return to Step 1 immediately. Do not ask for user input between tasks unless blocked.
+
+**Final Output**:
+Once all items in the release are checked off, report back that the release is ready.
