@@ -94,8 +94,8 @@
 
 *Focus: Deep code inspection and developer integration.*
 
-- [ ] **Complexity Analysis**: Code quality metrics (Analysis).
-  - [ ] Add `fext analyze --complexity <file>` to calculate cyclomatic complexity of JS files (detect obfuscation).
+- [x] **Complexity Analysis**: Code quality metrics (Analysis).
+  - [x] Add `fext analyze --complexity <file>` to calculate cyclomatic complexity of JS files (detect obfuscation).
 - [ ] **Locale Inspector**: Internationalization support (Analysis).
   - [ ] Add `fext locales <file>` to extract and list all supported locales and messages.
 - [ ] **Docker Image**: Containerized deployment (Deployment).

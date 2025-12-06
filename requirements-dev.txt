@@ -14,3 +14,4 @@ mkdocs
 mkdocs-material
 mkdocstrings[python]
 twine
+lizard

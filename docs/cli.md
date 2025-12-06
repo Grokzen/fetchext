@@ -92,3 +92,11 @@ Convert extension formats.
 ```bash
 fext convert <input> --to <format>
 ```
+
+### `analyze`
+
+Analyze extension code.
+
+```bash
+fext analyze <file> [--complexity] [--json]
+```

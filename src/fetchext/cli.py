@@ -264,6 +264,20 @@ def get_parser():
         action="store_true",
         help="Output results as JSON"
     )
+
+    # Analyze subcommand
+    analyze_parser = subparsers.add_parser("analyze", help="Analyze extension code")
+    analyze_parser.add_argument("file", help="Path to the .crx or .xpi file")
+    analyze_parser.add_argument(
+        "--complexity",
+        action="store_true",
+        help="Calculate cyclomatic complexity of JS files"
+    )
+    analyze_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output results as JSON"
+    )
     
     return parser
 
@@ -362,6 +376,42 @@ def main():
 
         if args.command == "stats":
             core.get_repo_stats(args.directory, json_output=args.json)
+            return
+
+        if args.command == "analyze":
+            if args.complexity:
+                from .analysis.complexity import analyze_complexity
+                import json
+                from rich.table import Table
+                
+                results = analyze_complexity(Path(args.file))
+                
+                if args.json:
+                    print(json.dumps(results, indent=2))
+                else:
+                    console.print(f"[bold]Complexity Analysis for {args.file}[/bold]")
+                    console.print(f"Average Complexity: {results['average_complexity']:.2f}")
+                    console.print(f"Max Complexity: {results['max_complexity']}")
+                    console.print(f"Total Functions: {results['total_functions']}")
+                    
+                    if results["high_complexity_functions"]:
+                        console.print("\n[bold red]High Complexity Functions (>15):[/bold red]")
+                        table = Table(show_header=True, header_style="bold magenta")
+                        table.add_column("File")
+                        table.add_column("Function")
+                        table.add_column("Complexity")
+                        table.add_column("Length")
+                        
+                        for func in results["high_complexity_functions"]:
+                            table.add_row(
+                                func["file"],
+                                func["function"],
+                                str(func["complexity"]),
+                                str(func["length"])
+                            )
+                        console.print(table)
+                    else:
+                        console.print("\n[green]No high complexity functions found.[/green]")
             return
 
         if args.command in ["download", "d"]:
