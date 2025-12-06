@@ -2,40 +2,43 @@
 
 **Objective**: Complete **ALL** remaining items for the current target release version in `ROADMAP.md`.
 
-**Loop Instructions**:
-Repeat the following steps for *every single incomplete item* in the target release version. Do not stop after a fixed number of items; continue until the entire release section is marked as completed (`[x]`).
+**CRITICAL INSTRUCTION**:
+You are an autonomous agent. You must loop through **ALL** items in the target release. **DO NOT STOP** after completing one or two items. **DO NOT ASK** for user permission to proceed to the next item. Continue the loop until the entire release section is marked as completed (`[x]`).
+
+**Workflow Loop**:
+Repeat these steps for every incomplete item:
 
 1. **Identify Task**:
     * Read `ROADMAP.md`.
     * Identify the next unchecked (`[ ]`) item in the current target release version.
-    * If no items remain in this version, **STOP** and report completion.
+    * If no items remain in this version, break the loop and proceed to **Finalization**.
 
 2. **Plan**:
-    * Analyze the repository state.
     * Create a detailed plan file in `plans/` (e.g., `plans/v1.2.0_04_config_management.md`).
-    * Ensure the plan covers implementation, testing, and documentation.
 
 3. **Implement & Verify**:
     * Write the code.
     * Write unit tests (`pytest`).
-    * **Crucial**: Verify functionality manually in the terminal (run the command, check output).
-    * Fix any issues found during verification.
+    * **Verify**: Run the tests and manually execute the command to ensure it works.
 
-4. **Documentation & Cleanup**:
-    * **Update `README.md`**: Ensure new commands/flags are documented with examples.
-    * **Update `CHANGELOG.md`**: Add an entry under the current version.
-    * **Update `docs/`**: If a docs folder exists, update relevant pages.
-    * **Update `.github/copilot-instructions.md`**: If architectural decisions changed.
+4. **Document**:
+    * **Update `README.md`**: Document new commands/flags.
+    * **Update `CHANGELOG.md`**: Add entry under current version.
+    * **Update `.github/copilot-instructions.md`**: If architecture changed.
 
-5. **Mark Complete**:
-    * **Update `ROADMAP.md`**: Change the item from `[ ]` to `[x]`.
+5. **Update Roadmap**:
+    * Edit `ROADMAP.md`: Change the item from `[ ]` to `[x]`.
 
 6. **Commit**:
     * Run linting (`ruff`, `markdownlint`).
-    * Git commit with a descriptive message (e.g., `feat: implement config management`).
+    * Stage **ALL** changes: `git add .` (Ensure `ROADMAP.md` is included).
+    * Commit: `git commit -m "feat: <description>"`
 
 7. **Loop**:
-    * Return to Step 1 immediately. Do not ask for user input between tasks unless blocked.
+    * **IMMEDIATELY** return to Step 1.
 
-**Final Output**:
-Once all items in the release are checked off, report back that the release is ready.
+**Finalization** (Only when all items are `[x]`):
+
+1. Verify `pyproject.toml` version matches the target release.
+2. If not, bump the version and commit: `git commit -m "chore: release vX.Y.Z"`.
+3. Report: "Release vX.Y.Z is complete. All items implemented and verified."

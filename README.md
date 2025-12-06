@@ -325,6 +325,20 @@ fext explain <permission>
 fext explain tabs
 ```
 
+### ⏳ Timeline View
+
+Visualize the modification timeline of files within an extension archive. This is useful for forensic analysis to see when files were last modified.
+
+```bash
+fext timeline <file>
+```
+
+**Example:**
+
+```bash
+fext timeline ublock-origin.crx
+```
+
 ### 🎲 Entropy Analysis
 
 Analyze the entropy of files within an extension to detect potential obfuscation, packing, or encrypted data.

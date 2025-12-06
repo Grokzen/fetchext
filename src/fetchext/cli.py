@@ -229,6 +229,15 @@ def get_parser():
         help=f"Number of parallel workers (default: {default_workers})"
     )
 
+    # Timeline subcommand
+    timeline_parser = subparsers.add_parser("timeline", help="Visualize file modification timeline")
+    timeline_parser.add_argument("file", help="Path to the .crx or .xpi file")
+    timeline_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output results as JSON"
+    )
+
     # UI subcommand
     subparsers.add_parser("ui", help="Launch interactive TUI")
 
@@ -486,6 +495,38 @@ def main():
 
         if args.command in ["batch", "b"]:
             core.batch_download(args.file, args.output_dir, workers=args.workers, show_progress=show_progress)
+            return
+
+        if args.command == "timeline":
+            from .inspector import ExtensionInspector
+            from rich.table import Table
+            import json
+            
+            inspector = ExtensionInspector()
+            timeline = inspector.get_timeline(args.file)
+            
+            if args.json:
+                # Convert datetime objects to strings for JSON serialization
+                json_timeline = []
+                for item in timeline:
+                    item_copy = item.copy()
+                    item_copy["datetime"] = item_copy["datetime"].isoformat()
+                    json_timeline.append(item_copy)
+                print(json.dumps(json_timeline, indent=2))
+            else:
+                console.print(f"[bold]Timeline for {args.file}[/bold]")
+                table = Table(show_header=True, header_style="bold magenta")
+                table.add_column("Date/Time")
+                table.add_column("File")
+                table.add_column("Size")
+                
+                for item in timeline:
+                    table.add_row(
+                        item["datetime"].strftime("%Y-%m-%d %H:%M:%S"),
+                        item["filename"],
+                        str(item["size"])
+                    )
+                console.print(table)
             return
 
         if args.command == "ui":

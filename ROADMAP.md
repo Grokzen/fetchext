@@ -139,8 +139,8 @@
 
 *Focus: Data visualization and local hosting.*
 
-- [ ] **Timeline View**: Forensic timeline (Analysis).
-  - [ ] Add `fext timeline <file>` to visualize file modification times within the archive.
+- [x] **Timeline View**: Forensic timeline (Analysis).
+  - [x] Add `fext timeline <file>` to visualize file modification times within the archive.
 - [ ] **Local Server**: Simple hosting (CLI).
   - [ ] Add `fext serve` to host the local repository as a Chrome Update Server (HTTP).
 - [ ] **Dependency Graph**: Internal structure (Analysis).
