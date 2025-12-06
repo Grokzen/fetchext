@@ -284,6 +284,11 @@ def get_parser():
         help="Extract domains and URLs from source code"
     )
     analyze_parser.add_argument(
+        "--secrets",
+        action="store_true",
+        help="Scan for potential secrets (API keys, tokens)"
+    )
+    analyze_parser.add_argument(
         "--yara",
         type=Path,
         help="Path to YARA rules file to scan against"
@@ -560,6 +565,40 @@ def main():
                     else:
                         console.print("  [yellow]No URLs found.[/yellow]")
             
+            elif args.secrets:
+                from .secrets import SecretScanner
+                import json
+                from rich.table import Table
+                
+                scanner = SecretScanner()
+                results = scanner.scan_extension(Path(args.file))
+                
+                if args.json:
+                    # Convert dataclass to dict for JSON serialization
+                    import dataclasses
+                    print(json.dumps([dataclasses.asdict(r) for r in results], indent=2))
+                else:
+                    console.print(f"[bold]Secret Scan for {args.file}[/bold]")
+                    
+                    if results:
+                        table = Table(show_header=True, header_style="bold magenta")
+                        table.add_column("Type")
+                        table.add_column("File")
+                        table.add_column("Line")
+                        table.add_column("Match (Masked)")
+                        
+                        for finding in results:
+                            table.add_row(
+                                finding.type,
+                                finding.file,
+                                str(finding.line),
+                                finding.match
+                            )
+                        console.print(table)
+                        console.print(f"\n[bold red]Found {len(results)} potential secrets.[/bold red]")
+                    else:
+                        console.print("\n[green]No secrets found.[/green]")
+
             elif args.yara:
                 from .analysis.yara import YaraScanner
                 import json
