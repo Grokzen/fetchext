@@ -196,3 +196,13 @@ This project serves as a proof-of-concept for fully automated software developme
     1. Update `README.md` immediately after implementing the feature.
     2. Ensure usage examples are copy-pasteable and correct.
     3. Verify that `fext --help` output aligns with documented commands.
+
+### 5. Feature Blacklist Protocol
+
+- **Rule**: **NEVER IMPLEMENT BLACKLISTED FEATURES**.
+- **Source**: `.github/feature-blacklist.md`.
+- **Action**:
+    1. Before suggesting a new feature or adding an item to `ROADMAP.md`, check `.github/feature-blacklist.md`.
+    2. If the feature (or a close variant) is listed there, **DO NOT** suggest it.
+    3. If the user asks for a blacklisted feature, politely decline and reference the blacklist reasoning.
+
