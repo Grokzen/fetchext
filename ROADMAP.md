@@ -102,10 +102,10 @@
   - [x] Publish official `Dockerfile` and GHCR image for CI/CD usage.
 - [x] **Pre-commit Hook**: Developer workflow integration (Integration).
   - [x] Add `.pre-commit-hooks.yaml` to allow using `fext audit` in pre-commit pipelines.
-- [ ] **Permission Explainer**: Educational tooling (Docs).
-  - [ ] Add `fext explain <permission>` to provide human-readable context for manifest permissions.
+- [x] **Permission Explainer**: Educational tooling (Docs).
+  - [x] Add `fext explain <permission>` to provide human-readable context for manifest permissions.
 
-## 🔮 v1.2.0: Advanced Security & Forensics
+## 🔮 v1.2.0: Advanced Forensics & Security
 
 *Focus: Malware detection and forensic analysis.*
 
@@ -115,10 +115,40 @@
   - [ ] Add `fext analyze --domains <file>` to extract all URLs and domains from source code.
 - [ ] **YARA Rules**: Malware matching (Security).
   - [ ] Integrate `yara-python` to scan extensions against a database of malicious signatures.
+- [ ] **Config Management**: CLI settings control (CLI).
+  - [ ] Add `fext config set <key> <value>` and `fext config get <key>` to manage settings.
+- [ ] **Cache Management**: Disk usage control (Core).
+  - [ ] Add `fext clean` to clear temporary download caches and build artifacts.
+
+## 🛡️ v1.3.0: Developer Experience & Quality
+
+*Focus: Deep auditing and developer tools.*
+
+- [ ] **CSP Auditor**: Security policy analysis (Analysis).
+  - [ ] Analyze `content_security_policy` for weak configurations (e.g., `unsafe-eval`).
+- [ ] **Secret Scanner**: Credential leakage detection (Security).
+  - [ ] Scan source code for potential API keys, tokens, and private keys using regex patterns.
+- [ ] **History Tracking**: Audit logs (CLI).
+  - [ ] Add `fext history` to view a local log of downloaded extensions and actions.
+- [ ] **JSON Schema**: Output standardization (Core).
+  - [ ] Publish and validate against JSON schemas for all `--json` command outputs.
+- [ ] **Plugin Manager**: Extension system (Ecosystem).
+  - [ ] Add `fext plugins list/install` to manage Python-based hooks easily.
+
+## 📊 v1.4.0: Visualization & Serving
+
+*Focus: Data visualization and local hosting.*
+
 - [ ] **Timeline View**: Forensic timeline (Analysis).
-  - [ ] Add `fext timeline <file>` to show a chronological view of file modification times within the archive.
-- [ ] **Hidden File Detector**: Steganography check (Security).
-  - [ ] Scan for files hidden within images or other assets.
+  - [ ] Add `fext timeline <file>` to visualize file modification times within the archive.
+- [ ] **Local Server**: Simple hosting (CLI).
+  - [ ] Add `fext serve` to host the local repository as a Chrome Update Server (HTTP).
+- [ ] **Dependency Graph**: Internal structure (Analysis).
+  - [ ] Generate DOT/Graphviz graphs of internal file dependencies/imports.
+- [ ] **Image Optimizer**: Asset reduction (Core).
+  - [ ] Add `fext optimize` to strip metadata from extension images to save space.
+- [ ] **Interactive Tutorial**: Onboarding (Docs).
+  - [ ] Add `fext tutorial` TUI walkthrough to teach users how to use the tool.
 
 ## ✅ Completed
 

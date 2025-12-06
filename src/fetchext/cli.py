@@ -274,6 +274,11 @@ def get_parser():
         help="Calculate cyclomatic complexity of JS files"
     )
     analyze_parser.add_argument(
+        "--entropy",
+        action="store_true",
+        help="Calculate entropy of files to detect obfuscation/packing"
+    )
+    analyze_parser.add_argument(
         "--json",
         action="store_true",
         help="Output results as JSON"
@@ -283,6 +288,15 @@ def get_parser():
     locales_parser = subparsers.add_parser("locales", help="Inspect extension locales")
     locales_parser.add_argument("file", help="Path to the .crx or .xpi file")
     locales_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output results as JSON"
+    )
+
+    # Explain subcommand
+    explain_parser = subparsers.add_parser("explain", help="Explain a permission")
+    explain_parser.add_argument("permission", help="The permission string to explain")
+    explain_parser.add_argument(
         "--json",
         action="store_true",
         help="Output results as JSON"
@@ -421,6 +435,46 @@ def main():
                         console.print(table)
                     else:
                         console.print("\n[green]No high complexity functions found.[/green]")
+            
+            elif args.entropy:
+                from .analysis.entropy import analyze_entropy
+                import json
+                from rich.table import Table
+                
+                results = analyze_entropy(Path(args.file))
+                
+                if args.json:
+                    print(json.dumps(results, indent=2))
+                else:
+                    console.print(f"[bold]Entropy Analysis for {args.file}[/bold]")
+                    console.print(f"Average Entropy: {results['average_entropy']:.2f}")
+                    
+                    # Sort by entropy descending
+                    sorted_files = sorted(results["files"], key=lambda x: x["entropy"], reverse=True)
+                    
+                    table = Table(show_header=True, header_style="bold magenta")
+                    table.add_column("File")
+                    table.add_column("Entropy")
+                    table.add_column("Size")
+                    table.add_column("Verdict")
+                    
+                    for file_info in sorted_files[:20]:  # Show top 20
+                        entropy = file_info["entropy"]
+                        verdict = "[green]Normal[/green]"
+                        if entropy > 7.5:
+                            verdict = "[red]Packed/Encrypted[/red]"
+                        elif entropy > 6.0:
+                            verdict = "[yellow]High[/yellow]"
+                            
+                        table.add_row(
+                            file_info["filename"],
+                            f"{entropy:.2f}",
+                            str(file_info["size"]),
+                            verdict
+                        )
+                    console.print(table)
+                    if len(sorted_files) > 20:
+                        console.print(f"\n... and {len(sorted_files) - 20} more files.")
             return
 
         if args.command == "locales":
@@ -455,6 +509,34 @@ def main():
                     console.print(table)
                 else:
                     console.print("[yellow]No locales found in _locales directory.[/yellow]")
+            return
+
+        if args.command == "explain":
+            from .analysis.explainer import explain_permission
+            import json
+            from rich.panel import Panel
+            
+            result = explain_permission(args.permission)
+            
+            if args.json:
+                print(json.dumps(result, indent=2))
+            else:
+                if result:
+                    risk_color = {
+                        "Low": "green",
+                        "Medium": "yellow",
+                        "High": "red",
+                        "Critical": "bold red"
+                    }.get(result["risk"], "white")
+                    
+                    console.print(Panel(
+                        f"[bold]Description:[/bold] {result['description']}\n\n"
+                        f"[bold]Risk Level:[/bold] [{risk_color}]{result['risk']}[/{risk_color}]",
+                        title=f"[bold cyan]{args.permission}[/bold cyan]",
+                        expand=False
+                    ))
+                else:
+                    console.print(f"[red]Permission '{args.permission}' not found in database.[/red]")
             return
 
         if args.command in ["download", "d"]:

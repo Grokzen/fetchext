@@ -311,6 +311,34 @@ Analyze a local directory of extensions to get insights like total size, MV2/MV3
 fext stats <directory>
 ```
 
+### 🧠 Permission Explainer
+
+Get a detailed explanation and risk assessment for a specific permission.
+
+```bash
+fext explain <permission>
+```
+
+**Example:**
+
+```bash
+fext explain tabs
+```
+
+### 🎲 Entropy Analysis
+
+Analyze the entropy of files within an extension to detect potential obfuscation, packing, or encrypted data.
+
+```bash
+fext analyze --entropy <file>
+```
+
+**Example:**
+
+```bash
+fext analyze --entropy ublock-origin.crx
+```
+
 ### 📄 Documentation & Completion
 
 **Man Page:**

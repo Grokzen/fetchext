@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Locale Inspector**: Added `fext locales` command to inspect supported locales and message counts.
 - **Docker Image**: Added `Dockerfile` and GitHub Actions workflow for containerized deployment.
 - **Pre-commit Hook**: Added `.pre-commit-hooks.yaml` for integration with pre-commit.
+- **Permission Explainer**: Added `fext explain <permission>` command to provide detailed descriptions and risk assessments for extension permissions.
+- **Entropy Analysis**: Added `fext analyze --entropy <file>` to calculate Shannon entropy of files within an extension to detect obfuscation or packing.
 
 ## [0.7.0] - 2025-12-06
 
