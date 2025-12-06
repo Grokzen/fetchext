@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Complexity Analysis**: Added `fext analyze --complexity` to calculate cyclomatic complexity of JavaScript files.
 - **Locale Inspector**: Added `fext locales` command to inspect supported locales and message counts.
 - **Docker Image**: Added `Dockerfile` and GitHub Actions workflow for containerized deployment.
+- **Pre-commit Hook**: Added `.pre-commit-hooks.yaml` for integration with pre-commit.
 
 ## [0.7.0] - 2025-12-06
 

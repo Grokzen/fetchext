@@ -100,8 +100,8 @@
   - [x] Add `fext locales <file>` to extract and list all supported locales and messages.
 - [x] **Docker Image**: Containerized deployment (Deployment).
   - [x] Publish official `Dockerfile` and GHCR image for CI/CD usage.
-- [ ] **Pre-commit Hook**: Developer workflow integration (Integration).
-  - [ ] Add `.pre-commit-hooks.yaml` to allow using `fext audit` in pre-commit pipelines.
+- [x] **Pre-commit Hook**: Developer workflow integration (Integration).
+  - [x] Add `.pre-commit-hooks.yaml` to allow using `fext audit` in pre-commit pipelines.
 - [ ] **Permission Explainer**: Educational tooling (Docs).
   - [ ] Add `fext explain <permission>` to provide human-readable context for manifest permissions.
 

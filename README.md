@@ -52,6 +52,18 @@ You can run `fetchext` using Docker:
 docker run --rm -v $(pwd):/app/downloads ghcr.io/grok/fetchext download chrome <url> -o /app/downloads
 ```
 
+### 🪝 Pre-commit Hook
+
+You can use `fetchext` in your [pre-commit](https://pre-commit.com) config:
+
+```yaml
+- repo: https://github.com/grok/fetchext
+  rev: v0.7.0
+  hooks:
+    - id: fext-audit
+    - id: fext-scan
+```
+
 ## 🚀 Usage
 
 The CLI requires two arguments: the browser type and the extension URL.

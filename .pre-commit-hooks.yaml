@@ -1,0 +1,23 @@
+- id: fext-audit
+  name: Audit Extension (MV3)
+  description: Check extension for Manifest V3 compatibility.
+  entry: fext audit
+  language: python
+  types: [file]
+  files: \.(crx|xpi|zip)$
+
+- id: fext-scan
+  name: Scan Extension (Vulnerabilities)
+  description: Scan extension for vulnerable libraries.
+  entry: fext scan
+  language: python
+  types: [file]
+  files: \.(crx|xpi|zip)$
+
+- id: fext-analyze
+  name: Analyze Extension (Complexity)
+  description: Analyze extension code complexity.
+  entry: fext analyze --complexity
+  language: python
+  types: [file]
+  files: \.(crx|xpi|zip)$

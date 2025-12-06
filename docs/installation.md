@@ -46,3 +46,15 @@ Run it:
 ```bash
 docker run --rm -v $(pwd):/data ghcr.io/grok/fetchext download chrome <url> -o /data
 ```
+
+## Pre-commit Hook
+
+You can use `fetchext` in your [pre-commit](https://pre-commit.com) config:
+
+```yaml
+- repo: https://github.com/grok/fetchext
+  rev: v0.7.0
+  hooks:
+    - id: fext-audit
+    - id: fext-scan
+```
