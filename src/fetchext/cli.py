@@ -82,10 +82,16 @@ def main():
         help="The browser type (only firefox/f supported for search)"
     )
     search_parser.add_argument("query", help="The search query")
-    search_parser.add_argument(
+    search_group = search_parser.add_mutually_exclusive_group()
+    search_group.add_argument(
         "--json",
         action="store_true",
         help="Output results as JSON"
+    )
+    search_group.add_argument(
+        "--csv",
+        action="store_true",
+        help="Output results as CSV"
     )
 
     # Inspect subcommand
@@ -159,10 +165,16 @@ def main():
     # Scan subcommand
     scan_parser = subparsers.add_parser("scan", help="Scan extension for vulnerable dependencies")
     scan_parser.add_argument("file", help="Path to the .crx or .xpi file")
-    scan_parser.add_argument(
+    scan_group = scan_parser.add_mutually_exclusive_group()
+    scan_group.add_argument(
         "--json",
         action="store_true",
         help="Output results as JSON"
+    )
+    scan_group.add_argument(
+        "--csv",
+        action="store_true",
+        help="Output results as CSV"
     )
 
     # Report subcommand
@@ -238,6 +250,21 @@ def main():
         help="Output file path"
     )
 
+    # Stats subcommand
+    stats_parser = subparsers.add_parser("stats", help="Analyze repository statistics")
+    stats_parser.add_argument(
+        "directory",
+        type=Path,
+        nargs="?",
+        default=Path("."),
+        help="Directory to scan (default: current directory)"
+    )
+    stats_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output results as JSON"
+    )
+
     args = parser.parse_args()
 
     # Configure logging based on flags
@@ -290,7 +317,7 @@ def main():
                 sys.exit(1)
 
         if args.command == "scan":
-            core.scan_extension(args.file, json_output=args.json)
+            core.scan_extension(args.file, json_output=args.json, csv_output=args.csv)
             return
 
         if args.command == "report":
@@ -326,6 +353,10 @@ def main():
             core.convert_extension(args.input, args.output, to_format=args.to)
             return
 
+        if args.command == "stats":
+            core.get_repo_stats(args.directory, json_output=args.json)
+            return
+
         if args.command in ["download", "d"]:
             core.download_extension(
                 args.browser,
@@ -337,7 +368,7 @@ def main():
             )
 
         elif args.command in ["search", "s"]:
-            core.search_extension(args.browser, args.query, json_output=args.json)
+            core.search_extension(args.browser, args.query, json_output=args.json, csv_output=args.csv)
 
         if not args.quiet:
             logger.info("Script finished successfully.")

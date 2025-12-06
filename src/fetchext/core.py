@@ -95,7 +95,7 @@ def download_extension(browser, url, output_dir, save_metadata=False, extract=Fa
 
     return output_path
 
-def search_extension(browser, query, json_output=False):
+def search_extension(browser, query, json_output=False, csv_output=False):
     """
     Search for an extension.
     """
@@ -110,6 +110,23 @@ def search_extension(browser, query, json_output=False):
     
     if json_output:
         console.print_json(data=results)
+    elif csv_output:
+        import csv
+        import sys
+        
+        writer = csv.writer(sys.stdout)
+        writer.writerow(["id", "name", "version", "url", "description", "users", "rating"])
+        
+        for r in results:
+            writer.writerow([
+                r.get("id", ""),
+                r.get("name", ""),
+                r.get("version", ""),
+                r.get("url", ""),
+                r.get("description", ""),
+                r.get("users", ""),
+                r.get("rating", "")
+            ])
     else:
         print_search_results_table(query, results)
     
@@ -485,7 +502,7 @@ def batch_download(file_path, output_dir, workers=4, show_progress=True):
     if show_progress:
         logger.info("Batch processing finished successfully.")
 
-def scan_extension(file_path, json_output=False):
+def scan_extension(file_path, json_output=False, csv_output=False):
     """
     Scan an extension for vulnerable dependencies.
     """
@@ -502,6 +519,23 @@ def scan_extension(file_path, json_output=False):
         
         if json_output:
             console.print_json(data=asdict(report))
+        elif csv_output:
+            import csv
+            import sys
+            
+            writer = csv.writer(sys.stdout)
+            writer.writerow(["file", "library", "version", "vulnerable", "advisory", "path"])
+            
+            if report.libraries:
+                for lib in report.libraries:
+                    writer.writerow([
+                        report.file,
+                        lib.name,
+                        lib.version,
+                        lib.vulnerable,
+                        lib.advisory,
+                        lib.path
+                    ])
         else:
             console.print(f"[bold]Dependency Scan Report:[/bold] {report.file}")
             if not report.libraries:
@@ -558,4 +592,25 @@ def convert_extension(input_path, output_path=None, to_format="zip"):
     except Exception as e:
         logger.error(f"Conversion failed: {e}")
         raise
+
+def get_repo_stats(directory, json_output=False):
+    """
+    Analyze a repository of extensions.
+    """
+    from .stats import RepoAnalyzer, print_stats
+    from dataclasses import asdict
+    
+    directory = Path(directory)
+    if not directory.exists():
+        raise FileNotFoundError(f"Directory not found: {directory}")
+        
+    analyzer = RepoAnalyzer()
+    stats = analyzer.scan(directory)
+    
+    if json_output:
+        console.print_json(data=asdict(stats))
+    else:
+        print_stats(stats)
+        
+    return stats
 

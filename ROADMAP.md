@@ -70,10 +70,10 @@
   - [x] Add `fext setup` to guide users through creating the config file.
 - [x] **Format Converter**: Repackaging tools (Core).
   - [x] Add `fext convert` to switch between raw source, CRX, and ZIP formats.
-- [ ] **Repository Statistics**: Local repo insights (Analysis).
-  - [ ] Add `fext stats` to visualize storage usage and permission trends.
-- [ ] **CSV Export**: Data portability (CLI).
-  - [ ] Add `--csv` flag to `search` and `scan` commands for spreadsheet integration.
+- [x] **Repository Statistics**: Local repo insights (Analysis).
+  - [x] Add `fext stats` to visualize storage usage and permission trends.
+- [x] **CSV Export**: Data portability (CLI).
+  - [x] Add `--csv` flag to `search` and `scan` commands for spreadsheet integration.
 
 ## 🚀 v1.0.0: Stability & Production
 

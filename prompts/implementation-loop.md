@@ -10,6 +10,6 @@ Remember that testing is not only pytest but as well testing in the terminal and
 When you done the first pass on the code i want you to analyze and review the changes to ensure they are up to the plan you made and to analyze if the implementation could be done better or if there is anything missing within the code that should be added, included or fixed that you either missed to broke.
 When you have completed the implementation you finish up by updating copilot instructions and all relevant documentation like the README.md always needs reviewing. If you have a docs/ folder it also needs to be updated each time.
 Lastly you git commit the changes, but do not publish things yet.
-After you have completed one feature i want you to loop back to the start and start at taking the next item and run this loop again until you have completed the 3 features. Each feature should result in one git commit each at least.
+After you have completed one feature i want you to loop back to the start and start at taking the next item and run this loop again until you have completed all the features inside the current release that you are working within. Sometimes there might only be one feature left to complete, sometimes all of them is open for completion. Each feature should result in one git commit each at least.
 
 Once the next major version of features is completed, you can finish up and report back. I will publish the git commits myself after a manual review of the commits
