@@ -64,12 +64,12 @@
 
 - [x] **Interactive TUI**: Terminal User Interface (CLI).
   - [x] Add `fext ui` for browsing and downloading using `textual` or `rich`.
-- [ ] **Markdown Reports**: Audit summaries (Analysis).
-  - [ ] Add `fext report <file>` to generate a readable `REPORT.md` with metadata and risk scores.
-- [ ] **Configuration Wizard**: Interactive setup (CLI).
-  - [ ] Add `fext setup` to guide users through creating the config file.
-- [ ] **Format Converter**: Repackaging tools (Core).
-  - [ ] Add `fext convert` to switch between raw source, CRX, and ZIP formats.
+- [x] **Markdown Reports**: Audit summaries (Analysis).
+  - [x] Add `fext report <file>` to generate a readable `REPORT.md` with metadata and risk scores.
+- [x] **Configuration Wizard**: Interactive setup (CLI).
+  - [x] Add `fext setup` to guide users through creating the config file.
+- [x] **Format Converter**: Repackaging tools (Core).
+  - [x] Add `fext convert` to switch between raw source, CRX, and ZIP formats.
 - [ ] **Repository Statistics**: Local repo insights (Analysis).
   - [ ] Add `fext stats` to visualize storage usage and permission trends.
 - [ ] **CSV Export**: Data portability (CLI).
@@ -104,6 +104,21 @@
   - [ ] Add `.pre-commit-hooks.yaml` to allow using `fext audit` in pre-commit pipelines.
 - [ ] **Permission Explainer**: Educational tooling (Docs).
   - [ ] Add `fext explain <permission>` to provide human-readable context for manifest permissions.
+
+## 🔮 v1.2.0: Advanced Security & Forensics
+
+*Focus: Malware detection and forensic analysis.*
+
+- [ ] **Entropy Analysis**: Obfuscation detection (Analysis).
+  - [ ] Add `fext analyze --entropy <file>` to detect high-entropy strings (potential packed code or secrets).
+- [ ] **Domain Extractor**: Network forensics (Analysis).
+  - [ ] Add `fext analyze --domains <file>` to extract all URLs and domains from source code.
+- [ ] **YARA Rules**: Malware matching (Security).
+  - [ ] Integrate `yara-python` to scan extensions against a database of malicious signatures.
+- [ ] **Timeline View**: Forensic timeline (Analysis).
+  - [ ] Add `fext timeline <file>` to show a chronological view of file modification times within the archive.
+- [ ] **Hidden File Detector**: Steganography check (Security).
+  - [ ] Scan for files hidden within images or other assets.
 
 ## ✅ Completed
 
