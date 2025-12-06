@@ -369,6 +369,28 @@ fext graph ublock-origin.crx
 dot -Tpng -o graph.png ublock-origin.dot
 ```
 
+### 🖼️ Image Optimizer
+
+Losslessly compress PNG and JPEG images within an extension directory to reduce size.
+
+```bash
+fext optimize <directory> [-q <quality>]
+```
+
+**Example:**
+
+```bash
+fext optimize ./my-extension -q 80
+```
+
+### 🎓 Interactive Tutorial
+
+Launch an interactive TUI walkthrough to learn how to use `fext`.
+
+```bash
+fext tutorial
+```
+
 ### 🎲 Entropy Analysis
 
 Analyze the entropy of files within an extension to detect potential obfuscation, packing, or encrypted data.

@@ -282,6 +282,9 @@ def get_parser():
         help="Output results as JSON"
     )
 
+    # Tutorial subcommand
+    subparsers.add_parser("tutorial", help="Launch interactive tutorial")
+
     # UI subcommand
     subparsers.add_parser("ui", help="Launch interactive TUI")
 
@@ -609,6 +612,11 @@ def main():
                 console.print(f"Original Size: {results['original_size'] / 1024:.2f} KB")
                 console.print(f"New Size: {results['new_size'] / 1024:.2f} KB")
                 console.print(f"Saved: {results['saved_bytes'] / 1024:.2f} KB ({(results['saved_bytes'] / results['original_size'] * 100) if results['original_size'] > 0 else 0:.1f}%)")
+            return
+
+        if args.command == "tutorial":
+            from .tutorial import run_tutorial
+            run_tutorial()
             return
 
         if args.command == "ui":

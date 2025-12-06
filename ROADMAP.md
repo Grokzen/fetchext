@@ -147,8 +147,8 @@
   - [x] Generate DOT/Graphviz graphs of internal file dependencies/imports.
 - [x] **Image Optimizer**: Asset reduction (Core).
   - [x] Add `fext optimize` to strip metadata from extension images to save space.
-- [ ] **Interactive Tutorial**: Onboarding (Docs).
-  - [ ] Add `fext tutorial` TUI walkthrough to teach users how to use the tool.
+- [x] **Interactive Tutorial**: Onboarding (Docs).
+  - [x] Add `fext tutorial` TUI walkthrough to teach users how to use the tool.
 
 ## 🌐 v1.5.0: Intelligence & Web
 
