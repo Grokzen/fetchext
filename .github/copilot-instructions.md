@@ -40,6 +40,7 @@ This file documents the project's history, architectural decisions, and coding s
         firefox.py
       __init__.py
       cli.py
+      mirror.py
       server.py
   pyproject.toml
   Makefile

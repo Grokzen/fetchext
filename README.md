@@ -206,6 +206,25 @@ fext update-manifest ./downloads --base-url http://localhost:8000/extensions
 
 This will generate `update.xml` (for Chrome/Edge) and/or `updates.json` (for Firefox) in the `./downloads` directory.
 
+### 🪞 Mirror Mode
+
+Synchronize a local directory with a list of extensions. This command will download missing extensions, update existing ones, and optionally remove files not in the list.
+
+```bash
+fext mirror <list_file> [--output-dir <dir>] [--prune]
+```
+
+**Arguments:**
+
+* `--prune`: Remove files in the output directory that are not in the list.
+* `--workers`: Number of parallel downloads.
+
+**Example:**
+
+```bash
+fext mirror my_extensions.txt -o ./mirror --prune
+```
+
 ## 💻 Development
 
 ### 🧹 Linting and Formatting

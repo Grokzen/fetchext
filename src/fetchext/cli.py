@@ -162,6 +162,27 @@ def main():
     manifest_parser.add_argument("--base-url", required=True, help="Base URL where extensions are hosted")
     manifest_parser.add_argument("--output", type=Path, help="Output file path (optional)")
 
+    # Mirror subcommand
+    mirror_parser = subparsers.add_parser("mirror", help="Sync local directory with extension list")
+    mirror_parser.add_argument("list_file", type=Path, help="Path to the list file")
+    mirror_parser.add_argument(
+        "-o", "--output-dir",
+        type=Path,
+        default=default_output_dir,
+        help=f"Target directory (default: {default_output_dir})"
+    )
+    mirror_parser.add_argument(
+        "--prune",
+        action="store_true",
+        help="Remove files not in the list"
+    )
+    mirror_parser.add_argument(
+        "-w", "--workers",
+        type=int,
+        default=default_workers,
+        help=f"Number of parallel workers (default: {default_workers})"
+    )
+
     # Batch subcommand
     batch_parser = subparsers.add_parser("batch", aliases=["b"], help="Download extensions from a batch file")
     batch_parser.add_argument("file", help="Path to the batch file containing URLs")
@@ -232,6 +253,12 @@ def main():
         if args.command in ["update-manifest", "um"]:
             from .server import generate_update_manifest
             generate_update_manifest(args.directory, args.base_url, args.output)
+            return
+
+        if args.command == "mirror":
+            from .mirror import MirrorManager
+            manager = MirrorManager()
+            manager.sync(args.list_file, args.output_dir, prune=args.prune, workers=args.workers, show_progress=show_progress)
             return
 
         if args.command in ["batch", "b"]:
