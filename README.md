@@ -190,6 +190,22 @@ firefox https://addons.mozilla.org/en-US/firefox/addon/postman_interceptor/
 fext batch my_extensions.txt -o downloads/ -w 8
 ```
 
+### 🔄 Local Update Server
+
+Generate an update manifest (`update.xml` or `updates.json`) for a directory of downloaded extensions. This allows you to host your own extension updates.
+
+```bash
+fext update-manifest <directory> --base-url <url>
+```
+
+**Example:**
+
+```bash
+fext update-manifest ./downloads --base-url http://localhost:8000/extensions
+```
+
+This will generate `update.xml` (for Chrome/Edge) and/or `updates.json` (for Firefox) in the `./downloads` directory.
+
 ## 💻 Development
 
 ### 🧹 Linting and Formatting

@@ -1,7 +1,9 @@
 import struct
 import io
+import hashlib
 from pathlib import Path
 from typing import BinaryIO
+from .protobuf import SimpleProtobuf
 
 class PartialFileReader(io.IOBase):
     """
@@ -101,3 +103,50 @@ class CrxDecoder:
             
             # Offset = Magic(4) + Version(4) + Length(4) + Header(header_len)
             return 12 + header_len
+
+    @staticmethod
+    def get_id(file_path: Path) -> str:
+        """
+        Extracts the Extension ID from a CRX3 file.
+        """
+        if not file_path.exists():
+            raise FileNotFoundError(f"File not found: {file_path}")
+
+        with open(file_path, 'rb') as f:
+            magic = f.read(4)
+            if magic != CrxDecoder.CRX_MAGIC:
+                raise ValueError("Not a CRX file")
+            
+            # Skip Version (4)
+            f.read(4)
+            
+            # Read Header Length
+            header_len_bytes = f.read(4)
+            header_len = struct.unpack('<I', header_len_bytes)[0]
+            
+            header_data = f.read(header_len)
+            
+        fields = SimpleProtobuf.parse(header_data)
+        
+        # Field 10000: sha256_with_rsa (repeated AsymmetricKeyProof)
+        if 10000 not in fields:
+             raise ValueError("No signature found in CRX header")
+             
+        # Use the first proof
+        proof_data = fields[10000][0]
+        proof_fields = SimpleProtobuf.parse(proof_data)
+        
+        # Field 1: public_key
+        if 1 not in proof_fields:
+            raise ValueError("No public key found in proof")
+            
+        public_key_bytes = proof_fields[1][0]
+        
+        # Calculate ID: SHA256 -> First 16 bytes -> Hex -> Transliterate 0-9a-f to a-p
+        sha = hashlib.sha256(public_key_bytes).digest()
+        prefix = sha[:16]
+        hex_str = prefix.hex()
+        
+        trans_map = str.maketrans("0123456789abcdef", "abcdefghijklmnop")
+        return hex_str.translate(trans_map)
+

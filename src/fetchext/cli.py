@@ -156,6 +156,12 @@ def main():
         help="Output results as JSON"
     )
 
+    # Update Manifest subcommand
+    manifest_parser = subparsers.add_parser("update-manifest", aliases=["um"], help="Generate update manifest for local extensions")
+    manifest_parser.add_argument("directory", type=Path, help="Directory containing extension files")
+    manifest_parser.add_argument("--base-url", required=True, help="Base URL where extensions are hosted")
+    manifest_parser.add_argument("--output", type=Path, help="Output file path (optional)")
+
     # Batch subcommand
     batch_parser = subparsers.add_parser("batch", aliases=["b"], help="Download extensions from a batch file")
     batch_parser.add_argument("file", help="Path to the batch file containing URLs")
@@ -222,6 +228,11 @@ def main():
                 sys.exit(0)
             else:
                 sys.exit(1)
+
+        if args.command in ["update-manifest", "um"]:
+            from .server import generate_update_manifest
+            generate_update_manifest(args.directory, args.base_url, args.output)
+            return
 
         if args.command in ["batch", "b"]:
             core.batch_download(args.file, args.output_dir, workers=args.workers, show_progress=show_progress)
