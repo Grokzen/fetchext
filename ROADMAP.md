@@ -113,8 +113,8 @@
   - [x] Add `fext analyze --entropy <file>` to detect high-entropy strings (potential packed code or secrets).
 - [x] **Domain Extractor**: Network forensics (Analysis).
   - [x] Add `fext analyze --domains <file>` to extract all URLs and domains from source code.
-- [ ] **YARA Rules**: Malware matching (Security).
-  - [ ] Integrate `yara-python` to scan extensions against a database of malicious signatures.
+- [x] **YARA Rules**: Malware matching (Security).
+  - [x] Integrate `yara-python` to scan extensions against a database of malicious signatures.
 - [ ] **Config Management**: CLI settings control (CLI).
   - [ ] Add `fext config set <key> <value>` and `fext config get <key>` to manage settings.
 - [ ] **Cache Management**: Disk usage control (Core).
@@ -149,6 +149,21 @@
   - [ ] Add `fext optimize` to strip metadata from extension images to save space.
 - [ ] **Interactive Tutorial**: Onboarding (Docs).
   - [ ] Add `fext tutorial` TUI walkthrough to teach users how to use the tool.
+
+## 🌐 v1.5.0: Intelligence & Web
+
+*Focus: AI integration and web-based interaction.*
+
+- [ ] **AI Summarizer**: Code intent analysis (Analysis).
+  - [ ] Add `fext analyze --summary <file>` to generate a natural language summary of the extension's functionality using a local LLM or API.
+- [ ] **Web Dashboard**: Browser-based UI (UI).
+  - [ ] Add `fext web` to launch a FastAPI/Flask app for browsing the local repository, viewing reports, and managing downloads.
+- [ ] **Cloud Storage**: S3/GCS backend (Core).
+  - [ ] Add support for storing the repository on cloud object storage (S3, GCS, Azure) instead of just local disk.
+- [ ] **Asset Diff**: Visual comparison (Analysis).
+  - [ ] Enhance `fext diff` to visually compare changed images and assets between versions.
+- [ ] **Badge Generator**: Status indicators (Docs).
+  - [ ] Add `fext badge <file>` to generate SVG badges for risk scores, version, and license for use in READMEs.
 
 ## ✅ Completed
 
