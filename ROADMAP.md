@@ -98,8 +98,8 @@
   - [x] Add `fext analyze --complexity <file>` to calculate cyclomatic complexity of JS files (detect obfuscation).
 - [x] **Locale Inspector**: Internationalization support (Analysis).
   - [x] Add `fext locales <file>` to extract and list all supported locales and messages.
-- [ ] **Docker Image**: Containerized deployment (Deployment).
-  - [ ] Publish official `Dockerfile` and GHCR image for CI/CD usage.
+- [x] **Docker Image**: Containerized deployment (Deployment).
+  - [x] Publish official `Dockerfile` and GHCR image for CI/CD usage.
 - [ ] **Pre-commit Hook**: Developer workflow integration (Integration).
   - [ ] Add `.pre-commit-hooks.yaml` to allow using `fext audit` in pre-commit pipelines.
 - [ ] **Permission Explainer**: Educational tooling (Docs).

@@ -44,6 +44,14 @@ This repository demonstrates the potential of fully automated development workfl
     make setup
     ```
 
+### 🐳 Docker
+
+You can run `fetchext` using Docker:
+
+```bash
+docker run --rm -v $(pwd):/app/downloads ghcr.io/grok/fetchext download chrome <url> -o /app/downloads
+```
+
 ## 🚀 Usage
 
 The CLI requires two arguments: the browser type and the extension URL.
