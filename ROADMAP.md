@@ -55,6 +55,8 @@
   - [ ] Check internal JS files for known vulnerable library signatures.
 - [ ] **Plugin Hooks**: Extensibility system (Architecture).
   - [ ] Support pre/post-download hooks (e.g., virus scan, git commit).
+- [ ] **Rate Limiting**: Respect Web Store limits (Network).
+  - [ ] Add configurable request delays to prevent IP bans during bulk operations.
 
 ## 🖥️ v0.9.0: Interactive & Ecosystem
 
@@ -70,6 +72,21 @@
   - [ ] Add `fext convert` to switch between raw source, CRX, and ZIP formats.
 - [ ] **Repository Statistics**: Local repo insights (Analysis).
   - [ ] Add `fext stats` to visualize storage usage and permission trends.
+
+## 🚀 v1.0.0: Stability & Production
+
+*Focus: Hardening, performance, and final polish.*
+
+- [ ] **AsyncIO Migration**: High-concurrency architecture (Core).
+  - [ ] Refactor core to use `httpx` and `asyncio` for non-blocking I/O.
+- [ ] **Shell Completion**: Native shell integration (CLI).
+  - [ ] Generate auto-completion scripts for Bash, Zsh, and Fish.
+- [ ] **Fuzz Testing**: Robustness verification (Quality).
+  - [ ] Implement fuzz testing for the CRX parser to handle malformed files.
+- [ ] **Documentation Site**: Comprehensive guides (Docs).
+  - [ ] Publish a static documentation site (MkDocs) to GitHub Pages.
+- [ ] **Signed Releases**: Supply chain security (Security).
+  - [ ] Implement Sigstore or GPG signing for PyPI packages and git tags.
 
 ## ✅ Completed
 
