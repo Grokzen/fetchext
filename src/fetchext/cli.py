@@ -249,6 +249,15 @@ def get_parser():
         help=f"Number of parallel workers (default: {default_workers})"
     )
 
+    # Graph subcommand
+    graph_parser = subparsers.add_parser("graph", help="Generate dependency graph")
+    graph_parser.add_argument("file", help="Path to the .crx or .xpi file")
+    graph_parser.add_argument(
+        "-o", "--output",
+        type=Path,
+        help="Output file path (default: <filename>.dot)"
+    )
+
     # Timeline subcommand
     timeline_parser = subparsers.add_parser("timeline", help="Visualize file modification timeline")
     timeline_parser.add_argument("file", help="Path to the .crx or .xpi file")
@@ -520,6 +529,22 @@ def main():
 
         if args.command in ["batch", "b"]:
             core.batch_download(args.file, args.output_dir, workers=args.workers, show_progress=show_progress)
+            return
+
+        if args.command == "graph":
+            from .analysis.graph import build_dependency_graph, generate_dot
+            
+            graph = build_dependency_graph(Path(args.file))
+            dot_content = generate_dot(graph, title=Path(args.file).name)
+            
+            output_path = args.output
+            if not output_path:
+                output_path = Path(args.file).with_suffix(".dot")
+                
+            with open(output_path, "w") as f:
+                f.write(dot_content)
+                
+            console.print(f"[green]Graph saved to {output_path}[/green]")
             return
 
         if args.command == "timeline":

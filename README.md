@@ -353,6 +353,22 @@ fext timeline <file>
 fext timeline ublock-origin.crx
 ```
 
+### 🕸️ Dependency Graph
+
+Generate a DOT graph of internal file dependencies (imports/requires) within an extension.
+
+```bash
+fext graph <file> [-o <output.dot>]
+```
+
+**Example:**
+
+```bash
+fext graph ublock-origin.crx
+# Convert to PNG (requires graphviz)
+dot -Tpng -o graph.png ublock-origin.dot
+```
+
 ### 🎲 Entropy Analysis
 
 Analyze the entropy of files within an extension to detect potential obfuscation, packing, or encrypted data.

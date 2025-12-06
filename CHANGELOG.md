@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Timeline View**: Added `fext timeline <file>` command to visualize file modification times within an extension archive for forensic analysis.
 - **Local Server**: Added `fext serve` command to host the local repository as a Chrome Update Server (HTTP).
+- **Dependency Graph**: Added `fext graph <file>` command to generate DOT graphs of internal file dependencies.
 
 ## [1.3.0] - 2025-12-06
 
