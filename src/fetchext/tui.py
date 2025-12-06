@@ -3,9 +3,6 @@ from textual.widgets import Header, Footer, Input, DataTable
 from fetchext.core import search_extension, download_extension
 import logging
 
-# Disable logging to stderr/stdout as it messes up TUI
-logging.getLogger("fetchext").setLevel(logging.CRITICAL)
-
 class ExtensionApp(App):
     """A Textual app to browse and download extensions."""
 
@@ -79,5 +76,7 @@ class ExtensionApp(App):
             self.notify(f"Download failed: {e}", severity="error")
 
 def run_tui():
+    # Disable logging to stderr/stdout as it messes up TUI
+    logging.getLogger("fetchext").setLevel(logging.CRITICAL)
     app = ExtensionApp()
     app.run()

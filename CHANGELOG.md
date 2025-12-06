@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Build System**: Fixed `TypeError: canonicalize_version()` build error by upgrading `setuptools` requirement to `>=77.0`.
 - **CI/CD**: Fixed CI test failures by adding missing `pytest-asyncio` dependency and fixing TUI test focus logic.
+- **Logging**: Fixed a regression where the TUI module globally disabled logging, causing test failures in other modules.
 - **Deprecations**: Resolved `setuptools` deprecation warnings by updating `pyproject.toml` to use SPDX license expression and removing deprecated classifiers.
 
 ## [0.6.0] - 2025-12-05

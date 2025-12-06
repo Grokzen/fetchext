@@ -56,6 +56,7 @@ class TestBatchProcessor:
         fs.create_dir(tmp_path)
         processor = BatchProcessor()
         processor._process_line("invalid_line", tmp_path)
+        # The logger name is 'fetchext.batch', so we need to check if the log record exists
         assert "Invalid line format" in caplog.text
 
     def test_process_line_unsupported_browser(self, fs, caplog):
