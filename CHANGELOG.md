@@ -20,6 +20,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Interactive TUI**: Added `fext ui` command to launch a terminal-based user interface for browsing and downloading extensions.
 - **Repository Statistics**: Added `fext stats` command to analyze local repository metrics (count, size, permissions, MV2/MV3 breakdown).
 - **CSV Export**: Added `--csv` flag to `search` and `scan` commands for exporting results to spreadsheet-friendly format.
+- **Man Page Generation**: Added `make docs` to generate standard man pages (`docs/man/fext.1`).
+- **Shell Completion**: Added generation of Bash and Zsh completion scripts (`docs/completions/`).
+- **Fuzz Testing**: Added `make fuzz` to run hypothesis-based fuzz tests for robust parsing.
+- **Documentation Site**: Added MkDocs-based documentation site configuration and `make docs-build` target.
+- **Signed Releases**: Added infrastructure for GPG signing of releases (`make sign`, `make release`).
 
 ## [0.7.0] - 2025-12-06
 
