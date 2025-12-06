@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **CSP Auditor**: Added Content Security Policy analysis to `fext audit` to detect weak security configurations.
 - **Secret Scanner**: Added `fext scan --secrets` to detect API keys and tokens (AWS, Google, Slack, Stripe) in extension source code.
 - **History Tracking**: Added `fext history` command to view a log of downloaded and extracted extensions.
+- **JSON Schema**: Added `fext schema <type>` command to output JSON schemas for configuration and reports.
 
 ## [0.7.0] - 2025-12-06
 

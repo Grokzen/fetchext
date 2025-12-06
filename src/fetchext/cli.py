@@ -381,6 +381,14 @@ def get_parser():
         help="Output results as JSON"
     )
 
+    # Schema subcommand
+    schema_parser = subparsers.add_parser("schema", help="Get JSON schema for outputs")
+    schema_parser.add_argument(
+        "type",
+        choices=["config", "audit", "risk", "history", "scan"],
+        help="The type of schema to generate"
+    )
+
     return parser
 
 def main():
@@ -836,6 +844,18 @@ def main():
                             f"[{status_color}]{entry.get('status', '')}[/{status_color}]"
                         )
                     console.print(table)
+            return
+
+        if args.command == "schema":
+            from .schemas import get_schema
+            import json
+            
+            try:
+                schema = get_schema(args.type)
+                print(json.dumps(schema, indent=2))
+            except ValueError as e:
+                console.print(f"[red]{e}[/red]")
+                sys.exit(1)
             return
 
         if args.command in ["download", "d"]:
