@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Domain Extractor**: Added `fext analyze --domains <file>` to extract all URLs and domains from extension source code for network forensics.
 - **YARA Rules**: Added `fext analyze --yara <rules_file>` to scan extension files against YARA rules for malware detection.
 - **Config Management**: Added `fext config` subcommand to get, set, and list configuration values in `~/.config/fext/config.toml`.
+- **Cache Management**: Added `fext clean` subcommand to remove build artifacts, caches, and temporary files.
 
 ## [0.7.0] - 2025-12-06
 

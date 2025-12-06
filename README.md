@@ -389,6 +389,29 @@ fext config set batch.workers 8
 fext config list
 ```
 
+### 🧹 Cache Management
+
+Clean up build artifacts, caches, and temporary files.
+
+```bash
+fext clean [--dry-run] [--force] [--cache] [--downloads]
+```
+
+**Arguments:**
+
+* `--dry-run`: List files to be deleted without actually deleting them.
+* `--force`: Delete files without confirmation.
+* `--cache`: Clean only cache and build artifacts (default if no flags provided).
+* `--downloads`: Clean the downloads directory.
+* `--all`: Clean everything (cache + downloads).
+
+**Example:**
+
+```bash
+fext clean --dry-run
+fext clean --all --force
+```
+
 ### 📄 Documentation & Completion
 
 **Man Page:**

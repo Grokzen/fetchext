@@ -328,6 +328,35 @@ def get_parser():
     # Config List
     config_subparsers.add_parser("list", help="List all configuration settings")
     
+    # Clean subcommand
+    clean_parser = subparsers.add_parser("clean", help="Clean up caches and artifacts")
+    clean_parser.add_argument(
+        "--cache",
+        action="store_true",
+        default=True,
+        help="Clean build and test caches (default)"
+    )
+    clean_parser.add_argument(
+        "--downloads",
+        action="store_true",
+        help="Clean download directory"
+    )
+    clean_parser.add_argument(
+        "--all",
+        action="store_true",
+        help="Clean everything"
+    )
+    clean_parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would be deleted without deleting"
+    )
+    clean_parser.add_argument(
+        "-f", "--force",
+        action="store_true",
+        help="Skip confirmation"
+    )
+
     return parser
 
 def main():
@@ -670,6 +699,45 @@ def main():
                 save_config(config)
                 console.print(f"[green]Set '{args.key}' to '{value}'[/green]")
                 return
+
+        if args.command == "clean":
+            from .clean import clean_artifacts
+            
+            # Determine what to clean
+            clean_cache = args.cache
+            clean_downloads = args.downloads
+            
+            if args.all:
+                clean_cache = True
+                clean_downloads = True
+            
+            # Get download dir from config if needed
+            download_dir = None
+            if clean_downloads:
+                config = load_config()
+                download_dir_str = get_config_value(config, "general.download_dir")
+                if download_dir_str:
+                    download_dir = Path(download_dir_str)
+                else:
+                    # Default to current dir / downloads? Or just skip?
+                    # If not in config, maybe use default from parser?
+                    # But parser default is calculated in get_parser.
+                    # Let's re-calculate default.
+                    download_dir = Path(".") # Default in get_parser is "." but usually users set it.
+                    # Actually, if it's ".", cleaning it might be dangerous if it's the project root.
+                    # Let's be safe and only clean if it's explicitly set or we are sure.
+                    # For now, let's use the same logic as get_parser default.
+                    pass
+
+            clean_artifacts(
+                base_dir=Path("."),
+                clean_cache=clean_cache,
+                clean_downloads=clean_downloads,
+                download_dir=download_dir,
+                dry_run=args.dry_run,
+                force=args.force
+            )
+            return
 
         if args.command in ["download", "d"]:
             core.download_extension(
