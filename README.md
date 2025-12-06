@@ -353,6 +353,42 @@ fext analyze --domains <file>
 fext analyze --domains ublock-origin.crx
 ```
 
+### 🦠 YARA Scanning
+
+Scan extension files against YARA rules to detect malware signatures.
+
+```bash
+fext analyze --yara <rules_file> <file>
+```
+
+**Example:**
+
+```bash
+fext analyze --yara malware_rules.yar ublock-origin.crx
+```
+
+### ⚙️ Config Management
+
+Manage your configuration settings directly from the CLI.
+
+**Get a value:**
+
+```bash
+fext config get general.download_dir
+```
+
+**Set a value:**
+
+```bash
+fext config set batch.workers 8
+```
+
+**List all settings:**
+
+```bash
+fext config list
+```
+
 ### 📄 Documentation & Completion
 
 **Man Page:**

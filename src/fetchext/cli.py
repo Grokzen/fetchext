@@ -4,7 +4,7 @@ import argparse
 from pathlib import Path
 from rich.logging import RichHandler
 from .console import console
-from .config import load_config
+from .config import load_config, save_config, get_config_value, set_config_value
 from . import core
 
 # Configure logging
@@ -311,6 +311,22 @@ def get_parser():
         action="store_true",
         help="Output results as JSON"
     )
+
+    # Config subcommand
+    config_parser = subparsers.add_parser("config", help="Manage configuration")
+    config_subparsers = config_parser.add_subparsers(dest="config_command", required=True, help="Config action")
+    
+    # Config Get
+    config_get_parser = config_subparsers.add_parser("get", help="Get a configuration value")
+    config_get_parser.add_argument("key", help="Configuration key (e.g. general.download_dir)")
+    
+    # Config Set
+    config_set_parser = config_subparsers.add_parser("set", help="Set a configuration value")
+    config_set_parser.add_argument("key", help="Configuration key (e.g. general.download_dir)")
+    config_set_parser.add_argument("value", help="Value to set")
+    
+    # Config List
+    config_subparsers.add_parser("list", help="List all configuration settings")
     
     return parser
 
@@ -617,6 +633,43 @@ def main():
                 else:
                     console.print(f"[red]Permission '{args.permission}' not found in database.[/red]")
             return
+
+        if args.command == "config":
+            config = load_config()
+            
+            if args.config_command == "list":
+                import json
+                console.print(json.dumps(config, indent=2))
+                return
+
+            if args.config_command == "get":
+                value = get_config_value(config, args.key)
+                if value is not None:
+                    console.print(value)
+                else:
+                    console.print(f"[yellow]Key '{args.key}' not found.[/yellow]")
+                return
+
+            if args.config_command == "set":
+                # Type inference
+                value = args.value
+                if value.lower() == "true":
+                    value = True
+                elif value.lower() == "false":
+                    value = False
+                else:
+                    try:
+                        value = int(value)
+                    except ValueError:
+                        try:
+                            value = float(value)
+                        except ValueError:
+                            pass  # Keep as string
+                
+                set_config_value(config, args.key, value)
+                save_config(config)
+                console.print(f"[green]Set '{args.key}' to '{value}'[/green]")
+                return
 
         if args.command in ["download", "d"]:
             core.download_extension(

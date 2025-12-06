@@ -115,8 +115,8 @@
   - [x] Add `fext analyze --domains <file>` to extract all URLs and domains from source code.
 - [x] **YARA Rules**: Malware matching (Security).
   - [x] Integrate `yara-python` to scan extensions against a database of malicious signatures.
-- [ ] **Config Management**: CLI settings control (CLI).
-  - [ ] Add `fext config set <key> <value>` and `fext config get <key>` to manage settings.
+- [x] **Config Management**: CLI settings control (CLI).
+  - [x] Add `fext config set <key> <value>` and `fext config get <key>` to manage settings.
 - [ ] **Cache Management**: Disk usage control (Core).
   - [ ] Add `fext clean` to clear temporary download caches and build artifacts.
 

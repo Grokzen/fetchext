@@ -23,6 +23,7 @@ dependencies = [
     "cryptography",
     "textual",
     "lizard",
+    "tomli-w",
 ]
 
 [project.optional-dependencies]

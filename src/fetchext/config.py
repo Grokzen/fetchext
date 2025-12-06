@@ -1,5 +1,6 @@
 import os
 import tomllib
+import tomli_w
 from pathlib import Path
 from typing import Any, Dict
 
@@ -29,8 +30,46 @@ def load_config() -> Dict[str, Any]:
         with open(config_path, "rb") as f:
             return tomllib.load(f)
     except Exception:
-        # Log warning? For now just return empty or raise?
-        # Since it's a CLI, maybe print a warning to stderr?
-        # But we don't have console here easily.
-        # Let's return empty and maybe log if we had logging setup.
         return {}
+
+def save_config(config: Dict[str, Any]) -> None:
+    """
+    Saves the configuration to the config file.
+    """
+    config_path = get_config_path()
+    config_path.parent.mkdir(parents=True, exist_ok=True)
+    
+    with open(config_path, "wb") as f:
+        tomli_w.dump(config, f)
+
+def get_config_value(config: Dict[str, Any], key_path: str) -> Any:
+    """
+    Retrieves a value from the config using a dot-separated key path.
+    Returns None if the key does not exist.
+    """
+    keys = key_path.split(".")
+    current = config
+    
+    for key in keys:
+        if isinstance(current, dict) and key in current:
+            current = current[key]
+        else:
+            return None
+            
+    return current
+
+def set_config_value(config: Dict[str, Any], key_path: str, value: Any) -> None:
+    """
+    Sets a value in the config using a dot-separated key path.
+    Creates nested dictionaries as needed.
+    """
+    keys = key_path.split(".")
+    current = config
+    
+    for i, key in enumerate(keys[:-1]):
+        if key not in current or not isinstance(current[key], dict):
+            current[key] = {}
+        current = current[key]
+    
+    current[keys[-1]] = value
+
