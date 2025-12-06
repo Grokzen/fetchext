@@ -126,14 +126,14 @@
 
 - [x] **CSP Auditor**: Security policy analysis (Analysis).
   - [x] Analyze `content_security_policy` for weak configurations (e.g., `unsafe-eval`).
-- [ ] **Secret Scanner**: Credential leakage detection (Security).
-  - [ ] Scan source code for potential API keys, tokens, and private keys using regex patterns.
-- [ ] **History Tracking**: Audit logs (CLI).
-  - [ ] Add `fext history` to view a local log of downloaded extensions and actions.
-- [ ] **JSON Schema**: Output standardization (Core).
-  - [ ] Publish and validate against JSON schemas for all `--json` command outputs.
-- [ ] **Plugin Manager**: Extension system (Ecosystem).
-  - [ ] Add `fext plugins list/install` to manage Python-based hooks easily.
+- [x] **Secret Scanner**: Credential leakage detection (Security).
+  - [x] Scan source code for potential API keys, tokens, and private keys using regex patterns.
+- [x] **History Tracking**: Audit logs (CLI).
+  - [x] Add `fext history` to view a local log of downloaded and extracted extensions and actions.
+- [x] **JSON Schema**: Output standardization (Core).
+  - [x] Publish and validate against JSON schemas for all `--json` command outputs.
+- [x] **Plugin Manager**: Extension system (Ecosystem).
+  - [x] Add `fext plugin` to manage Python-based hooks easily.
 
 ## 📊 v1.4.0: Visualization & Serving
 
@@ -164,6 +164,21 @@
   - [ ] Enhance `fext diff` to visually compare changed images and assets between versions.
 - [ ] **Badge Generator**: Status indicators (Docs).
   - [ ] Add `fext badge <file>` to generate SVG badges for risk scores, version, and license for use in READMEs.
+
+## 📦 v1.6.0: Lifecycle & Integration
+
+*Focus: Full lifecycle management and external integration.*
+
+- [ ] **Extension Packer**: CRX creation (Core).
+  - [ ] Add `fext pack <dir>` to create a signed CRX file from a source directory (reverse of extract).
+- [ ] **License Scanner**: Legal compliance (Analysis).
+  - [ ] Add `fext scan --licenses` to identify open source licenses in extension files.
+- [ ] **Git Integration**: Version control (Workflow).
+  - [ ] Add `fext git init` to automatically set up a git repo for a downloaded extension with proper `.gitignore`.
+- [ ] **Remote Config**: Centralized management (Config).
+  - [ ] Add `fext config --remote <url>` to load configuration from a remote URL.
+- [ ] **HTML Report**: Rich reporting (Reporting).
+  - [ ] Add `fext report --html` to generate a standalone, interactive HTML report with charts and graphs.
 
 ## ✅ Completed
 
