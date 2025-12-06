@@ -7,3 +7,5 @@ pyfakefs
 rich
 textual
 pytest-asyncio
+argparse-manpage
+shtab

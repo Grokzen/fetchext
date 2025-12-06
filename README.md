@@ -283,6 +283,35 @@ fext convert ublock-origin.crx --to zip
 
 This will create `ublock-origin.zip` (stripping the CRX header).
 
+### 📊 Repository Statistics
+
+Analyze a local directory of extensions to get insights like total size, MV2/MV3 breakdown, and permission usage.
+
+```bash
+fext stats <directory>
+```
+
+### 📄 Documentation & Completion
+
+**Man Page:**
+
+Generate a standard man page for `fext`.
+
+```bash
+make docs
+man -l docs/man/fext.1
+```
+
+**Shell Completion:**
+
+Generate shell completion scripts for Bash and Zsh.
+
+```bash
+make docs
+source docs/completions/fext.bash  # For Bash
+source docs/completions/fext.zsh   # For Zsh
+```
+
 ## 💻 Development
 
 ### 🧹 Linting and Formatting

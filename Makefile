@@ -1,4 +1,4 @@
-.PHONY: setup run lint format clean build
+.PHONY: setup run lint format clean build docs
 
 VENV = .venv
 PYTHON ?= python3
@@ -20,6 +20,10 @@ format:
 
 build:
 	$(PYTHON) -m build
+
+docs:
+	$(PYTHON) scripts/gen_man.py
+	$(PYTHON) scripts/gen_completion.py
 
 clean:
 	rm -rf $(VENV)

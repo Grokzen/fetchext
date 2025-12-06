@@ -79,10 +79,10 @@
 
 *Focus: Hardening, performance, and final polish.*
 
-- [ ] **Man Page Generation**: Standard Linux documentation (Docs).
-  - [ ] Generate `man` pages for distribution packaging using `argparse-manpage` or similar.
-- [ ] **Shell Completion**: Native shell integration (CLI).
-  - [ ] Generate auto-completion scripts for Bash, Zsh, and Fish.
+- [x] **Man Page Generation**: Standard Linux documentation (Docs).
+  - [x] Generate `man` pages for distribution packaging using `argparse-manpage` or similar.
+- [x] **Shell Completion**: Native shell integration (CLI).
+  - [x] Generate auto-completion scripts for Bash, Zsh, and Fish.
 - [ ] **Fuzz Testing**: Robustness verification (Quality).
   - [ ] Implement fuzz testing for the CRX parser to handle malformed files.
 - [ ] **Documentation Site**: Comprehensive guides (Docs).

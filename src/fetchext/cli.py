@@ -16,9 +16,9 @@ logging.basicConfig(
 )
 logger = logging.getLogger("fetchext")
 
-def main():
+def get_parser():
     """
-    Main entry point of the script.
+    Constructs and returns the argument parser.
     """
     # Load configuration
     config = load_config()
@@ -264,7 +264,14 @@ def main():
         action="store_true",
         help="Output results as JSON"
     )
+    
+    return parser
 
+def main():
+    """
+    Main entry point of the script.
+    """
+    parser = get_parser()
     args = parser.parse_args()
 
     # Configure logging based on flags
