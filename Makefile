@@ -45,6 +45,9 @@ test-all:
 test-coverage:
 	$(PYTHON) -m pytest --cov=src/fetchext --cov-report=term-missing
 
+fuzz:
+	$(PYTHON) -m pytest tests/fuzz/
+
 # Legacy tests (kept for reference, but CI should use pytest)
 test-legacy-downloads:
 	# Test downloads postman extensions to validate all three downloads works

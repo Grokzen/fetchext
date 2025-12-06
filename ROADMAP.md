@@ -83,8 +83,8 @@
   - [x] Generate `man` pages for distribution packaging using `argparse-manpage` or similar.
 - [x] **Shell Completion**: Native shell integration (CLI).
   - [x] Generate auto-completion scripts for Bash, Zsh, and Fish.
-- [ ] **Fuzz Testing**: Robustness verification (Quality).
-  - [ ] Implement fuzz testing for the CRX parser to handle malformed files.
+- [x] **Fuzz Testing**: Robustness verification (Quality).
+  - [x] Implement fuzz testing for the CRX parser to handle malformed files.
 - [ ] **Documentation Site**: Comprehensive guides (Docs).
   - [ ] Publish a static documentation site (MkDocs) to GitHub Pages.
 - [ ] **Signed Releases**: Supply chain security (Security).

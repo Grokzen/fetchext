@@ -9,3 +9,4 @@ textual
 pytest-asyncio
 argparse-manpage
 shtab
+hypothesis
