@@ -124,8 +124,8 @@
 
 *Focus: Deep auditing and developer tools.*
 
-- [ ] **CSP Auditor**: Security policy analysis (Analysis).
-  - [ ] Analyze `content_security_policy` for weak configurations (e.g., `unsafe-eval`).
+- [x] **CSP Auditor**: Security policy analysis (Analysis).
+  - [x] Analyze `content_security_policy` for weak configurations (e.g., `unsafe-eval`).
 - [ ] **Secret Scanner**: Credential leakage detection (Security).
   - [ ] Scan source code for potential API keys, tokens, and private keys using regex patterns.
 - [ ] **History Tracking**: Audit logs (CLI).

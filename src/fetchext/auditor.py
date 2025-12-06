@@ -36,6 +36,7 @@ class ExtensionAuditor:
             report = AuditReport(manifest_version=manifest.get("manifest_version", 0))
             
             self._check_manifest(manifest, report)
+            self._check_csp(manifest, report)
             self._scan_code(zf, report)
             
             return report
@@ -64,6 +65,51 @@ class ExtensionAuditor:
                 report.issues.append(AuditIssue("warning", "Persistent background pages ('background.scripts') are replaced by Service Workers in MV3."))
             if "persistent" in bg and bg["persistent"]:
                  report.issues.append(AuditIssue("warning", "Persistent background pages are not supported in MV3."))
+
+    def _check_csp(self, manifest: Dict[str, Any], report: AuditReport):
+        """Analyze Content Security Policy for weaknesses."""
+        csp = manifest.get("content_security_policy")
+        if not csp:
+            return
+
+        policies = []
+        
+        # Normalize CSP to a list of strings to check
+        if isinstance(csp, str):
+            # MV2 format
+            policies.append(("MV2 Policy", csp))
+        elif isinstance(csp, dict):
+            # MV3 format
+            if "extension_pages" in csp:
+                policies.append(("MV3 Extension Pages", csp["extension_pages"]))
+            if "sandbox" in csp:
+                policies.append(("MV3 Sandbox", csp["sandbox"]))
+        
+        for context, policy_str in policies:
+            self._analyze_policy_string(context, policy_str, report)
+
+    def _analyze_policy_string(self, context: str, policy: str, report: AuditReport):
+        """Check a single CSP string for insecure directives."""
+        # Check for unsafe-eval
+        if "'unsafe-eval'" in policy:
+            report.issues.append(AuditIssue("warning", f"CSP ({context}) allows 'unsafe-eval'. This enables code execution from strings and is a security risk."))
+        
+        # Check for unsafe-inline (often ignored in MV3 but still bad practice)
+        if "'unsafe-inline'" in policy:
+            report.issues.append(AuditIssue("warning", f"CSP ({context}) allows 'unsafe-inline'. This enables inline scripts and increases XSS risk."))
+            
+        # Check for insecure schemes
+        if "http:" in policy:
+            report.issues.append(AuditIssue("warning", f"CSP ({context}) allows insecure 'http:' sources."))
+            
+        if "ftp:" in policy:
+            report.issues.append(AuditIssue("warning", f"CSP ({context}) allows insecure 'ftp:' sources."))
+            
+        # Check for wildcards in script-src
+        # Simple heuristic: look for script-src followed by *
+        # This is a bit loose but catches obvious cases
+        if re.search(r"script-src[^;]*\*", policy):
+             report.issues.append(AuditIssue("warning", f"CSP ({context}) contains wildcard '*' in script-src. This allows loading scripts from any domain."))
 
     def _scan_code(self, zf, report: AuditReport):
         # Simple regex scan for JS files

@@ -367,6 +367,16 @@ fext analyze --yara <rules_file> <file>
 fext analyze --yara malware_rules.yar ublock-origin.crx
 ```
 
+### 🛡️ CSP Auditor
+
+Analyze the Content Security Policy (CSP) of an extension for weak configurations (e.g., `unsafe-eval`, `unsafe-inline`, insecure schemes).
+
+```bash
+fext audit <file>
+```
+
+This check is automatically included in the standard `audit` command.
+
 ### ⚙️ Config Management
 
 Manage your configuration settings directly from the CLI.
