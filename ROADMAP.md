@@ -53,17 +53,17 @@
   - [x] Add `fext mirror <list_file>` to keep a local repository up to date.
 - [x] **Dependency Scanner**: Scan for vulnerable libraries (Security).
   - [x] Check internal JS files for known vulnerable library signatures.
-- [ ] **Plugin Hooks**: Extensibility system (Architecture).
-  - [ ] Support pre/post-download hooks (e.g., virus scan, git commit).
-- [ ] **Rate Limiting**: Respect Web Store limits (Network).
-  - [ ] Add configurable request delays to prevent IP bans during bulk operations.
+- [x] **Plugin Hooks**: Extensibility system (Architecture).
+  - [x] Support pre/post-download hooks (e.g., virus scan, git commit).
+- [x] **Rate Limiting**: Respect Web Store limits (Network).
+  - [x] Add configurable request delays to prevent IP bans during bulk operations.
 
 ## 🖥️ v0.9.0: Interactive & Ecosystem
 
 *Focus: Enhanced user experience and deployment options.*
 
-- [ ] **Interactive TUI**: Terminal User Interface (CLI).
-  - [ ] Add `fext ui` for browsing and downloading using `textual` or `rich`.
+- [x] **Interactive TUI**: Terminal User Interface (CLI).
+  - [x] Add `fext ui` for browsing and downloading using `textual` or `rich`.
 - [ ] **Markdown Reports**: Audit summaries (Analysis).
   - [ ] Add `fext report <file>` to generate a readable `REPORT.md` with metadata and risk scores.
 - [ ] **Configuration Wizard**: Interactive setup (CLI).

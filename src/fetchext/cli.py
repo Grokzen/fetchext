@@ -208,6 +208,9 @@ def main():
         help=f"Number of parallel workers (default: {default_workers})"
     )
 
+    # UI subcommand
+    ui_parser = subparsers.add_parser("ui", help="Launch interactive TUI")
+
     args = parser.parse_args()
 
     # Configure logging based on flags
@@ -276,6 +279,11 @@ def main():
 
         if args.command in ["batch", "b"]:
             core.batch_download(args.file, args.output_dir, workers=args.workers, show_progress=show_progress)
+            return
+
+        if args.command == "ui":
+            from .tui import run_tui
+            run_tui()
             return
 
         if args.command in ["download", "d"]:

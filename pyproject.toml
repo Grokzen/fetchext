@@ -22,6 +22,7 @@ dependencies = [
     "requests",
     "rich",
     "cryptography",
+    "textual",
 ]
 
 [project.scripts]
