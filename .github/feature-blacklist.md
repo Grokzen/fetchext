@@ -12,3 +12,7 @@ These features should **NOT** be implemented, suggested, or added to the roadmap
 ### 2. GUI (Graphical User Interface)
 - **Reason**: The project is strictly a CLI tool. A TUI (Terminal User Interface) is acceptable (e.g., `textual`), but a full windowed GUI (Qt, Tkinter) is out of scope.
 - **Status**: Permanently Rejected.
+
+### 3. Web Dashboard / Web Server
+- **Reason**: Hosting a web server (Flask/Django/FastAPI) for a dashboard violates the "stateless CLI" philosophy. The tool should be usable in scripts and pipelines, not require a running daemon or browser interaction for management.
+- **Status**: Permanently Rejected.

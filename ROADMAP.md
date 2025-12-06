@@ -156,10 +156,10 @@
 
 - [ ] **AI Summarizer**: Code intent analysis (Analysis).
   - [ ] Add `fext analyze --summary <file>` to generate a natural language summary of the extension's functionality using a local LLM or API.
-- [ ] **Web Dashboard**: Browser-based UI (UI).
-  - [ ] Add `fext web` to launch a FastAPI/Flask app for browsing the local repository, viewing reports, and managing downloads.
-- [ ] **Cloud Storage**: S3/GCS backend (Core).
-  - [ ] Add support for storing the repository on cloud object storage (S3, GCS, Azure) instead of just local disk.
+- [ ] **Code Beautifier**: Deobfuscation helper (Core).
+  - [ ] Add `fext beautify <file>` to format minified JavaScript and JSON files for better readability.
+- [ ] **Similarity Search**: Code reuse detection (Analysis).
+  - [ ] Add `fext similar <file>` to find other extensions in the local repository with high code similarity (using fuzzy hashing).
 - [ ] **Asset Diff**: Visual comparison (Analysis).
   - [ ] Enhance `fext diff` to visually compare changed images and assets between versions.
 - [ ] **Badge Generator**: Status indicators (Docs).
