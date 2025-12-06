@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Plugin Hooks**: Added support for Python-based pre/post-download hooks in `~/.config/fext/hooks`.
 - **Rate Limiting**: Added `rate_limit_delay` configuration option to throttle network requests and prevent IP bans.
 - **Interactive TUI**: Added `fext ui` command to launch a terminal-based user interface for browsing and downloading extensions.
+- **Repository Statistics**: Added `fext stats` command to analyze local repository metrics (count, size, permissions, MV2/MV3 breakdown).
+- **CSV Export**: Added `--csv` flag to `search` and `scan` commands for exporting results to spreadsheet-friendly format.
 
 ## [0.7.0] - 2025-12-06
 
