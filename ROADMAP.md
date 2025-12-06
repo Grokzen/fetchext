@@ -85,8 +85,8 @@
   - [x] Generate auto-completion scripts for Bash, Zsh, and Fish.
 - [x] **Fuzz Testing**: Robustness verification (Quality).
   - [x] Implement fuzz testing for the CRX parser to handle malformed files.
-- [ ] **Documentation Site**: Comprehensive guides (Docs).
-  - [ ] Publish a static documentation site (MkDocs) to GitHub Pages.
+- [x] **Documentation Site**: Comprehensive guides (Docs).
+  - [x] Publish a static documentation site (MkDocs) to GitHub Pages.
 - [ ] **Signed Releases**: Supply chain security (Security).
   - [ ] Implement Sigstore or GPG signing for PyPI packages and git tags.
 

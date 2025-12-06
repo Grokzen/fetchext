@@ -10,3 +10,6 @@ pytest-asyncio
 argparse-manpage
 shtab
 hypothesis
+mkdocs
+mkdocs-material
+mkdocstrings[python]

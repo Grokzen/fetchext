@@ -1,0 +1,48 @@
+site_name: fetchext
+site_description: A Python CLI tool to download browser extensions (Chrome, Edge, Firefox) directly from their respective web stores.
+site_url: https://github.com/grok/fetchext
+repo_url: https://github.com/grok/fetchext
+repo_name: grok/fetchext
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - content.code.copy
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to dark mode
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - CLI Reference: cli.md
+  - Library Reference: library.md
+  - Configuration: configuration.md
+  - Contributing: contributing.md
+  - Changelog: changelog.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets

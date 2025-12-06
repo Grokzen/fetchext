@@ -25,6 +25,12 @@ docs:
 	$(PYTHON) scripts/gen_man.py
 	$(PYTHON) scripts/gen_completion.py
 
+docs-serve:
+	$(PYTHON) -m mkdocs serve
+
+docs-build:
+	$(PYTHON) -m mkdocs build
+
 clean:
 	rm -rf $(VENV)
 	find . -type f -name '*.pyc' -delete
