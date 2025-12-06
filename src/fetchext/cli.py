@@ -223,6 +223,21 @@ def main():
     # Setup subcommand
     subparsers.add_parser("setup", help="Run configuration wizard")
 
+    # Convert subcommand
+    convert_parser = subparsers.add_parser("convert", help="Convert extension format")
+    convert_parser.add_argument("input", help="Input file or directory")
+    convert_parser.add_argument(
+        "--to",
+        choices=["zip"],
+        default="zip",
+        help="Target format (default: zip)"
+    )
+    convert_parser.add_argument(
+        "-o", "--output",
+        type=Path,
+        help="Output file path"
+    )
+
     args = parser.parse_args()
 
     # Configure logging based on flags
@@ -305,6 +320,10 @@ def main():
         if args.command == "setup":
             from .setup import run_setup
             run_setup()
+            return
+
+        if args.command == "convert":
+            core.convert_extension(args.input, args.output, to_format=args.to)
             return
 
         if args.command in ["download", "d"]:

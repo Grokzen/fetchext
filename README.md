@@ -267,6 +267,22 @@ fext setup
 
 This wizard will guide you through setting default download directory, worker count, and other preferences.
 
+### 🔄 Format Converter
+
+Convert extensions between formats (e.g., CRX to ZIP, Directory to ZIP).
+
+```bash
+fext convert <input> --to zip [-o <output>]
+```
+
+**Example:**
+
+```bash
+fext convert ublock-origin.crx --to zip
+```
+
+This will create `ublock-origin.zip` (stripping the CRX header).
+
 ## 💻 Development
 
 ### 🧹 Linting and Formatting

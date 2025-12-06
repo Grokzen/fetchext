@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Format Converter**: Added `fext convert` command to convert between extension formats (CRX -> ZIP, Directory -> ZIP).
 - **Configuration Wizard**: Added `fext setup` command to interactively create or update the user configuration file.
 - **Markdown Reports**: Added `fext report <file>` command to generate comprehensive Markdown reports including metadata, risk analysis, and file structure.
 - **Local Update Server**: Added `fext update-manifest` command to generate `update.xml` (Chrome/Edge) and `updates.json` (Firefox) for self-hosted extensions.

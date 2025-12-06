@@ -544,3 +544,18 @@ def generate_report(file_path, output_path=None):
         logger.error(f"Report generation failed: {e}")
         raise
 
+def convert_extension(input_path, output_path=None, to_format="zip"):
+    """
+    Convert extension format.
+    """
+    from .converter import FormatConverter
+    
+    if to_format.lower() != "zip":
+        raise ValueError(f"Unsupported target format: {to_format}. Only 'zip' is supported currently.")
+        
+    try:
+        return FormatConverter.convert_to_zip(input_path, output_path)
+    except Exception as e:
+        logger.error(f"Conversion failed: {e}")
+        raise
+
