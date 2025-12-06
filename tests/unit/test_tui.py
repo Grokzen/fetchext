@@ -22,9 +22,8 @@ async def test_tui_search_submission():
         
         app = ExtensionApp()
         async with app.run_test() as pilot:
-            await pilot.press("tab") # Focus input?
-            # Or just set value directly if possible, but pilot.type is better
             input_widget = app.query_one(Input)
+            input_widget.focus()
             input_widget.value = "test"
             await pilot.press("enter")
             

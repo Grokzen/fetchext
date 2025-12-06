@@ -26,6 +26,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Risk Analysis**: Added `fext risk <file>` command to analyze permission risks and assign a privacy score.
 - **Signature Verification**: Added `fext verify <file>` command to cryptographically verify CRX3 signatures.
 
+### Fixed
+
+- **Build System**: Fixed `TypeError: canonicalize_version()` build error by upgrading `setuptools` requirement to `>=77.0`.
+- **CI/CD**: Fixed CI test failures by adding missing `pytest-asyncio` dependency and fixing TUI test focus logic.
+- **Deprecations**: Resolved `setuptools` deprecation warnings by updating `pyproject.toml` to use SPDX license expression and removing deprecated classifiers.
+
 ## [0.6.0] - 2025-12-05
 
 ### Added

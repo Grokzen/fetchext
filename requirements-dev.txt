@@ -6,3 +6,4 @@ pytest-cov
 pyfakefs
 rich
 textual
+pytest-asyncio
