@@ -31,6 +31,15 @@ docs-serve:
 docs-build:
 	$(PYTHON) -m mkdocs build
 
+sign:
+	# Detach-sign the built artifacts
+	gpg --detach-sign -a dist/*.whl
+	gpg --detach-sign -a dist/*.tar.gz
+
+release: build sign
+	# Upload to PyPI
+	$(PYTHON) -m twine upload dist/*
+
 clean:
 	rm -rf $(VENV)
 	find . -type f -name '*.pyc' -delete

@@ -13,3 +13,4 @@ hypothesis
 mkdocs
 mkdocs-material
 mkdocstrings[python]
+twine

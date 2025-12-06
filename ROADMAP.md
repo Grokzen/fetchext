@@ -87,8 +87,8 @@
   - [x] Implement fuzz testing for the CRX parser to handle malformed files.
 - [x] **Documentation Site**: Comprehensive guides (Docs).
   - [x] Publish a static documentation site (MkDocs) to GitHub Pages.
-- [ ] **Signed Releases**: Supply chain security (Security).
-  - [ ] Implement Sigstore or GPG signing for PyPI packages and git tags.
+- [x] **Signed Releases**: Supply chain security (Security).
+  - [x] Implement Sigstore or GPG signing for PyPI packages and git tags.
 
 ## 🔬 v1.1.0: Advanced Analysis & Ecosystem
 
