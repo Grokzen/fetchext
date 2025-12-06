@@ -64,8 +64,8 @@
 
 - [ ] **Interactive TUI**: Terminal User Interface (CLI).
   - [ ] Add `fext ui` for browsing and downloading using `textual` or `rich`.
-- [ ] **Docker Support**: Official Container Image (DevOps).
-  - [ ] Provide a `Dockerfile` and publish to GHCR for easy CI usage.
+- [ ] **Markdown Reports**: Audit summaries (Analysis).
+  - [ ] Add `fext report <file>` to generate a readable `REPORT.md` with metadata and risk scores.
 - [ ] **Configuration Wizard**: Interactive setup (CLI).
   - [ ] Add `fext setup` to guide users through creating the config file.
 - [ ] **Format Converter**: Repackaging tools (Core).
@@ -77,8 +77,8 @@
 
 *Focus: Hardening, performance, and final polish.*
 
-- [ ] **AsyncIO Migration**: High-concurrency architecture (Core).
-  - [ ] Refactor core to use `httpx` and `asyncio` for non-blocking I/O.
+- [ ] **Man Page Generation**: Standard Linux documentation (Docs).
+  - [ ] Generate `man` pages for distribution packaging using `argparse-manpage` or similar.
 - [ ] **Shell Completion**: Native shell integration (CLI).
   - [ ] Generate auto-completion scripts for Bash, Zsh, and Fish.
 - [ ] **Fuzz Testing**: Robustness verification (Quality).
