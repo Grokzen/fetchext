@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **Local Update Server**: Added `fext update-manifest` command to generate `update.xml` (Chrome/Edge) and `updates.json` (Firefox) for self-hosted extensions.
+- **Mirror Mode**: Added `fext mirror` command to synchronize a local directory with a list of extension IDs, supporting updates and pruning.
+- **Dependency Scanner**: Added `fext scan` command to detect known vulnerable libraries (e.g., jQuery, Lodash) within extension source code.
+- **Plugin Hooks**: Added support for Python-based pre/post-download hooks in `~/.config/fext/hooks`.
+- **Rate Limiting**: Added `rate_limit_delay` configuration option to throttle network requests and prevent IP bans.
+- **Interactive TUI**: Added `fext ui` command to launch a terminal-based user interface for browsing and downloading extensions.
+
 ## [0.7.0] - 2025-12-06
 
 ### Added
