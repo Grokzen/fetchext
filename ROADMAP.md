@@ -158,8 +158,8 @@
   - [x] Refactor `cli.py` to use a command pattern, moving subcommands into `src/fetchext/commands/`.
 - [x] **Unified Exception Handling**: Error management (Core).
   - [x] Create `src/fetchext/exceptions.py` and implement a custom exception hierarchy for consistent error reporting.
-- [ ] **Config Validation**: Robustness (Config).
-  - [ ] Add schema validation for `config.toml` on load to prevent runtime errors from typos.
+- [x] **Config Validation**: Robustness (Config).
+  - [x] Add schema validation for `config.toml` on load to prevent runtime errors from typos.
 - [ ] **Path Standardization**: Code quality (Core).
   - [ ] Audit codebase to ensure `pathlib.Path` is used exclusively (remove any lingering `os.path`).
 - [ ] **Logging Standardization**: Observability (Core).

@@ -71,3 +71,37 @@ def test_load_config_invalid_toml(fs, mocker):
     # Should raise ConfigError on error
     with pytest.raises(ConfigError):
         load_config()
+
+def test_load_config_invalid_type(fs, mocker):
+    from fetchext.exceptions import ConfigError
+    import pytest
+    
+    config_content = """
+    [general]
+    save_metadata = "not a boolean"
+    """
+    
+    mocker.patch.dict("os.environ", {"XDG_CONFIG_HOME": "/config"})
+    fs.create_file("/config/fext/config.toml", contents=config_content)
+    
+    with pytest.raises(ConfigError, match="must be of type bool"):
+        load_config()
+
+def test_load_config_invalid_section(fs, mocker):
+    from fetchext.exceptions import ConfigError
+    import pytest
+    
+    # This is tricky because TOML parsers usually enforce structure.
+    # But if we had something like:
+    # general = "not a dict"
+    # TOML parser might handle it, but our schema expects a dict.
+    
+    config_content = """
+    general = "not a dict"
+    """
+    
+    mocker.patch.dict("os.environ", {"XDG_CONFIG_HOME": "/config"})
+    fs.create_file("/config/fext/config.toml", contents=config_content)
+    
+    with pytest.raises(ConfigError, match="Section 'general' must be a dictionary"):
+        load_config()
