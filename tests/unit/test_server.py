@@ -90,9 +90,6 @@ def test_run_server(tmp_path, mocker):
     mock_server_instance = mock_server.return_value
     mock_server_instance.__enter__.return_value = mock_server_instance
     
-    # Mock os.chdir
-    mock_chdir = mocker.patch("fetchext.server.os.chdir")
-    
     from fetchext.server import run_server
     
     # Create a dummy directory
@@ -103,6 +100,5 @@ def test_run_server(tmp_path, mocker):
     run_server(d, port=9000)
     
     # Verify
-    mock_chdir.assert_called_with(d.resolve())
     mock_server.assert_called_once()
     mock_server_instance.serve_forever.assert_called_once()

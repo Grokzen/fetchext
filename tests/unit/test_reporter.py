@@ -21,7 +21,8 @@ def mock_open_archive():
 
 class TestMarkdownReporter:
     def test_init_file_not_found(self):
-        with pytest.raises(FileNotFoundError):
+        from fetchext.exceptions import ExtensionError
+        with pytest.raises(ExtensionError):
             MarkdownReporter(Path("non_existent.crx"))
 
     def test_generate_report(self, fs, mock_inspector, mock_risk_analyzer, mock_open_archive):

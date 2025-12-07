@@ -3,7 +3,7 @@ import logging
 import xml.etree.ElementTree as ET
 import http.server
 import socketserver
-import os
+import functools
 from pathlib import Path
 from typing import List, Dict, Optional
 from .inspector import ExtensionInspector
@@ -81,14 +81,14 @@ def generate_update_manifest(directory: Path, base_url: str, output_file: Option
     if crx_extensions:
         xml_content = _generate_chrome_xml(crx_extensions, base_url)
         out_path = output_file if output_file and output_file.suffix == ".xml" else directory / "update.xml"
-        with open(out_path, "w") as f:
+        with out_path.open("w") as f:
             f.write(xml_content)
         logger.info(f"Generated Chrome update manifest: {out_path}")
         
     if xpi_extensions:
         json_content = _generate_firefox_json(xpi_extensions, base_url)
         out_path = output_file if output_file and output_file.suffix == ".json" else directory / "updates.json"
-        with open(out_path, "w") as f:
+        with out_path.open("w") as f:
             f.write(json_content)
         logger.info(f"Generated Firefox update manifest: {out_path}")
 
@@ -134,9 +134,9 @@ def run_server(directory: Path, host: str = "127.0.0.1", port: int = 8000):
         raise FileNotFoundError(f"Directory not found: {directory}")
     
     # Change to the directory to serve files relative to it
-    os.chdir(directory)
+    # os.chdir(directory) -> Avoid changing global state
     
-    handler = http.server.SimpleHTTPRequestHandler
+    handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(directory))
     
     with socketserver.TCPServer((host, port), handler) as httpd:
         logger.info(f"Serving extensions from {directory}")

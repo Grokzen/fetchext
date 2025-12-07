@@ -1,5 +1,4 @@
 import shutil
-import os
 from pathlib import Path
 from rich.console import Console
 from rich.prompt import Confirm
@@ -89,7 +88,7 @@ def clean_artifacts(
             if target.is_dir():
                 shutil.rmtree(target)
             else:
-                os.remove(target)
+                target.unlink()
             reclaimed += size
             console.print(f"[green]Deleted:[/green] {target}")
         except Exception as e:

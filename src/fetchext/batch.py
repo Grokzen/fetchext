@@ -4,6 +4,7 @@ from pathlib import Path
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn, TimeRemainingColumn
 from .console import console
 from .downloaders import ChromeDownloader, EdgeDownloader, FirefoxDownloader
+from .exceptions import ConfigError
 
 logger = logging.getLogger(__name__)
 
@@ -11,7 +12,7 @@ class BatchProcessor:
     def process(self, file_path, output_dir, max_workers=4, show_progress=True):
         path = Path(file_path)
         if not path.exists():
-            raise FileNotFoundError(f"Batch file not found: {path}")
+            raise ConfigError(f"Batch file not found: {path}")
 
         if not output_dir.exists():
             output_dir.mkdir(parents=True, exist_ok=True)

@@ -160,8 +160,8 @@
   - [x] Create `src/fetchext/exceptions.py` and implement a custom exception hierarchy for consistent error reporting.
 - [x] **Config Validation**: Robustness (Config).
   - [x] Add schema validation for `config.toml` on load to prevent runtime errors from typos.
-- [ ] **Path Standardization**: Code quality (Core).
-  - [ ] Audit codebase to ensure `pathlib.Path` is used exclusively (remove any lingering `os.path`).
+- [x] **Path Standardization**: Code quality (Core).
+  - [x] Audit codebase to ensure `pathlib.Path` is used exclusively (remove any lingering `os.path`).
 - [ ] **Logging Standardization**: Observability (Core).
   - [ ] Review and standardize logging levels and formats across all modules using `rich`.
 

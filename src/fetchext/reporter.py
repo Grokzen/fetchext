@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from .inspector import ExtensionInspector
 from .risk import RiskAnalyzer
 from .utils import open_extension_archive
+from .exceptions import ExtensionError
 
 class MarkdownReporter:
     """Generates Markdown reports for extension files."""
@@ -13,7 +14,7 @@ class MarkdownReporter:
     def __init__(self, file_path: Path):
         self.file_path = Path(file_path)
         if not self.file_path.exists():
-            raise FileNotFoundError(f"File not found: {self.file_path}")
+            raise ExtensionError(f"File not found: {self.file_path}")
         
         self.inspector = ExtensionInspector()
         self.risk_analyzer = RiskAnalyzer()
@@ -21,7 +22,7 @@ class MarkdownReporter:
     def _calculate_hash(self, algorithm: str = "sha256") -> str:
         """Calculate file hash."""
         hash_func = getattr(hashlib, algorithm)()
-        with open(self.file_path, "rb") as f:
+        with self.file_path.open("rb") as f:
             for chunk in iter(lambda: f.read(4096), b""):
                 hash_func.update(chunk)
         return hash_func.hexdigest()
@@ -173,5 +174,5 @@ class MarkdownReporter:
     def save(self, output_path: Path):
         """Save the report to a file."""
         content = self.generate()
-        with open(output_path, "w", encoding="utf-8") as f:
+        with output_path.open("w", encoding="utf-8") as f:
             f.write(content)
