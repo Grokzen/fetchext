@@ -180,6 +180,81 @@
 - [ ] **HTML Report**: Rich reporting (Reporting).
   - [ ] Add `fext report --html` to generate a standalone, interactive HTML report with charts and graphs.
 
+## 🧹 v1.5.0: Architecture Cleanup
+
+*Focus: Refactoring and code hygiene.*
+
+- [ ] **CLI Modularization**: Split monolithic `cli.py` (Architecture).
+  - [ ] Refactor `cli.py` to use a command pattern, moving subcommands into `src/fetchext/commands/`.
+- [ ] **Unified Exception Handling**: Error management (Core).
+  - [ ] Create `src/fetchext/exceptions.py` and implement a custom exception hierarchy for consistent error reporting.
+- [ ] **Config Validation**: Robustness (Config).
+  - [ ] Add schema validation for `config.toml` on load to prevent runtime errors from typos.
+- [ ] **Path Standardization**: Code quality (Core).
+  - [ ] Audit codebase to ensure `pathlib.Path` is used exclusively (remove any lingering `os.path`).
+- [ ] **Logging Standardization**: Observability (Core).
+  - [ ] Review and standardize logging levels and formats across all modules using `rich`.
+
+## 🛡️ v1.6.0: Security & Analysis Consolidation
+
+*Focus: Hardening security tools and analysis reporting.*
+
+- [ ] **Unified Audit Report**: Reporting (Analysis).
+  - [ ] Create a single JSON schema/report that combines risk, secrets, and MV3 audit results.
+- [ ] **False Positive Reduction**: Accuracy (Security).
+  - [ ] Tune secret scanner regexes to reduce false positives for common patterns.
+- [ ] **Performance Optimization**: Speed (Analysis).
+  - [ ] Optimize `entropy` and `complexity` calculations for large extensions (parallel processing).
+- [ ] **YARA Integration**: Flexibility (Security).
+  - [ ] Allow `fext analyze --yara` to accept a directory of rule files, not just a single file.
+- [ ] **Risk Scoring Tuning**: Accuracy (Analysis).
+  - [ ] Refine the risk scoring algorithm to account for permission combinations (e.g., `tabs` + `http://*/*`).
+
+## 🌐 v1.7.0: Network & Download Robustness
+
+*Focus: Reliability and network features.*
+
+- [ ] **Resumable Downloads**: Reliability (Network).
+  - [ ] Support `Range` headers to resume interrupted downloads for large files.
+- [ ] **Integrity Checking**: Security (Core).
+  - [ ] Verify SHA256 of downloaded files against the Web Store (if available) or internal hash.
+- [ ] **Proxy Configuration**: Network (Config).
+  - [ ] Add explicit proxy support (`http`, `https`) to `config.toml`.
+- [ ] **Disk Space Safety**: Reliability (Core).
+  - [ ] Check free disk space before starting download or extraction to prevent partial writes.
+- [ ] **Filename Sanitization**: Compatibility (Core).
+  - [ ] Ensure downloaded filenames are safe on all OSes (Windows/macOS/Linux) by stripping illegal characters.
+
+## 🧪 v1.8.0: Testing & Quality Assurance
+
+*Focus: Test coverage and developer tools.*
+
+- [ ] **Plugin System v2**: Extensibility (Architecture).
+  - [ ] Enhance plugin hooks to receive full context (config, args) and allow modifying behavior.
+- [ ] **Debug Mode**: Developer Experience (CLI).
+  - [ ] Enhance `-v` output to dump full HTTP headers and response codes for debugging.
+- [ ] **API Documentation**: Docs (Core).
+  - [ ] Generate API documentation for `fetchext.core` using `pdoc` or similar.
+- [ ] **Shell Completion**: Usability (CLI).
+  - [ ] Verify and improve generated shell completion scripts for zsh and bash.
+- [ ] **Exit Codes**: Scripting (CLI).
+  - [ ] Standardize and document specific exit codes (e.g., 1=Generic, 2=Network, 3=IO).
+
+## 🚀 v1.9.0: Performance & Polish
+
+*Focus: Optimization and user experience.*
+
+- [ ] **Startup Time**: Performance (Core).
+  - [ ] Optimize import times by using lazy imports for heavy modules (e.g., `rich`, `Pillow`).
+- [ ] **Memory Usage**: Performance (Core).
+  - [ ] Profile and reduce memory footprint during extraction and analysis of large archives.
+- [ ] **TUI Polish**: UX (CLI).
+  - [ ] Improve `fext ui` responsiveness, error handling, and navigation.
+- [ ] **Progress Bars**: UX (CLI).
+  - [ ] Standardize progress bar styles and behavior across all long-running commands.
+- [ ] **Dependency Review**: Maintenance (Core).
+  - [ ] Audit and prune unused or redundant dependencies to keep the package lightweight.
+
 ## ✅ Completed
 
 - [x] **Extract Command**: Add `fext extract <file>` subcommand.
