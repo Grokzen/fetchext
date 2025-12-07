@@ -162,8 +162,8 @@
   - [x] Add schema validation for `config.toml` on load to prevent runtime errors from typos.
 - [x] **Path Standardization**: Code quality (Core).
   - [x] Audit codebase to ensure `pathlib.Path` is used exclusively (remove any lingering `os.path`).
-- [ ] **Logging Standardization**: Observability (Core).
-  - [ ] Review and standardize logging levels and formats across all modules using `rich`.
+- [x] **Logging Standardization**: Observability (Core).
+  - [x] Review and standardize logging levels and formats across all modules using `rich`.
 
 ## 🛡️ v1.6.0: Security & Analysis Consolidation
 

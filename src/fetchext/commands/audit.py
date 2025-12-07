@@ -106,7 +106,7 @@ def handle_analyze(args, show_progress=True):
         results = analyze_complexity(Path(args.file))
         
         if args.json:
-            print(json.dumps(results, indent=2))
+            console.print_json(data=results)
         else:
             console.print(f"[bold]Complexity Analysis for {args.file}[/bold]")
             console.print(f"Average Complexity: {results['average_complexity']:.2f}")
@@ -140,7 +140,7 @@ def handle_analyze(args, show_progress=True):
         results = analyze_entropy(Path(args.file))
         
         if args.json:
-            print(json.dumps(results, indent=2))
+            console.print_json(data=results)
         else:
             console.print(f"[bold]Entropy Analysis for {args.file}[/bold]")
             console.print(f"Average Entropy: {results['average_entropy']:.2f}")
@@ -180,7 +180,7 @@ def handle_analyze(args, show_progress=True):
         results = analyze_domains(Path(args.file))
         
         if args.json:
-            print(json.dumps(results, indent=2))
+            console.print_json(data=results)
         else:
             console.print(f"[bold]Domain Analysis for {args.file}[/bold]")
             
@@ -212,7 +212,7 @@ def handle_analyze(args, show_progress=True):
         if args.json:
             # Convert dataclass to dict for JSON serialization
             import dataclasses
-            print(json.dumps([dataclasses.asdict(r) for r in results], indent=2))
+            console.print_json(data=[dataclasses.asdict(r) for r in results])
         else:
             console.print(f"[bold]Secret Scan for {args.file}[/bold]")
             
@@ -245,7 +245,7 @@ def handle_analyze(args, show_progress=True):
             results = scanner.scan_archive(Path(args.file))
             
             if args.json:
-                print(json.dumps(results, indent=2))
+                console.print_json(data=results)
             else:
                 console.print(f"[bold]YARA Scan for {args.file}[/bold]")
                 console.print(f"Rules: {args.yara}")

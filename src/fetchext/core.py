@@ -17,7 +17,7 @@ from .config import get_config_path
 from .history import HistoryManager
 from .exceptions import FetchextError, NetworkError, ExtensionError, ConfigError, SecurityError
 
-logger = logging.getLogger("fetchext")
+logger = logging.getLogger(__name__)
 
 def get_downloader(browser):
     """Factory to get the appropriate downloader instance."""

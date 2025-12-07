@@ -73,7 +73,7 @@ def handle_locales(args, show_progress=True):
     results = inspect_locales(Path(args.file))
     
     if args.json:
-        print(json.dumps(results, indent=2))
+        console.print_json(data=results)
     else:
         console.print(f"[bold]Locales for {args.file}[/bold]")
         if results["default_locale"]:

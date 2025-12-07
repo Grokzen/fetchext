@@ -4,7 +4,7 @@ import zipfile
 from pathlib import Path
 from .crx import CrxDecoder
 
-logger = logging.getLogger("fetchext")
+logger = logging.getLogger(__name__)
 
 class FormatConverter:
     """
@@ -43,9 +43,9 @@ class FormatConverter:
         
         logger.info(f"Converting CRX to ZIP (Offset: {offset})...")
         
-        with open(input_path, "rb") as fin:
+        with input_path.open("rb") as fin:
             fin.seek(offset)
-            with open(output_path, "wb") as fout:
+            with output_path.open("wb") as fout:
                 shutil.copyfileobj(fin, fout)
         
         logger.info(f"Saved to {output_path}")
