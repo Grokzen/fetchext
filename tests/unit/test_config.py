@@ -62,8 +62,12 @@ def test_load_config_integration(fs, mocker):
     assert config["batch"]["workers"] == 8
 
 def test_load_config_invalid_toml(fs, mocker):
+    from fetchext.exceptions import ConfigError
+    import pytest
+    
     mocker.patch.dict("os.environ", {"XDG_CONFIG_HOME": "/config"})
     fs.create_file("/config/fext/config.toml", contents="invalid toml [")
     
-    # Should return empty dict on error (as per implementation)
-    assert load_config() == {}
+    # Should raise ConfigError on error
+    with pytest.raises(ConfigError):
+        load_config()

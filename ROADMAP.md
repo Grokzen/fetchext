@@ -156,8 +156,8 @@
 
 - [x] **CLI Modularization**: Split monolithic `cli.py` (Architecture).
   - [x] Refactor `cli.py` to use a command pattern, moving subcommands into `src/fetchext/commands/`.
-- [ ] **Unified Exception Handling**: Error management (Core).
-  - [ ] Create `src/fetchext/exceptions.py` and implement a custom exception hierarchy for consistent error reporting.
+- [x] **Unified Exception Handling**: Error management (Core).
+  - [x] Create `src/fetchext/exceptions.py` and implement a custom exception hierarchy for consistent error reporting.
 - [ ] **Config Validation**: Robustness (Config).
   - [ ] Add schema validation for `config.toml` on load to prevent runtime errors from typos.
 - [ ] **Path Standardization**: Code quality (Core).

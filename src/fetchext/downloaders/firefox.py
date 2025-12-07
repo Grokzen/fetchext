@@ -6,6 +6,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskPr
 from ..console import console
 from ..network import get_session
 from .base import BaseDownloader
+from ..exceptions import NetworkError, ExtensionError
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +24,7 @@ class FirefoxDownloader(BaseDownloader):
         except ValueError:
             pass
 
-        raise ValueError("Could not extract extension slug from Firefox Add-ons URL")
+        raise ExtensionError("Could not extract extension slug from Firefox Add-ons URL")
 
     def download(self, extension_id, output_dir, show_progress=True):
         # Use AMO API to get the download URL
@@ -44,7 +45,7 @@ class FirefoxDownloader(BaseDownloader):
                     download_url = data["current_version"]["file"]["url"]
                     filename = Path(urlparse(download_url).path).name
                 else:
-                    raise RuntimeError("Could not find download URL in metadata")
+                    raise NetworkError("Could not find download URL in metadata")
 
                 logger.info(f"Downloading from {download_url}...")
 
@@ -78,14 +79,14 @@ class FirefoxDownloader(BaseDownloader):
             if not output_path.exists() or output_path.stat().st_size == 0:
                 if output_path.exists():
                     output_path.unlink()
-                raise RuntimeError("Download failed: File is empty or does not exist.")
+                raise NetworkError("Download failed: File is empty or does not exist.")
 
             logger.info(f"Successfully downloaded to {output_path}")
             return output_path
 
         except requests.RequestException as e:
             logger.error(f"Failed to download extension: {e}")
-            raise
+            raise NetworkError(f"Failed to download extension: {e}", original_exception=e)
 
     def get_latest_version(self, extension_id):
         api_url = f"https://addons.mozilla.org/api/v5/addons/addon/{extension_id}/"
@@ -114,4 +115,4 @@ class FirefoxDownloader(BaseDownloader):
 
         except requests.RequestException as e:
             logger.error(f"Failed to search for extension: {e}")
-            raise
+            raise NetworkError(f"Failed to search for extension: {e}", original_exception=e)

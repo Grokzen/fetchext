@@ -6,6 +6,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskPr
 from ..console import console
 from ..network import get_session
 from .base import BaseDownloader
+from ..exceptions import NetworkError, ExtensionError
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +24,7 @@ class ChromeDownloader(BaseDownloader):
             if re.match(r"^[a-z]{32}$", possible_id):
                 return possible_id
 
-        raise ValueError("Could not extract extension ID from Chrome Web Store URL")
+        raise ExtensionError("Could not extract extension ID from Chrome Web Store URL")
 
     def get_latest_version(self, extension_id):
         # Chrome doesn't have a simple JSON API for version checking without downloading XML
@@ -99,11 +100,11 @@ class ChromeDownloader(BaseDownloader):
             if not output_path.exists() or output_path.stat().st_size == 0:
                 if output_path.exists():
                     output_path.unlink()
-                raise RuntimeError("Download failed: File is empty or does not exist.")
+                raise NetworkError("Download failed: File is empty or does not exist.")
 
             logger.info(f"Successfully downloaded to {output_path}")
             return output_path
 
         except requests.RequestException as e:
             logger.error(f"Failed to download extension: {e}")
-            raise
+            raise NetworkError(f"Failed to download extension: {e}", original_exception=e)

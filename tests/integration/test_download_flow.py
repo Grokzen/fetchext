@@ -29,6 +29,7 @@ class TestDownloadFlow:
         assert output_path.name == "extension.crx"
 
     def test_chrome_download_404(self, fs, mocker):
+        from fetchext.exceptions import NetworkError
         # Mock session to raise HTTPError
         mock_session = mocker.MagicMock()
         mock_session.get.side_effect = requests.HTTPError("404 Not Found")
@@ -42,10 +43,11 @@ class TestDownloadFlow:
         output_dir = Path("/tmp/test_download")
         fs.create_dir(output_dir)
 
-        with pytest.raises(requests.HTTPError):
+        with pytest.raises(NetworkError):
             downloader.download(extension_id, output_dir)
 
     def test_chrome_download_empty_file_cleanup(self, fs, mocker):
+        from fetchext.exceptions import NetworkError
         # Mock session to return empty content
         mock_session = mocker.MagicMock()
         mock_response = mocker.Mock()
@@ -63,7 +65,7 @@ class TestDownloadFlow:
         output_dir = Path("/tmp/test_download")
         fs.create_dir(output_dir)
 
-        with pytest.raises(RuntimeError, match="Download failed: File is empty"):
+        with pytest.raises(NetworkError, match="Download failed: File is empty"):
             downloader.download(extension_id, output_dir)
         
         # Verify file was cleaned up

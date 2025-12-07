@@ -3,6 +3,7 @@ import logging
 import argparse
 from rich.logging import RichHandler
 from .console import console
+from .exceptions import FetchextError
 from .commands import (
     download,
     search,
@@ -92,8 +93,15 @@ def main():
 
         if not args.quiet:
             logger.info("Script finished successfully.")
+    except FetchextError as e:
+        # Handle known errors gracefully
+        if args.verbose:
+            logger.exception(e)
+        else:
+            logger.error(str(e))
+        sys.exit(1)
     except Exception as e:
-        logger.error(f"An error occurred: {e}")
+        logger.error(f"An unexpected error occurred: {e}")
         if args.verbose:
             logger.exception(e)
         sys.exit(1)

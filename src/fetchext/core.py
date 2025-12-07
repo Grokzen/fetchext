@@ -15,6 +15,7 @@ from .verifier import CrxVerifier
 from .hooks import HookManager, HookContext
 from .config import get_config_path
 from .history import HistoryManager
+from .exceptions import FetchextError, NetworkError, ExtensionError, ConfigError, SecurityError
 
 logger = logging.getLogger("fetchext")
 
@@ -34,7 +35,7 @@ def download_extension(browser, url, output_dir, save_metadata=False, extract=Fa
     """
     downloader = get_downloader(browser)
     if not downloader:
-        raise ValueError(f"Unsupported browser type: {browser}")
+        raise ConfigError(f"Unsupported browser type: {browser}")
 
     extension_id = downloader.extract_id(url)
     if show_progress:
@@ -120,10 +121,10 @@ def search_extension(browser, query, json_output=False, csv_output=False):
     """
     downloader = get_downloader(browser)
     if not downloader:
-        raise ValueError(f"Unsupported browser type: {browser}")
+        raise ConfigError(f"Unsupported browser type: {browser}")
         
     if not hasattr(downloader, 'search'):
-         raise ValueError(f"Search not supported for {browser}")
+         raise ConfigError(f"Search not supported for {browser}")
     
     results = downloader.search(query)
     
@@ -173,7 +174,7 @@ def check_update(file_path, json_output=False):
     """
     file_path = Path(file_path)
     if not file_path.exists():
-        raise FileNotFoundError(f"File not found: {file_path}")
+        raise ExtensionError(f"File not found: {file_path}")
 
     inspector = ExtensionInspector()
     manifest = inspector.get_manifest(file_path)
@@ -291,7 +292,7 @@ def preview_extension(file_path):
     """
     file_path = Path(file_path)
     if not file_path.exists():
-        raise FileNotFoundError(f"File not found: {file_path}")
+        raise ExtensionError(f"File not found: {file_path}")
 
     try:
         with open_extension_archive(file_path) as zf:
@@ -302,7 +303,7 @@ def preview_extension(file_path):
         
     except Exception as e:
         logger.error(f"Preview failed: {e}")
-        raise
+        raise ExtensionError(f"Preview failed: {e}", original_exception=e)
 
 def audit_extension(file_path, json_output=False):
     """
@@ -310,7 +311,7 @@ def audit_extension(file_path, json_output=False):
     """
     file_path = Path(file_path)
     if not file_path.exists():
-        raise FileNotFoundError(f"File not found: {file_path}")
+        raise ExtensionError(f"File not found: {file_path}")
 
     auditor = ExtensionAuditor()
     try:
@@ -352,9 +353,9 @@ def diff_extensions(old_path, new_path, json_output=False):
     new_path = Path(new_path)
     
     if not old_path.exists():
-        raise FileNotFoundError(f"File not found: {old_path}")
+        raise ExtensionError(f"File not found: {old_path}")
     if not new_path.exists():
-        raise FileNotFoundError(f"File not found: {new_path}")
+        raise ExtensionError(f"File not found: {new_path}")
 
     differ = ExtensionDiffer()
     try:
@@ -404,7 +405,7 @@ def analyze_risk(file_path, json_output=False):
     """
     file_path = Path(file_path)
     if not file_path.exists():
-        raise FileNotFoundError(f"File not found: {file_path}")
+        raise ExtensionError(f"File not found: {file_path}")
 
     analyzer = RiskAnalyzer()
     try:
@@ -453,7 +454,7 @@ def verify_signature(file_path, json_output=False):
     """
     file_path = Path(file_path)
     if not file_path.exists():
-        raise FileNotFoundError(f"File not found: {file_path}")
+        raise ExtensionError(f"File not found: {file_path}")
         
     verifier = CrxVerifier()
     try:
@@ -488,7 +489,7 @@ def extract_extension(file_path, output_dir=None, show_progress=True):
     """
     file_path = Path(file_path)
     if not file_path.exists():
-        raise FileNotFoundError(f"File not found: {file_path}")
+        raise ExtensionError(f"File not found: {file_path}")
     
     if output_dir:
         extract_dir = Path(output_dir)
@@ -543,7 +544,7 @@ def extract_extension(file_path, output_dir=None, show_progress=True):
 
     except Exception as e:
         logger.error(f"Extraction failed: {e}")
-        raise
+        raise ExtensionError(f"Extraction failed: {e}", original_exception=e)
 
 def batch_download(file_path, output_dir, workers=4, show_progress=True):
     """
@@ -563,7 +564,7 @@ def scan_extension(file_path, json_output=False, csv_output=False):
     
     file_path = Path(file_path)
     if not file_path.exists():
-        raise FileNotFoundError(f"File not found: {file_path}")
+        raise ExtensionError(f"File not found: {file_path}")
 
     scanner = DependencyScanner()
     try:
@@ -613,7 +614,7 @@ def generate_report(file_path, output_path=None):
     
     file_path = Path(file_path)
     if not file_path.exists():
-        raise FileNotFoundError(f"File not found: {file_path}")
+        raise ExtensionError(f"File not found: {file_path}")
 
     reporter = MarkdownReporter(file_path)
     try:
@@ -628,7 +629,7 @@ def generate_report(file_path, output_path=None):
         return output_path
     except Exception as e:
         logger.error(f"Report generation failed: {e}")
-        raise
+        raise ExtensionError(f"Report generation failed: {e}", original_exception=e)
 
 def convert_extension(input_path, output_path=None, to_format="zip"):
     """
@@ -637,13 +638,13 @@ def convert_extension(input_path, output_path=None, to_format="zip"):
     from .converter import FormatConverter
     
     if to_format.lower() != "zip":
-        raise ValueError(f"Unsupported target format: {to_format}. Only 'zip' is supported currently.")
+        raise ConfigError(f"Unsupported target format: {to_format}. Only 'zip' is supported currently.")
         
     try:
         return FormatConverter.convert_to_zip(input_path, output_path)
     except Exception as e:
         logger.error(f"Conversion failed: {e}")
-        raise
+        raise ExtensionError(f"Conversion failed: {e}", original_exception=e)
 
 def get_repo_stats(directory, json_output=False):
     """
@@ -654,7 +655,7 @@ def get_repo_stats(directory, json_output=False):
     
     directory = Path(directory)
     if not directory.exists():
-        raise FileNotFoundError(f"Directory not found: {directory}")
+        raise ConfigError(f"Directory not found: {directory}")
         
     analyzer = RepoAnalyzer()
     stats = analyzer.scan(directory)

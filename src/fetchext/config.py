@@ -3,6 +3,7 @@ import tomllib
 import tomli_w
 from pathlib import Path
 from typing import Any, Dict
+from .exceptions import ConfigError
 
 def get_config_path() -> Path:
     """
@@ -29,8 +30,8 @@ def load_config() -> Dict[str, Any]:
     try:
         with open(config_path, "rb") as f:
             return tomllib.load(f)
-    except Exception:
-        return {}
+    except Exception as e:
+        raise ConfigError(f"Failed to load configuration from {config_path}: {e}", original_exception=e)
 
 def save_config(config: Dict[str, Any]) -> None:
     """
