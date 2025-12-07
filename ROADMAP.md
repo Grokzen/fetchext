@@ -150,7 +150,7 @@
 - [x] **Interactive Tutorial**: Onboarding (Docs).
   - [x] Add `fext tutorial` TUI walkthrough to teach users how to use the tool.
 
-## 🌐 v1.5.0: Intelligence & Web
+## 🌐 v2.0.0: Intelligence & Web
 
 *Focus: AI integration and web-based interaction.*
 
@@ -165,7 +165,7 @@
 - [ ] **Badge Generator**: Status indicators (Docs).
   - [ ] Add `fext badge <file>` to generate SVG badges for risk scores, version, and license for use in READMEs.
 
-## 📦 v1.6.0: Lifecycle & Integration
+## 📦 v2.1.0: Lifecycle & Integration
 
 *Focus: Full lifecycle management and external integration.*
 
