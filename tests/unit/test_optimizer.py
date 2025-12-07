@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import MagicMock, patch, PropertyMock
+from unittest.mock import MagicMock, patch
 from pathlib import Path
 from fetchext.optimizer import optimize_image, optimize_extension
 
@@ -25,8 +25,6 @@ class TestOptimizer(unittest.TestCase):
         # Mock save behavior - we need to simulate the temp file being smaller
         # The optimize_image function calls stat() on the temp path to check size
         # So we need to handle the stat call for the temp path
-        
-        temp_path_mock = mock_path.with_suffix.return_value
         
         # We need to distinguish between calls to stat() on original path and temp path
         # But since we are mocking Path.stat globally, it's tricky.

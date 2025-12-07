@@ -154,8 +154,8 @@
 
 *Focus: Refactoring and code hygiene.*
 
-- [ ] **CLI Modularization**: Split monolithic `cli.py` (Architecture).
-  - [ ] Refactor `cli.py` to use a command pattern, moving subcommands into `src/fetchext/commands/`.
+- [x] **CLI Modularization**: Split monolithic `cli.py` (Architecture).
+  - [x] Refactor `cli.py` to use a command pattern, moving subcommands into `src/fetchext/commands/`.
 - [ ] **Unified Exception Handling**: Error management (Core).
   - [ ] Create `src/fetchext/exceptions.py` and implement a custom exception hierarchy for consistent error reporting.
 - [ ] **Config Validation**: Robustness (Config).

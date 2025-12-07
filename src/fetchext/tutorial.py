@@ -1,8 +1,6 @@
 from textual.app import App, ComposeResult
-from textual.containers import Container, Vertical, Horizontal
-from textual.widgets import Header, Footer, Static, Button, Markdown
-from textual.screen import Screen
-from textual.binding import Binding
+from textual.containers import Container, Horizontal
+from textual.widgets import Header, Footer, Button, Markdown
 
 TUTORIAL_STEPS = [
     {
