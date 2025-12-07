@@ -150,36 +150,6 @@
 - [x] **Interactive Tutorial**: Onboarding (Docs).
   - [x] Add `fext tutorial` TUI walkthrough to teach users how to use the tool.
 
-## 🌐 v2.0.0: Intelligence & Web
-
-*Focus: AI integration and web-based interaction.*
-
-- [ ] **AI Summarizer**: Code intent analysis (Analysis).
-  - [ ] Add `fext analyze --summary <file>` to generate a natural language summary of the extension's functionality using a local LLM or API.
-- [ ] **Code Beautifier**: Deobfuscation helper (Core).
-  - [ ] Add `fext beautify <file>` to format minified JavaScript and JSON files for better readability.
-- [ ] **Similarity Search**: Code reuse detection (Analysis).
-  - [ ] Add `fext similar <file>` to find other extensions in the local repository with high code similarity (using fuzzy hashing).
-- [ ] **Asset Diff**: Visual comparison (Analysis).
-  - [ ] Enhance `fext diff` to visually compare changed images and assets between versions.
-- [ ] **Badge Generator**: Status indicators (Docs).
-  - [ ] Add `fext badge <file>` to generate SVG badges for risk scores, version, and license for use in READMEs.
-
-## 📦 v2.1.0: Lifecycle & Integration
-
-*Focus: Full lifecycle management and external integration.*
-
-- [ ] **Extension Packer**: CRX creation (Core).
-  - [ ] Add `fext pack <dir>` to create a signed CRX file from a source directory (reverse of extract).
-- [ ] **License Scanner**: Legal compliance (Analysis).
-  - [ ] Add `fext scan --licenses` to identify open source licenses in extension files.
-- [ ] **Git Integration**: Version control (Workflow).
-  - [ ] Add `fext git init` to automatically set up a git repo for a downloaded extension with proper `.gitignore`.
-- [ ] **Remote Config**: Centralized management (Config).
-  - [ ] Add `fext config --remote <url>` to load configuration from a remote URL.
-- [ ] **HTML Report**: Rich reporting (Reporting).
-  - [ ] Add `fext report --html` to generate a standalone, interactive HTML report with charts and graphs.
-
 ## 🧹 v1.5.0: Architecture Cleanup
 
 *Focus: Refactoring and code hygiene.*
@@ -254,6 +224,36 @@
   - [ ] Standardize progress bar styles and behavior across all long-running commands.
 - [ ] **Dependency Review**: Maintenance (Core).
   - [ ] Audit and prune unused or redundant dependencies to keep the package lightweight.
+
+## 🌐 v2.0.0: Intelligence & Web
+
+*Focus: AI integration and web-based interaction.*
+
+- [ ] **AI Summarizer**: Code intent analysis (Analysis).
+  - [ ] Add `fext analyze --summary <file>` to generate a natural language summary of the extension's functionality using a local LLM or API.
+- [ ] **Code Beautifier**: Deobfuscation helper (Core).
+  - [ ] Add `fext beautify <file>` to format minified JavaScript and JSON files for better readability.
+- [ ] **Similarity Search**: Code reuse detection (Analysis).
+  - [ ] Add `fext similar <file>` to find other extensions in the local repository with high code similarity (using fuzzy hashing).
+- [ ] **Asset Diff**: Visual comparison (Analysis).
+  - [ ] Enhance `fext diff` to visually compare changed images and assets between versions.
+- [ ] **Badge Generator**: Status indicators (Docs).
+  - [ ] Add `fext badge <file>` to generate SVG badges for risk scores, version, and license for use in READMEs.
+
+## 📦 v2.1.0: Lifecycle & Integration
+
+*Focus: Full lifecycle management and external integration.*
+
+- [ ] **Extension Packer**: CRX creation (Core).
+  - [ ] Add `fext pack <dir>` to create a signed CRX file from a source directory (reverse of extract).
+- [ ] **License Scanner**: Legal compliance (Analysis).
+  - [ ] Add `fext scan --licenses` to identify open source licenses in extension files.
+- [ ] **Git Integration**: Version control (Workflow).
+  - [ ] Add `fext git init` to automatically set up a git repo for a downloaded extension with proper `.gitignore`.
+- [ ] **Remote Config**: Centralized management (Config).
+  - [ ] Add `fext config --remote <url>` to load configuration from a remote URL.
+- [ ] **HTML Report**: Rich reporting (Reporting).
+  - [ ] Add `fext report --html` to generate a standalone, interactive HTML report with charts and graphs.
 
 ## ✅ Completed
 
