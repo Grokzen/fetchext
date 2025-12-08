@@ -200,7 +200,7 @@ This project serves as a proof-of-concept for fully automated software developme
 ### 1. Documentation Self-Maintenance
 
 - **Rule**: This file (`.github/copilot-instructions.md`) is the source of truth for project context.
-- **Action**: If a new architectural decision, coding standard, or workflow pattern emerges during a chat session, the Agent **MUST** update this file to reflect the change.
+- **Action**: If a new architectural decision, coding standard, or workflow pattern emerges during a chat session, the Agent **MUST** update this file to reflect the change. Keep README reduced and document as much as possible in the docs/ implementation. Write documentation for the end user and/or a developer for this tool. The mkdocs site can be as deep and detailed as possible and the readme should direct you there and showa reduced and only as much as needed.
 - **Goal**: Ensure future context windows have access to the latest project state and rules.
 
 ### 2. Git Usage Policy
@@ -212,6 +212,7 @@ This project serves as a proof-of-concept for fully automated software developme
     2. **Fix Python**: If errors exist, run `ruff check . --fix`.
     3. **Lint Markdown**: Run `npx markdownlint-cli@0.31.1 "**/*.md"`.
     4. **Fix Markdown**: If errors exist, run `npx markdownlint-cli@0.31.1 "**/*.md" --fix`.
+    5. **Testing** Ensure that there is no testing or errors with the new code. Run unittests via `pytest` and/or via `make ci` and fix any errors that occur.
     5. **Block**: If unfixable errors remain in either, **ABORT** the commit and report issues to the user.
 - **Workflow**:
     1. Perform necessary code changes.
@@ -240,11 +241,12 @@ This project serves as a proof-of-concept for fully automated software developme
 ### 4. README Consistency Protocol
 
 - **Rule**: Documentation must never lag behind code.
-- **Trigger**: Any modification to `cli.py`, addition of flags, or change in user-facing behavior.
+- **Trigger**: Any modification to any code or files that is related to documentation. For CLI it can be changes to flags or usage. For core code it could be a chaned API or method invocation. 
 - **Action**:
     1. Update `README.md` immediately after implementing the feature.
     2. Ensure usage examples are copy-pasteable and correct.
     3. Verify that `fext --help` output aligns with documented commands.
+    4. Update documentation that is written with mkdocs in the `docs/` folder to match all code in the repo
 
 ### 5. Feature Blacklist Protocol
 

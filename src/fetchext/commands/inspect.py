@@ -67,7 +67,6 @@ def handle_verify(args, show_progress=True):
 
 def handle_locales(args, show_progress=True):
     from ..analysis.locales import inspect_locales
-    import json
     from rich.table import Table
     
     results = inspect_locales(Path(args.file))
