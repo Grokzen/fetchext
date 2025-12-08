@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2025-12-07
+
+### Added
+
+- **Unified Audit Report**: Added `fext report --json` to generate a comprehensive JSON report aggregating metadata, risk analysis, MV3 audit, complexity, entropy, domains, and secrets.
+
+### Changed
+
+- **Performance Optimization**: Parallelized entropy and complexity analysis using `ProcessPoolExecutor` to improve performance on multi-core systems.
+- **YARA Integration**: Updated `fext analyze --yara` to accept a directory of rule files, compiling them all for the scan.
+- **Risk Scoring Tuning**: Refined risk analysis to detect and penalize dangerous permission combinations (e.g., `tabs` + `cookies` + `<all_urls>`).
+- **False Positive Reduction**: Improved `SecretScanner` accuracy by filtering out common placeholders, low-entropy strings, and URLs from "Generic API Key" matches.
+
 ## [1.5.0] - 2025-12-07
 
 ### Changed

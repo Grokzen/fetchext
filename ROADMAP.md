@@ -169,16 +169,16 @@
 
 *Focus: Hardening security tools and analysis reporting.*
 
-- [ ] **Unified Audit Report**: Reporting (Analysis).
-  - [ ] Create a single JSON schema/report that combines risk, secrets, and MV3 audit results.
-- [ ] **False Positive Reduction**: Accuracy (Security).
-  - [ ] Tune secret scanner regexes to reduce false positives for common patterns.
-- [ ] **Performance Optimization**: Speed (Analysis).
-  - [ ] Optimize `entropy` and `complexity` calculations for large extensions (parallel processing).
-- [ ] **YARA Integration**: Flexibility (Security).
-  - [ ] Allow `fext analyze --yara` to accept a directory of rule files, not just a single file.
-- [ ] **Risk Scoring Tuning**: Accuracy (Analysis).
-  - [ ] Refine the risk scoring algorithm to account for permission combinations (e.g., `tabs` + `http://*/*`).
+- [x] **Unified Audit Report**: Reporting (Analysis).
+  - [x] Create a single JSON schema/report that combines risk, secrets, and MV3 audit results.
+- [x] **False Positive Reduction**: Accuracy (Security).
+  - [x] Tune secret scanner regexes to reduce false positives for common patterns.
+- [x] **Performance Optimization**: Speed (Analysis).
+  - [x] Optimize `entropy` and `complexity` calculations for large extensions (parallel processing).
+- [x] **YARA Integration**: Flexibility (Security).
+  - [x] Allow `fext analyze --yara` to accept a directory of rule files, not just a single file.
+- [x] **Risk Scoring Tuning**: Accuracy (Analysis).
+  - [x] Refine the risk scoring algorithm to account for permission combinations (e.g., `tabs` + `http://*/*`).
 
 ## 🌐 v1.7.0: Network & Download Robustness
 
