@@ -1,5 +1,7 @@
 import pytest
 import zipfile
+import concurrent.futures
+from unittest.mock import patch
 from pathlib import Path
 from fetchext.analysis.complexity import analyze_complexity
 
@@ -31,7 +33,8 @@ def test_analyze_complexity_zip(fs):
         zf.writestr("complex.js", js_complex)
         zf.writestr("manifest.json", "{}") # Non-JS file
     
-    results = analyze_complexity(zip_path)
+    with patch("fetchext.analysis.complexity.concurrent.futures.ProcessPoolExecutor", concurrent.futures.ThreadPoolExecutor):
+        results = analyze_complexity(zip_path)
     
     assert results["total_functions"] == 2
     # foo: 1, bar: 4. Avg: 2.5

@@ -2,6 +2,8 @@ from pathlib import Path
 from fetchext.analysis.entropy import calculate_shannon_entropy, analyze_entropy
 from zipfile import ZipFile
 import os
+import concurrent.futures
+from unittest.mock import patch
 
 def test_calculate_shannon_entropy():
     # Zero entropy (all same bytes)
@@ -22,7 +24,8 @@ def test_analyze_entropy_zip(fs):
         zf.writestr("low_entropy.txt", "aaaaa" * 100)
         zf.writestr("high_entropy.bin", os.urandom(1000))
         
-    results = analyze_entropy(zip_path)
+    with patch("fetchext.analysis.entropy.concurrent.futures.ProcessPoolExecutor", concurrent.futures.ThreadPoolExecutor):
+        results = analyze_entropy(zip_path)
     
     assert "average_entropy" in results
     assert len(results["files"]) == 2
@@ -42,6 +45,7 @@ def test_analyze_entropy_crx(fs):
     with ZipFile(crx_path, "w") as zf:
         zf.writestr("test.txt", "content")
         
-    results = analyze_entropy(crx_path)
+    with patch("fetchext.analysis.entropy.concurrent.futures.ProcessPoolExecutor", concurrent.futures.ThreadPoolExecutor):
+        results = analyze_entropy(crx_path)
     assert len(results["files"]) == 1
     assert results["files"][0]["filename"] == "test.txt"

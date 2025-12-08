@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **False Positive Reduction**: Improved `SecretScanner` accuracy by filtering out common placeholders, low-entropy strings, and URLs from "Generic API Key" matches.
 - **Python Compatibility**: Added `tomli` fallback for Python 3.10 compatibility (while maintaining 3.11+ target).
 
+### Fixed
+
+- **Testing**: Fixed test suite hangs/deadlocks in complexity and entropy tests by mocking `ProcessPoolExecutor` when using `pyfakefs`.
+
 ## [1.5.0] - 2025-12-07
 
 ### Changed
