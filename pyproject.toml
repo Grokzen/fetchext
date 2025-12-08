@@ -25,6 +25,7 @@ dependencies = [
     "lizard",
     "tomli-w",
     "Pillow",
+    "tomli; python_version < '3.11'",
 ]
 
 [project.optional-dependencies]

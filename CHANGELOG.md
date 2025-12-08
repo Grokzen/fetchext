@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Unified Audit Report**: Added `fext report --json` to generate a comprehensive JSON report aggregating metadata, risk analysis, MV3 audit, complexity, entropy, domains, and secrets.
+- **Documentation Refactor**: Split documentation into a slim `README.md` (Quick Start) and detailed `docs/` site (MkDocs).
 
 ### Changed
 
@@ -17,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **YARA Integration**: Updated `fext analyze --yara` to accept a directory of rule files, compiling them all for the scan.
 - **Risk Scoring Tuning**: Refined risk analysis to detect and penalize dangerous permission combinations (e.g., `tabs` + `cookies` + `<all_urls>`).
 - **False Positive Reduction**: Improved `SecretScanner` accuracy by filtering out common placeholders, low-entropy strings, and URLs from "Generic API Key" matches.
+- **Python Compatibility**: Added `tomli` fallback for Python 3.10 compatibility (while maintaining 3.11+ target).
 
 ## [1.5.0] - 2025-12-07
 

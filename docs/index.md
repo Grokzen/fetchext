@@ -1,26 +1,122 @@
-# fetchext
+# 📦 fetchext
 
-A Python CLI tool to download browser extensions (Chrome, Edge, Firefox) directly from their web stores.
+A Python CLI tool to download browser extensions (Chrome, Edge, Firefox) directly from their web stores. 🚀
 
-## Features
+## �� Development and Agent Tooling
 
-- **Multi-Browser Support**: Download from Chrome Web Store, Microsoft Edge Add-ons, and Firefox Add-ons.
-- **CRX3 Parsing**: Robust parsing of modern Chrome extension format.
-- **Batch Downloading**: Download multiple extensions in parallel.
-- **Analysis Tools**: Inspect manifests, scan for vulnerabilities, and generate reports.
-- **Mirror Mode**: Maintain a local repository of extensions.
-- **No API Keys**: Works directly with public store URLs.
+This repository is an experiment in **100% Vibe Coding** - all code is generated, maintained, and evolved exclusively through Agent tooling. No manual coding is permitted. ✨
 
-## Quick Start
+### 🧪 Experimental Setup
 
-Install via pip (once published) or from source:
+* **IDE**: VSCode Insider program (required for Agent integration) 💻
+* **AI Model**: Gemini 2.0 Flash or Grok 3 Beta (exclusively) 🧠
+* **Approach**: Zero manual intervention - all development is Agent-driven ⚡
+
+### 📜 100% Vibe Coding Policy
+
+This project serves as a proof-of-concept for fully automated software development:
+
+* **No Manual Code**: All code changes must be produced by the Agent. 🚫✋
+* **Rejection Criteria**: Manual submissions or changes from other AI models will be rejected. ❌
+* **Quality Control**: The Agent maintains consistent coding standards and patterns. ✅
+* **Evolution**: The codebase grows and adapts through iterative Agent interactions. 🌱
+
+### 📝 Submission Guidelines
+
+To participate in this experiment:
+
+* Use only VSCode Insider with Gemini 2.0 Flash or Grok 3 Beta for any interactions.
+* Allow the Agent to handle all code modifications.
+* Manual pull requests will be declined to preserve the purity of the experiment.
+* Report issues or request features through Agent-mediated channels. 🗣️
+
+This repository demonstrates the potential of fully automated development workflows while maintaining high code quality and consistency.
+
+## 📋 Requirements
+
+* Python 3.11 or higher 🐍
+
+## 🛠️ Setup
+
+1. **Create a virtual environment and install the package:**
+
+    ```bash
+    make setup
+    ```
+
+### 🐳 Docker
+
+You can run `fetchext` using Docker:
 
 ```bash
-pip install fetchext
+docker run --rm -v $(pwd):/app/downloads ghcr.io/grok/fetchext download chrome <url> -o /app/downloads
 ```
 
-Download an extension:
+### 🪝 Pre-commit Hook
+
+You can use `fetchext` in your [pre-commit](https://pre-commit.com) config:
+
+```yaml
+- repo: https://github.com/grok/fetchext
+  rev: v0.7.0
+  hooks:
+    - id: fext-audit
+    - id: fext-scan
+```
+
+## 🚀 Quick Start
+
+The CLI requires two arguments: the browser type and the extension URL.
+
+```bash
+fext <browser> <url>
+```
+
+* **browser**: `chrome` (or `c`), `edge` (or `e`), `firefox` (or `f`) 🌐
+* **url**: The URL of the extension in the respective web store. 🔗
+
+### 💡 Examples
+
+**Chrome:** 🌈
 
 ```bash
 fext chrome https://chromewebstore.google.com/detail/ublock-origin-lite/ddkjiahejlhfcafbddmgiahcphecmpfh
+```
+
+**Edge:** 🌊
+
+```bash
+fext edge https://microsoftedge.microsoft.com/addons/detail/ublock-origin/odfafepnkmbhccpbejgmiehpchacaeak
+```
+
+**Firefox:** 🦊
+
+```bash
+fext firefox https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/
+```
+
+## 📚 Documentation
+
+For full documentation, including advanced usage, analysis tools, and deployment guides, please visit our [Documentation Site](https://grok.github.io/fetchext/).
+
+* [CLI Reference](docs/cli.md)
+* [Analysis & Forensics](docs/analysis.md)
+* [Deployment & Enterprise](docs/deployment.md)
+* [Installation](docs/installation.md)
+
+## 💻 Development
+
+### 🧹 Linting and Formatting
+
+This project uses [Ruff](https://github.com/astral-sh/ruff) for linting and formatting.
+
+```bash
+make lint
+make format
+```
+
+### 🏗️ Building the Package
+
+```bash
+make build
 ```

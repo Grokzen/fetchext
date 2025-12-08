@@ -1,110 +1,242 @@
 # CLI Reference
 
-The `fext` command line interface is the primary way to interact with fetchext.
+The `fetchext` CLI (command: `fext`) provides a comprehensive suite of tools for downloading, analyzing, and managing browser extensions.
 
-## Global Options
+## Basic Usage
 
-- `-v`, `--verbose`: Enable debug logging.
-- `-q`, `--quiet`: Suppress non-error output.
-- `--version`: Show version information.
+```bash
+fext <command> [options]
+```
 
 ## Commands
 
 ### `download`
 
-Download an extension from a Web Store.
+Download an extension from a web store.
 
 ```bash
-fext download <browser> <url_or_id> [options]
+fext download <browser> <url> [options]
 ```
+
+**Aliases:** `d`
 
 **Arguments:**
 
-- `browser`: `chrome`, `edge`, or `firefox`.
-- `url_or_id`: The full URL or the extension ID.
+* `browser`: The target browser store. Supported values:
+  * `chrome` (alias: `c`)
+  * `edge` (alias: `e`)
+  * `firefox` (alias: `f`)
+* `url`: The full URL of the extension page.
 
 **Options:**
 
-- `-o`, `--output <dir>`: Output directory.
-- `-x`, `--extract`: Extract the extension after downloading.
-- `-m`, `--save-metadata`: Save metadata to a sidecar JSON file.
+* `-o, --output-dir <dir>`: Directory to save the downloaded file (default: current directory).
+* `-m, --save-metadata`: Save extension metadata (ID, version, name) to a JSON file.
+* `-x, --extract`: Automatically extract the extension contents to a folder.
+* `--quiet`: Suppress output.
+* `--verbose`: Enable verbose logging.
+
+**Examples:**
+
+```bash
+# Download Chrome extension
+fext download chrome https://chromewebstore.google.com/detail/...
+
+# Download and extract
+fext download firefox https://addons.mozilla.org/... --extract
+
+# Save metadata
+fext download edge https://microsoftedge.microsoft.com/... --save-metadata
+```
 
 ### `search`
 
-Search for extensions (currently Firefox only).
+Search for extensions in a web store (currently supports Firefox).
 
 ```bash
-fext search <browser> <query> [--json] [--csv]
+fext search <browser> <query>
+```
+
+**Aliases:** `s`
+
+**Example:**
+
+```bash
+fext search firefox "adblock"
 ```
 
 ### `inspect`
 
-Inspect a local extension file.
+Inspect the metadata (manifest) of a downloaded extension file.
 
 ```bash
-fext inspect <file> [--json]
+fext inspect <file>
 ```
 
-### `scan`
+**Aliases:** `i`
 
-Scan an extension for vulnerable libraries.
+**Example:**
 
 ```bash
-fext scan <file> [--json] [--csv]
+fext inspect ublock-origin.crx
 ```
 
-### `report`
+### `extract`
 
-Generate a Markdown report for an extension.
+Extract an existing extension file (`.crx`, `.xpi`) to a directory.
 
 ```bash
-fext report <file> [-o <output>]
+fext extract <file> [-o <output_dir>]
+```
+
+**Aliases:** `x`
+
+**Example:**
+
+```bash
+fext extract ublock-origin.crx -o ./extracted
 ```
 
 ### `batch`
 
-Download multiple extensions from a list.
+Download multiple extensions from a batch file.
 
 ```bash
-fext batch <file> [-o <dir>] [-w <workers>]
+fext batch <file> [-o <output_dir>] [-w <workers>]
 ```
 
-### `mirror`
+**Aliases:** `b`
 
-Sync a local directory with a list of extensions.
+**Options:**
 
-```bash
-fext mirror <list_file> [-o <dir>] [--prune]
+* `-w, --workers <n>`: Number of parallel downloads (default: 4).
+
+**Batch File Format:**
+
+```text
+# Format: <browser> <url_or_id>
+chrome aicmkgpgakddgnaphhhpliifpcfhicfo
+firefox https://addons.mozilla.org/en-US/firefox/addon/postman_interceptor/
 ```
 
-### `stats`
+### `scan`
 
-Show statistics for a repository.
+Scan an extension for known vulnerable third-party libraries (e.g., jQuery, Lodash).
 
 ```bash
-fext stats <dir>
+fext scan <file> [--json]
+```
+
+**Example:**
+
+```bash
+fext scan ublock-origin.crx
+```
+
+### `report`
+
+Generate a comprehensive Markdown report for an extension.
+
+```bash
+fext report <file> [-o <output_file>]
+```
+
+**Example:**
+
+```bash
+fext report ublock-origin.crx
 ```
 
 ### `convert`
 
-Convert extension formats.
+Convert extensions between formats.
 
 ```bash
-fext convert <input> --to <format>
+fext convert <input> --to <format> [-o <output>]
 ```
 
-### `analyze`
+**Supported Formats:** `zip`
 
-Analyze extension code.
+**Example:**
 
 ```bash
-fext analyze <file> [--complexity] [--json]
+fext convert ublock-origin.crx --to zip
 ```
 
-### `locales`
+### `stats`
 
-Inspect extension locales.
+Analyze a directory of extensions for aggregate statistics.
 
 ```bash
-fext locales <file> [--json]
+fext stats <directory>
+```
+
+### `explain`
+
+Get a detailed explanation and risk assessment for a specific permission.
+
+```bash
+fext explain <permission>
+```
+
+**Example:**
+
+```bash
+fext explain tabs
+```
+
+### `timeline`
+
+Visualize the modification timeline of files within an extension.
+
+```bash
+fext timeline <file>
+```
+
+### `graph`
+
+Generate a dependency graph of internal files.
+
+```bash
+fext graph <file> [-o <output.dot>]
+```
+
+### `optimize`
+
+Losslessly compress images within an extension directory.
+
+```bash
+fext optimize <directory> [-q <quality>]
+```
+
+### `tutorial`
+
+Launch the interactive TUI tutorial.
+
+```bash
+fext tutorial
+```
+
+### `setup`
+
+Run the interactive configuration wizard.
+
+```bash
+fext setup
+```
+
+### `config`
+
+Manage configuration settings.
+
+```bash
+fext config [get|set|list] [key] [value]
+```
+
+### `clean`
+
+Clean up cache and temporary files.
+
+```bash
+fext clean [--dry-run] [--force] [--all]
 ```

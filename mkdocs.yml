@@ -1,7 +1,7 @@
 site_name: fetchext
 site_description: A Python CLI tool to download browser extensions (Chrome, Edge, Firefox) directly from their respective web stores.
-site_url: https://github.com/grok/fetchext
-repo_url: https://github.com/grok/fetchext
+site_url: https://github.com/grokzen/fetchext
+repo_url: https://github.com/grokzen/fetchext
 repo_name: grok/fetchext
 
 theme:
@@ -33,6 +33,8 @@ nav:
   - Home: index.md
   - Installation: installation.md
   - CLI Reference: cli.md
+  - Analysis & Forensics: analysis.md
+  - Deployment & Enterprise: deployment.md
   - Library Reference: library.md
   - Configuration: configuration.md
   - Contributing: contributing.md

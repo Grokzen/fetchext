@@ -49,12 +49,19 @@ docker run --rm -v $(pwd):/data ghcr.io/grok/fetchext download chrome <url> -o /
 
 ## Pre-commit Hook
 
-You can use `fetchext` in your [pre-commit](https://pre-commit.com) config:
+You can use `fetchext` in your [pre-commit](https://pre-commit.com) config to automatically audit and scan extensions committed to your repository.
 
 ```yaml
 - repo: https://github.com/grok/fetchext
-  rev: v0.7.0
+  rev: v1.6.0
   hooks:
     - id: fext-audit
+      name: Audit Extension
+      description: Check for MV3 compatibility and security risks.
     - id: fext-scan
+      name: Scan Dependencies
+      description: Check for vulnerable third-party libraries.
+    - id: fext-analyze
+      name: Analyze Complexity
+      args: ["--complexity"]
 ```
