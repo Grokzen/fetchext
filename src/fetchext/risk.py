@@ -28,6 +28,8 @@ class RiskAnalyzer:
         "webRequestBlocking": (10, "Intercept and block network requests"),
         "cookies": (9, "Read and modify cookies"),
         "pageCapture": (9, "Capture page content"),
+        "declarativeNetRequest": (8, "Block or modify network requests (MV3)"),
+        "scripting": (8, "Execute scripts on pages"),
         
         # High
         "tabs": (7, "Access browser tabs and navigation"),
@@ -38,6 +40,8 @@ class RiskAnalyzer:
         "privacy": (7, "Change privacy settings"),
         "topSites": (7, "Access most visited sites"),
         "webNavigation": (7, "Monitor navigation events"),
+        "clipboardRead": (6, "Read data from clipboard"),
+        "clipboardWrite": (5, "Write data to clipboard"),
         
         # Medium
         "storage": (4, "Store data locally"),
@@ -46,6 +50,7 @@ class RiskAnalyzer:
         "contextMenus": (4, "Add items to context menu"),
         "downloads": (5, "Manage downloads"),
         "geolocation": (5, "Access location"),
+        "webRequest": (5, "Observe network requests"),
         
         # Low
         "alarms": (1, "Schedule alarms"),
@@ -53,6 +58,46 @@ class RiskAnalyzer:
         "power": (1, "Manage power settings"),
         "printerProvider": (1, "Access printers"),
     }
+
+    # Toxic combinations that amplify risk
+    RISK_COMBINATIONS = [
+        (
+            {"tabs", "cookies", "<all_urls_normalized>"}, 
+            20, 
+            "Critical", 
+            "Session Hijacking Risk (Tabs + Cookies + All URLs)"
+        ),
+        (
+            {"webRequest", "webRequestBlocking", "<all_urls_normalized>"}, 
+            20, 
+            "Critical", 
+            "Man-in-the-Middle Risk (Intercept + Block + All URLs)"
+        ),
+        (
+            {"declarativeNetRequest", "<all_urls_normalized>"},
+            15,
+            "Critical",
+            "Ad Injection / Traffic Modification Risk"
+        ),
+        (
+            {"scripting", "<all_urls_normalized>"},
+            15,
+            "Critical",
+            "Arbitrary Code Execution on All Pages"
+        ),
+        (
+            {"clipboardRead", "clipboardWrite"}, 
+            10, 
+            "High", 
+            "Full Clipboard Access (Read + Write)"
+        ),
+        (
+            {"history", "tabs"},
+            10,
+            "High",
+            "Comprehensive Browsing Activity Tracking"
+        )
+    ]
 
     def analyze(self, file_path: Path) -> RiskReport:
         with open_extension_archive(file_path) as zf:
@@ -70,6 +115,12 @@ class RiskAnalyzer:
             safe_perms = []
             total_score = 0
             
+            # Normalize permissions for combination checking
+            normalized_perms = set(all_perms)
+            for perm in all_perms:
+                if perm == "<all_urls>" or "*://*/*" in perm or "https://*/*" in perm:
+                    normalized_perms.add("<all_urls_normalized>")
+
             for perm in all_perms:
                 # Check for host patterns (e.g. *://*/*)
                 if "://" in perm or perm == "<all_urls>":
@@ -103,6 +154,12 @@ class RiskAnalyzer:
                 else:
                     safe_perms.append(perm)
             
+            # Check for toxic combinations
+            for req_perms, bonus_score, level, desc in self.RISK_COMBINATIONS:
+                if req_perms.issubset(normalized_perms):
+                    total_score += bonus_score
+                    risky_perms.append(PermissionRisk("COMBINATION", bonus_score, level, desc))
+
             # Determine max level
             max_level = "Safe"
             if any(p.level == "Critical" for p in risky_perms):

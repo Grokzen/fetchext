@@ -15,7 +15,7 @@ from .verifier import CrxVerifier
 from .hooks import HookManager, HookContext
 from .config import get_config_path
 from .history import HistoryManager
-from .exceptions import FetchextError, NetworkError, ExtensionError, ConfigError, SecurityError
+from .exceptions import ExtensionError, ConfigError
 
 logger = logging.getLogger(__name__)
 
@@ -666,4 +666,80 @@ def get_repo_stats(directory, json_output=False):
         print_stats(stats)
         
     return stats
+
+def generate_unified_report(file_path, yara_rules=None):
+    """
+    Generate a comprehensive unified report for an extension.
+    """
+    from .inspector import ExtensionInspector
+    from .risk import RiskAnalyzer
+    from .auditor import ExtensionAuditor
+    from .analysis.complexity import analyze_complexity
+    from .analysis.entropy import analyze_entropy
+    from .analysis.domains import analyze_domains
+    from .secrets import SecretScanner
+    from .analysis.yara import YaraScanner
+    from dataclasses import asdict
+    import hashlib
+
+    file_path = Path(file_path)
+    if not file_path.exists():
+        raise ExtensionError(f"File not found: {file_path}")
+
+    report = {}
+
+    # 1. Metadata
+    inspector = ExtensionInspector()
+    manifest = inspector.get_manifest(file_path)
+    
+    # Calculate hashes
+    sha256 = hashlib.sha256()
+    with file_path.open("rb") as f:
+        sha256.update(f.read())
+    
+    report["metadata"] = {
+        "filename": file_path.name,
+        "size": file_path.stat().st_size,
+        "sha256": sha256.hexdigest(),
+        "manifest": manifest
+    }
+
+    # 2. MV3 Audit
+    auditor = ExtensionAuditor()
+    mv3_report = auditor.audit(file_path)
+    report["mv3_audit"] = asdict(mv3_report)
+
+    # 3. Risk Analysis
+    risk_analyzer = RiskAnalyzer()
+    risk_report = risk_analyzer.analyze(file_path)
+    report["risk_analysis"] = asdict(risk_report)
+
+    # 4. Complexity
+    report["complexity"] = analyze_complexity(file_path)
+
+    # 5. Entropy
+    report["entropy"] = analyze_entropy(file_path)
+
+    # 6. Domains
+    domain_report = analyze_domains(file_path)
+    report["domains"] = domain_report["domains"]
+    report["urls"] = domain_report["urls"]
+
+    # 7. Secrets
+    secret_scanner = SecretScanner()
+    secrets = secret_scanner.scan_extension(file_path)
+    report["secrets"] = [asdict(s) for s in secrets]
+
+    # 8. YARA (Optional)
+    if yara_rules:
+        try:
+            yara_scanner = YaraScanner(yara_rules)
+            report["yara_matches"] = yara_scanner.scan_archive(file_path)
+        except Exception as e:
+            logger.warning(f"YARA scan failed: {e}")
+            report["yara_matches"] = {"error": str(e)}
+    else:
+        report["yara_matches"] = None
+
+    return report
 

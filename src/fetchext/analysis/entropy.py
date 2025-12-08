@@ -1,4 +1,6 @@
 import math
+import concurrent.futures
+import os
 from pathlib import Path
 from typing import Dict, List, Union
 from zipfile import ZipFile
@@ -26,9 +28,19 @@ def calculate_shannon_entropy(data: bytes) -> float:
             
     return entropy
 
+def _process_file_entropy(filename: str, data: bytes, size: int) -> Dict[str, Union[str, float, int]]:
+    """Helper function to run in a separate process."""
+    entropy = calculate_shannon_entropy(data)
+    return {
+        "filename": filename,
+        "entropy": entropy,
+        "size": size
+    }
+
 def analyze_entropy(file_path: Path) -> Dict[str, Union[float, List[Dict[str, Union[str, float]]]]]:
     """
     Analyze the entropy of files within an extension.
+    Uses parallel processing for performance.
     
     Returns:
         Dict containing average entropy and a list of file details.
@@ -48,9 +60,6 @@ def analyze_entropy(file_path: Path) -> Dict[str, Union[float, List[Dict[str, Un
             offset = CrxDecoder.get_zip_offset(file_path)
             
         # Open as ZipFile
-        # If offset > 0, we need to handle it.
-        # Python's ZipFile takes a file object.
-        
         f = open(file_path, "rb")
         if offset > 0:
             f.seek(offset)
@@ -59,7 +68,7 @@ def analyze_entropy(file_path: Path) -> Dict[str, Union[float, List[Dict[str, Un
             zf = ZipFile(f)
         except Exception:
             f.close()
-            # If it failed and we didn't try offset (e.g. .zip file that is actually a CRX), try detecting CRX
+            # Fallback logic
             if offset == 0:
                 offset = CrxDecoder.get_zip_offset(file_path)
                 if offset > 0:
@@ -75,42 +84,41 @@ def analyze_entropy(file_path: Path) -> Dict[str, Union[float, List[Dict[str, Un
             else:
                 raise ValueError("Could not open file as CRX")
         
-        # Now iterate
-        with zf:
-            for info in zf.infolist():
-                if info.is_dir():
-                    continue
-                
-                data = zf.read(info.filename)
-                entropy = calculate_shannon_entropy(data)
-                
-                results["files"].append({
-                    "filename": info.filename,
-                    "entropy": entropy,
-                    "size": info.file_size
-                })
-                
-                total_entropy += entropy
-                file_count += 1
-                
+        # Use ProcessPoolExecutor for CPU-bound entropy calculation
+        # We read files in the main thread (I/O bound) and send data to workers
+        max_workers = os.cpu_count() or 4
+        with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
+            futures = []
+            with zf:
+                for info in zf.infolist():
+                    if info.is_dir():
+                        continue
+                    
+                    # Read data in main thread
+                    data = zf.read(info.filename)
+                    
+                    # Submit to pool
+                    futures.append(
+                        executor.submit(_process_file_entropy, info.filename, data, info.file_size)
+                    )
+            
+            # Collect results
+            for future in concurrent.futures.as_completed(futures):
+                try:
+                    res = future.result()
+                    results["files"].append(res)
+                    total_entropy += res["entropy"]
+                    file_count += 1
+                except Exception:
+                    pass # Ignore failures for individual files
+
         if file_count > 0:
             results["average_entropy"] = total_entropy / file_count
             
     except Exception as e:
         raise ValueError(f"Error analyzing entropy: {e}")
     finally:
-        # f is closed by zf context manager if zf was created successfully?
-        # No, ZipFile(f) does not close f automatically unless we use it in a with block?
-        # Actually, ZipFile context manager closes the file if it opened it, or if we passed a filename.
-        # If we passed a file object, ZipFile does NOT close it by default in older python, but in 3.11 it might.
-        # To be safe, we should ensure f is closed if zf didn't take ownership or if we are done.
-        # But since we used `with zf:`, zf.close() is called.
-        # Does zf.close() close the underlying file object?
-        # Documentation says: "If the file was opened by passing a file name, it is closed. If a file object was passed, it is NOT closed."
-        # So we need to close f.
         if 'f' in locals() and not f.closed:
             f.close()
-
-    return results
 
     return results

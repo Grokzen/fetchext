@@ -22,7 +22,24 @@ class YaraScanner:
             raise FileNotFoundError(f"YARA rules file not found: {rules_path}")
 
         try:
-            self.rules = yara.compile(filepath=str(rules_path))
+            if self.rules_path.is_dir():
+                filepaths = {}
+                # Find .yar and .yara files recursively
+                rule_files = list(self.rules_path.glob("**/*.yar")) + list(self.rules_path.glob("**/*.yara"))
+                
+                for rule_file in rule_files:
+                    # Use filename as namespace to avoid collisions if possible, 
+                    # but simple stem is usually enough for display.
+                    # To be safe against duplicates in different dirs, we could use the full path hash or similar,
+                    # but let's stick to stem for readability in results.
+                    filepaths[rule_file.stem] = str(rule_file)
+                
+                if not filepaths:
+                    raise FileNotFoundError(f"No .yar or .yara files found in directory: {rules_path}")
+                
+                self.rules = yara.compile(filepaths=filepaths)
+            else:
+                self.rules = yara.compile(filepath=str(rules_path))
         except yara.Error as e:
             logger.error(f"Failed to compile YARA rules: {e}")
             raise

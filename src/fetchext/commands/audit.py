@@ -66,7 +66,7 @@ def register(subparsers):
     analyze_parser.add_argument(
         "--yara",
         type=Path,
-        help="Path to YARA rules file to scan against"
+        help="Path to YARA rules file or directory to scan against"
     )
     analyze_parser.add_argument(
         "--json",
@@ -76,12 +76,22 @@ def register(subparsers):
     analyze_parser.set_defaults(func=handle_analyze)
 
     # Report subcommand
-    report_parser = subparsers.add_parser("report", help="Generate a Markdown report")
+    report_parser = subparsers.add_parser("report", help="Generate a comprehensive report")
     report_parser.add_argument("file", help="Path to the .crx or .xpi file")
     report_parser.add_argument(
         "-o", "--output",
         type=Path,
-        help="Output file path (default: <filename>_REPORT.md)"
+        help="Output file path (default: <filename>_REPORT.md for markdown, stdout for JSON)"
+    )
+    report_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output unified report as JSON"
+    )
+    report_parser.add_argument(
+        "--yara",
+        type=Path,
+        help="Path to YARA rules file or directory (optional, for JSON report)"
     )
     report_parser.set_defaults(func=handle_report)
 
@@ -95,12 +105,22 @@ def handle_scan(args, show_progress=True):
     core.scan_extension(args.file, json_output=args.json, csv_output=args.csv)
 
 def handle_report(args, show_progress=True):
-    core.generate_report(args.file, args.output)
+    if args.json:
+        report = core.generate_unified_report(args.file, yara_rules=args.yara)
+        if args.output:
+            import json
+            with args.output.open("w") as f:
+                json.dump(report, f, indent=2)
+            if show_progress:
+                console.print(f"JSON report saved to {args.output}")
+        else:
+            console.print_json(data=report)
+    else:
+        core.generate_report(args.file, args.output)
 
 def handle_analyze(args, show_progress=True):
     if args.complexity:
         from ..analysis.complexity import analyze_complexity
-        import json
         from rich.table import Table
         
         results = analyze_complexity(Path(args.file))
@@ -134,7 +154,6 @@ def handle_analyze(args, show_progress=True):
     
     elif args.entropy:
         from ..analysis.entropy import analyze_entropy
-        import json
         from rich.table import Table
         
         results = analyze_entropy(Path(args.file))
@@ -174,7 +193,6 @@ def handle_analyze(args, show_progress=True):
     
     elif args.domains:
         from ..analysis.domains import analyze_domains
-        import json
         from rich.table import Table
         
         results = analyze_domains(Path(args.file))
@@ -203,7 +221,6 @@ def handle_analyze(args, show_progress=True):
     
     elif args.secrets:
         from ..secrets import SecretScanner
-        import json
         from rich.table import Table
         
         scanner = SecretScanner()
@@ -237,7 +254,6 @@ def handle_analyze(args, show_progress=True):
 
     elif args.yara:
         from ..analysis.yara import YaraScanner
-        import json
         from rich.table import Table
         
         try:

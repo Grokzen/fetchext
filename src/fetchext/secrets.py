@@ -1,4 +1,5 @@
 import re
+import math
 from dataclasses import dataclass
 from typing import List
 from pathlib import Path
@@ -24,6 +25,14 @@ class SecretScanner:
         ("Generic API Key", r"(?i)(api_key|apikey|secret|token)\s*[:=]\s*['\"]([a-zA-Z0-9_\-]{20,})['\"]"),
     ]
 
+    # Known false positives for generic matches
+    FALSE_POSITIVES = {
+        "YOUR_API_KEY", "YOUR_TOKEN", "REPLACE_ME", "EXAMPLE_KEY",
+        "API_KEY_HERE", "INSERT_KEY_HERE", "TEST_TOKEN", "SAMPLE_KEY",
+        "undefined", "null", "true", "false", "string", "number",
+        "object", "function", "boolean", "symbol", "bigint"
+    }
+
     def scan_extension(self, file_path: Path) -> List[SecretFinding]:
         findings = []
         with open_extension_archive(file_path) as zf:
@@ -41,6 +50,15 @@ class SecretScanner:
                 except Exception:
                     pass # Ignore read errors
         return findings
+
+    def _calculate_entropy(self, s: str) -> float:
+        """Calculate Shannon entropy of a string."""
+        if not s:
+            return 0.0
+        
+        prob = [float(s.count(c)) / len(s) for c in dict.fromkeys(list(s))]
+        entropy = - sum([p * math.log(p) / math.log(2.0) for p in prob])
+        return entropy
 
     def _scan_content(self, content: str, filename: str) -> List[SecretFinding]:
         findings = []
@@ -80,12 +98,28 @@ class SecretScanner:
                 
                 if is_overlap:
                     continue
-                    
-                matched_ranges.add((start, end))
                 
                 full_match = match.group(0)
-                # If it's a Generic API Key, the group(2) is the actual secret
+                
+                # False Positive Reduction for Generic API Key
                 if name == "Generic API Key":
+                    secret_value = match.group(2)
+                    
+                    # 1. Check against known false positives
+                    if any(fp in secret_value.upper() for fp in self.FALSE_POSITIVES):
+                        continue
+                        
+                    # 2. Check entropy (randomness)
+                    # A real API key usually has high entropy (> 3.0 for ~20 chars)
+                    # Simple words or repeated chars have low entropy.
+                    entropy = self._calculate_entropy(secret_value)
+                    if entropy < 3.0:
+                        continue
+                        
+                    # 3. Check if it looks like a URL or path
+                    if secret_value.startswith(("http", "//", "/", "./", "../")):
+                        continue
+
                     # Re-implement masking to be simpler and consistent
                     if len(full_match) > 12:
                          masked = full_match[:8] + "*" * (len(full_match) - 12) + full_match[-4:]
@@ -97,7 +131,8 @@ class SecretScanner:
                         masked = full_match[:4] + "*" * (len(full_match) - 4)
                     else:
                         masked = "*" * len(full_match)
-                    
+                
+                matched_ranges.add((start, end))
                 findings.append(SecretFinding(
                     type=name,
                     file=filename,
