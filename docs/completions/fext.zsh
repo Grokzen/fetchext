@@ -6,29 +6,41 @@
 _shtab_gen_completion_py_commands() {
   local _commands=(
     "a:"
+    "analyze:"
     "audit:"
     "b:"
     "batch:"
-    "c:"
-    "check:"
+    "clean:"
+    "config:"
     "convert:"
     "d:"
     "diff:"
     "download:"
+    "explain:"
     "extract:"
+    "graph:"
+    "history:"
     "i:"
+    "info:"
     "inspect:"
+    "locales:"
     "mirror:"
+    "optimize:"
     "p:"
+    "plugin:"
     "preview:"
     "r:"
     "report:"
     "risk:"
     "s:"
     "scan:"
+    "schema:"
     "search:"
+    "serve:"
     "setup:"
     "stats:"
+    "timeline:"
+    "tutorial:"
     "ui:"
     "um:"
     "update-manifest:"
@@ -38,8 +50,28 @@ _shtab_gen_completion_py_commands() {
   _describe 'gen_completion.py commands' _commands
 }
 
+_shtab_gen_completion_py_config_commands() {
+  local _commands=(
+    "init:"
+    "show:"
+  )
+  _describe 'gen_completion.py config commands' _commands
+}
+
+_shtab_gen_completion_py_plugin_commands() {
+  local _commands=(
+    "disable:"
+    "enable:"
+    "install:"
+    "list:"
+    "remove:"
+  )
+  _describe 'gen_completion.py plugin commands' _commands
+}
+
 _shtab_gen_completion_py_options=(
   "(- : *)"{-h,--help}"[show this help message and exit]"
+  "(- : *)--version[show program\'s version number and exit]"
   {-v,--verbose}"[Enable verbose logging (DEBUG level)]"
   {-q,--quiet}"[Enable quiet mode (ERROR level only, no progress bars)]"
 )
@@ -55,6 +87,20 @@ _shtab_gen_completion_py_a_options=(
 
 # guard to ensure default positional specs are added only once per session
 _shtab_gen_completion_py_a_defaults_added=0
+
+_shtab_gen_completion_py_analyze_options=(
+  "(- : *)"{-h,--help}"[show this help message and exit]"
+  "--complexity[Calculate cyclomatic complexity of JS files]"
+  "--entropy[Calculate entropy of files to detect obfuscation\/packing]"
+  "--domains[Extract domains and URLs from source code]"
+  "--secrets[Scan for potential secrets (API keys, tokens)]"
+  "--yara[Path to YARA rules file or directory to scan against]:yara:"
+  "--json[Output results as JSON]"
+  ":Path to the .crx or .xpi file:"
+)
+
+# guard to ensure default positional specs are added only once per session
+_shtab_gen_completion_py_analyze_defaults_added=0
 
 _shtab_gen_completion_py_audit_options=(
   "(- : *)"{-h,--help}"[show this help message and exit]"
@@ -85,23 +131,39 @@ _shtab_gen_completion_py_batch_options=(
 # guard to ensure default positional specs are added only once per session
 _shtab_gen_completion_py_batch_defaults_added=0
 
-_shtab_gen_completion_py_c_options=(
+_shtab_gen_completion_py_clean_options=(
   "(- : *)"{-h,--help}"[show this help message and exit]"
-  "--json[Output results as JSON]"
-  ":Path to the .crx or .xpi file:"
+  "--cache[Clean build and test caches (default)]"
+  "--downloads[Clean download directory]"
+  "--all[Clean everything]"
+  "--dry-run[Show what would be deleted without deleting]"
+  {-f,--force}"[Skip confirmation]"
 )
 
 # guard to ensure default positional specs are added only once per session
-_shtab_gen_completion_py_c_defaults_added=0
+_shtab_gen_completion_py_clean_defaults_added=0
 
-_shtab_gen_completion_py_check_options=(
+_shtab_gen_completion_py_config_options=(
   "(- : *)"{-h,--help}"[show this help message and exit]"
-  "--json[Output results as JSON]"
-  ":Path to the .crx or .xpi file:"
 )
 
 # guard to ensure default positional specs are added only once per session
-_shtab_gen_completion_py_check_defaults_added=0
+_shtab_gen_completion_py_config_defaults_added=0
+
+_shtab_gen_completion_py_config_init_options=(
+  "(- : *)"{-h,--help}"[show this help message and exit]"
+  {-f,--force}"[Overwrite existing configuration]"
+)
+
+# guard to ensure default positional specs are added only once per session
+_shtab_gen_completion_py_config_init_defaults_added=0
+
+_shtab_gen_completion_py_config_show_options=(
+  "(- : *)"{-h,--help}"[show this help message and exit]"
+)
+
+# guard to ensure default positional specs are added only once per session
+_shtab_gen_completion_py_config_show_defaults_added=0
 
 _shtab_gen_completion_py_convert_options=(
   "(- : *)"{-h,--help}"[show this help message and exit]"
@@ -118,6 +180,7 @@ _shtab_gen_completion_py_d_options=(
   {-o,--output-dir}"[Directory to save the downloaded extension (default\: .)]:output_dir:"
   {-m,--save-metadata}"[Save metadata to a JSON file alongside the extension]"
   {-x,--extract}"[Automatically extract the extension to a folder]"
+  "--verify-hash[Verify the downloaded file against this SHA256 hash]:verify_hash:"
   ":The browser type (chrome\/c, edge\/e, firefox\/f):(chrome c edge e firefox f)"
   ":The URL of the extension in the Web Store:"
   ":The browser type (chrome\/c, edge\/e, firefox\/f):(chrome c edge e firefox f)"
@@ -141,6 +204,7 @@ _shtab_gen_completion_py_download_options=(
   {-o,--output-dir}"[Directory to save the downloaded extension (default\: .)]:output_dir:"
   {-m,--save-metadata}"[Save metadata to a JSON file alongside the extension]"
   {-x,--extract}"[Automatically extract the extension to a folder]"
+  "--verify-hash[Verify the downloaded file against this SHA256 hash]:verify_hash:"
   ":The browser type (chrome\/c, edge\/e, firefox\/f):(chrome c edge e firefox f)"
   ":The URL of the extension in the Web Store:"
   ":The browser type (chrome\/c, edge\/e, firefox\/f):(chrome c edge e firefox f)"
@@ -149,14 +213,42 @@ _shtab_gen_completion_py_download_options=(
 # guard to ensure default positional specs are added only once per session
 _shtab_gen_completion_py_download_defaults_added=0
 
+_shtab_gen_completion_py_explain_options=(
+  "(- : *)"{-h,--help}"[show this help message and exit]"
+  "--json[Output results as JSON]"
+  ":The permission string to explain:"
+)
+
+# guard to ensure default positional specs are added only once per session
+_shtab_gen_completion_py_explain_defaults_added=0
+
 _shtab_gen_completion_py_extract_options=(
   "(- : *)"{-h,--help}"[show this help message and exit]"
-  {-o,--output-dir}"[Directory to extract to (default\: \<filename_stem\> in current dir)]:output_dir:"
-  ":Path to the .crx or .xpi file:"
+  {-o,--output-dir}"[Output directory (default\: \<filename\>_extracted)]:output_dir:"
+  ":Path to extension file:"
 )
 
 # guard to ensure default positional specs are added only once per session
 _shtab_gen_completion_py_extract_defaults_added=0
+
+_shtab_gen_completion_py_graph_options=(
+  "(- : *)"{-h,--help}"[show this help message and exit]"
+  {-o,--output}"[Output file path (default\: \<filename\>_graph.html)]:output:"
+  ":Path to extension file:"
+)
+
+# guard to ensure default positional specs are added only once per session
+_shtab_gen_completion_py_graph_defaults_added=0
+
+_shtab_gen_completion_py_history_options=(
+  "(- : *)"{-h,--help}"[show this help message and exit]"
+  "--limit[Number of entries to show (default\: 20)]:limit:"
+  "--clear[Clear the history]"
+  "--json[Output results as JSON]"
+)
+
+# guard to ensure default positional specs are added only once per session
+_shtab_gen_completion_py_history_defaults_added=0
 
 _shtab_gen_completion_py_i_options=(
   "(- : *)"{-h,--help}"[show this help message and exit]"
@@ -167,6 +259,15 @@ _shtab_gen_completion_py_i_options=(
 # guard to ensure default positional specs are added only once per session
 _shtab_gen_completion_py_i_defaults_added=0
 
+_shtab_gen_completion_py_info_options=(
+  "(- : *)"{-h,--help}"[show this help message and exit]"
+  "--json[Output as JSON]"
+  ":Path to extension file:"
+)
+
+# guard to ensure default positional specs are added only once per session
+_shtab_gen_completion_py_info_defaults_added=0
+
 _shtab_gen_completion_py_inspect_options=(
   "(- : *)"{-h,--help}"[show this help message and exit]"
   "--json[Output results as JSON]"
@@ -175,6 +276,15 @@ _shtab_gen_completion_py_inspect_options=(
 
 # guard to ensure default positional specs are added only once per session
 _shtab_gen_completion_py_inspect_defaults_added=0
+
+_shtab_gen_completion_py_locales_options=(
+  "(- : *)"{-h,--help}"[show this help message and exit]"
+  "--json[Output results as JSON]"
+  ":Path to the .crx or .xpi file:"
+)
+
+# guard to ensure default positional specs are added only once per session
+_shtab_gen_completion_py_locales_defaults_added=0
 
 _shtab_gen_completion_py_mirror_options=(
   "(- : *)"{-h,--help}"[show this help message and exit]"
@@ -187,6 +297,16 @@ _shtab_gen_completion_py_mirror_options=(
 # guard to ensure default positional specs are added only once per session
 _shtab_gen_completion_py_mirror_defaults_added=0
 
+_shtab_gen_completion_py_optimize_options=(
+  "(- : *)"{-h,--help}"[show this help message and exit]"
+  {-q,--quality}"[Image quality (1-100, default\: 85)]:quality:"
+  "--json[Output results as JSON]"
+  ":Path to the extension directory:"
+)
+
+# guard to ensure default positional specs are added only once per session
+_shtab_gen_completion_py_optimize_defaults_added=0
+
 _shtab_gen_completion_py_p_options=(
   "(- : *)"{-h,--help}"[show this help message and exit]"
   ":Path to the .crx or .xpi file:"
@@ -194,6 +314,52 @@ _shtab_gen_completion_py_p_options=(
 
 # guard to ensure default positional specs are added only once per session
 _shtab_gen_completion_py_p_defaults_added=0
+
+_shtab_gen_completion_py_plugin_options=(
+  "(- : *)"{-h,--help}"[show this help message and exit]"
+)
+
+# guard to ensure default positional specs are added only once per session
+_shtab_gen_completion_py_plugin_defaults_added=0
+
+_shtab_gen_completion_py_plugin_disable_options=(
+  "(- : *)"{-h,--help}"[show this help message and exit]"
+  ":Plugin name:"
+)
+
+# guard to ensure default positional specs are added only once per session
+_shtab_gen_completion_py_plugin_disable_defaults_added=0
+
+_shtab_gen_completion_py_plugin_enable_options=(
+  "(- : *)"{-h,--help}"[show this help message and exit]"
+  ":Plugin name:"
+)
+
+# guard to ensure default positional specs are added only once per session
+_shtab_gen_completion_py_plugin_enable_defaults_added=0
+
+_shtab_gen_completion_py_plugin_install_options=(
+  "(- : *)"{-h,--help}"[show this help message and exit]"
+  ":Path to plugin file:"
+)
+
+# guard to ensure default positional specs are added only once per session
+_shtab_gen_completion_py_plugin_install_defaults_added=0
+
+_shtab_gen_completion_py_plugin_list_options=(
+  "(- : *)"{-h,--help}"[show this help message and exit]"
+)
+
+# guard to ensure default positional specs are added only once per session
+_shtab_gen_completion_py_plugin_list_defaults_added=0
+
+_shtab_gen_completion_py_plugin_remove_options=(
+  "(- : *)"{-h,--help}"[show this help message and exit]"
+  ":Plugin name:"
+)
+
+# guard to ensure default positional specs are added only once per session
+_shtab_gen_completion_py_plugin_remove_defaults_added=0
 
 _shtab_gen_completion_py_preview_options=(
   "(- : *)"{-h,--help}"[show this help message and exit]"
@@ -214,7 +380,9 @@ _shtab_gen_completion_py_r_defaults_added=0
 
 _shtab_gen_completion_py_report_options=(
   "(- : *)"{-h,--help}"[show this help message and exit]"
-  {-o,--output}"[Output file path (default\: \<filename\>_REPORT.md)]:output:"
+  {-o,--output}"[Output file path (default\: \<filename\>_REPORT.md for markdown, stdout for JSON)]:output:"
+  "--json[Output unified report as JSON]"
+  "--yara[Path to YARA rules file or directory (optional, for JSON report)]:yara:"
   ":Path to the .crx or .xpi file:"
 )
 
@@ -252,6 +420,15 @@ _shtab_gen_completion_py_scan_options=(
 # guard to ensure default positional specs are added only once per session
 _shtab_gen_completion_py_scan_defaults_added=0
 
+_shtab_gen_completion_py_schema_options=(
+  "(- : *)"{-h,--help}"[show this help message and exit]"
+  ":The type of schema to generate:(config audit risk history scan)"
+  ":The type of schema to generate:(config audit risk history scan)"
+)
+
+# guard to ensure default positional specs are added only once per session
+_shtab_gen_completion_py_schema_defaults_added=0
+
 _shtab_gen_completion_py_search_options=(
   "(- : *)"{-h,--help}"[show this help message and exit]"
   "--json[Output results as JSON]"
@@ -263,6 +440,16 @@ _shtab_gen_completion_py_search_options=(
 
 # guard to ensure default positional specs are added only once per session
 _shtab_gen_completion_py_search_defaults_added=0
+
+_shtab_gen_completion_py_serve_options=(
+  "(- : *)"{-h,--help}"[show this help message and exit]"
+  {-d,--directory}"[Directory to serve (default\: current directory)]:directory:"
+  "--host[Host to bind to (default\: 127.0.0.1)]:host:"
+  {-p,--port}"[Port to listen on (default\: 8000)]:port:"
+)
+
+# guard to ensure default positional specs are added only once per session
+_shtab_gen_completion_py_serve_defaults_added=0
 
 _shtab_gen_completion_py_setup_options=(
   "(- : *)"{-h,--help}"[show this help message and exit]"
@@ -279,6 +466,22 @@ _shtab_gen_completion_py_stats_options=(
 
 # guard to ensure default positional specs are added only once per session
 _shtab_gen_completion_py_stats_defaults_added=0
+
+_shtab_gen_completion_py_timeline_options=(
+  "(- : *)"{-h,--help}"[show this help message and exit]"
+  "--json[Output results as JSON]"
+  ":Path to the .crx or .xpi file:"
+)
+
+# guard to ensure default positional specs are added only once per session
+_shtab_gen_completion_py_timeline_defaults_added=0
+
+_shtab_gen_completion_py_tutorial_options=(
+  "(- : *)"{-h,--help}"[show this help message and exit]"
+)
+
+# guard to ensure default positional specs are added only once per session
+_shtab_gen_completion_py_tutorial_defaults_added=0
 
 _shtab_gen_completion_py_ui_options=(
   "(- : *)"{-h,--help}"[show this help message and exit]"
@@ -318,8 +521,8 @@ _shtab_gen_completion_py_verify_defaults_added=0
 
 _shtab_gen_completion_py_x_options=(
   "(- : *)"{-h,--help}"[show this help message and exit]"
-  {-o,--output-dir}"[Directory to extract to (default\: \<filename_stem\> in current dir)]:output_dir:"
-  ":Path to the .crx or .xpi file:"
+  {-o,--output-dir}"[Output directory (default\: \<filename\>_extracted)]:output_dir:"
+  ":Path to extension file:"
 )
 
 # guard to ensure default positional specs are added only once per session
@@ -345,34 +548,97 @@ _shtab_gen_completion_py() {
       curcontext="${curcontext%:*:*}:_shtab_gen_completion_py-$line[1]:"
       case $line[1] in
         a) _arguments -C -s $_shtab_gen_completion_py_a_options ;;
+        analyze) _arguments -C -s $_shtab_gen_completion_py_analyze_options ;;
         audit) _arguments -C -s $_shtab_gen_completion_py_audit_options ;;
         b) _arguments -C -s $_shtab_gen_completion_py_b_options ;;
         batch) _arguments -C -s $_shtab_gen_completion_py_batch_options ;;
-        c) _arguments -C -s $_shtab_gen_completion_py_c_options ;;
-        check) _arguments -C -s $_shtab_gen_completion_py_check_options ;;
+        clean) _arguments -C -s $_shtab_gen_completion_py_clean_options ;;
+        config) _shtab_gen_completion_py_config ;;
         convert) _arguments -C -s $_shtab_gen_completion_py_convert_options ;;
         d) _arguments -C -s $_shtab_gen_completion_py_d_options ;;
         diff) _arguments -C -s $_shtab_gen_completion_py_diff_options ;;
         download) _arguments -C -s $_shtab_gen_completion_py_download_options ;;
+        explain) _arguments -C -s $_shtab_gen_completion_py_explain_options ;;
         extract) _arguments -C -s $_shtab_gen_completion_py_extract_options ;;
+        graph) _arguments -C -s $_shtab_gen_completion_py_graph_options ;;
+        history) _arguments -C -s $_shtab_gen_completion_py_history_options ;;
         i) _arguments -C -s $_shtab_gen_completion_py_i_options ;;
+        info) _arguments -C -s $_shtab_gen_completion_py_info_options ;;
         inspect) _arguments -C -s $_shtab_gen_completion_py_inspect_options ;;
+        locales) _arguments -C -s $_shtab_gen_completion_py_locales_options ;;
         mirror) _arguments -C -s $_shtab_gen_completion_py_mirror_options ;;
+        optimize) _arguments -C -s $_shtab_gen_completion_py_optimize_options ;;
         p) _arguments -C -s $_shtab_gen_completion_py_p_options ;;
+        plugin) _shtab_gen_completion_py_plugin ;;
         preview) _arguments -C -s $_shtab_gen_completion_py_preview_options ;;
         r) _arguments -C -s $_shtab_gen_completion_py_r_options ;;
         report) _arguments -C -s $_shtab_gen_completion_py_report_options ;;
         risk) _arguments -C -s $_shtab_gen_completion_py_risk_options ;;
         s) _arguments -C -s $_shtab_gen_completion_py_s_options ;;
         scan) _arguments -C -s $_shtab_gen_completion_py_scan_options ;;
+        schema) _arguments -C -s $_shtab_gen_completion_py_schema_options ;;
         search) _arguments -C -s $_shtab_gen_completion_py_search_options ;;
+        serve) _arguments -C -s $_shtab_gen_completion_py_serve_options ;;
         setup) _arguments -C -s $_shtab_gen_completion_py_setup_options ;;
         stats) _arguments -C -s $_shtab_gen_completion_py_stats_options ;;
+        timeline) _arguments -C -s $_shtab_gen_completion_py_timeline_options ;;
+        tutorial) _arguments -C -s $_shtab_gen_completion_py_tutorial_options ;;
         ui) _arguments -C -s $_shtab_gen_completion_py_ui_options ;;
         um) _arguments -C -s $_shtab_gen_completion_py_um_options ;;
         update-manifest) _arguments -C -s $_shtab_gen_completion_py_update_manifest_options ;;
         verify) _arguments -C -s $_shtab_gen_completion_py_verify_options ;;
         x) _arguments -C -s $_shtab_gen_completion_py_x_options ;;
+      esac
+  esac
+}
+
+_shtab_gen_completion_py_config() {
+  local context state line curcontext="$curcontext" one_or_more='(*)' remainder='(-)*' default='*::: :->config'
+
+  # Add default positional/remainder specs only if none exist, and only once per session
+  if (( ! _shtab_gen_completion_py_config_defaults_added )); then
+    if (( ${_shtab_gen_completion_py_config_options[(I)${(q)one_or_more}*]} +          ${_shtab_gen_completion_py_config_options[(I)${(q)remainder}*]} +          ${_shtab_gen_completion_py_config_options[(I)${(q)default}]} == 0 )); then
+      _shtab_gen_completion_py_config_options+=(': :_shtab_gen_completion_py_config_commands' '*::: :->config')
+    fi
+    _shtab_gen_completion_py_config_defaults_added=1
+  fi
+  _arguments -C -s $_shtab_gen_completion_py_config_options
+
+  case $state in
+    config)
+      words=($line[1] "${words[@]}")
+      (( CURRENT += 1 ))
+      curcontext="${curcontext%:*:*}:_shtab_gen_completion_py_config-$line[1]:"
+      case $line[1] in
+        init) _arguments -C -s $_shtab_gen_completion_py_config_init_options ;;
+        show) _arguments -C -s $_shtab_gen_completion_py_config_show_options ;;
+      esac
+  esac
+}
+
+_shtab_gen_completion_py_plugin() {
+  local context state line curcontext="$curcontext" one_or_more='(*)' remainder='(-)*' default='*::: :->plugin'
+
+  # Add default positional/remainder specs only if none exist, and only once per session
+  if (( ! _shtab_gen_completion_py_plugin_defaults_added )); then
+    if (( ${_shtab_gen_completion_py_plugin_options[(I)${(q)one_or_more}*]} +          ${_shtab_gen_completion_py_plugin_options[(I)${(q)remainder}*]} +          ${_shtab_gen_completion_py_plugin_options[(I)${(q)default}]} == 0 )); then
+      _shtab_gen_completion_py_plugin_options+=(': :_shtab_gen_completion_py_plugin_commands' '*::: :->plugin')
+    fi
+    _shtab_gen_completion_py_plugin_defaults_added=1
+  fi
+  _arguments -C -s $_shtab_gen_completion_py_plugin_options
+
+  case $state in
+    plugin)
+      words=($line[1] "${words[@]}")
+      (( CURRENT += 1 ))
+      curcontext="${curcontext%:*:*}:_shtab_gen_completion_py_plugin-$line[1]:"
+      case $line[1] in
+        disable) _arguments -C -s $_shtab_gen_completion_py_plugin_disable_options ;;
+        enable) _arguments -C -s $_shtab_gen_completion_py_plugin_enable_options ;;
+        install) _arguments -C -s $_shtab_gen_completion_py_plugin_install_options ;;
+        list) _arguments -C -s $_shtab_gen_completion_py_plugin_list_options ;;
+        remove) _arguments -C -s $_shtab_gen_completion_py_plugin_remove_options ;;
       esac
   esac
 }
