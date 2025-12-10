@@ -1,6 +1,7 @@
 import sys
 import logging
 import argparse
+from importlib.metadata import version, PackageNotFoundError
 from rich.logging import RichHandler
 from .console import console
 from .exceptions import FetchextError
@@ -32,6 +33,17 @@ def get_parser():
     Constructs and returns the argument parser.
     """
     parser = argparse.ArgumentParser(description="Download or search for browser extensions.")
+    
+    try:
+        ver = version("fetchext")
+    except PackageNotFoundError:
+        ver = "unknown"
+
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"%(prog)s {ver}"
+    )
     
     # Global logging flags
     logging_group = parser.add_mutually_exclusive_group()

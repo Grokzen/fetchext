@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **CLI Version Flag**: Added `--version` flag to the CLI to display the current version of the tool.
 - **Resumable Downloads**: Implemented support for resuming interrupted downloads using HTTP `Range` headers.
 - **Network Resilience**: Enhanced `download_file` to handle `416 Range Not Satisfiable` errors by automatically restarting the download.
 - **Integrity Checking**: Added `--verify-hash <sha256>` flag to `download` command to verify file integrity after download.
