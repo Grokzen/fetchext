@@ -26,7 +26,7 @@ class TestDownloadFlow:
 
         assert output_path.exists()
         assert output_path.read_bytes() == b"fake_content"
-        assert output_path.name == "extension.crx"
+        assert output_path.name == f"{extension_id}.crx"
 
     def test_chrome_download_404(self, fs, mocker):
         from fetchext.exceptions import NetworkError

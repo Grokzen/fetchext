@@ -2,9 +2,7 @@ import re
 import logging
 import requests
 from urllib.parse import urlparse
-from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn, DownloadColumn, TransferSpeedColumn
-from ..console import console
-from ..network import get_session
+from ..network import get_session, download_file
 from .base import BaseDownloader
 from ..exceptions import NetworkError, ExtensionError
 
@@ -59,48 +57,11 @@ class EdgeDownloader(BaseDownloader):
 
         logger.info(f"Downloading Edge extension {extension_id}...")
 
+        output_path = output_dir / f"{extension_id}.crx"
+
         try:
             with get_session() as session:
-                response = session.get(download_url, stream=True)
-                response.raise_for_status()
-
-                filename = f"{extension_id}.crx"
-            if "content-disposition" in response.headers:
-                cd = response.headers["content-disposition"]
-                filenames = re.findall('filename="(.+)"', cd)
-                if filenames:
-                    filename = filenames[0]
-
-            output_path = output_dir / filename
-            total_size = int(response.headers.get('content-length', 0))
-
-            with output_path.open("wb") as f:
-                if show_progress:
-                    with Progress(
-                        SpinnerColumn(),
-                        TextColumn("[progress.description]{task.description}"),
-                        BarColumn(),
-                        TaskProgressColumn(),
-                        DownloadColumn(),
-                        TransferSpeedColumn(),
-                        console=console,
-                        transient=True
-                    ) as progress:
-                        task = progress.add_task(filename, total=total_size)
-                        for chunk in response.iter_content(chunk_size=8192):
-                            f.write(chunk)
-                            progress.update(task, advance=len(chunk))
-                else:
-                    for chunk in response.iter_content(chunk_size=8192):
-                        f.write(chunk)
-
-            if not output_path.exists() or output_path.stat().st_size == 0:
-                if output_path.exists():
-                    output_path.unlink()
-                raise NetworkError("Download failed: File is empty or does not exist.")
-
-            logger.info(f"Successfully downloaded to {output_path}")
-            return output_path
+                return download_file(download_url, output_path, session=session, show_progress=show_progress)
 
         except requests.RequestException as e:
             logger.error(f"Failed to download extension: {e}")

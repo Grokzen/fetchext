@@ -1,10 +1,17 @@
 import random
 import time
 import threading
+import logging
+from pathlib import Path
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn, DownloadColumn, TransferSpeedColumn
 from .config import load_config
+from .console import console
+from .exceptions import NetworkError
+
+logger = logging.getLogger(__name__)
 
 # List of modern User-Agents to rotate
 USER_AGENTS = [
@@ -71,3 +78,89 @@ def get_session(
     session.mount("https://", adapter)
     
     return session
+
+def download_file(url: str, output_path: Path, session: requests.Session = None, show_progress: bool = True, params: dict = None) -> Path:
+    """
+    Downloads a file from a URL to a local path, supporting resumable downloads.
+    """
+    if session is None:
+        session = get_session()
+
+    output_path = Path(output_path)
+    resume_header = {}
+    file_mode = "wb"
+    downloaded_bytes = 0
+
+    # Check for partial file
+    if output_path.exists():
+        downloaded_bytes = output_path.stat().st_size
+        if downloaded_bytes > 0:
+            resume_header = {"Range": f"bytes={downloaded_bytes}-"}
+            file_mode = "ab"
+            logger.info(f"Resuming download from byte {downloaded_bytes}...")
+
+    try:
+        # Make request
+        headers = session.headers.copy()
+        headers.update(resume_header)
+        
+        response = session.get(url, stream=True, headers=headers, params=params)
+        
+        # Handle 416 Range Not Satisfiable (file might be complete or server doesn't support range)
+        if response.status_code == 416:
+            logger.warning("Server returned 416 Range Not Satisfiable. Restarting download.")
+            downloaded_bytes = 0
+            file_mode = "wb"
+            # Create a new headers dict for the retry to avoid modifying the one used in the previous call
+            retry_headers = headers.copy()
+            retry_headers.pop("Range", None)
+            response = session.get(url, stream=True, headers=retry_headers, params=params)
+
+        response.raise_for_status()
+
+        # Check if server accepted the range
+        is_resumed = response.status_code == 206
+        if not is_resumed and downloaded_bytes > 0:
+            logger.warning("Server does not support resume. Restarting download.")
+            downloaded_bytes = 0
+            file_mode = "wb"
+            # Truncate file if we are restarting
+            with output_path.open("wb") as f:
+                pass
+
+        total_size = int(response.headers.get('content-length', 0)) + downloaded_bytes
+        
+        # If content-length is missing, we can't show a proper progress bar total
+        if total_size == downloaded_bytes and 'content-length' not in response.headers:
+             total_size = None
+
+        with output_path.open(file_mode) as f:
+            if show_progress:
+                with Progress(
+                    SpinnerColumn(),
+                    TextColumn("[progress.description]{task.description}"),
+                    BarColumn(),
+                    TaskProgressColumn(),
+                    DownloadColumn(),
+                    TransferSpeedColumn(),
+                    console=console,
+                    transient=True
+                ) as progress:
+                    task = progress.add_task(output_path.name, total=total_size, completed=downloaded_bytes)
+                    for chunk in response.iter_content(chunk_size=8192):
+                        f.write(chunk)
+                        progress.update(task, advance=len(chunk))
+            else:
+                for chunk in response.iter_content(chunk_size=8192):
+                    f.write(chunk)
+
+        if not output_path.exists() or output_path.stat().st_size == 0:
+            if output_path.exists():
+                output_path.unlink()
+            raise NetworkError("Download failed: File is empty or does not exist.")
+
+        return output_path
+
+    except requests.RequestException as e:
+        logger.error(f"Failed to download file: {e}")
+        raise NetworkError(f"Failed to download file: {e}", original_exception=e)

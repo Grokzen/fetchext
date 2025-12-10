@@ -36,6 +36,8 @@ fext download <browser> <url> [options]
 * `--quiet`: Suppress output.
 * `--verbose`: Enable verbose logging.
 
+> **Note:** Downloads are resumable. If a download is interrupted, running the command again will resume from where it left off.
+
 ### `search`
 
 Search for extensions in a web store (currently supports Firefox).
