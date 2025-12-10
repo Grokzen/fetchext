@@ -35,8 +35,10 @@ timeout = 30
 # Number of retries for failed requests
 retries = 3
 
-# Proxy URL (e.g., "http://user:pass@host:port")
-proxy = "http://127.0.0.1:8080"
+# Proxy Configuration
+[network.proxies]
+http = "http://10.10.1.10:3128"
+https = "http://10.10.1.10:1080"
 ```
 
 ## Environment Variables

@@ -34,7 +34,8 @@ def test_quiet_flag(mocker):
         mocker.ANY, 
         save_metadata=False, 
         extract=False, 
-        show_progress=False
+        show_progress=False,
+        verify_hash=None
     )
     
     # Verify info logs were NOT called
@@ -59,7 +60,8 @@ def test_default_logging(mocker):
         mocker.ANY, 
         save_metadata=False, 
         extract=False, 
-        show_progress=True
+        show_progress=True,
+        verify_hash=None
     )
     
     # Verify info logs WERE called

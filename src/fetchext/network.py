@@ -55,9 +55,14 @@ def get_session(
     Creates a requests Session with retry logic configured and a random User-Agent.
     """
     config = load_config()
-    delay = config.get("network", {}).get("rate_limit_delay", 0.0)
+    network_config = config.get("network", {})
+    delay = network_config.get("rate_limit_delay", 0.0)
+    proxies = network_config.get("proxies", {})
 
     session = RateLimitedSession(delay=float(delay))
+    
+    if proxies:
+        session.proxies.update(proxies)
     
     # Set a random User-Agent
     session.headers.update({

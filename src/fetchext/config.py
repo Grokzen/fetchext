@@ -23,6 +23,8 @@ SCHEMA = {
         "timeout": (int, 30),
         "retries": (int, 3),
         "proxy": (str, None),
+        "proxies": (dict, None),
+        "rate_limit_delay": ((int, float), 0.0),
     }
 }
 
