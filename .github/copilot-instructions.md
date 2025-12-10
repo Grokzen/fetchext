@@ -247,15 +247,16 @@ This project serves as a proof-of-concept for fully automated software developme
     3. If (and only if) instructed to release a new version, update `pyproject.toml` version as well.
     4. Ensure `CHANGELOG.md` passes markdown linting (no duplicate headers within the same section, correct spacing).
 
-### 4. README Consistency Protocol
+### 4. Documentation Consistency Protocol
 
 - **Rule**: Documentation must never lag behind code.
-- **Trigger**: Any modification to any code or files that is related to documentation. For CLI it can be changes to flags or usage. For core code it could be a chaned API or method invocation. 
+- **Trigger**: Any modification to any code or files that is related to documentation. For CLI it can be changes to flags or usage. For core code it could be a changed API or method invocation.
 - **Action**:
     1. Update `README.md` immediately after implementing the feature.
-    2. Ensure usage examples are copy-pasteable and correct.
-    3. Verify that `fext --help` output aligns with documented commands.
-    4. Update documentation that is written with mkdocs in the `docs/` folder to match all code in the repo
+    2. Update the detailed documentation in the `docs/` folder (e.g., `docs/cli.md`, `docs/configuration.md`) to reflect the changes.
+    3. Ensure usage examples are copy-pasteable and correct.
+    4. Verify that `fext --help` output aligns with documented commands.
+    5. Run `make docs-build` to verify that the documentation site builds correctly.
 
 ### 5. Feature Blacklist Protocol
 

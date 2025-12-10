@@ -24,6 +24,7 @@ Repeat these steps for every incomplete item:
 
 4. **Document**:
     * **Update `README.md`**: Document new commands/flags.
+    * **Update `docs/`**: Update detailed documentation (CLI reference, guides) to match implementation.
     * **Update `CHANGELOG.md`**: Add entry under current version.
     * **Update `.github/copilot-instructions.md`**: If architecture changed.
 
