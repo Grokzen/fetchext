@@ -179,6 +179,7 @@ This file documents the project's history, architectural decisions, and coding s
 7. **Advanced Analysis**: Added deep inspection tools (complexity, entropy, domains, YARA) and forensic capabilities (timeline, graph).
 8. **Local Serving**: Added capabilities to host and mirror extensions locally (`serve`, `mirror`, `update-manifest`).
 9. **User Experience**: Enhanced UX with TUI (`ui`), interactive tutorial (`tutorial`), and rich CLI output.
+10. **Robustness**: Added resumable downloads, integrity checking, proxy support, disk space safety, and filename sanitization.
 
 ## Future Considerations
 
