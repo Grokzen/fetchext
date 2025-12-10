@@ -199,8 +199,8 @@
 
 *Focus: Test coverage and developer tools.*
 
-- [ ] **Plugin System v2**: Extensibility (Architecture).
-  - [ ] Enhance plugin hooks to receive full context (config, args) and allow modifying behavior.
+- [x] **Plugin System v2**: Extensibility (Architecture).
+  - [x] Enhance plugin hooks to receive full context (config, args) and allow modifying behavior.
 - [ ] **Debug Mode**: Developer Experience (CLI).
   - [ ] Enhance `-v` output to dump full HTTP headers and response codes for debugging.
 - [ ] **API Documentation**: Docs (Core).

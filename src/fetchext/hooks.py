@@ -15,6 +15,10 @@ class HookContext:
     version: Optional[str] = None
     file_path: Optional[Path] = None
     metadata: Optional[Dict[str, Any]] = None
+    config: Optional[Dict[str, Any]] = None
+    args: Optional[Any] = None
+    cancel: bool = False
+    result: Any = None
 
 class HookManager:
     """Manages loading and execution of plugin hooks."""
@@ -24,6 +28,9 @@ class HookManager:
         self.hooks: Dict[str, List[Callable[[HookContext], None]]] = {
             "pre_download": [],
             "post_download": [],
+            "post_extract": [],
+            "pre_analysis": [],
+            "post_analysis": [],
         }
         if self.hooks_dir and self.hooks_dir.exists():
             self._load_hooks()
@@ -59,13 +66,18 @@ class HookManager:
                     self.hooks[hook_name].append(func)
                     logger.debug(f"Registered {hook_name} from {file_path.name}")
 
-    def run_hook(self, hook_name: str, context: HookContext):
+    def run_hook(self, hook_name: str, context: HookContext) -> HookContext:
         """Execute all registered functions for a given hook."""
         if hook_name not in self.hooks:
-            return
+            return context
 
         for func in self.hooks[hook_name]:
             try:
                 func(context)
+                if context.cancel:
+                    logger.info(f"Hook {hook_name} requested cancellation.")
+                    break
             except Exception as e:
                 logger.error(f"Error in hook {hook_name}: {e}")
+        
+        return context

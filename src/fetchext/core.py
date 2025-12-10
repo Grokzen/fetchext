@@ -13,7 +13,7 @@ from .diff import ExtensionDiffer
 from .risk import RiskAnalyzer
 from .verifier import CrxVerifier
 from .hooks import HookManager, HookContext
-from .config import get_config_path
+from .config import get_config_path, load_config
 from .history import HistoryManager
 from .exceptions import ExtensionError, ConfigError, IntegrityError
 
@@ -45,10 +45,20 @@ def download_extension(browser, url, output_dir, save_metadata=False, extract=Fa
     config_dir = get_config_path().parent
     hooks_dir = config_dir / "hooks"
     hook_manager = HookManager(hooks_dir)
+    
+    # Load config for hooks
+    try:
+        config = load_config()
+    except Exception:
+        config = {}
 
     # Run pre-download hook
-    ctx = HookContext(extension_id=extension_id, browser=browser)
+    ctx = HookContext(extension_id=extension_id, browser=browser, config=config)
     hook_manager.run_hook("pre_download", ctx)
+    
+    if ctx.cancel:
+        logger.info("Download cancelled by pre_download hook.")
+        return None
 
     output_dir = Path(output_dir)
     if not output_dir.exists():
@@ -529,6 +539,45 @@ def extract_extension(file_path, output_dir=None, show_progress=True):
         if show_progress:
             logger.info(f"Successfully extracted to {extract_dir}")
 
+        # Run post-extract hook
+        try:
+            config_dir = get_config_path().parent
+            hooks_dir = config_dir / "hooks"
+            hook_manager = HookManager(hooks_dir)
+            try:
+                config = load_config()
+            except Exception:
+                config = {}
+            
+            # Try to infer ID/browser for context
+            extension_id = "unknown"
+            browser = "unknown"
+            metadata_path = file_path.with_suffix(file_path.suffix + ".json")
+            if metadata_path.exists():
+                try:
+                    with metadata_path.open("r") as f:
+                        meta = json.load(f)
+                        extension_id = meta.get("id", "unknown")
+                        source_url = meta.get("source_url", "")
+                        if "google.com" in source_url:
+                            browser = "chrome"
+                        elif "microsoft.com" in source_url:
+                            browser = "edge"
+                        elif "mozilla.org" in source_url:
+                            browser = "firefox"
+                except Exception:
+                    pass
+
+            ctx = HookContext(
+                extension_id=extension_id, 
+                browser=browser, 
+                file_path=extract_dir,
+                config=config
+            )
+            hook_manager.run_hook("post_extract", ctx)
+        except Exception as e:
+            logger.warning(f"Failed to run post-extract hook: {e}")
+
         # Log to history
         try:
             # Try to find metadata sidecar
@@ -705,6 +754,23 @@ def generate_unified_report(file_path, yara_rules=None):
     if not file_path.exists():
         raise ExtensionError(f"File not found: {file_path}")
 
+    # Initialize hooks
+    config_dir = get_config_path().parent
+    hooks_dir = config_dir / "hooks"
+    hook_manager = HookManager(hooks_dir)
+    try:
+        config = load_config()
+    except Exception:
+        config = {}
+
+    # Run pre-analysis hook
+    ctx = HookContext(extension_id=file_path.stem, browser="unknown", file_path=file_path, config=config)
+    hook_manager.run_hook("pre_analysis", ctx)
+    
+    if ctx.cancel:
+        logger.info("Analysis cancelled by pre_analysis hook.")
+        return {}
+
     report = {}
 
     # 1. Metadata
@@ -759,6 +825,14 @@ def generate_unified_report(file_path, yara_rules=None):
             report["yara_matches"] = {"error": str(e)}
     else:
         report["yara_matches"] = None
+
+    # Run post-analysis hook
+    ctx.result = report
+    hook_manager.run_hook("post_analysis", ctx)
+    
+    # Allow hook to modify report
+    if ctx.result:
+        report = ctx.result
 
     return report
 
