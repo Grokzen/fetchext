@@ -1,8 +1,37 @@
 import zipfile
 import hashlib
+import shutil
 from pathlib import Path
 from .crx import CrxDecoder, PartialFileReader
-from .exceptions import IntegrityError
+from .exceptions import IntegrityError, InsufficientDiskSpaceError
+
+def check_disk_space(path: Path, required_bytes: int, buffer_bytes: int = 10 * 1024 * 1024):
+    """
+    Checks if there is enough free disk space at the given path.
+    Raises InsufficientDiskSpaceError if space is low.
+    
+    Args:
+        path: The directory or file path to check.
+        required_bytes: The number of bytes needed.
+        buffer_bytes: Additional safety buffer (default 10MB).
+    """
+    # Ensure we check a directory that exists
+    check_path = path if path.is_dir() else path.parent
+    if not check_path.exists():
+        # If parent doesn't exist, go up until we find one
+        for parent in check_path.parents:
+            if parent.exists():
+                check_path = parent
+                break
+    
+    total, used, free = shutil.disk_usage(check_path)
+    
+    if free < (required_bytes + buffer_bytes):
+        raise InsufficientDiskSpaceError(
+            f"Insufficient disk space on {check_path}.\n"
+            f"Required: {required_bytes + buffer_bytes} bytes (including {buffer_bytes} buffer)\n"
+            f"Available: {free} bytes"
+        )
 
 def verify_file_hash(file_path: Path, expected_hash: str, algorithm: str = "sha256") -> bool:
     """

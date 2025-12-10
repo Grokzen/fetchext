@@ -190,8 +190,8 @@
   - [x] Verify SHA256 of downloaded files against the Web Store (if available) or internal hash.
 - [x] **Proxy Configuration**: Network (Config).
   - [x] Add explicit proxy support (`http`, `https`) to `config.toml`.
-- [ ] **Disk Space Safety**: Reliability (Core).
-  - [ ] Check free disk space before starting download or extraction to prevent partial writes.
+- [x] **Disk Space Safety**: Reliability (Core).
+  - [x] Check free disk space before starting download or extraction to prevent partial writes.
 - [ ] **Filename Sanitization**: Compatibility (Core).
   - [ ] Ensure downloaded filenames are safe on all OSes (Windows/macOS/Linux) by stripping illegal characters.
 

@@ -10,6 +10,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskPr
 from .config import load_config
 from .console import console
 from .exceptions import NetworkError
+from .utils import check_disk_space
 
 logger = logging.getLogger(__name__)
 
@@ -138,6 +139,11 @@ def download_file(url: str, output_path: Path, session: requests.Session = None,
         # If content-length is missing, we can't show a proper progress bar total
         if total_size == downloaded_bytes and 'content-length' not in response.headers:
              total_size = None
+
+        # Check disk space if total size is known
+        if total_size:
+            remaining_bytes = total_size - downloaded_bytes
+            check_disk_space(output_path.parent, remaining_bytes)
 
         with output_path.open(file_mode) as f:
             if show_progress:

@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from .downloaders import ChromeDownloader, EdgeDownloader, FirefoxDownloader
 from .inspector import ExtensionInspector
 from .batch import BatchProcessor
-from .utils import open_extension_archive, verify_file_hash
+from .utils import open_extension_archive, verify_file_hash, check_disk_space
 from .console import console, print_manifest_table, print_search_results_table
 from .preview import build_file_tree
 from .auditor import ExtensionAuditor
@@ -521,6 +521,10 @@ def extract_extension(file_path, output_dir=None, show_progress=True):
     
     try:
         with open_extension_archive(file_path) as zf:
+            # Check disk space
+            total_size = sum(info.file_size for info in zf.infolist())
+            check_disk_space(extract_dir, total_size)
+            
             zf.extractall(extract_dir)
         if show_progress:
             logger.info(f"Successfully extracted to {extract_dir}")

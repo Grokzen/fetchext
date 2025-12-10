@@ -23,3 +23,7 @@ class SecurityError(FetchextError):
 class IntegrityError(SecurityError):
     """File integrity verification failed (hash mismatch)."""
     pass
+
+class InsufficientDiskSpaceError(FetchextError):
+    """Not enough disk space for the operation."""
+    pass
