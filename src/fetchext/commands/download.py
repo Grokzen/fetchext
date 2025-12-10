@@ -38,6 +38,11 @@ def register(subparsers):
         default=default_extract,
         help="Automatically extract the extension to a folder"
     )
+    download_parser.add_argument(
+        "--verify-hash",
+        metavar="SHA256",
+        help="Verify the downloaded file against this SHA256 hash"
+    )
     download_parser.set_defaults(func=handle_download)
 
     # Batch subcommand
@@ -64,7 +69,8 @@ def handle_download(args, show_progress=True):
         args.output_dir,
         save_metadata=args.save_metadata,
         extract=args.extract,
-        show_progress=show_progress
+        show_progress=show_progress,
+        verify_hash=args.verify_hash
     )
 
 def handle_batch(args, show_progress=True):

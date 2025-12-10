@@ -33,6 +33,7 @@ fext download <browser> <url> [options]
 * `-o, --output-dir <dir>`: Directory to save the downloaded file (default: current directory).
 * `-m, --save-metadata`: Save extension metadata (ID, version, name) to a JSON file.
 * `-x, --extract`: Automatically extract the extension contents to a folder.
+* `--verify-hash <sha256>`: Verify the downloaded file against a known SHA256 hash.
 * `--quiet`: Suppress output.
 * `--verbose`: Enable verbose logging.
 

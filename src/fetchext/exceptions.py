@@ -19,3 +19,7 @@ class ExtensionError(FetchextError):
 class SecurityError(FetchextError):
     """Security violations (signature mismatch, risk threshold)."""
     pass
+
+class IntegrityError(SecurityError):
+    """File integrity verification failed (hash mismatch)."""
+    pass

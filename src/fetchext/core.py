@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from .downloaders import ChromeDownloader, EdgeDownloader, FirefoxDownloader
 from .inspector import ExtensionInspector
 from .batch import BatchProcessor
-from .utils import open_extension_archive
+from .utils import open_extension_archive, verify_file_hash
 from .console import console, print_manifest_table, print_search_results_table
 from .preview import build_file_tree
 from .auditor import ExtensionAuditor
@@ -15,7 +15,7 @@ from .verifier import CrxVerifier
 from .hooks import HookManager, HookContext
 from .config import get_config_path
 from .history import HistoryManager
-from .exceptions import ExtensionError, ConfigError
+from .exceptions import ExtensionError, ConfigError, IntegrityError
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +29,7 @@ def get_downloader(browser):
         return FirefoxDownloader()
     return None
 
-def download_extension(browser, url, output_dir, save_metadata=False, extract=False, show_progress=True):
+def download_extension(browser, url, output_dir, save_metadata=False, extract=False, show_progress=True, verify_hash=None):
     """
     Download an extension from a web store.
     """
@@ -56,6 +56,21 @@ def download_extension(browser, url, output_dir, save_metadata=False, extract=Fa
 
     output_path = downloader.download(extension_id, output_dir, show_progress=show_progress)
     
+    # Verify hash if requested
+    if verify_hash:
+        if show_progress:
+            logger.info(f"Verifying SHA256 hash: {verify_hash}")
+        try:
+            verify_file_hash(output_path, verify_hash)
+            if show_progress:
+                logger.info("Hash verification successful.")
+        except IntegrityError as e:
+            logger.error(f"Integrity check failed: {e}")
+            # Cleanup
+            if output_path.exists():
+                output_path.unlink()
+            raise
+
     # Update context with result
     ctx.file_path = output_path
 
