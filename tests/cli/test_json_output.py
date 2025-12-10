@@ -1,4 +1,5 @@
 import json
+import pytest
 from fetchext.cli import main
 
 def test_search_json_output(mocker, capsys):
@@ -10,7 +11,9 @@ def test_search_json_output(mocker, capsys):
     mock_downloader.search.return_value = mock_results
     mocker.patch("fetchext.core.FirefoxDownloader", return_value=mock_downloader)
     
-    main()
+    with pytest.raises(SystemExit) as excinfo:
+        main()
+    assert excinfo.value.code == 0
     
     captured = capsys.readouterr()
     output = json.loads(captured.out)
@@ -26,7 +29,9 @@ def test_inspect_json_output(mocker, capsys):
     mock_inspector.get_manifest.return_value = mock_manifest
     mocker.patch("fetchext.core.ExtensionInspector", return_value=mock_inspector)
     
-    main()
+    with pytest.raises(SystemExit) as excinfo:
+        main()
+    assert excinfo.value.code == 0
     
     captured = capsys.readouterr()
     output = json.loads(captured.out)

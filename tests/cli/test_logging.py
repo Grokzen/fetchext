@@ -1,4 +1,5 @@
 import logging
+import pytest
 from fetchext.cli import main
 
 def test_verbose_flag(mocker):
@@ -10,7 +11,9 @@ def test_verbose_flag(mocker):
     # Mock logger
     mock_logger = mocker.patch("fetchext.cli.logger")
     
-    main()
+    with pytest.raises(SystemExit) as excinfo:
+        main()
+    assert excinfo.value.code == 0
     
     # Verify setLevel was called with DEBUG
     mock_logger.setLevel.assert_called_with(logging.DEBUG)
@@ -22,7 +25,9 @@ def test_quiet_flag(mocker):
     
     mock_logger = mocker.patch("fetchext.cli.logger")
     
-    main()
+    with pytest.raises(SystemExit) as excinfo:
+        main()
+    assert excinfo.value.code == 0
     
     # Verify setLevel was called with ERROR
     mock_logger.setLevel.assert_called_with(logging.ERROR)
@@ -48,7 +53,9 @@ def test_default_logging(mocker):
     
     mock_logger = mocker.patch("fetchext.cli.logger")
     
-    main()
+    with pytest.raises(SystemExit) as excinfo:
+        main()
+    assert excinfo.value.code == 0
     
     # Verify setLevel was NOT called (uses default INFO)
     mock_logger.setLevel.assert_not_called()

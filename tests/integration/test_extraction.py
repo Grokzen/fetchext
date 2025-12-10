@@ -1,4 +1,5 @@
 import zipfile
+import pytest
 from pathlib import Path
 from fetchext.cli import main
 from unittest.mock import patch
@@ -23,7 +24,9 @@ def test_auto_extraction(fs, mocker):
     
     # Run CLI with --extract
     with patch("sys.argv", ["fext", "download", "chrome", "http://example.com", "-o", "/downloads", "--extract"]):
-        main()
+        with pytest.raises(SystemExit) as excinfo:
+            main()
+        assert excinfo.value.code == 0
         
     # Check if extracted directory exists
     # The CLI uses output_path.stem as the directory name
@@ -42,7 +45,9 @@ def test_extract_command(fs):
     
     # Run extract command
     with patch("sys.argv", ["fext", "extract", "test.crx"]):
-        main()
+        with pytest.raises(SystemExit) as excinfo:
+            main()
+        assert excinfo.value.code == 0
         
     # Check default output dir
     assert Path("test").exists()
@@ -56,7 +61,9 @@ def test_extract_command_custom_output(fs):
         
     # Run extract command with -o
     with patch("sys.argv", ["fext", "extract", "test.crx", "-o", "custom_dir"]):
-        main()
+        with pytest.raises(SystemExit) as excinfo:
+            main()
+        assert excinfo.value.code == 0
         
     # Check custom output dir
     assert Path("custom_dir").exists()

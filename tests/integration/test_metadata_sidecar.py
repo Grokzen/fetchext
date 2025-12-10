@@ -1,4 +1,5 @@
 import json
+import pytest
 from pathlib import Path
 from fetchext.cli import main
 from unittest.mock import patch
@@ -27,7 +28,9 @@ def test_metadata_sidecar_creation(fs, mocker):
     
     # Run CLI
     with patch("sys.argv", ["fext", "download", "chrome", "http://example.com", "-o", "/downloads", "--save-metadata"]):
-        main()
+        with pytest.raises(SystemExit) as excinfo:
+            main()
+        assert excinfo.value.code == 0
         
     # Check if metadata file exists
     metadata_path = output_dir / "test_id.crx.json"

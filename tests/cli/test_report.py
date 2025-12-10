@@ -1,6 +1,7 @@
 from pathlib import Path
 from fetchext.cli import main
 from unittest.mock import patch
+import pytest
 
 def test_report_command(fs, capsys):
     # Create a fake CRX file
@@ -10,7 +11,9 @@ def test_report_command(fs, capsys):
     # Mock core.generate_report
     with patch("fetchext.core.generate_report") as mock_generate:
         with patch("sys.argv", ["fext", "report", "extension.crx"]):
-            main()
+            with pytest.raises(SystemExit) as excinfo:
+                main()
+            assert excinfo.value.code == 0
             
         mock_generate.assert_called_once()
         args, _ = mock_generate.call_args
@@ -23,7 +26,9 @@ def test_report_command_with_output(fs, capsys):
     
     with patch("fetchext.core.generate_report") as mock_generate:
         with patch("sys.argv", ["fext", "report", "extension.crx", "-o", "my_report.md"]):
-            main()
+            with pytest.raises(SystemExit) as excinfo:
+                main()
+            assert excinfo.value.code == 0
             
         mock_generate.assert_called_once()
         args, _ = mock_generate.call_args

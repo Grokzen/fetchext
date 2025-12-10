@@ -39,25 +39,33 @@ class TestCLI:
     def test_preview_command(self):
         with patch.object(sys, 'argv', ['fext', 'preview', 'test.crx']), \
              patch('fetchext.core.preview_extension') as mock_preview:
-            main()
+            with pytest.raises(SystemExit) as excinfo:
+                main()
+            assert excinfo.value.code == 0
             mock_preview.assert_called_once_with('test.crx')
 
     def test_audit_command(self):
         with patch.object(sys, 'argv', ['fext', 'audit', 'test.crx']), \
              patch('fetchext.core.audit_extension') as mock_audit:
-            main()
+            with pytest.raises(SystemExit) as excinfo:
+                main()
+            assert excinfo.value.code == 0
             mock_audit.assert_called_once_with('test.crx', json_output=False)
 
     def test_diff_command(self):
         with patch.object(sys, 'argv', ['fext', 'diff', 'old.crx', 'new.crx']), \
              patch('fetchext.core.diff_extensions') as mock_diff:
-            main()
+            with pytest.raises(SystemExit) as excinfo:
+                main()
+            assert excinfo.value.code == 0
             mock_diff.assert_called_once_with('old.crx', 'new.crx', json_output=False)
 
     def test_risk_command(self):
         with patch.object(sys, 'argv', ['fext', 'risk', 'test.crx']), \
              patch('fetchext.core.analyze_risk') as mock_risk:
-            main()
+            with pytest.raises(SystemExit) as excinfo:
+                main()
+            assert excinfo.value.code == 0
             mock_risk.assert_called_once_with('test.crx', json_output=False)
 
     def test_verify_command(self):
