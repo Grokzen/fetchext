@@ -5,6 +5,7 @@ from importlib.metadata import version, PackageNotFoundError
 from rich.logging import RichHandler
 from .console import console
 from .exceptions import FetchextError
+from .constants import ExitCode
 from .commands import (
     download,
     search,
@@ -101,22 +102,29 @@ def main():
             args.func(args, show_progress=show_progress)
         else:
             parser.print_help()
-            sys.exit(1)
+            sys.exit(ExitCode.USAGE)
 
         if not args.quiet:
             logger.info("Script finished successfully.")
+        sys.exit(ExitCode.SUCCESS)
+
     except FetchextError as e:
         # Handle known errors gracefully
         if args.verbose:
             logger.exception(e)
         else:
             logger.error(str(e))
-        sys.exit(1)
+        sys.exit(e.exit_code)
+
+    except KeyboardInterrupt:
+        logger.error("Operation cancelled by user.")
+        sys.exit(ExitCode.CANCELLED)
+
     except Exception as e:
         logger.error(f"An unexpected error occurred: {e}")
         if args.verbose:
             logger.exception(e)
-        sys.exit(1)
+        sys.exit(ExitCode.ERROR)
 
 if __name__ == "__main__":
     main()

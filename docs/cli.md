@@ -334,3 +334,21 @@ Clean up cache and temporary files.
 ```bash
 fext clean [--cache] [--downloads] [--all] [--dry-run] [--force]
 ```
+
+## Exit Codes
+
+The CLI returns the following exit codes to indicate the status of the operation:
+
+| Code | Name | Description |
+| :--- | :--- | :--- |
+| 0 | `SUCCESS` | Command completed successfully. |
+| 1 | `ERROR` | Generic error (catch-all). |
+| 2 | `USAGE` | Invalid arguments or usage error. |
+| 3 | `NETWORK` | Network connection failed (DNS, timeout, connection refused). |
+| 4 | `IO` | File system error (permission denied, disk full, file not found). |
+| 5 | `CONFIG` | Configuration error (invalid config file, missing keys). |
+| 6 | `NOT_FOUND` | Resource not found (extension ID, file). |
+| 7 | `SECURITY` | Security check failed (signature verification, risk threshold). |
+| 8 | `CANCELLED` | Operation cancelled by user (Ctrl+C). |
+| 9 | `DEPENDENCY` | Missing external dependency. |
+
