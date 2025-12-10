@@ -128,3 +128,19 @@ fext graph <file>
 ```
 
 This produces a DOT file that can be rendered with Graphviz to visualize the architecture of the extension.
+
+## Localization Analysis
+
+### Locale Inspection
+
+The `locales` command inspects the `_locales` directory to identify supported languages and message counts.
+
+```bash
+fext locales <file>
+```
+
+**Analysis:**
+
+- Identifies the `default_locale` specified in the manifest.
+- Lists all supported locale codes (e.g., `en_US`, `fr`, `es`).
+- Counts the number of translation messages for each locale, helping to identify incomplete translations.

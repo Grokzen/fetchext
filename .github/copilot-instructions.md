@@ -142,6 +142,15 @@ This file documents the project's history, architectural decisions, and coding s
 - **Decision**: Use `Pillow` for image processing.
 - **Reasoning**: Standard library for Python image manipulation, robust and widely supported, enabling lossless compression features.
 
+### 14. Documentation Structure
+
+- **Decision**: Use MkDocs with Material theme for comprehensive documentation.
+- **Structure**:
+  - `README.md`: Minimal quick start and project overview.
+  - `docs/`: Detailed documentation (CLI reference, guides, architecture).
+  - `docs/changelog.md`: Automatically includes the root `CHANGELOG.md`.
+- **Reasoning**: Keeps the root README clean while providing a scalable structure for detailed documentation hosted on GitHub Pages.
+
 ## Development Workflow
 
 - **Setup**: `make setup` (creates venv, installs package in editable mode `pip install -e .`).

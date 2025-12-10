@@ -36,50 +36,44 @@ fext download <browser> <url> [options]
 * `--quiet`: Suppress output.
 * `--verbose`: Enable verbose logging.
 
-**Examples:**
-
-```bash
-# Download Chrome extension
-fext download chrome https://chromewebstore.google.com/detail/...
-
-# Download and extract
-fext download firefox https://addons.mozilla.org/... --extract
-
-# Save metadata
-fext download edge https://microsoftedge.microsoft.com/... --save-metadata
-```
-
 ### `search`
 
 Search for extensions in a web store (currently supports Firefox).
 
 ```bash
-fext search <browser> <query>
+fext search <browser> <query> [options]
 ```
 
 **Aliases:** `s`
 
-**Example:**
+**Options:**
 
-```bash
-fext search firefox "adblock"
-```
+* `--json`: Output results as JSON.
+* `--csv`: Output results as CSV.
 
 ### `inspect`
 
 Inspect the metadata (manifest) of a downloaded extension file.
 
 ```bash
-fext inspect <file>
+fext inspect <file> [options]
 ```
 
 **Aliases:** `i`
 
-**Example:**
+**Options:**
+
+* `--json`: Output results as JSON.
+
+### `preview`
+
+List the contents of an extension archive without extracting it.
 
 ```bash
-fext inspect ublock-origin.crx
+fext preview <file>
 ```
+
+**Aliases:** `p`
 
 ### `extract`
 
@@ -90,12 +84,6 @@ fext extract <file> [-o <output_dir>]
 ```
 
 **Aliases:** `x`
-
-**Example:**
-
-```bash
-fext extract ublock-origin.crx -o ./extracted
-```
 
 ### `batch`
 
@@ -111,40 +99,121 @@ fext batch <file> [-o <output_dir>] [-w <workers>]
 
 * `-w, --workers <n>`: Number of parallel downloads (default: 4).
 
-**Batch File Format:**
+### `audit`
 
-```text
-# Format: <browser> <url_or_id>
-chrome aicmkgpgakddgnaphhhpliifpcfhicfo
-firefox https://addons.mozilla.org/en-US/firefox/addon/postman_interceptor/
+Audit an extension for Manifest V3 compatibility and deprecated APIs.
+
+```bash
+fext audit <file> [--json]
 ```
+
+**Aliases:** `a`
+
+### `risk`
+
+Analyze permission risks and calculate a privacy score.
+
+```bash
+fext risk <file> [--json]
+```
+
+**Aliases:** `r`
 
 ### `scan`
 
 Scan an extension for known vulnerable third-party libraries (e.g., jQuery, Lodash).
 
 ```bash
-fext scan <file> [--json]
+fext scan <file> [--json] [--csv]
 ```
 
-**Example:**
+### `analyze`
+
+Perform deep analysis on extension code.
 
 ```bash
-fext scan ublock-origin.crx
+fext analyze <file> [options]
 ```
+
+**Options:**
+
+* `--complexity`: Calculate cyclomatic complexity of JavaScript files.
+* `--entropy`: Calculate Shannon entropy to detect obfuscation/packing.
+* `--domains`: Extract domains and URLs from source code.
+* `--secrets`: Scan for potential secrets (API keys, tokens).
+* `--yara <path>`: Scan against YARA rules (file or directory).
+* `--json`: Output results as JSON.
 
 ### `report`
 
-Generate a comprehensive Markdown report for an extension.
+Generate a comprehensive report for an extension.
 
 ```bash
-fext report <file> [-o <output_file>]
+fext report <file> [options]
 ```
 
-**Example:**
+**Options:**
+
+* `-o, --output <file>`: Output file path (default: `<filename>_REPORT.md`).
+* `--json`: Output unified report as JSON.
+* `--yara <path>`: Include YARA scan results in the report.
+
+### `diff`
+
+Compare two extension versions.
 
 ```bash
-fext report ublock-origin.crx
+fext diff <old_file> <new_file> [--json]
+```
+
+### `verify`
+
+Cryptographically verify a CRX3 file signature.
+
+```bash
+fext verify <file> [--json]
+```
+
+### `locales`
+
+Inspect supported locales and message counts.
+
+```bash
+fext locales <file> [--json]
+```
+
+### `check`
+
+Check for updates of local extension files against the Web Store.
+
+```bash
+fext check <file_or_dir> [--json]
+```
+
+### `serve`
+
+Host the local repository as a Chrome/Edge Update Server.
+
+```bash
+fext serve [-d <directory>] [--host <host>] [-p <port>]
+```
+
+### `update-manifest`
+
+Generate `update.xml` (Chrome/Edge) or `updates.json` (Firefox) for self-hosted extensions.
+
+```bash
+fext update-manifest <directory> --base-url <url> [--output <file>]
+```
+
+**Aliases:** `um`
+
+### `mirror`
+
+Synchronize a local directory with a list of extension IDs.
+
+```bash
+fext mirror <list_file> [-o <output_dir>] [--prune] [-w <workers>]
 ```
 
 ### `convert`
@@ -157,32 +226,12 @@ fext convert <input> --to <format> [-o <output>]
 
 **Supported Formats:** `zip`
 
-**Example:**
+### `optimize`
+
+Losslessly compress images within an extension directory.
 
 ```bash
-fext convert ublock-origin.crx --to zip
-```
-
-### `stats`
-
-Analyze a directory of extensions for aggregate statistics.
-
-```bash
-fext stats <directory>
-```
-
-### `explain`
-
-Get a detailed explanation and risk assessment for a specific permission.
-
-```bash
-fext explain <permission>
-```
-
-**Example:**
-
-```bash
-fext explain tabs
+fext optimize <directory> [-q <quality>] [--json]
 ```
 
 ### `timeline`
@@ -190,7 +239,7 @@ fext explain tabs
 Visualize the modification timeline of files within an extension.
 
 ```bash
-fext timeline <file>
+fext timeline <file> [--json]
 ```
 
 ### `graph`
@@ -201,12 +250,44 @@ Generate a dependency graph of internal files.
 fext graph <file> [-o <output.dot>]
 ```
 
-### `optimize`
+### `stats`
 
-Losslessly compress images within an extension directory.
+Analyze a directory of extensions for aggregate statistics.
 
 ```bash
-fext optimize <directory> [-q <quality>]
+fext stats <directory> [--json]
+```
+
+### `explain`
+
+Get a detailed explanation and risk assessment for a specific permission.
+
+```bash
+fext explain <permission> [--json]
+```
+
+### `plugin`
+
+Manage Python-based plugins.
+
+```bash
+fext plugin <command> [args]
+```
+
+**Commands:**
+
+* `list`: List installed plugins.
+* `install <path>`: Install a plugin.
+* `enable <name>`: Enable a plugin.
+* `disable <name>`: Disable a plugin.
+* `remove <name>`: Remove a plugin.
+
+### `ui`
+
+Launch the terminal-based user interface (TUI).
+
+```bash
+fext ui
 ```
 
 ### `tutorial`
@@ -230,13 +311,23 @@ fext setup
 Manage configuration settings.
 
 ```bash
-fext config [get|set|list] [key] [value]
+fext config [show|init]
 ```
+
+### `schema`
+
+Get JSON schema for various outputs.
+
+```bash
+fext schema <type>
+```
+
+**Types:** `config`, `audit`, `risk`, `history`, `scan`.
 
 ### `clean`
 
 Clean up cache and temporary files.
 
 ```bash
-fext clean [--dry-run] [--force] [--all]
+fext clean [--cache] [--downloads] [--all] [--dry-run] [--force]
 ```
