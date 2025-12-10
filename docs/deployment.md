@@ -1,4 +1,4 @@
-# Deployment & Enterprise
+# Deployment
 
 `fetchext` is designed to scale from single-user usage to enterprise deployment and repository management.
 

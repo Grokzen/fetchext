@@ -31,17 +31,20 @@ plugins:
 
 nav:
   - Home: index.md
-  - Installation: installation.md
-  - CLI Reference: cli.md
-  - Analysis & Forensics: analysis.md
-  - Deployment & Enterprise: deployment.md
-  - Library Reference: library.md
-  - Configuration: configuration.md
+  - User Guide:
+    - Installation: installation.md
+    - Configuration: configuration.md
+    - CLI Reference: cli.md
+  - Features:
+    - Analysis & Forensics: analysis.md
+    - Deployment: deployment.md
   - Contributing: contributing.md
   - Changelog: changelog.md
 
 markdown_extensions:
   - admonition
+  - attr_list
+  - md_in_html
   - pymdownx.details
   - pymdownx.superfences
   - pymdownx.highlight:
