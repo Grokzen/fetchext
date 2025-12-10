@@ -201,8 +201,8 @@
 
 - [x] **Plugin System v2**: Extensibility (Architecture).
   - [x] Enhance plugin hooks to receive full context (config, args) and allow modifying behavior.
-- [ ] **Debug Mode**: Developer Experience (CLI).
-  - [ ] Enhance `-v` output to dump full HTTP headers and response codes for debugging.
+- [x] **Debug Mode**: Developer Experience (CLI).
+  - [x] Enhance `-v` output to dump full HTTP headers and response codes for debugging.
 - [ ] **API Documentation**: Docs (Core).
   - [ ] Generate API documentation for `fetchext.core` using `pdoc` or similar.
 - [ ] **Shell Completion**: Usability (CLI).

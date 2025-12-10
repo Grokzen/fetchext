@@ -35,7 +35,7 @@ fext download <browser> <url> [options]
 * `-x, --extract`: Automatically extract the extension contents to a folder.
 * `--verify-hash <sha256>`: Verify the downloaded file against a known SHA256 hash.
 * `--quiet`: Suppress output.
-* `--verbose`: Enable verbose logging.
+* `--verbose`: Enable verbose logging. This includes full HTTP request/response headers (with sensitive data redacted) and status codes for debugging network issues.
 
 > **Note:** Downloads are resumable. If a download is interrupted, running the command again will resume from where it left off.
 

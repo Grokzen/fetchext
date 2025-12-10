@@ -45,7 +45,27 @@ class RateLimitedSession(requests.Session):
                 if elapsed < self.delay:
                     time.sleep(self.delay - elapsed)
                 RateLimitedSession._last_request_time = time.time()
-        return super().request(method, url, *args, **kwargs)
+        
+        # Debug Logging
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(f"Request: {method} {url}")
+            # Merge session headers with request headers for logging
+            merged_headers = self.merge_environment_settings(url, {}, None, None, None)
+            merged_headers = requests.sessions.merge_setting(merged_headers, self.headers, dict_class=dict)
+            merged_headers = requests.sessions.merge_setting(merged_headers, kwargs.get('headers'), dict_class=dict)
+            
+            safe_headers = merged_headers.copy()
+            if 'Authorization' in safe_headers:
+                safe_headers['Authorization'] = 'REDACTED'
+            logger.debug(f"Request Headers: {safe_headers}")
+
+        response = super().request(method, url, *args, **kwargs)
+
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(f"Response: {response.status_code} {response.reason}")
+            logger.debug(f"Response Headers: {dict(response.headers)}")
+
+        return response
 
 def get_session(
     retries: int = 3,
