@@ -184,8 +184,8 @@
 
 *Focus: Reliability and network features.*
 
-- [ ] **Resumable Downloads**: Reliability (Network).
-  - [ ] Support `Range` headers to resume interrupted downloads for large files.
+- [x] **Resumable Downloads**: Reliability (Network).
+  - [x] Support `Range` headers to resume interrupted downloads for large files.
 - [ ] **Integrity Checking**: Security (Core).
   - [ ] Verify SHA256 of downloaded files against the Web Store (if available) or internal hash.
 - [ ] **Proxy Configuration**: Network (Config).

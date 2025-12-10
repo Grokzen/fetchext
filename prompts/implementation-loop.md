@@ -30,6 +30,7 @@ Repeat these steps for every incomplete item:
 
 5. **Update Roadmap**:
     * Edit `ROADMAP.md`: Change the item from `[ ]` to `[x]`.
+    * **CRITICAL**: This step is mandatory. You must mark the item as complete before committing.
 
 6. **Commit**:
     * Run linting (`ruff`, `markdownlint`).
