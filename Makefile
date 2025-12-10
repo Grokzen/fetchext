@@ -49,19 +49,19 @@ clean:
 	rm -rf downloads/
 
 test:
-	$(PYTHON) -m pytest -m "not live"
+	$(PYTHON) -m pytest -m "not live" --verbosity=5 --show-capture=all
 
 test-live:
-	$(PYTHON) -m pytest -m "live"
+	$(PYTHON) -m pytest -m "live" --verbosity=5 --show-capture=all
 
 test-all:
-	$(PYTHON) -m pytest
+	$(PYTHON) -m pytest --verbosity=5 --show-capture=all
 
 test-coverage:
-	$(PYTHON) -m pytest --cov=src/fetchext --cov-report=term-missing
+	$(PYTHON) -m pytest --verbosity=5 --show-capture=all --cov=src/fetchext --cov-report=term-missing
 
 fuzz:
-	$(PYTHON) -m pytest tests/fuzz/
+	$(PYTHON) -m pytest --verbosity=5 --show-capture=all tests/fuzz/
 
 # Legacy tests (kept for reference, but CI should use pytest)
 test-legacy-downloads:

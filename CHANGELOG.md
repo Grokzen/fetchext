@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Docs Deployment**: Added GitHub Actions workflow to automatically build and deploy documentation to GitHub Pages.
 - **Unified Audit Report**: Added `fext report --json` to generate a comprehensive JSON report aggregating metadata, risk analysis, MV3 audit, complexity, entropy, domains, and secrets.
 - **Documentation Refactor**: Split documentation into a slim `README.md` (Quick Start) and detailed `docs/` site (MkDocs).
 
