@@ -351,4 +351,3 @@ The CLI returns the following exit codes to indicate the status of the operation
 | 7 | `SECURITY` | Security check failed (signature verification, risk threshold). |
 | 8 | `CANCELLED` | Operation cancelled by user (Ctrl+C). |
 | 9 | `DEPENDENCY` | Missing external dependency. |
-

@@ -1,9 +1,28 @@
-from rich.console import Console
-from rich.table import Table
+class LazyConsole:
+    def __init__(self):
+        self._console = None
 
-console = Console()
+    @property
+    def _impl(self):
+        if self._console is None:
+            from rich.console import Console
+            self._console = Console()
+        return self._console
+
+    def __getattr__(self, name):
+        return getattr(self._impl, name)
+
+    def __enter__(self):
+        return self._impl.__enter__()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        return self._impl.__exit__(exc_type, exc_val, exc_tb)
+
+console = LazyConsole()
 
 def print_manifest_table(manifest):
+    from rich.table import Table
+    
     table = Table(title="Extension Details", show_header=True, header_style="bold magenta")
     table.add_column("Field", style="cyan", no_wrap=True)
     table.add_column("Value", style="green")
@@ -26,6 +45,8 @@ def print_manifest_table(manifest):
     console.print(table)
 
 def print_search_results_table(query, results):
+    from rich.table import Table
+
     if not results:
         console.print(f"[yellow]No results found for '{query}'.[/yellow]")
         return

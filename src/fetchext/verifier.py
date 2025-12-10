@@ -1,7 +1,5 @@
 import struct
 from pathlib import Path
-from cryptography.hazmat.primitives import serialization, hashes
-from cryptography.hazmat.primitives.asymmetric import padding, utils
 from .protobuf import SimpleProtobuf
 
 class CrxVerifier:
@@ -10,6 +8,9 @@ class CrxVerifier:
         Verifies the signature of a CRX3 file.
         Returns True if valid, False otherwise.
         """
+        from cryptography.hazmat.primitives import serialization, hashes
+        from cryptography.hazmat.primitives.asymmetric import padding, utils
+
         with open(file_path, "rb") as f:
             # Read Magic
             magic = f.read(4)

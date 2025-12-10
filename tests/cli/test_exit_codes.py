@@ -1,5 +1,4 @@
 import pytest
-import sys
 from unittest.mock import patch, MagicMock
 from fetchext.cli import main
 from fetchext.constants import ExitCode

@@ -6,11 +6,11 @@
 
 The following hooks are available:
 
-*   `pre_download`: Triggered before a download starts. Can be used to validate the request or cancel the download.
-*   `post_download`: Triggered after a download completes successfully.
-*   `post_extract`: Triggered after an extension is extracted.
-*   `pre_analysis`: Triggered before generating a unified report. Can be used to cancel analysis.
-*   `post_analysis`: Triggered after a unified report is generated. Can be used to modify the report.
+* `pre_download`: Triggered before a download starts. Can be used to validate the request or cancel the download.
+* `post_download`: Triggered after a download completes successfully.
+* `post_extract`: Triggered after an extension is extracted.
+* `pre_analysis`: Triggered before generating a unified report. Can be used to cancel analysis.
+* `post_analysis`: Triggered after a unified report is generated. Can be used to modify the report.
 
 ## Writing Plugins
 
@@ -20,15 +20,15 @@ Plugins are Python scripts (e.g., `my_plugin.py`) placed in the hooks directory.
 
 Each hook function receives a `context` object with the following attributes:
 
-*   `extension_id` (str): The ID of the extension.
-*   `browser` (str): The browser type (chrome, edge, firefox).
-*   `version` (Optional[str]): The version of the extension.
-*   `file_path` (Optional[Path]): Path to the downloaded file or extracted directory.
-*   `metadata` (Optional[Dict]): Metadata about the extension.
-*   `config` (Optional[Dict]): The full configuration dictionary.
-*   `args` (Optional[Any]): CLI arguments (if available).
-*   `cancel` (bool): Set to `True` to cancel the operation (for `pre_*` hooks).
-*   `result` (Any): The result of the operation (e.g., the analysis report). Can be modified in `post_*` hooks.
+* `extension_id` (str): The ID of the extension.
+* `browser` (str): The browser type (chrome, edge, firefox).
+* `version` (Optional[str]): The version of the extension.
+* `file_path` (Optional[Path]): Path to the downloaded file or extracted directory.
+* `metadata` (Optional[Dict]): Metadata about the extension.
+* `config` (Optional[Dict]): The full configuration dictionary.
+* `args` (Optional[Any]): CLI arguments (if available).
+* `cancel` (bool): Set to `True` to cancel the operation (for `pre_*` hooks).
+* `result` (Any): The result of the operation (e.g., the analysis report). Can be modified in `post_*` hooks.
 
 ### Example: Cancel Download based on Config
 

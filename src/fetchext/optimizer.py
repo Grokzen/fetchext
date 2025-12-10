@@ -2,8 +2,6 @@ import logging
 from pathlib import Path
 from typing import Dict, Tuple
 
-from PIL import Image
-
 logger = logging.getLogger(__name__)
 
 
@@ -22,6 +20,7 @@ def optimize_image(path: Path, quality: int = 85) -> Tuple[bool, int, int]:
         - int: New file size in bytes.
     """
     try:
+        from PIL import Image
         original_size = path.stat().st_size
         
         # Open image

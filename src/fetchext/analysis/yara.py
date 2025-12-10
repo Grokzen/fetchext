@@ -6,15 +6,12 @@ from fetchext.crx import CrxDecoder
 
 logger = logging.getLogger(__name__)
 
-try:
-    import yara
-    YARA_AVAILABLE = True
-except ImportError:
-    YARA_AVAILABLE = False
 
 class YaraScanner:
     def __init__(self, rules_path: Path):
-        if not YARA_AVAILABLE:
+        try:
+            import yara
+        except ImportError:
             raise ImportError("yara-python is not installed. Install with 'pip install fetchext[security]'")
         
         self.rules_path = rules_path

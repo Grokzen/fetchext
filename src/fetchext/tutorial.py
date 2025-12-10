@@ -1,7 +1,3 @@
-from textual.app import App, ComposeResult
-from textual.containers import Container, Horizontal
-from textual.widgets import Header, Footer, Button, Markdown
-
 TUTORIAL_STEPS = [
     {
         "title": "Welcome to fetchext",
@@ -118,110 +114,118 @@ Happy hacking!
     }
 ]
 
-class TutorialStep(Container):
-    def __init__(self, step_index: int):
-        super().__init__()
-        self.step_index = step_index
-        self.step_data = TUTORIAL_STEPS[step_index]
+def get_tutorial_classes():
+    from textual.app import App, ComposeResult
+    from textual.containers import Container, Horizontal
+    from textual.widgets import Header, Footer, Button, Markdown
 
-    def compose(self) -> ComposeResult:
-        yield Markdown(self.step_data["content"])
+    class TutorialStep(Container):
+        def __init__(self, step_index: int):
+            super().__init__()
+            self.step_index = step_index
+            self.step_data = TUTORIAL_STEPS[step_index]
 
-class TutorialApp(App):
-    CSS = """
-    Screen {
-        align: center middle;
-    }
+        def compose(self) -> ComposeResult:
+            yield Markdown(self.step_data["content"])
 
-    #main-container {
-        width: 80%;
-        height: 80%;
-        border: solid green;
-        padding: 1 2;
-        background: $surface;
-    }
+    class TutorialApp(App):
+        CSS = """
+        Screen {
+            align: center middle;
+        }
 
-    #content {
-        height: 1fr;
-        overflow-y: auto;
-    }
+        #main-container {
+            width: 80%;
+            height: 80%;
+            border: solid green;
+            padding: 1 2;
+            background: $surface;
+        }
 
-    #buttons {
-        height: 3;
-        dock: bottom;
-        align: center middle;
-    }
+        #content {
+            height: 1fr;
+            overflow-y: auto;
+        }
 
-    Button {
-        margin: 0 1;
-    }
-    """
+        #buttons {
+            height: 3;
+            dock: bottom;
+            align: center middle;
+        }
 
-    BINDINGS = [
-        ("q", "quit", "Quit"),
-        ("n", "next_step", "Next"),
-        ("p", "prev_step", "Previous"),
-    ]
+        Button {
+            margin: 0 1;
+        }
+        """
 
-    def __init__(self):
-        super().__init__()
-        self.current_step = 0
+        BINDINGS = [
+            ("q", "quit", "Quit"),
+            ("n", "next_step", "Next"),
+            ("p", "prev_step", "Previous"),
+        ]
 
-    def compose(self) -> ComposeResult:
-        yield Header()
-        yield Container(
-            Container(id="content"),
-            Horizontal(
-                Button("Previous", id="btn-prev", variant="primary"),
-                Button("Next", id="btn-next", variant="success"),
-                Button("Quit", id="btn-quit", variant="error"),
-                id="buttons"
-            ),
-            id="main-container"
-        )
-        yield Footer()
+        def __init__(self):
+            super().__init__()
+            self.current_step = 0
 
-    def on_mount(self) -> None:
-        self.update_step()
+        def compose(self) -> ComposeResult:
+            yield Header()
+            yield Container(
+                Container(id="content"),
+                Horizontal(
+                    Button("Previous", id="btn-prev", variant="primary"),
+                    Button("Next", id="btn-next", variant="success"),
+                    Button("Quit", id="btn-quit", variant="error"),
+                    id="buttons"
+                ),
+                id="main-container"
+            )
+            yield Footer()
 
-    def update_step(self) -> None:
-        content_container = self.query_one("#content")
-        content_container.remove_children()
-        content_container.mount(TutorialStep(self.current_step))
-        
-        self.title = f"fext Tutorial - {self.current_step + 1}/{len(TUTORIAL_STEPS)}"
-        
-        # Update button states
-        self.query_one("#btn-prev").disabled = self.current_step == 0
-        
-        next_btn = self.query_one("#btn-next")
-        if self.current_step == len(TUTORIAL_STEPS) - 1:
-            next_btn.label = "Finish"
-            next_btn.variant = "success"
-        else:
-            next_btn.label = "Next"
-            next_btn.variant = "primary"
-
-    def action_next_step(self) -> None:
-        if self.current_step < len(TUTORIAL_STEPS) - 1:
-            self.current_step += 1
-            self.update_step()
-        else:
-            self.exit()
-
-    def action_prev_step(self) -> None:
-        if self.current_step > 0:
-            self.current_step -= 1
+        def on_mount(self) -> None:
             self.update_step()
 
-    def on_button_pressed(self, event: Button.Pressed) -> None:
-        if event.button.id == "btn-next":
-            self.action_next_step()
-        elif event.button.id == "btn-prev":
-            self.action_prev_step()
-        elif event.button.id == "btn-quit":
-            self.exit()
+        def update_step(self) -> None:
+            content_container = self.query_one("#content")
+            content_container.remove_children()
+            content_container.mount(TutorialStep(self.current_step))
+            
+            self.title = f"fext Tutorial - {self.current_step + 1}/{len(TUTORIAL_STEPS)}"
+            
+            # Update button states
+            self.query_one("#btn-prev").disabled = self.current_step == 0
+            
+            next_btn = self.query_one("#btn-next")
+            if self.current_step == len(TUTORIAL_STEPS) - 1:
+                next_btn.label = "Finish"
+                next_btn.variant = "success"
+            else:
+                next_btn.label = "Next"
+                next_btn.variant = "primary"
+
+        def action_next_step(self) -> None:
+            if self.current_step < len(TUTORIAL_STEPS) - 1:
+                self.current_step += 1
+                self.update_step()
+            else:
+                self.exit()
+
+        def action_prev_step(self) -> None:
+            if self.current_step > 0:
+                self.current_step -= 1
+                self.update_step()
+
+        def on_button_pressed(self, event: Button.Pressed) -> None:
+            if event.button.id == "btn-next":
+                self.action_next_step()
+            elif event.button.id == "btn-prev":
+                self.action_prev_step()
+            elif event.button.id == "btn-quit":
+                self.exit()
+
+    return TutorialApp, TutorialStep
 
 def run_tutorial():
+    TutorialApp, _ = get_tutorial_classes()
     app = TutorialApp()
     app.run()

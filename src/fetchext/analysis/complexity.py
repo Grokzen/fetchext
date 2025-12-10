@@ -1,5 +1,4 @@
 import zipfile
-import lizard
 import concurrent.futures
 import os
 from pathlib import Path
@@ -8,6 +7,7 @@ from ..crx import CrxDecoder
 
 def _analyze_file_content(name: str, content: str) -> List[Dict[str, Any]]:
     """Helper function to run in a separate process."""
+    import lizard
     results = []
     analysis = lizard.analyze_file.analyze_source_code(name, content)
     for func in analysis.function_list:

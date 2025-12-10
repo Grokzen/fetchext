@@ -1,6 +1,9 @@
 import unittest
 from unittest.mock import MagicMock, patch
-from fetchext.tutorial import TutorialApp, TUTORIAL_STEPS
+from fetchext.tutorial import get_tutorial_classes, TUTORIAL_STEPS
+
+# Get classes dynamically
+TutorialApp, TutorialStep = get_tutorial_classes()
 
 class TestTutorial(unittest.TestCase):
     def test_tutorial_steps_content(self):
@@ -11,12 +14,12 @@ class TestTutorial(unittest.TestCase):
             self.assertIn("content", step)
             self.assertTrue(len(step["content"]) > 0)
 
-    @patch("fetchext.tutorial.TutorialApp.run")
-    def test_app_instantiation(self, mock_run):
+    def test_app_instantiation(self):
         """Verify the app can be instantiated."""
-        app = TutorialApp()
-        self.assertIsNotNone(app)
-        self.assertEqual(app.current_step, 0)
+        with patch.object(TutorialApp, 'run'):
+            app = TutorialApp()
+            self.assertIsNotNone(app)
+            self.assertEqual(app.current_step, 0)
 
     def test_step_navigation_logic(self):
         """Test navigation logic without running the UI."""

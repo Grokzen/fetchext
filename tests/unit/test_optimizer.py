@@ -5,7 +5,7 @@ from fetchext.optimizer import optimize_image, optimize_extension
 
 class TestOptimizer(unittest.TestCase):
 
-    @patch("fetchext.optimizer.Image.open")
+    @patch("PIL.Image.open")
     @patch("pathlib.Path.stat")
     def test_optimize_image_success(self, mock_stat, mock_open):
         # Setup
@@ -60,7 +60,7 @@ class TestOptimizer(unittest.TestCase):
         temp_mock.replace.assert_called_with(path_mock)
         mock_img.save.assert_called()
 
-    @patch("fetchext.optimizer.Image.open")
+    @patch("PIL.Image.open")
     def test_optimize_image_no_reduction(self, mock_open):
         # Setup
         path_mock = MagicMock(spec=Path)
