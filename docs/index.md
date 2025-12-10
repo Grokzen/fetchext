@@ -97,7 +97,7 @@ fext firefox https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/
 
 ## 📚 Documentation
 
-For full documentation, including advanced usage, analysis tools, and deployment guides, please visit our [Documentation Site](https://grokzen.github.io/fetchext/).
+For full documentation, including advanced usage, analysis tools, and deployment guides, please visit our [Documentation Site](https://fetchext.grok.nu/).
 
 * [CLI Reference](cli.md)
 * [Analysis & Forensics](analysis.md)
