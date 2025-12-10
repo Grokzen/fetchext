@@ -1,122 +1,44 @@
-# 📦 fetchext
+# Welcome to fetchext
 
-A Python CLI tool to download browser extensions (Chrome, Edge, Firefox) directly from their web stores. 🚀
+**fetchext** is a powerful Python CLI tool designed to download, analyze, and audit browser extensions from Chrome, Edge, and Firefox web stores.
 
-## �� Development and Agent Tooling
+<div class="grid cards" markdown>
 
-This repository is an experiment in **100% Vibe Coding** - all code is generated, maintained, and evolved exclusively through Agent tooling. No manual coding is permitted. ✨
+-   :material-console: **[CLI Reference](cli.md)**
+    
+    Comprehensive guide to all `fext` commands, flags, and options.
 
-### 🧪 Experimental Setup
+-   :material-microscope: **[Analysis & Forensics](analysis.md)**
+    
+    Learn how to inspect code, visualize dependencies, and detect risks.
 
-* **IDE**: VSCode Insider program (required for Agent integration) 💻
-* **AI Model**: Gemini 2.0 Flash or Grok 3 Beta (exclusively) 🧠
-* **Approach**: Zero manual intervention - all development is Agent-driven ⚡
+-   :material-server: **[Deployment](deployment.md)**
+    
+    Guides for Docker, local mirroring, and enterprise integration.
 
-### 📜 100% Vibe Coding Policy
+-   :material-download: **[Installation](installation.md)**
+    
+    Get started with `pip`, `docker`, or source installation.
 
-This project serves as a proof-of-concept for fully automated software development:
+</div>
 
-* **No Manual Code**: All code changes must be produced by the Agent. 🚫✋
-* **Rejection Criteria**: Manual submissions or changes from other AI models will be rejected. ❌
-* **Quality Control**: The Agent maintains consistent coding standards and patterns. ✅
-* **Evolution**: The codebase grows and adapts through iterative Agent interactions. 🌱
+## Key Features
 
-### 📝 Submission Guidelines
+*   **Multi-Browser Support**: Download from Chrome, Edge, and Firefox stores.
+*   **Deep Analysis**: Calculate entropy, complexity, and scan for secrets.
+*   **Security Auditing**: Detect MV3 issues, dangerous permissions, and vulnerable libraries.
+*   **Forensics**: Visualize file timelines and dependency graphs.
+*   **Automation**: Batch processing, JSON output, and CI/CD integration.
 
-To participate in this experiment:
-
-* Use only VSCode Insider with Gemini 2.0 Flash or Grok 3 Beta for any interactions.
-* Allow the Agent to handle all code modifications.
-* Manual pull requests will be declined to preserve the purity of the experiment.
-* Report issues or request features through Agent-mediated channels. 🗣️
-
-This repository demonstrates the potential of fully automated development workflows while maintaining high code quality and consistency.
-
-## 📋 Requirements
-
-* Python 3.11 or higher 🐍
-
-## 🛠️ Setup
-
-1. **Create a virtual environment and install the package:**
-
-    ```bash
-    make setup
-    ```
-
-### 🐳 Docker
-
-You can run `fetchext` using Docker:
+## Quick Start
 
 ```bash
-docker run --rm -v $(pwd):/app/downloads ghcr.io/grok/fetchext download chrome <url> -o /app/downloads
-```
+# Install
+pip install fetchext
 
-### 🪝 Pre-commit Hook
+# Download an extension
+fext download chrome <url>
 
-You can use `fetchext` in your [pre-commit](https://pre-commit.com) config:
-
-```yaml
-- repo: https://github.com/grok/fetchext
-  rev: v0.7.0
-  hooks:
-    - id: fext-audit
-    - id: fext-scan
-```
-
-## 🚀 Quick Start
-
-The CLI requires two arguments: the browser type and the extension URL.
-
-```bash
-fext <browser> <url>
-```
-
-* **browser**: `chrome` (or `c`), `edge` (or `e`), `firefox` (or `f`) 🌐
-* **url**: The URL of the extension in the respective web store. 🔗
-
-### 💡 Examples
-
-**Chrome:** 🌈
-
-```bash
-fext chrome https://chromewebstore.google.com/detail/ublock-origin-lite/ddkjiahejlhfcafbddmgiahcphecmpfh
-```
-
-**Edge:** 🌊
-
-```bash
-fext edge https://microsoftedge.microsoft.com/addons/detail/ublock-origin/odfafepnkmbhccpbejgmiehpchacaeak
-```
-
-**Firefox:** 🦊
-
-```bash
-fext firefox https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/
-```
-
-## 📚 Documentation
-
-For full documentation, including advanced usage, analysis tools, and deployment guides, please visit our [Documentation Site](https://fetchext.grok.nu/).
-
-* [CLI Reference](cli.md)
-* [Analysis & Forensics](analysis.md)
-* [Deployment & Enterprise](deployment.md)
-* [Installation](installation.md)
-
-## 💻 Development
-
-### 🧹 Linting and Formatting
-
-This project uses [Ruff](https://github.com/astral-sh/ruff) for linting and formatting.
-
-```bash
-make lint
-make format
-```
-
-### 🏗️ Building the Package
-
-```bash
-make build
+# Analyze it
+fext analyze --risk <file>
 ```
