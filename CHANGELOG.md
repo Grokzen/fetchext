@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Integrity Checking**: Added `--verify-hash <sha256>` flag to `download` command to verify file integrity after download.
 - **Proxy Configuration**: Added support for configuring HTTP/HTTPS proxies via `[network.proxies]` in `config.toml`.
 - **Disk Space Safety**: Added pre-flight checks to ensure sufficient disk space before downloading or extracting extensions.
+- **Filename Sanitization**: Implemented filename sanitization to ensure cross-platform compatibility (Windows/macOS/Linux) by stripping illegal characters.
 
 ## [1.6.0] - 2025-12-07
 

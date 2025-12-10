@@ -192,8 +192,8 @@
   - [x] Add explicit proxy support (`http`, `https`) to `config.toml`.
 - [x] **Disk Space Safety**: Reliability (Core).
   - [x] Check free disk space before starting download or extraction to prevent partial writes.
-- [ ] **Filename Sanitization**: Compatibility (Core).
-  - [ ] Ensure downloaded filenames are safe on all OSes (Windows/macOS/Linux) by stripping illegal characters.
+- [x] **Filename Sanitization**: Compatibility (Core).
+  - [x] Ensure downloaded filenames are safe on all OSes (Windows/macOS/Linux) by stripping illegal characters.
 
 ## 🧪 v1.8.0: Testing & Quality Assurance
 

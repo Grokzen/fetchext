@@ -5,6 +5,7 @@ from urllib.parse import urlparse
 from ..network import get_session, download_file
 from .base import BaseDownloader
 from ..exceptions import NetworkError, ExtensionError
+from ..utils import sanitize_filename
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +42,8 @@ class FirefoxDownloader(BaseDownloader):
                 # Get the latest version file URL
                 if "current_version" in data and "file" in data["current_version"]:
                     download_url = data["current_version"]["file"]["url"]
-                    filename = Path(urlparse(download_url).path).name
+                    raw_filename = Path(urlparse(download_url).path).name
+                    filename = sanitize_filename(raw_filename)
                 else:
                     raise NetworkError("Could not find download URL in metadata")
 
