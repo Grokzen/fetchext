@@ -31,6 +31,9 @@ docs-serve:
 docs-build:
 	$(PYTHON) -m mkdocs build
 
+docs-api:
+	$(PYTHON) -m pdoc -o docs/api src/fetchext
+
 sign:
 	# Detach-sign the built artifacts
 	gpg --detach-sign -a dist/*.whl

@@ -203,8 +203,8 @@
   - [x] Enhance plugin hooks to receive full context (config, args) and allow modifying behavior.
 - [x] **Debug Mode**: Developer Experience (CLI).
   - [x] Enhance `-v` output to dump full HTTP headers and response codes for debugging.
-- [ ] **API Documentation**: Docs (Core).
-  - [ ] Generate API documentation for `fetchext.core` using `pdoc` or similar.
+- [x] **API Documentation**: Docs (Core).
+  - [x] Generate API documentation for `fetchext.core` using `pdoc` or similar.
 - [ ] **Shell Completion**: Usability (CLI).
   - [ ] Verify and improve generated shell completion scripts for zsh and bash.
 - [ ] **Exit Codes**: Scripting (CLI).

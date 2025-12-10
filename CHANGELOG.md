@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Plugin System v2**: Enhanced plugin system with richer context (`config`, `args`) and control flow (cancellation, result modification).
 - **New Hooks**: Added `post_extract`, `pre_analysis`, and `post_analysis` hooks.
 - **Debug Mode**: Enhanced `-v` / `--verbose` output to include full HTTP request/response headers and status codes (with sensitive data redaction).
+- **API Documentation**: Added `make docs-api` to generate HTML API documentation using `pdoc`.
 
 ## [1.7.0] - 2025-12-07
 
