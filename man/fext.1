@@ -1,0 +1,330 @@
+.TH FEXT "1" "2025\-12\-06" "gen_man.py" "Generated Python Manual"
+.SH NAME
+fext
+.SH SYNOPSIS
+.B gen_man.py
+[-h] [-v | -q] {download,d,search,s,inspect,i,extract,x,check,c,preview,p,audit,a,diff,risk,r,verify,scan,report,update-manifest,um,mirror,batch,b,ui,setup,convert,stats} ...
+.SH DESCRIPTION
+Download or search for browser extensions.
+
+.SH
+POSITIONAL ARGUMENTS
+.TP
+\fBgen_man.py\fR \fI\,download\/\fR
+Download an extension
+.TP
+\fBgen_man.py\fR \fI\,search\/\fR
+Search for an extension
+.TP
+\fBgen_man.py\fR \fI\,inspect\/\fR
+Inspect an extension file
+.TP
+\fBgen_man.py\fR \fI\,extract\/\fR
+Extract an extension file
+.TP
+\fBgen_man.py\fR \fI\,check\/\fR
+Check for updates
+.TP
+\fBgen_man.py\fR \fI\,preview\/\fR
+Preview extension contents
+.TP
+\fBgen_man.py\fR \fI\,audit\/\fR
+Audit extension for MV3 compatibility
+.TP
+\fBgen_man.py\fR \fI\,diff\/\fR
+Compare two extension versions
+.TP
+\fBgen_man.py\fR \fI\,risk\/\fR
+Analyze permission risk
+.TP
+\fBgen_man.py\fR \fI\,verify\/\fR
+Verify CRX signature
+.TP
+\fBgen_man.py\fR \fI\,scan\/\fR
+Scan extension for vulnerable dependencies
+.TP
+\fBgen_man.py\fR \fI\,report\/\fR
+Generate a Markdown report
+.TP
+\fBgen_man.py\fR \fI\,update\-manifest\/\fR
+Generate update manifest for local extensions
+.TP
+\fBgen_man.py\fR \fI\,mirror\/\fR
+Sync local directory with extension list
+.TP
+\fBgen_man.py\fR \fI\,batch\/\fR
+Download extensions from a batch file
+.TP
+\fBgen_man.py\fR \fI\,ui\/\fR
+Launch interactive TUI
+.TP
+\fBgen_man.py\fR \fI\,setup\/\fR
+Run configuration wizard
+.TP
+\fBgen_man.py\fR \fI\,convert\/\fR
+Convert extension format
+.TP
+\fBgen_man.py\fR \fI\,stats\/\fR
+Analyze repository statistics
+
+.SH COMMAND \fI\,'gen_man.py download'\/\fR
+usage: gen_man.py download [\-h] [\-o OUTPUT_DIR] [\-m] [\-x] {chrome,c,edge,e,firefox,f} url
+
+.TP
+\fB{chrome,c,edge,e,firefox,f}\fR
+The browser type (chrome/c, edge/e, firefox/f)
+
+.TP
+\fBurl\fR
+The URL of the extension in the Web Store
+
+.SH OPTIONS \fI\,'gen_man.py download'\/\fR
+.TP
+\fB\-o\fR \fI\,OUTPUT_DIR\/\fR, \fB\-\-output\-dir\fR \fI\,OUTPUT_DIR\/\fR
+Directory to save the downloaded extension (default: .)
+
+.TP
+\fB\-m\fR, \fB\-\-save\-metadata\fR
+Save metadata to a JSON file alongside the extension
+
+.TP
+\fB\-x\fR, \fB\-\-extract\fR
+Automatically extract the extension to a folder
+
+.SH COMMAND \fI\,'gen_man.py search'\/\fR
+usage: gen_man.py search [\-h] [\-\-json | \-\-csv] {firefox,f} query
+
+.TP
+\fB{firefox,f}\fR
+The browser type (only firefox/f supported for search)
+
+.TP
+\fBquery\fR
+The search query
+
+.SH OPTIONS \fI\,'gen_man.py search'\/\fR
+.TP
+\fB\-\-json\fR
+Output results as JSON
+
+.TP
+\fB\-\-csv\fR
+Output results as CSV
+
+.SH COMMAND \fI\,'gen_man.py inspect'\/\fR
+usage: gen_man.py inspect [\-h] [\-\-json] file
+
+.TP
+\fBfile\fR
+Path to the .crx or .xpi file
+
+.SH OPTIONS \fI\,'gen_man.py inspect'\/\fR
+.TP
+\fB\-\-json\fR
+Output results as JSON
+
+.SH COMMAND \fI\,'gen_man.py extract'\/\fR
+usage: gen_man.py extract [\-h] [\-o OUTPUT_DIR] file
+
+.TP
+\fBfile\fR
+Path to the .crx or .xpi file
+
+.SH OPTIONS \fI\,'gen_man.py extract'\/\fR
+.TP
+\fB\-o\fR \fI\,OUTPUT_DIR\/\fR, \fB\-\-output\-dir\fR \fI\,OUTPUT_DIR\/\fR
+Directory to extract to (default: <filename_stem> in current dir)
+
+.SH COMMAND \fI\,'gen_man.py check'\/\fR
+usage: gen_man.py check [\-h] [\-\-json] file
+
+.TP
+\fBfile\fR
+Path to the .crx or .xpi file
+
+.SH OPTIONS \fI\,'gen_man.py check'\/\fR
+.TP
+\fB\-\-json\fR
+Output results as JSON
+
+.SH COMMAND \fI\,'gen_man.py preview'\/\fR
+usage: gen_man.py preview [\-h] file
+
+.TP
+\fBfile\fR
+Path to the .crx or .xpi file
+
+.SH COMMAND \fI\,'gen_man.py audit'\/\fR
+usage: gen_man.py audit [\-h] [\-\-json] file
+
+.TP
+\fBfile\fR
+Path to the .crx or .xpi file
+
+.SH OPTIONS \fI\,'gen_man.py audit'\/\fR
+.TP
+\fB\-\-json\fR
+Output results as JSON
+
+.SH COMMAND \fI\,'gen_man.py diff'\/\fR
+usage: gen_man.py diff [\-h] [\-\-json] old_file new_file
+
+.TP
+\fBold_file\fR
+Path to the old .crx or .xpi file
+
+.TP
+\fBnew_file\fR
+Path to the new .crx or .xpi file
+
+.SH OPTIONS \fI\,'gen_man.py diff'\/\fR
+.TP
+\fB\-\-json\fR
+Output results as JSON
+
+.SH COMMAND \fI\,'gen_man.py risk'\/\fR
+usage: gen_man.py risk [\-h] [\-\-json] file
+
+.TP
+\fBfile\fR
+Path to the .crx or .xpi file
+
+.SH OPTIONS \fI\,'gen_man.py risk'\/\fR
+.TP
+\fB\-\-json\fR
+Output results as JSON
+
+.SH COMMAND \fI\,'gen_man.py verify'\/\fR
+usage: gen_man.py verify [\-h] [\-\-json] file
+
+.TP
+\fBfile\fR
+Path to the .crx file
+
+.SH OPTIONS \fI\,'gen_man.py verify'\/\fR
+.TP
+\fB\-\-json\fR
+Output results as JSON
+
+.SH COMMAND \fI\,'gen_man.py scan'\/\fR
+usage: gen_man.py scan [\-h] [\-\-json | \-\-csv] file
+
+.TP
+\fBfile\fR
+Path to the .crx or .xpi file
+
+.SH OPTIONS \fI\,'gen_man.py scan'\/\fR
+.TP
+\fB\-\-json\fR
+Output results as JSON
+
+.TP
+\fB\-\-csv\fR
+Output results as CSV
+
+.SH COMMAND \fI\,'gen_man.py report'\/\fR
+usage: gen_man.py report [\-h] [\-o OUTPUT] file
+
+.TP
+\fBfile\fR
+Path to the .crx or .xpi file
+
+.SH OPTIONS \fI\,'gen_man.py report'\/\fR
+.TP
+\fB\-o\fR \fI\,OUTPUT\/\fR, \fB\-\-output\fR \fI\,OUTPUT\/\fR
+Output file path (default: <filename>_REPORT.md)
+
+.SH COMMAND \fI\,'gen_man.py update\-manifest'\/\fR
+usage: gen_man.py update\-manifest [\-h] \-\-base\-url BASE_URL [\-\-output OUTPUT] directory
+
+.TP
+\fBdirectory\fR
+Directory containing extension files
+
+.SH OPTIONS \fI\,'gen_man.py update\-manifest'\/\fR
+.TP
+\fB\-\-base\-url\fR \fI\,BASE_URL\/\fR
+Base URL where extensions are hosted
+
+.TP
+\fB\-\-output\fR \fI\,OUTPUT\/\fR
+Output file path (optional)
+
+.SH COMMAND \fI\,'gen_man.py mirror'\/\fR
+usage: gen_man.py mirror [\-h] [\-o OUTPUT_DIR] [\-\-prune] [\-w WORKERS] list_file
+
+.TP
+\fBlist_file\fR
+Path to the list file
+
+.SH OPTIONS \fI\,'gen_man.py mirror'\/\fR
+.TP
+\fB\-o\fR \fI\,OUTPUT_DIR\/\fR, \fB\-\-output\-dir\fR \fI\,OUTPUT_DIR\/\fR
+Target directory (default: .)
+
+.TP
+\fB\-\-prune\fR
+Remove files not in the list
+
+.TP
+\fB\-w\fR \fI\,WORKERS\/\fR, \fB\-\-workers\fR \fI\,WORKERS\/\fR
+Number of parallel workers (default: 4)
+
+.SH COMMAND \fI\,'gen_man.py batch'\/\fR
+usage: gen_man.py batch [\-h] [\-o OUTPUT_DIR] [\-w WORKERS] file
+
+.TP
+\fBfile\fR
+Path to the batch file containing URLs
+
+.SH OPTIONS \fI\,'gen_man.py batch'\/\fR
+.TP
+\fB\-o\fR \fI\,OUTPUT_DIR\/\fR, \fB\-\-output\-dir\fR \fI\,OUTPUT_DIR\/\fR
+Directory to save the downloaded extensions (default: .)
+
+.TP
+\fB\-w\fR \fI\,WORKERS\/\fR, \fB\-\-workers\fR \fI\,WORKERS\/\fR
+Number of parallel workers (default: 4)
+
+.SH COMMAND \fI\,'gen_man.py ui'\/\fR
+usage: gen_man.py ui [\-h]
+
+.SH COMMAND \fI\,'gen_man.py setup'\/\fR
+usage: gen_man.py setup [\-h]
+
+.SH COMMAND \fI\,'gen_man.py convert'\/\fR
+usage: gen_man.py convert [\-h] [\-\-to {zip}] [\-o OUTPUT] input
+
+.TP
+\fBinput\fR
+Input file or directory
+
+.SH OPTIONS \fI\,'gen_man.py convert'\/\fR
+.TP
+\fB\-\-to\fR \fI\,{zip}\/\fR
+Target format (default: zip)
+
+.TP
+\fB\-o\fR \fI\,OUTPUT\/\fR, \fB\-\-output\fR \fI\,OUTPUT\/\fR
+Output file path
+
+.SH COMMAND \fI\,'gen_man.py stats'\/\fR
+usage: gen_man.py stats [\-h] [\-\-json] [directory]
+
+.TP
+\fBdirectory\fR
+Directory to scan (default: current directory)
+
+.SH OPTIONS \fI\,'gen_man.py stats'\/\fR
+.TP
+\fB\-\-json\fR
+Output results as JSON
+
+.SH OPTIONS
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+Enable verbose logging (DEBUG level)
+
+.TP
+\fB\-q\fR, \fB\-\-quiet\fR
+Enable quiet mode (ERROR level only, no progress bars)
