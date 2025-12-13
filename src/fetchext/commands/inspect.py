@@ -33,6 +33,16 @@ def register(subparsers):
         action="store_true",
         help="Ignore whitespace changes in text files"
     )
+    diff_parser.add_argument(
+        "--visual",
+        action="store_true",
+        help="Generate a visual HTML diff report"
+    )
+    diff_parser.add_argument(
+        "--output",
+        type=Path,
+        help="Output path for the visual report (default: diff_report.html)"
+    )
     diff_parser.set_defaults(func=handle_diff)
 
     # Verify subcommand
@@ -66,7 +76,9 @@ def handle_diff(args, show_progress=True):
         args.old_file, 
         args.new_file, 
         json_output=args.json,
-        ignore_whitespace=args.ignore_whitespace
+        ignore_whitespace=args.ignore_whitespace,
+        visual=args.visual,
+        output_path=args.output
     )
 
 def handle_verify(args, show_progress=True):

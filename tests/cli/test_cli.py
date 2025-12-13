@@ -58,7 +58,28 @@ class TestCLI:
             with pytest.raises(SystemExit) as excinfo:
                 main()
             assert excinfo.value.code == 0
-            mock_diff.assert_called_once_with('old.crx', 'new.crx', json_output=False, ignore_whitespace=False)
+            mock_diff.assert_called_once_with(
+                'old.crx', 
+                'new.crx', 
+                json_output=False, 
+                ignore_whitespace=False,
+                visual=False,
+                output_path=None
+            )
+
+    def test_diff_visual_command(self):
+        with patch.object(sys, 'argv', ['fext', 'diff', 'old.crx', 'new.crx', '--visual', '--output', 'report.html']), \
+             patch('fetchext.core.diff_extensions') as mock_diff:
+            with pytest.raises(SystemExit) as excinfo:
+                main()
+            assert excinfo.value.code == 0
+            # output_path will be a Path object
+            args, kwargs = mock_diff.call_args
+            assert args == ('old.crx', 'new.crx')
+            assert kwargs['json_output'] is False
+            assert kwargs['ignore_whitespace'] is False
+            assert kwargs['visual'] is True
+            assert str(kwargs['output_path']) == 'report.html'
 
     def test_risk_command(self):
         with patch.object(sys, 'argv', ['fext', 'risk', 'test.crx']), \

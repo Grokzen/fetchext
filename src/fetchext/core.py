@@ -370,7 +370,7 @@ def audit_extension(file_path, json_output=False):
         logger.error(f"Audit failed: {e}")
         raise
 
-def diff_extensions(old_path, new_path, json_output=False, ignore_whitespace=False):
+def diff_extensions(old_path, new_path, json_output=False, ignore_whitespace=False, visual=False, output_path=None):
     """
     Compare two extension archives.
     """
@@ -385,6 +385,16 @@ def diff_extensions(old_path, new_path, json_output=False, ignore_whitespace=Fal
     differ = ExtensionDiffer()
     try:
         report = differ.diff(old_path, new_path, ignore_whitespace=ignore_whitespace)
+        
+        if visual:
+            from .analysis.visual_diff import VisualDiffGenerator
+            if output_path is None:
+                output_path = Path("diff_report.html")
+            
+            generator = VisualDiffGenerator()
+            generator.generate(report, old_path, new_path, output_path)
+            console.print(f"[green]Visual diff report generated at {output_path}[/green]")
+            return report
         
         if json_output:
             from dataclasses import asdict
