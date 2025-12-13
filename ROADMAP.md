@@ -309,8 +309,8 @@
   - [x] Add `fext watch <dir>` to monitor a folder for new `.crx` or `.xpi` files and automatically trigger analysis workflows (scan, report, extract) as they arrive.
 - [x] **TUI E2E Testing**: Quality (Test).
   - [x] Implement automated end-to-end tests for the TUI using `textual`'s `Pilot` testing harness to verify user interactions and prevent UI regressions.
-- [ ] **Migration Regression Tests**: Quality (Test).
-  - [ ] Add a suite of "golden" tests for `fext migrate` to verify MV2->MV3 conversion accuracy against known good outputs, ensuring the migration logic remains stable.
+- [x] **Migration Regression Tests**: Quality (Test).
+  - [x] Add a suite of "golden" tests for `fext migrate` to verify MV2->MV3 conversion accuracy against known good outputs, ensuring the migration logic remains stable.
 - [ ] **Complexity in Reports**: Reporting (Improve).
   - [ ] Integrate `lizard` complexity metrics directly into the HTML report with visualization charts (e.g., complexity vs. line count scatter plot) to highlight maintenance hotspots.
 - [ ] **Firefox Signature Verification**: Security (Improve).

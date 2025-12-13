@@ -1,0 +1,6 @@
+{
+  "manifest_version": 2,
+  "name": "CSP Extension",
+  "version": "1.0",
+  "content_security_policy": "script-src 'self'; object-src 'self'"
+}

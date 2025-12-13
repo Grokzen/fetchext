@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Directory Watcher**: Added `fext watch <dir>` command to monitor a folder for new extensions and automatically trigger extraction, reporting, or scanning.
 - **Report Sharing**: Added `fext share <report.html>` command to upload reports to GitHub Gist (requires `GITHUB_TOKEN`) and generate shareable links.
 - **TUI E2E Testing**: Implemented automated end-to-end tests for the TUI using `textual.pilot` to verify search, download, and navigation flows.
+- **Migration Regression Tests**: Added a suite of "golden" tests for `fext migrate` to verify MV2->MV3 conversion accuracy against known good outputs, ensuring the migration logic remains stable.
 - **History Concurrency**: Enabled SQLite WAL (Write-Ahead Logging) mode for the history database to support high-concurrency scenarios (e.g., parallel batch downloads) without locking errors.
 - **CLI Theming**: Introduced a centralized `Theme` system to enforce consistent colors, emojis, and formatting across all CLI commands, improving visual coherence.
 
