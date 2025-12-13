@@ -233,8 +233,8 @@
   - [x] Add `fext analyze --summary <file>` to generate a natural language summary of the extension's functionality using a local LLM or API.
 - [x] **Code Beautifier**: Deobfuscation helper (Core).
   - [x] Add `fext beautify <file>` to format minified JavaScript and JSON files for better readability.
-- [ ] **Similarity Search**: Code reuse detection (Analysis).
-  - [ ] Add `fext similar <file>` to find other extensions in the local repository with high code similarity (using fuzzy hashing).
+- [x] **Similarity Search**: Code reuse detection (Analysis).
+  - [x] Add `fext similar <file>` to find other extensions in the local repository with high code similarity (using fuzzy hashing).
 - [ ] **Smart Diff**: Visual comparison (CLI).
   - [ ] Enhance `fext diff` to visually compare changed images/assets and support "ignore whitespace" for code diffs.
 - [ ] **TUI Dashboard**: Visual Analytics (TUI).

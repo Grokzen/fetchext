@@ -128,6 +128,14 @@ Format minified JavaScript and JSON files:
 fext beautify <file>
 ```
 
+### 🔍 Similarity Search
+
+Find similar extensions in a directory using fuzzy hashing:
+
+```bash
+fext similar <target_file> <directory>
+```
+
 ## 💻 Development
 
 ### 🧹 Linting and Formatting
