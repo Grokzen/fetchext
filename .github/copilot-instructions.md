@@ -268,3 +268,15 @@ This project serves as a proof-of-concept for fully automated software developme
     2. If the feature (or a close variant) is listed there, **DO NOT** suggest it.
     3. If the user asks for a blacklisted feature, politely decline and reference the blacklist reasoning.
 
+### 6. Plan Management Protocol
+
+- **Rule**: **ORGANIZE PLANS BY VERSION**.
+- **Structure**:
+  - All implementation plans must be stored in `plans/vX.Y.Z/`.
+  - Create the directory if it doesn't exist.
+  - Filename format: `plans/vX.Y.Z/01_feature_name.md`.
+- **Action**:
+    1. When starting a new feature, create a plan file in the corresponding version folder.
+    2. If the version folder does not exist, create it.
+    3. Do not clutter the root `plans/` directory.
+
