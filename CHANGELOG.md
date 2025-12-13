@@ -9,9 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.3.0] - 2025-12-10
 
+### Added
+
+- **Visual Diff**: Added `fext diff --visual` to generate interactive HTML reports showing side-by-side comparisons of modified files and images.
+
 ### Fixed
 
 - **Inspector Robustness**: Refactored `ExtensionInspector` to gracefully handle malformed manifests and corrupt archives, preventing crashes in reporting and visualization tools.
+- **Network Error Handling**: Improved handling of HTTP 403 (Access Denied) and 429 (Rate Limit) errors with actionable user feedback (e.g., suggesting VPN or config changes).
 
 ## [2.2.0] - 2025-12-10
 
