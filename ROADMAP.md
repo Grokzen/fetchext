@@ -294,8 +294,8 @@
   - [x] Optimize `fext grep` to use `ProcessPoolExecutor` for multi-threaded searching of large repositories.
 - [x] **Interactive Dependency Graph**: Visualization (Innovate).
   - [x] Add `fext graph --interactive` to generate a dynamic HTML/D3.js visualization of internal file dependencies.
-- [ ] **JS Sandbox**: Security (Innovate).
-  - [ ] Introduce `fext sandbox <file.js>` (experimental) to execute extension code in a secure, isolated runtime (e.g., Deno).
+- [x] **JS Sandbox**: Security (Innovate).
+  - [x] Introduce `fext sandbox <file.js>` (experimental) to execute extension code in a secure, isolated runtime (e.g., Deno).
 
 ## 🤝 v2.4.0: Ecosystem & Collaboration
 

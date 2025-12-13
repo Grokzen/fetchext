@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Performance Benchmarks**: Added a benchmarking suite (`benchmarks/run.py`) to track performance of critical operations (parsing, entropy, complexity, secrets).
 - **TUI Mouse Support**: Added mouse support to `fext ui` with a confirmation dialog for downloading extensions by clicking rows.
 - **Parallel Grep**: Optimized `fext grep` to use multi-core processing (`ProcessPoolExecutor`), significantly speeding up searches in large repositories.
+- **JS Sandbox**: Added `fext sandbox <file.js>` to execute JavaScript files in a secure, isolated environment using Deno (requires Deno installation).
 
 ### Fixed
 

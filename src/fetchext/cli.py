@@ -25,7 +25,8 @@ from .commands import (
     git,
     update,
     badge,
-    grep
+    grep,
+    sandbox
 )
 
 # Configure logging
@@ -89,6 +90,7 @@ def get_parser():
     update.register(subparsers)
     badge.register(subparsers)
     grep.register(subparsers)
+    sandbox.register(subparsers)
 
     return parser
 
