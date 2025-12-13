@@ -144,6 +144,22 @@ Compare two extension versions with whitespace ignoring and image analysis:
 fext diff old.crx new.crx --ignore-whitespace
 ```
 
+### 📦 Extension Packer
+
+Pack a directory into a signed CRX3 file:
+
+```bash
+fext pack ./my-extension -o my-extension.crx
+```
+
+### 🖥️ TUI Dashboard
+
+Launch the interactive dashboard to browse, download, and analyze extensions:
+
+```bash
+fext ui
+```
+
 ## 💻 Development
 
 ### 🧹 Linting and Formatting

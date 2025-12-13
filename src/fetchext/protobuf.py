@@ -55,6 +55,37 @@ class SimpleProtobuf:
         return result
 
     @staticmethod
+    def encode(fields: Dict[int, List[bytes]]) -> bytes:
+        """
+        Encodes a dict of field_id -> list of values (bytes) into protobuf format.
+        Only supports Length-Delimited (Type 2) fields.
+        """
+        out = bytearray()
+        for field_id, values in fields.items():
+            for value in values:
+                # Key: (field_id << 3) | 2
+                key = (field_id << 3) | 2
+                out.extend(SimpleProtobuf._write_varint(key))
+                out.extend(SimpleProtobuf._write_varint(len(value)))
+                out.extend(value)
+        return bytes(out)
+
+    @staticmethod
+    def _write_varint(value: int) -> bytes:
+        """Writes an integer as a varint."""
+        out = bytearray()
+        while True:
+            byte = value & 0x7F
+            value >>= 7
+            if value:
+                byte |= 0x80
+                out.append(byte)
+            else:
+                out.append(byte)
+                break
+        return bytes(out)
+
+    @staticmethod
     def _read_varint(data: bytes, offset: int) -> Tuple[int, int]:
         """Reads a varint from data at offset. Returns (value, new_offset)."""
         value = 0

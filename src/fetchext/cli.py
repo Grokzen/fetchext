@@ -19,7 +19,8 @@ from .commands import (
     tui,
     plugin,
     beautify,
-    similar
+    similar,
+    pack
 )
 
 # Configure logging
@@ -77,6 +78,7 @@ def get_parser():
     plugin.register(subparsers)
     beautify.register(subparsers)
     similar.register(subparsers)
+    pack.register(subparsers)
 
     return parser
 
