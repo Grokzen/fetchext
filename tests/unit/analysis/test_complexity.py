@@ -46,7 +46,8 @@ def test_analyze_complexity_empty(fs):
     with zipfile.ZipFile(zip_path, "w") as zf:
         zf.writestr("manifest.json", "{}")
         
-    results = analyze_complexity(zip_path)
+    with patch("fetchext.analysis.complexity.concurrent.futures.ProcessPoolExecutor", concurrent.futures.ThreadPoolExecutor):
+        results = analyze_complexity(zip_path)
     assert results["total_functions"] == 0
     assert results["average_complexity"] == 0
 

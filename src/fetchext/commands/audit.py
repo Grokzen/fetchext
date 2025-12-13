@@ -38,6 +38,16 @@ def register(subparsers):
         action="store_true",
         help="Output results as CSV"
     )
+    scan_parser.add_argument(
+        "--licenses",
+        action="store_true",
+        help="Scan for open source licenses"
+    )
+    scan_parser.add_argument(
+        "--custom",
+        type=Path,
+        help="Path to custom YAML rules file"
+    )
     scan_parser.set_defaults(func=handle_scan)
 
     # Analyze subcommand
@@ -91,9 +101,14 @@ def register(subparsers):
         help="Output unified report as JSON"
     )
     report_parser.add_argument(
+        "--html",
+        action="store_true",
+        help="Output unified report as HTML"
+    )
+    report_parser.add_argument(
         "--yara",
         type=Path,
-        help="Path to YARA rules file or directory (optional, for JSON report)"
+        help="Path to YARA rules file or directory (optional, for JSON/HTML report)"
     )
     report_parser.set_defaults(func=handle_report)
 
@@ -104,7 +119,68 @@ def handle_risk(args, show_progress=True):
     core.analyze_risk(args.file, json_output=args.json)
 
 def handle_scan(args, show_progress=True):
-    core.scan_extension(args.file, json_output=args.json, csv_output=args.csv)
+    if args.custom:
+        from ..analysis.rules import RuleEngine
+        from rich.table import Table
+        
+        try:
+            engine = RuleEngine(args.custom)
+            results = engine.scan(Path(args.file))
+            
+            if args.json:
+                import dataclasses
+                console.print_json(data=[dataclasses.asdict(r) for r in results])
+            else:
+                console.print(f"[bold]Custom Rule Scan for {args.file}[/bold]")
+                if results:
+                    table = Table(show_header=True, header_style="bold magenta")
+                    table.add_column("Rule ID")
+                    table.add_column("Severity")
+                    table.add_column("File")
+                    table.add_column("Match")
+                    
+                    for match in results:
+                        severity_color = {
+                            "critical": "red",
+                            "high": "orange1",
+                            "medium": "yellow",
+                            "low": "blue"
+                        }.get(match.severity.lower(), "white")
+                        
+                        table.add_row(
+                            match.rule_id,
+                            f"[{severity_color}]{match.severity}[/{severity_color}]",
+                            f"{match.file}:{match.line}",
+                            match.match
+                        )
+                    console.print(table)
+                else:
+                    console.print("[green]No custom rule matches found.[/green]")
+        except Exception as e:
+            console.print(f"[red]Error during custom scan: {e}[/red]")
+            
+    elif args.licenses:
+        from ..analysis.licenses import scan_licenses
+        from rich.table import Table
+        
+        results = scan_licenses(Path(args.file))
+        
+        if args.json:
+            console.print_json(data=results)
+        else:
+            console.print(f"[bold]License Scan for {args.file}[/bold]")
+            if results:
+                table = Table(show_header=True, header_style="bold magenta")
+                table.add_column("License")
+                table.add_column("Files")
+                
+                for license_name, files in results.items():
+                    table.add_row(license_name, ", ".join(files))
+                console.print(table)
+            else:
+                console.print("[yellow]No licenses detected.[/yellow]")
+    else:
+        core.scan_extension(args.file, json_output=args.json, csv_output=args.csv)
 
 def handle_report(args, show_progress=True):
     if args.json:
@@ -117,6 +193,8 @@ def handle_report(args, show_progress=True):
                 console.print(f"JSON report saved to {args.output}")
         else:
             console.print_json(data=report)
+    elif args.html:
+        core.generate_html_report(args.file, args.output, yara_rules=args.yara)
     else:
         core.generate_report(args.file, args.output)
 

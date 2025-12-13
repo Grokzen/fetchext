@@ -21,7 +21,11 @@ from .commands import (
     beautify,
     similar,
     pack,
-    migrate
+    migrate,
+    git,
+    update,
+    badge,
+    grep
 )
 
 # Configure logging
@@ -81,6 +85,10 @@ def get_parser():
     similar.register(subparsers)
     pack.register(subparsers)
     migrate.register(subparsers)
+    git.register(subparsers)
+    update.register(subparsers)
+    badge.register(subparsers)
+    grep.register(subparsers)
 
     return parser
 

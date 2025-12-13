@@ -27,6 +27,7 @@ dependencies = [
     "Pillow",
     "jsbeautifier",
     "ppdeep",
+    "PyYAML",
 ]
 
 [project.optional-dependencies]

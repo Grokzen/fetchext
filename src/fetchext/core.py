@@ -841,3 +841,30 @@ def generate_unified_report(file_path, yara_rules=None):
 
     return report
 
+def generate_html_report(file_path, output_path=None, yara_rules=None):
+    """
+    Generate an HTML report for an extension.
+    """
+    from .reporter import HtmlReporter
+    
+    file_path = Path(file_path)
+    if not file_path.exists():
+        raise ExtensionError(f"File not found: {file_path}")
+
+    # Get unified data
+    data = generate_unified_report(file_path, yara_rules=yara_rules)
+    
+    reporter = HtmlReporter(data)
+    try:
+        if output_path:
+            output_path = Path(output_path)
+        else:
+            output_path = Path(f"{file_path.name}_REPORT.html")
+            
+        reporter.save(output_path)
+        logger.info(f"HTML Report saved to {output_path}")
+        return output_path
+    except Exception as e:
+        logger.error(f"HTML Report generation failed: {e}")
+        raise ExtensionError(f"HTML Report generation failed: {e}", original_exception=e)
+

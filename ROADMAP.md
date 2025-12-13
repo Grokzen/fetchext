@@ -237,38 +237,40 @@
   - [x] Add `fext similar <file>` to find other extensions in the local repository with high code similarity (using fuzzy hashing).
 - [x] **Smart Diff**: Visual comparison (CLI).
   - [x] Enhance `fext diff` to visually compare changed images/assets and support "ignore whitespace" for code diffs.
-- [ ] **TUI Dashboard**: Visual Analytics (TUI).
-  - [ ] Add a "Home" screen to `fext ui` displaying repository statistics (disk usage, risk distribution) using charts.
+- [x] **TUI Dashboard**: Visual Analytics (TUI).
+  - [x] Add a "Home" screen to `fext ui` displaying repository statistics (disk usage, risk distribution) using charts.
+- [x] **Extension Packer**: CRX creation (Core).
+  - [x] Add `fext pack <dir>` to create a signed CRX file from a source directory (reverse of extract).
+- [x] **MV3 Migration**: Automated migration (Core).
+  - [x] Add `fext migrate <dir>` to automate Manifest V2 to V3 conversion.
 
 ## 📦 v2.1.0: Lifecycle & Management
 
 *Focus: Full lifecycle management and workflow automation.*
 
-- [ ] **Extension Packer**: CRX creation (Core).
-  - [ ] Add `fext pack <dir>` to create a signed CRX file from a source directory (reverse of extract).
-- [ ] **Git Integration**: Version control (Workflow).
-  - [ ] Add `fext git init` to automatically set up a git repo for a downloaded extension with proper `.gitignore`.
-- [ ] **Update All**: Bulk maintenance (Workflow).
-  - [ ] Add `fext update --all` to check and update all extensions currently tracked in the local repository/history.
-- [ ] **License Scanner**: Legal compliance (Analysis).
-  - [ ] Add `fext scan --licenses` to identify open source licenses in extension files.
-- [ ] **Remote Config**: Centralized management (Config).
-  - [ ] Add `fext config --remote <url>` to load configuration from a remote URL (useful for teams).
+- [x] **Git Integration**: Version control (Workflow).
+  - [x] Add `fext git init` to automatically set up a git repo for a downloaded extension with proper `.gitignore`.
+- [x] **Update All**: Bulk maintenance (Workflow).
+  - [x] Add `fext update --all` to check and update all extensions currently tracked in the local repository/history.
+- [x] **License Scanner**: Legal compliance (Analysis).
+  - [x] Add `fext scan --licenses` to identify open source licenses in extension files.
+- [x] **Remote Config**: Centralized management (Config).
+  - [x] Add `fext config --remote <url>` to load configuration from a remote URL (useful for teams).
 
 ## 📊 v2.2.0: Reporting & Ecosystem
 
 *Focus: Advanced reporting, searching, and scalability.*
 
-- [ ] **HTML Report**: Rich reporting (Reporting).
-  - [ ] Add `fext report --html` to generate a standalone, interactive HTML report with charts and graphs.
-- [ ] **Badge Generator**: Status indicators (Docs).
-  - [ ] Add `fext badge <file>` to generate SVG badges for risk scores, version, and license for use in READMEs.
-- [ ] **Repo Grep**: Deep search (Analysis).
-  - [ ] Add `fext grep <pattern>` to search for string patterns across the source code of *all* downloaded extensions.
-- [ ] **Custom Rules**: Lightweight analysis (Analysis).
-  - [ ] Support a YAML-based rules engine for defining custom scan patterns without writing full Python plugins.
-- [ ] **Scalable History**: Performance (Core).
-  - [ ] Migrate `history` tracking to an optional SQLite backend to support repositories with thousands of extensions.
+- [x] **HTML Report**: Rich reporting (Reporting).
+  - [x] Add `fext report --html` to generate a standalone, interactive HTML report with charts and graphs.
+- [x] **Badge Generator**: Status indicators (Docs).
+  - [x] Add `fext badge <file>` to generate SVG badges for risk scores, version, and license for use in READMEs.
+- [x] **Repo Grep**: Deep search (Analysis).
+  - [x] Add `fext grep <pattern>` to search for string patterns across the source code of *all* downloaded extensions.
+- [x] **Custom Rules**: Lightweight analysis (Analysis).
+  - [x] Support a YAML-based rules engine for defining custom scan patterns without writing full Python plugins.
+- [x] **Scalable History**: Performance (Core).
+  - [x] Migrate `history` tracking to an optional SQLite backend to support repositories with thousands of extensions.
 
 ## ✅ Completed
 

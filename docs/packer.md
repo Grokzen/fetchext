@@ -12,12 +12,12 @@ fext pack <source_directory> [options]
 
 ### Arguments
 
--   `source_directory`: The path to the directory containing the extension source code (must contain a `manifest.json`).
+- `source_directory`: The path to the directory containing the extension source code (must contain a `manifest.json`).
 
 ### Options
 
--   `--pem <path>`: Path to an existing private key (`.pem`) file. If not provided, a new key will be generated.
--   `--out <path>`: Output filename for the `.crx` file. Defaults to `<directory_name>.crx`.
+- `--pem <path>`: Path to an existing private key (`.pem`) file. If not provided, a new key will be generated.
+- `--out <path>`: Output filename for the `.crx` file. Defaults to `<directory_name>.crx`.
 
 ## Examples
 
@@ -28,8 +28,9 @@ fext pack ./my-extension
 ```
 
 This will create:
--   `my-extension.crx`: The packed extension.
--   `my-extension.pem`: The generated private key (keep this safe!).
+
+- `my-extension.crx`: The packed extension.
+- `my-extension.pem`: The generated private key (keep this safe!).
 
 ### Packing with an Existing Key
 
@@ -48,9 +49,10 @@ fext pack ./my-extension --out release-v1.0.crx
 ## Technical Details
 
 The packer creates **CRX3** format files, which are required by modern browsers.
--   **Signing**: Uses RSA-2048 keys.
--   **Hashing**: Uses SHA-256.
--   **Header**: Includes the standard CRX3 header with public key and signature proofs.
+
+- **Signing**: Uses RSA-2048 keys.
+- **Hashing**: Uses SHA-256.
+- **Header**: Includes the standard CRX3 header with public key and signature proofs.
 
 ## Hooks
 

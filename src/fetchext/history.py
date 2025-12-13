@@ -1,39 +1,73 @@
 import json
 import os
-from datetime import datetime
+import sqlite3
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 class HistoryManager:
     def __init__(self):
-        self.history_file = self._get_history_path()
+        self.base_dir = self._get_base_dir()
+        self.db_path = self.base_dir / "history.db"
+        self.json_path = self.base_dir / "history.json"
+        self._init_db()
+        self._migrate_json()
 
-    def _get_history_path(self) -> Path:
-        """
-        Returns the path to the history file.
-        Respects XDG_DATA_HOME, defaulting to ~/.local/share/fext/history.json.
-        """
+    def _get_base_dir(self) -> Path:
         xdg_data_home = os.environ.get("XDG_DATA_HOME")
         if xdg_data_home:
             base_dir = Path(xdg_data_home)
         else:
             base_dir = Path.home() / ".local" / "share"
-        
-        return base_dir / "fext" / "history.json"
+        return base_dir / "fext"
 
-    def _load_history(self) -> List[Dict[str, Any]]:
-        if not self.history_file.exists():
-            return []
-        try:
-            with open(self.history_file, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except (json.JSONDecodeError, OSError):
-            return []
+    def _init_db(self):
+        self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS history (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    timestamp TEXT,
+                    action TEXT,
+                    extension_id TEXT,
+                    browser TEXT,
+                    version TEXT,
+                    status TEXT,
+                    path TEXT
+                )
+            """)
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_timestamp ON history(timestamp DESC)")
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_ext_id ON history(extension_id)")
 
-    def _save_history(self, history: List[Dict[str, Any]]) -> None:
-        self.history_file.parent.mkdir(parents=True, exist_ok=True)
-        with open(self.history_file, "w", encoding="utf-8") as f:
-            json.dump(history, f, indent=2)
+    def _migrate_json(self):
+        if self.json_path.exists():
+            try:
+                with open(self.json_path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                
+                if data:
+                    with sqlite3.connect(self.db_path) as conn:
+                        # Check if DB is empty to avoid double migration
+                        cursor = conn.execute("SELECT count(*) FROM history")
+                        if cursor.fetchone()[0] == 0:
+                            for entry in data:
+                                conn.execute("""
+                                    INSERT INTO history (timestamp, action, extension_id, browser, version, status, path)
+                                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                                """, (
+                                    entry.get("timestamp"),
+                                    entry.get("action"),
+                                    entry.get("id"),
+                                    entry.get("browser"),
+                                    entry.get("version"),
+                                    entry.get("status"),
+                                    entry.get("path")
+                                ))
+                
+                # Rename JSON file to indicate migration done
+                self.json_path.rename(self.json_path.with_suffix(".json.bak"))
+            except Exception:
+                pass
 
     def add_entry(self, 
                   action: str, 
@@ -42,35 +76,35 @@ class HistoryManager:
                   version: Optional[str] = None, 
                   status: str = "success", 
                   path: Optional[str] = None) -> None:
-        """
-        Adds a new entry to the history log.
-        """
-        entry = {
-            "timestamp": datetime.utcnow().isoformat() + "Z",
-            "action": action,
-            "id": extension_id,
-            "browser": browser,
-            "version": version,
-            "status": status,
-            "path": str(path) if path else None
-        }
-        
-        history = self._load_history()
-        history.append(entry)
-        self._save_history(history)
+        timestamp = datetime.now(timezone.utc).isoformat()
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute("""
+                INSERT INTO history (timestamp, action, extension_id, browser, version, status, path)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (timestamp, action, extension_id, browser, version, status, str(path) if path else None))
 
     def get_entries(self, limit: int = 20) -> List[Dict[str, Any]]:
-        """
-        Returns the last N history entries, most recent first.
-        """
-        history = self._load_history()
-        # Sort by timestamp descending just in case, though append keeps order
-        # Actually, append puts newest at end. So reverse it.
-        return sorted(history, key=lambda x: x.get("timestamp", ""), reverse=True)[:limit]
+        with sqlite3.connect(self.db_path) as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.execute("""
+                SELECT timestamp, action, extension_id as id, browser, version, status, path
+                FROM history
+                ORDER BY timestamp DESC
+                LIMIT ?
+            """, (limit,))
+            return [dict(row) for row in cursor.fetchall()]
+
+    def get_all_entries(self) -> List[Dict[str, Any]]:
+        """Get all entries for bulk operations."""
+        with sqlite3.connect(self.db_path) as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.execute("""
+                SELECT timestamp, action, extension_id as id, browser, version, status, path
+                FROM history
+                ORDER BY timestamp DESC
+            """)
+            return [dict(row) for row in cursor.fetchall()]
 
     def clear(self) -> None:
-        """
-        Clears the history.
-        """
-        if self.history_file.exists():
-            self.history_file.unlink()
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute("DELETE FROM history")

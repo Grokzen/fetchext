@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2025-12-10
+
+### Added
+
+- **HTML Reports**: Added `fext report --html` to generate interactive HTML reports with Chart.js visualizations for risk, complexity, and file distribution.
+- **Badge Generator**: Added `fext badge` command to generate SVG badges (Shields.io style) for version, risk score, and license, suitable for READMEs.
+- **Repository Grep**: Added `fext grep <pattern>` command to search for regex patterns across all downloaded extensions, including content within compressed archives (CRX/ZIP).
+- **Custom Rules**: Added `fext scan --custom <rules.yaml>` to run user-defined regex rules against extension source code for specialized auditing.
+- **Scalable History**: Migrated history tracking from a flat JSON file to a SQLite database (`history.db`) to support thousands of records and advanced querying.
+
+## [2.1.0] - 2025-12-10
+
+### Added
+
+- **Git Integration**: Added `fext git init` command to initialize a git repository in an extension directory with a tailored `.gitignore`.
+- **Update All**: Added `fext update --all` command to check and update all previously downloaded extensions in parallel.
+- **License Scanner**: Added `fext audit scan --licenses` to detect open source licenses (MIT, Apache, GPL, etc.) in extension files.
+- **Remote Config**: Added `fext config remote <url>` command to fetch and apply configuration from a remote URL.
+
 ## [2.0.0] - 2025-12-10
 
 ### Added
