@@ -365,6 +365,20 @@ fext share <file> [--provider <provider>] [--description <text>]
 * `--provider`: Sharing provider (default: `gist`).
 * `--description`: Description for the shared file.
 
+### `watch`
+
+Monitor a directory for new extensions and automatically process them.
+
+```bash
+fext watch <directory> [--extract] [--report] [--scan]
+```
+
+**Options:**
+
+* `--extract`: Automatically extract new extensions.
+* `--report`: Automatically generate reports.
+* `--scan`: Automatically scan for vulnerabilities.
+
 ### `clean`
 
 Clean up cache and temporary files.

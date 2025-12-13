@@ -28,6 +28,7 @@ dependencies = [
     "jsbeautifier",
     "ppdeep",
     "PyYAML",
+    "watchdog",
 ]
 
 [project.optional-dependencies]
