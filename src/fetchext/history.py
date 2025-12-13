@@ -21,9 +21,18 @@ class HistoryManager:
             base_dir = Path.home() / ".local" / "share"
         return base_dir / "fext"
 
+    def _get_connection(self) -> sqlite3.Connection:
+        """Get a configured SQLite connection with WAL mode enabled."""
+        conn = sqlite3.connect(self.db_path, timeout=5.0)
+        # Enable Write-Ahead Logging for better concurrency
+        conn.execute("PRAGMA journal_mode=WAL;")
+        # Enable foreign keys (good practice, though not strictly used yet)
+        conn.execute("PRAGMA foreign_keys=ON;")
+        return conn
+
     def _init_db(self):
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
-        with sqlite3.connect(self.db_path) as conn:
+        with self._get_connection() as conn:
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS history (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -46,7 +55,7 @@ class HistoryManager:
                     data = json.load(f)
                 
                 if data:
-                    with sqlite3.connect(self.db_path) as conn:
+                    with self._get_connection() as conn:
                         # Check if DB is empty to avoid double migration
                         cursor = conn.execute("SELECT count(*) FROM history")
                         if cursor.fetchone()[0] == 0:
@@ -77,14 +86,14 @@ class HistoryManager:
                   status: str = "success", 
                   path: Optional[str] = None) -> None:
         timestamp = datetime.now(timezone.utc).isoformat()
-        with sqlite3.connect(self.db_path) as conn:
+        with self._get_connection() as conn:
             conn.execute("""
                 INSERT INTO history (timestamp, action, extension_id, browser, version, status, path)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
             """, (timestamp, action, extension_id, browser, version, status, str(path) if path else None))
 
     def get_entries(self, limit: int = 20) -> List[Dict[str, Any]]:
-        with sqlite3.connect(self.db_path) as conn:
+        with self._get_connection() as conn:
             conn.row_factory = sqlite3.Row
             cursor = conn.execute("""
                 SELECT timestamp, action, extension_id as id, browser, version, status, path
@@ -96,7 +105,7 @@ class HistoryManager:
 
     def get_all_entries(self) -> List[Dict[str, Any]]:
         """Get all entries for bulk operations."""
-        with sqlite3.connect(self.db_path) as conn:
+        with self._get_connection() as conn:
             conn.row_factory = sqlite3.Row
             cursor = conn.execute("""
                 SELECT timestamp, action, extension_id as id, browser, version, status, path
@@ -106,5 +115,5 @@ class HistoryManager:
             return [dict(row) for row in cursor.fetchall()]
 
     def clear(self) -> None:
-        with sqlite3.connect(self.db_path) as conn:
+        with self._get_connection() as conn:
             conn.execute("DELETE FROM history")

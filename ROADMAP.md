@@ -299,8 +299,8 @@
 
 *Focus: Sharing, automation, and expanding platform support.*
 
-- [ ] **History Concurrency**: Reliability (Fix).
-  - [ ] Implement file locking or WAL mode for SQLite to prevent race conditions during concurrent `fext` runs. This ensures data integrity when running multiple instances or batch jobs.
+- [x] **History Concurrency**: Reliability (Fix).
+  - [x] Implement file locking or WAL mode for SQLite to prevent race conditions during concurrent `fext` runs. This ensures data integrity when running multiple instances or batch jobs.
 - [ ] **CLI Output Standardization**: UX (Fix).
   - [ ] Create a central `Theme` class to enforce consistent colors, emojis, and formatting across all CLI commands. This improves the professional look and feel of the tool.
 - [ ] **Report Sharing**: Collaboration (New).

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4.0] - 2025-12-10
+
+### Added
+
+- **History Concurrency**: Enabled SQLite WAL (Write-Ahead Logging) mode for the history database to support high-concurrency scenarios (e.g., parallel batch downloads) without locking errors.
+
 ## [2.3.0] - 2025-12-10
 
 ### Added
