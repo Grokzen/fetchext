@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Visual Diff**: Added `fext diff --visual` to generate interactive HTML reports showing side-by-side comparisons of modified files and images.
 - **Permission Matrix**: Added `fext analyze permissions <directory>` to generate a cross-reference matrix of permissions across multiple extensions (JSON/CSV/Table).
+- **Property-Based Testing**: Implemented advanced fuzz testing for `CrxDecoder` using `hypothesis` to ensure robustness against malformed CRX headers.
 
 ### Fixed
 

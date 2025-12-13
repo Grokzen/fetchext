@@ -284,8 +284,8 @@
   - [x] Add `fext diff --visual` to generate an HTML report showing side-by-side comparisons of modified images.
 - [x] **Permission Matrix**: Auditing (New).
   - [x] Add `fext analyze --permissions` to output a matrix showing permission usage across multiple extensions.
-- [ ] **Property-Based Testing**: Quality (Test).
-  - [ ] Introduce `hypothesis` to fuzz test the `CrxDecoder` with thousands of valid and invalid header combinations.
+- [x] **Property-Based Testing**: Quality (Test).
+  - [x] Introduce `hypothesis` to fuzz test the `CrxDecoder` with thousands of valid and invalid header combinations.
 - [ ] **Performance Benchmarks**: Quality (Test).
   - [ ] Add a `benchmarks/` suite to measure and track extraction and analysis speed over time.
 - [ ] **TUI Mouse Support**: Accessibility (Improve).
