@@ -302,25 +302,50 @@
 *Focus: Sharing, automation, and expanding platform support.*
 
 - [ ] **History Concurrency**: Reliability (Fix).
-  - [ ] Implement file locking or WAL mode for SQLite to prevent race conditions during concurrent `fext` runs.
+  - [ ] Implement file locking or WAL mode for SQLite to prevent race conditions during concurrent `fext` runs. This ensures data integrity when running multiple instances or batch jobs.
 - [ ] **CLI Output Standardization**: UX (Fix).
-  - [ ] Create a central `Theme` class to enforce consistent colors and formatting across all CLI commands.
+  - [ ] Create a central `Theme` class to enforce consistent colors, emojis, and formatting across all CLI commands. This improves the professional look and feel of the tool.
 - [ ] **Report Sharing**: Collaboration (New).
-  - [ ] Add `fext share <report.html>` to automatically upload reports to a configured destination (S3/Gist) and generate a link.
+  - [ ] Add `fext share <report.html>` to automatically upload reports to a configured destination (e.g., GitHub Gist, S3, or a pastebin) and generate a shareable link for team collaboration.
 - [ ] **Directory Watcher**: Automation (New).
-  - [ ] Add `fext watch <dir>` to monitor a folder and automatically trigger analysis workflows on new CRX files.
+  - [ ] Add `fext watch <dir>` to monitor a folder for new `.crx` or `.xpi` files and automatically trigger analysis workflows (scan, report, extract) as they arrive.
 - [ ] **TUI E2E Testing**: Quality (Test).
-  - [ ] Implement automated end-to-end tests for the TUI using `textual`'s `Pilot` testing harness.
+  - [ ] Implement automated end-to-end tests for the TUI using `textual`'s `Pilot` testing harness to verify user interactions and prevent UI regressions.
 - [ ] **Migration Regression Tests**: Quality (Test).
-  - [ ] Add "golden" tests for `fext migrate` to verify MV2->MV3 conversion accuracy against known good outputs.
+  - [ ] Add a suite of "golden" tests for `fext migrate` to verify MV2->MV3 conversion accuracy against known good outputs, ensuring the migration logic remains stable.
 - [ ] **Complexity in Reports**: Reporting (Improve).
-  - [ ] Integrate `lizard` complexity metrics into the HTML report with visualization charts.
+  - [ ] Integrate `lizard` complexity metrics directly into the HTML report with visualization charts (e.g., complexity vs. line count scatter plot) to highlight maintenance hotspots.
 - [ ] **Firefox Signature Verification**: Security (Improve).
-  - [ ] Implement XPI signature verification (PKCS#7/CMS) to support Firefox extension integrity checking.
+  - [ ] Implement XPI signature verification (PKCS#7/CMS) to support Firefox extension integrity checking, matching the capability currently available for Chrome CRX files.
 - [ ] **Local AI (Ollama)**: Privacy (Innovate).
-  - [ ] Add an `ollama` provider to the AI module to support offline, private extension summarization.
+  - [ ] Add an `ollama` provider to the AI module to support offline, private extension summarization and code analysis without sending data to external APIs.
 - [ ] **SQL Query Interface**: Power User (Innovate).
-  - [ ] Add `fext query <sql>` to allow running direct SQL queries against the local extension metadata repository.
+  - [ ] Add `fext query <sql>` to allow running direct SQL queries against the local extension metadata repository (`history.db`), enabling complex ad-hoc data analysis.
+
+## 🕵️ v2.5.0: Dynamic Analysis & Hardening
+
+*Focus: Runtime behavior analysis and architectural hardening.*
+
+- [ ] **Unified Network Client**: Architecture (Fix).
+  - [ ] Refactor all downloader modules to use a single, centralized `NetworkClient` class that handles rate limiting, retries, user-agent rotation, and proxying consistently.
+- [ ] **Strict Typing**: Code Quality (Fix).
+  - [ ] Audit the entire codebase to enforce strict type checking (`mypy --strict`), removing `Any` types and ensuring full type safety for better maintainability.
+- [ ] **Dynamic Analysis Sandbox**: Analysis (New).
+  - [ ] Add `fext analyze --dynamic <file>` using `playwright` to launch the extension in a headless browser, capturing screenshots, console logs, and network requests during installation.
+- [ ] **Export to STIX**: Interoperability (New).
+  - [ ] Add `fext export --stix <file>` to generate Threat Intelligence objects (STIX 2.1) for detected indicators (hashes, domains, IPs) to integrate with security platforms.
+- [ ] **Cross-Platform CI**: Quality (Test).
+  - [ ] Expand GitHub Actions workflow to include Windows and macOS runners, ensuring path handling and file operations work correctly across all supported operating systems.
+- [ ] **Snapshot Testing**: Quality (Test).
+  - [ ] Implement snapshot testing (using `pytest-snapshot`) for CLI output and TUI screens to detect unintended visual changes or formatting regressions.
+- [ ] **TUI Themes**: UX (Improve).
+  - [ ] Add support for user-configurable color schemes (themes) in `config.toml` for the TUI, allowing users to match their terminal aesthetics.
+- [ ] **AST-Based Diff**: Analysis (Improve).
+  - [ ] Enhance `fext diff` to perform semantic, AST-based comparisons for JavaScript files (ignoring formatting/comments) to highlight actual logic changes more clearly.
+- [ ] **WASM Inspector**: Analysis (Innovate).
+  - [ ] Add support for detecting and analyzing WebAssembly (`.wasm`) modules within extensions, including disassembly (using `wasm2wat`) and basic stats.
+- [ ] **Community Rules Sync**: Security (Innovate).
+  - [ ] Add `fext rules sync` to automatically download and update YARA rules and analysis signatures from a community-maintained git repository.
 
 ## ✅ Completed
 
