@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **History Concurrency**: Enabled SQLite WAL (Write-Ahead Logging) mode for the history database to support high-concurrency scenarios (e.g., parallel batch downloads) without locking errors.
+- **CLI Theming**: Introduced a centralized `Theme` system to enforce consistent colors, emojis, and formatting across all CLI commands, improving visual coherence.
 
 ## [2.3.0] - 2025-12-10
 

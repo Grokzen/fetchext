@@ -7,6 +7,7 @@ from .inspector import ExtensionInspector
 from .batch import BatchProcessor
 from .utils import open_extension_archive, verify_file_hash, check_disk_space
 from .console import console, print_manifest_table, print_search_results_table
+from .theme import Theme
 from .preview import build_file_tree
 from .auditor import ExtensionAuditor
 from .diff import ExtensionDiffer
@@ -39,7 +40,7 @@ def download_extension(browser, url, output_dir, save_metadata=False, extract=Fa
 
     extension_id = downloader.extract_id(url)
     if show_progress:
-        logger.info(f"Extracted ID/Slug: {extension_id}")
+        console.print_info(f"Extracted ID/Slug: [bold]{extension_id}[/bold]")
 
     # Initialize hooks
     config_dir = get_config_path().parent
@@ -57,7 +58,7 @@ def download_extension(browser, url, output_dir, save_metadata=False, extract=Fa
     hook_manager.run_hook("pre_download", ctx)
     
     if ctx.cancel:
-        logger.info("Download cancelled by pre_download hook.")
+        console.print_warning("Download cancelled by pre_download hook.")
         return None
 
     output_dir = Path(output_dir)
@@ -69,13 +70,13 @@ def download_extension(browser, url, output_dir, save_metadata=False, extract=Fa
     # Verify hash if requested
     if verify_hash:
         if show_progress:
-            logger.info(f"Verifying SHA256 hash: {verify_hash}")
+            console.print_info(f"Verifying SHA256 hash: {verify_hash}")
         try:
             verify_file_hash(output_path, verify_hash)
             if show_progress:
-                logger.info("Hash verification successful.")
+                console.print_success("Hash verification successful.")
         except IntegrityError as e:
-            logger.error(f"Integrity check failed: {e}")
+            console.print_error(f"Integrity check failed: {e}")
             # Cleanup
             if output_path.exists():
                 output_path.unlink()
@@ -86,7 +87,7 @@ def download_extension(browser, url, output_dir, save_metadata=False, extract=Fa
 
     if save_metadata:
         if show_progress:
-            logger.info("Generating metadata sidecar...")
+            console.print_info("Generating metadata sidecar...")
         try:
             inspector = ExtensionInspector()
             manifest = inspector.get_manifest(output_path)
@@ -110,9 +111,9 @@ def download_extension(browser, url, output_dir, save_metadata=False, extract=Fa
                 json.dump(metadata, f, indent=2)
                 
             if show_progress:
-                logger.info(f"Metadata saved to {metadata_path}")
+                console.print_success(f"Metadata saved to {metadata_path}")
         except Exception as e:
-            logger.warning(f"Failed to generate metadata: {e}")
+            console.print_warning(f"Failed to generate metadata: {e}")
 
     # Run post-download hook
     hook_manager.run_hook("post_download", ctx)
@@ -189,7 +190,7 @@ def inspect_extension(file_path, show_progress=True, json_output=False):
     else:
         print_manifest_table(manifest)
         if show_progress:
-            logger.info("Inspection finished successfully.")
+            console.print_success("Inspection finished successfully.")
     
     return manifest
 
@@ -301,13 +302,13 @@ def check_update(file_path, json_output=False):
     else:
         # Print human readable
         if result["status"] == "update_available":
-            console.print(f"[bold green]Update Available![/bold green] {name} ({local_version} -> {remote_version})")
+            console.print(f"[{Theme.COLOR_SUCCESS} bold]Update Available![/{Theme.COLOR_SUCCESS} bold] {name} ({local_version} -> {remote_version})")
         elif result["status"] == "up_to_date":
-            console.print(f"[bold blue]Up to date.[/bold blue] {name} ({local_version})")
+            console.print(f"[{Theme.COLOR_INFO} bold]Up to date.[/] {name} ({local_version})")
         elif result["status"] == "check_failed":
-            console.print(f"[bold red]Failed to check for updates.[/bold red] {name}")
+            console.print(f"[{Theme.COLOR_ERROR} bold]Failed to check for updates.[/] {name}")
         else:
-             console.print(f"[yellow]Status: {result['status']}[/yellow] {name} ({local_version} vs {remote_version})")
+             console.print(f"[{Theme.COLOR_WARNING}]Status: {result['status']}[/] {name} ({local_version} vs {remote_version})")
 
     return result
 
@@ -350,20 +351,20 @@ def audit_extension(file_path, json_output=False):
             # Print report
             console.print(f"[bold]Manifest Version:[/bold] {report.manifest_version}")
             if report.is_mv3:
-                console.print("[bold green]MV3 Compatible[/bold green]")
+                console.print(f"[{Theme.COLOR_SUCCESS} bold]MV3 Compatible[/]")
             else:
-                console.print("[bold yellow]MV2 Legacy[/bold yellow]")
+                console.print(f"[{Theme.COLOR_WARNING} bold]MV2 Legacy[/]")
                 
             if report.issues:
                 console.print("\n[bold]Issues:[/bold]")
                 for issue in report.issues:
-                    color = "red" if issue.severity == "error" else "yellow" if issue.severity == "warning" else "blue"
+                    color = Theme.COLOR_ERROR if issue.severity == "error" else Theme.COLOR_WARNING if issue.severity == "warning" else Theme.COLOR_INFO
                     loc = f"{issue.file}"
                     if issue.line:
                         loc += f":{issue.line}"
                     console.print(f"[{color}]• {issue.message}[/{color}] ([dim]{loc}[/dim])")
             else:
-                console.print("\n[bold green]No issues found.[/bold green]")
+                console.print(f"\n[{Theme.COLOR_SUCCESS} bold]No issues found.[/]")
                 
         return report
     except Exception as e:
@@ -393,7 +394,7 @@ def diff_extensions(old_path, new_path, json_output=False, ignore_whitespace=Fal
             
             generator = VisualDiffGenerator()
             generator.generate(report, old_path, new_path, output_path)
-            console.print(f"[green]Visual diff report generated at {output_path}[/green]")
+            console.print_success(f"Visual diff report generated at {output_path}")
             return report
         
         if json_output:
@@ -406,31 +407,31 @@ def diff_extensions(old_path, new_path, json_output=False, ignore_whitespace=Fal
             if report.manifest_changes:
                 console.print("\n[bold]Manifest Changes:[/bold]")
                 for key, (old, new) in report.manifest_changes.items():
-                    console.print(f"  [yellow]{key}[/yellow]: {old} -> {new}")
+                    console.print(f"  [{Theme.COLOR_WARNING}]{key}[/]: {old} -> {new}")
             
             if report.added_files:
-                console.print(f"\n[bold green]Added Files ({len(report.added_files)}):[/bold green]")
+                console.print(f"\n[{Theme.COLOR_SUCCESS} bold]Added Files ({len(report.added_files)}):[/]")
                 for f in report.added_files[:10]:
                     console.print(f"  + {f}")
                 if len(report.added_files) > 10:
                     console.print(f"  ... and {len(report.added_files) - 10} more")
                     
             if report.removed_files:
-                console.print(f"\n[bold red]Removed Files ({len(report.removed_files)}):[/bold red]")
+                console.print(f"\n[{Theme.COLOR_ERROR} bold]Removed Files ({len(report.removed_files)}):[/]")
                 for f in report.removed_files[:10]:
                     console.print(f"  - {f}")
                 if len(report.removed_files) > 10:
                     console.print(f"  ... and {len(report.removed_files) - 10} more")
                     
             if report.modified_files:
-                console.print(f"\n[bold blue]Modified Files ({len(report.modified_files)}):[/bold blue]")
+                console.print(f"\n[{Theme.COLOR_INFO} bold]Modified Files ({len(report.modified_files)}):[/]")
                 for f in report.modified_files[:10]:
                     console.print(f"  ~ {f}")
                 if len(report.modified_files) > 10:
                     console.print(f"  ... and {len(report.modified_files) - 10} more")
 
             if report.image_changes:
-                console.print(f"\n[bold magenta]Image Changes ({len(report.image_changes)}):[/bold magenta]")
+                console.print(f"\n[{Theme.COLOR_HIGHLIGHT} bold]Image Changes ({len(report.image_changes)}):[/]")
                 for img in report.image_changes:
                     console.print(f"  * {img['file']}: {img['diff']}")
                     
@@ -457,11 +458,11 @@ def analyze_risk(file_path, json_output=False):
         else:
             # Color code the max level
             level_color = {
-                "Critical": "red",
+                "Critical": Theme.COLOR_ERROR,
                 "High": "orange1",
-                "Medium": "yellow",
-                "Low": "blue",
-                "Safe": "green"
+                "Medium": Theme.COLOR_WARNING,
+                "Low": Theme.COLOR_INFO,
+                "Safe": Theme.COLOR_SUCCESS
             }.get(report.max_level, "white")
             
             console.print("[bold]Risk Analysis Report[/bold]")
@@ -472,15 +473,15 @@ def analyze_risk(file_path, json_output=False):
                 console.print("\n[bold]Risky Permissions:[/bold]")
                 for p in report.risky_permissions:
                     p_color = {
-                        "Critical": "red",
+                        "Critical": Theme.COLOR_ERROR,
                         "High": "orange1",
-                        "Medium": "yellow",
-                        "Low": "blue"
+                        "Medium": Theme.COLOR_WARNING,
+                        "Low": Theme.COLOR_INFO
                     }.get(p.level, "white")
                     console.print(f"  [{p_color}]• {p.permission}[/{p_color}] (Score: {p.score}) - [dim]{p.description}[/dim]")
             
             if report.safe_permissions:
-                console.print(f"\n[bold green]Safe/Unknown Permissions ({len(report.safe_permissions)}):[/bold green]")
+                console.print(f"\n[{Theme.COLOR_SUCCESS} bold]Safe/Unknown Permissions ({len(report.safe_permissions)}):[/]")
                 console.print(f"  {', '.join(report.safe_permissions)}")
                 
         return report
@@ -510,9 +511,9 @@ def verify_signature(file_path, json_output=False):
             console.print_json(data=result)
         else:
             if is_valid:
-                console.print("[bold green]Signature Verified[/bold green] (RSA-SHA256)")
+                console.print_success("Signature Verified (RSA-SHA256)")
             else:
-                console.print("[bold red]Verification Failed[/bold red]")
+                console.print_error("Verification Failed")
                 
         return is_valid
     except Exception as e:
@@ -520,7 +521,7 @@ def verify_signature(file_path, json_output=False):
         if json_output:
              console.print_json(data={"file": str(file_path), "verified": False, "error": str(e)})
         else:
-             console.print(f"[bold red]Verification Error:[/bold red] {e}")
+             console.print_error(f"Verification Error: {e}")
         return False
 
 def extract_extension(file_path, output_dir=None, show_progress=True):
@@ -537,12 +538,12 @@ def extract_extension(file_path, output_dir=None, show_progress=True):
         extract_dir = Path(".") / file_path.stem
         
     if extract_dir.exists() and any(extract_dir.iterdir()):
-         logger.warning(f"Extraction directory {extract_dir} is not empty.")
+         console.print_warning(f"Extraction directory {extract_dir} is not empty.")
     
     extract_dir.mkdir(parents=True, exist_ok=True)
     
     if show_progress:
-        logger.info(f"Extracting {file_path} to {extract_dir}...")
+        console.print_info(f"Extracting {file_path} to {extract_dir}...")
     
     try:
         with open_extension_archive(file_path) as zf:
@@ -552,7 +553,7 @@ def extract_extension(file_path, output_dir=None, show_progress=True):
             
             zf.extractall(extract_dir)
         if show_progress:
-            logger.info(f"Successfully extracted to {extract_dir}")
+            console.print_success(f"Successfully extracted to {extract_dir}")
 
         # Run post-extract hook
         try:
@@ -591,7 +592,7 @@ def extract_extension(file_path, output_dir=None, show_progress=True):
             )
             hook_manager.run_hook("post_extract", ctx)
         except Exception as e:
-            logger.warning(f"Failed to run post-extract hook: {e}")
+            console.print_warning(f"Failed to run post-extract hook: {e}")
 
         # Log to history
         try:
@@ -636,7 +637,7 @@ def batch_download(file_path, output_dir, workers=4, show_progress=True):
     processor = BatchProcessor()
     processor.process(file_path, output_dir, max_workers=workers, show_progress=show_progress)
     if show_progress:
-        logger.info("Batch processing finished successfully.")
+        console.print_success("Batch processing finished successfully.")
 
 def scan_extension(file_path, json_output=False, csv_output=False):
     """
@@ -675,14 +676,14 @@ def scan_extension(file_path, json_output=False, csv_output=False):
         else:
             console.print(f"[bold]Dependency Scan Report:[/bold] {report.file}")
             if not report.libraries:
-                console.print("[green]No known libraries detected.[/green]")
+                console.print(f"[{Theme.COLOR_SUCCESS}]No known libraries detected.[/]")
             else:
                 for lib in report.libraries:
-                    status = "[red]VULNERABLE[/red]" if lib.vulnerable else "[green]OK[/green]"
+                    status = f"[{Theme.COLOR_ERROR}]VULNERABLE[/]" if lib.vulnerable else f"[{Theme.COLOR_SUCCESS}]OK[/]"
                     console.print(f"  • [bold]{lib.name}[/bold] v{lib.version} ({status})")
                     console.print(f"    Path: [dim]{lib.path}[/dim]")
                     if lib.vulnerable:
-                        console.print(f"    Advisory: [red]{lib.advisory}[/red]")
+                        console.print(f"    Advisory: [{Theme.COLOR_ERROR}]{lib.advisory}[/]")
                         
         return report
     except Exception as e:

@@ -1,3 +1,5 @@
+from fetchext.theme import Theme
+
 class LazyConsole:
     def __init__(self):
         self._console = None
@@ -6,7 +8,7 @@ class LazyConsole:
     def _impl(self):
         if self._console is None:
             from rich.console import Console
-            self._console = Console()
+            self._console = Console(theme=Theme.RICH_THEME)
         return self._console
 
     def __getattr__(self, name):
@@ -45,6 +47,18 @@ class LazyConsole:
             transient=transient
         )
 
+    def print_success(self, message: str):
+        self.print(Theme.format_success(message))
+
+    def print_error(self, message: str):
+        self.print(Theme.format_error(message))
+
+    def print_warning(self, message: str):
+        self.print(Theme.format_warning(message))
+
+    def print_info(self, message: str):
+        self.print(Theme.format_info(message))
+
 console = LazyConsole()
 
 def print_manifest_table(manifest):
@@ -75,7 +89,7 @@ def print_search_results_table(query, results):
     from rich.table import Table
 
     if not results:
-        console.print(f"[yellow]No results found for '{query}'.[/yellow]")
+        console.print_warning(f"No results found for '{query}'.")
         return
 
     table = Table(title=f"Search Results for '{query}'", show_header=True, header_style="bold magenta")
