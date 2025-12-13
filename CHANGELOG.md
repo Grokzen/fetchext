@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **Startup Time Optimization**: Implemented lazy loading for heavy dependencies (`rich`, `PIL`, `lizard`, `yara`, `textual`, `cryptography`) to significantly reduce CLI startup time.
+- **Memory Optimization**: Refactored `secrets` scanner to stream file content line-by-line and `yara` scanner to extract large files (>10MB) to temporary storage, reducing memory footprint during analysis of large extensions.
 
 ## [1.8.0] - 2025-12-10
 

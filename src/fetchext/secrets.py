@@ -45,8 +45,14 @@ class SecretScanner:
                     continue
 
                 try:
-                    content = zf.read(filename).decode("utf-8", errors="ignore")
-                    findings.extend(self._scan_content(content, filename))
+                    # Use streaming to avoid loading entire file into memory
+                    with zf.open(filename) as f:
+                        for i, line_bytes in enumerate(f):
+                            try:
+                                line = line_bytes.decode("utf-8", errors="ignore")
+                                findings.extend(self._scan_line(line, filename, i + 1))
+                            except Exception:
+                                pass
                 except Exception:
                     pass # Ignore read errors
         return findings
@@ -60,83 +66,81 @@ class SecretScanner:
         entropy = - sum([p * math.log(p) / math.log(2.0) for p in prob])
         return entropy
 
-    def _scan_content(self, content: str, filename: str) -> List[SecretFinding]:
+    def _scan_line(self, line: str, filename: str, line_number: int) -> List[SecretFinding]:
         findings = []
-        lines = content.splitlines()
-        for i, line in enumerate(lines):
-            # Use a set to track matched ranges in this line to avoid overlapping matches
-            matched_ranges = set()
+        # Use a set to track matched ranges in this line to avoid overlapping matches
+        matched_ranges = set()
+        
+        # Collect all matches first
+        all_matches = []
+        for name, pattern in self.PATTERNS:
+            for match in re.finditer(pattern, line):
+                all_matches.append((name, match))
+        
+        # Prioritize specific types
+        type_priority = {
+            "AWS Access Key": 10,
+            "Google API Key": 10,
+            "Slack Token": 10,
+            "Stripe Secret Key": 10,
+            "Private Key": 10,
+            "Generic API Key": 1
+        }
+        
+        # Sort by priority (descending) then by start position
+        all_matches.sort(key=lambda x: (-type_priority.get(x[0], 0), x[1].start()))
+        
+        for name, match in all_matches:
+            start, end = match.span()
             
-            # Collect all matches first
-            all_matches = []
-            for name, pattern in self.PATTERNS:
-                for match in re.finditer(pattern, line):
-                    all_matches.append((name, match))
+            # Check for overlap
+            is_overlap = False
+            for r_start, r_end in matched_ranges:
+                if (start < r_end and end > r_start):
+                    is_overlap = True
+                    break
             
-            # Prioritize specific types
-            type_priority = {
-                "AWS Access Key": 10,
-                "Google API Key": 10,
-                "Slack Token": 10,
-                "Stripe Secret Key": 10,
-                "Private Key": 10,
-                "Generic API Key": 1
-            }
+            if is_overlap:
+                continue
             
-            # Sort by priority (descending) then by start position
-            all_matches.sort(key=lambda x: (-type_priority.get(x[0], 0), x[1].start()))
+            full_match = match.group(0)
             
-            for name, match in all_matches:
-                start, end = match.span()
+            # False Positive Reduction for Generic API Key
+            if name == "Generic API Key":
+                secret_value = match.group(2)
                 
-                # Check for overlap
-                is_overlap = False
-                for r_start, r_end in matched_ranges:
-                    if (start < r_end and end > r_start):
-                        is_overlap = True
-                        break
-                
-                if is_overlap:
+                # 1. Check against known false positives
+                if any(fp in secret_value.upper() for fp in self.FALSE_POSITIVES):
                     continue
-                
-                full_match = match.group(0)
-                
-                # False Positive Reduction for Generic API Key
-                if name == "Generic API Key":
-                    secret_value = match.group(2)
                     
-                    # 1. Check against known false positives
-                    if any(fp in secret_value.upper() for fp in self.FALSE_POSITIVES):
-                        continue
-                        
-                    # 2. Check entropy (randomness)
-                    # A real API key usually has high entropy (> 3.0 for ~20 chars)
-                    # Simple words or repeated chars have low entropy.
-                    entropy = self._calculate_entropy(secret_value)
-                    if entropy < 3.0:
-                        continue
-                        
-                    # 3. Check if it looks like a URL or path
-                    if secret_value.startswith(("http", "//", "/", "./", "../")):
-                        continue
+                # 2. Check entropy (randomness)
+                # A real API key usually has high entropy (> 3.0 for ~20 chars)
+                # Simple words or repeated chars have low entropy.
+                entropy = self._calculate_entropy(secret_value)
+                if entropy < 3.0:
+                    continue
+                    
+                # 3. Check if it looks like a URL or path
+                if secret_value.startswith(("http", "//", "/", "./", "../")):
+                    continue
 
-                    # Re-implement masking to be simpler and consistent
-                    if len(full_match) > 12:
-                         masked = full_match[:8] + "*" * (len(full_match) - 12) + full_match[-4:]
-                    else:
-                         masked = "*" * len(full_match)
+                # Re-implement masking to be simpler and consistent
+                if len(full_match) > 12:
+                        masked = full_match[:8] + "*" * (len(full_match) - 12) + full_match[-4:]
                 else:
-                    # Standard masking
-                    if len(full_match) > 8:
-                        masked = full_match[:4] + "*" * (len(full_match) - 4)
-                    else:
                         masked = "*" * len(full_match)
-                
-                matched_ranges.add((start, end))
-                findings.append(SecretFinding(
-                    type=name,
-                    file=filename,
-                    line=i + 1,
-                    match=masked
-                ))
+            else:
+                # Standard masking
+                if len(full_match) > 8:
+                    masked = full_match[:4] + "*" * (len(full_match) - 4)
+                else:
+                    masked = "*" * len(full_match)
+            
+            matched_ranges.add((start, end))
+            findings.append(SecretFinding(
+                type=name,
+                file=filename,
+                line=line_number,
+                match=masked
+            ))
         return findings

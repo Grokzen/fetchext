@@ -214,10 +214,10 @@
 
 *Focus: Optimization and user experience.*
 
-- [ ] **Startup Time**: Performance (Core).
-  - [ ] Optimize import times by using lazy imports for heavy modules (e.g., `rich`, `Pillow`).
-- [ ] **Memory Usage**: Performance (Core).
-  - [ ] Profile and reduce memory footprint during extraction and analysis of large archives.
+- [x] **Startup Time**: Performance (Core).
+  - [x] Optimize import times by using lazy imports for heavy modules (e.g., `rich`, `Pillow`).
+- [x] **Memory Usage**: Performance (Core).
+  - [x] Profile and reduce memory footprint during extraction and analysis of large archives.
 - [ ] **TUI Polish**: UX (CLI).
   - [ ] Improve `fext ui` responsiveness, error handling, and navigation.
 - [ ] **Progress Bars**: UX (CLI).
