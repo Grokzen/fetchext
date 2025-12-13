@@ -286,8 +286,8 @@
   - [x] Add `fext analyze --permissions` to output a matrix showing permission usage across multiple extensions.
 - [x] **Property-Based Testing**: Quality (Test).
   - [x] Introduce `hypothesis` to fuzz test the `CrxDecoder` with thousands of valid and invalid header combinations.
-- [ ] **Performance Benchmarks**: Quality (Test).
-  - [ ] Add a `benchmarks/` suite to measure and track extraction and analysis speed over time.
+- [x] **Performance Benchmarks**: Quality (Test).
+  - [x] Add a `benchmarks/` suite to measure and track extraction and analysis speed over time.
 - [ ] **TUI Mouse Support**: Accessibility (Improve).
   - [ ] Enable mouse support in `fext ui` for clicking rows, tabs, and buttons to improve usability.
 - [ ] **Parallel Grep**: Performance (Improve).
