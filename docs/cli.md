@@ -285,6 +285,31 @@ fext plugin <command> [args]
 * `disable <name>`: Disable a plugin.
 * `remove <name>`: Remove a plugin.
 
+### `pack`
+
+Pack an extension directory into a `.crx` file.
+
+```bash
+fext pack <directory> [options]
+```
+
+**Options:**
+
+* `--pem <file>`: Path to private key file (generated if not exists).
+* `--out <file>`: Output filename.
+
+### `migrate`
+
+Migrate a Manifest V2 extension to Manifest V3.
+
+```bash
+fext migrate <directory> [options]
+```
+
+**Options:**
+
+* `--in-place`: Modify files in place.
+
 ### `ui`
 
 Launch the terminal-based user interface (TUI).

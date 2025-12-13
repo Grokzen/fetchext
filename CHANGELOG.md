@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2025-12-10
+
 ### Added
 
 - **Extension Packer**: Added `fext pack <directory>` command to create signed CRX3 files from source code, automatically generating RSA keys if needed.

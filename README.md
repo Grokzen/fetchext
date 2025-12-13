@@ -58,7 +58,7 @@ You can use `fetchext` in your [pre-commit](https://pre-commit.com) config:
 
 ```yaml
 - repo: https://github.com/grok/fetchext
-  rev: v0.7.0
+  rev: v2.0.0
   hooks:
     - id: fext-audit
     - id: fext-scan
