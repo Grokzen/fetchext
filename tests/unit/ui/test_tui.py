@@ -4,7 +4,7 @@ from unittest.mock import patch
 # Skip if textual is not installed
 textual = pytest.importorskip("textual")
 from textual.widgets import Input, DataTable  # noqa: E402
-from fetchext.tui import ExtensionApp  # noqa: E402
+from fetchext.tui import ExtensionApp, ConfirmationScreen  # noqa: E402
 
 @pytest.mark.asyncio
 async def test_tui_app_structure():
@@ -64,3 +64,50 @@ async def test_tui_browser_selection():
             await pilot.pause()
             
             mock_search.assert_called_with("firefox", "test")
+
+@pytest.mark.asyncio
+async def test_tui_download_confirmation():
+    with patch("fetchext.tui.search_extension") as mock_search, \
+         patch("fetchext.tui.download_extension") as mock_download:
+        
+        mock_search.return_value = [
+            {"name": "Test Ext", "id": "abc", "version": "1.0"}
+        ]
+        
+        app = ExtensionApp()
+        async with app.run_test() as pilot:
+            # Switch to Browser tab
+            app.query_one("TabbedContent").active = "browser"
+            await pilot.pause()
+
+            # Perform search to populate table
+            input_widget = app.query_one(Input)
+            input_widget.focus()
+            input_widget.value = "test"
+            await pilot.press("enter")
+            
+            # Wait for rows to appear
+            table = app.query_one(DataTable)
+            for _ in range(20):
+                if table.row_count > 0:
+                    break
+                await pilot.pause(0.1)
+            
+            # Select the row
+            assert table.row_count == 1
+            table.focus()
+            table.move_cursor(row=0)
+            await pilot.press("enter") # This triggers RowSelected
+            
+            await pilot.pause(0.5)
+            
+            # Check if ConfirmationScreen is pushed
+            # Note: app.screen returns the top screen
+            assert isinstance(app.screen, ConfirmationScreen)
+            
+            # Click "Yes"
+            await pilot.click("#yes")
+            await pilot.pause()
+            
+            # Check if download was called
+            mock_download.assert_called()

@@ -288,8 +288,8 @@
   - [x] Introduce `hypothesis` to fuzz test the `CrxDecoder` with thousands of valid and invalid header combinations.
 - [x] **Performance Benchmarks**: Quality (Test).
   - [x] Add a `benchmarks/` suite to measure and track extraction and analysis speed over time.
-- [ ] **TUI Mouse Support**: Accessibility (Improve).
-  - [ ] Enable mouse support in `fext ui` for clicking rows, tabs, and buttons to improve usability.
+- [x] **TUI Mouse Support**: Accessibility (Improve).
+  - [x] Enable mouse support in `fext ui` for clicking rows, tabs, and buttons to improve usability.
 - [ ] **Parallel Grep**: Performance (Improve).
   - [ ] Optimize `fext grep` to use `ProcessPoolExecutor` for multi-threaded searching of large repositories.
 - [ ] **JS Sandbox**: Security (Innovate).

@@ -1,11 +1,61 @@
 from textual import work
 from textual.app import App, ComposeResult
-from textual.containers import Horizontal, Container
-from textual.widgets import Header, Footer, Input, DataTable, RadioSet, RadioButton, Label, TabbedContent, TabPane, Static, Markdown
+from textual.containers import Horizontal, Container, Grid
+from textual.widgets import Header, Footer, Input, DataTable, RadioSet, RadioButton, Label, TabbedContent, TabPane, Static, Markdown, Button
+from textual.screen import ModalScreen
 from fetchext.core import search_extension, download_extension, get_repo_stats
 from fetchext.history import HistoryManager
 import logging
 from pathlib import Path
+
+class ConfirmationScreen(ModalScreen[bool]):
+    """Screen for confirming an action."""
+
+    CSS = """
+    ConfirmationScreen {
+        align: center middle;
+    }
+
+    #dialog {
+        grid-size: 2;
+        grid-gutter: 1 2;
+        grid-rows: 1fr 3;
+        padding: 0 1;
+        width: 60;
+        height: 11;
+        border: thick $background 80%;
+        background: $surface;
+    }
+
+    #question {
+        column-span: 2;
+        height: 1fr;
+        width: 1fr;
+        content-align: center middle;
+    }
+
+    Button {
+        width: 100%;
+    }
+    """
+
+    def __init__(self, message: str):
+        super().__init__()
+        self.message = message
+
+    def compose(self) -> ComposeResult:
+        yield Grid(
+            Label(self.message, id="question"),
+            Button("Yes", variant="primary", id="yes"),
+            Button("No", variant="error", id="no"),
+            id="dialog",
+        )
+
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.id == "yes":
+            self.dismiss(True)
+        else:
+            self.dismiss(False)
 
 class Dashboard(Static):
     """Dashboard widget showing repository statistics."""
@@ -188,8 +238,12 @@ class ExtensionApp(App):
             ext_id = row[1]
             browser = row[3]
             
-            self.notify(f"Downloading {name}...")
-            self.download_worker(browser, ext_id, name)
+            def check_confirm(confirm: bool) -> None:
+                if confirm:
+                    self.notify(f"Downloading {name}...")
+                    self.download_worker(browser, ext_id, name)
+            
+            self.push_screen(ConfirmationScreen(f"Download {name}?"), check_confirm)
 
 def run_tui():
     # Disable logging to stderr/stdout as it messes up TUI
