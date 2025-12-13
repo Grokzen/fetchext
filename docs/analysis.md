@@ -47,7 +47,7 @@ fext audit <file>
 High entropy in files often indicates packed, obfuscated, or encrypted code, which is common in malware trying to hide its payload.
 
 ```bash
-fext analyze --entropy <file>
+fext analyze entropy <file>
 ```
 
 The tool calculates the Shannon entropy (0-8) for every file in the archive.
@@ -60,7 +60,7 @@ The tool calculates the Shannon entropy (0-8) for every file in the archive.
 To detect obfuscated code that hasn't been packed, `fetchext` measures the cyclomatic complexity of JavaScript functions.
 
 ```bash
-fext analyze --complexity <file>
+fext analyze complexity <file>
 ```
 
 Obfuscated code often has abnormally high complexity (nested loops, conditionals) or very long single-line functions.
@@ -70,17 +70,17 @@ Obfuscated code often has abnormally high complexity (nested loops, conditionals
 Scan extension files against custom or standard YARA rules to detect known malware signatures.
 
 ```bash
-fext analyze --yara /path/to/rules/ <file>
+fext analyze yara /path/to/rules/ <file>
 ```
 
 You can provide a single `.yar` file or a directory containing multiple rule files.
 
 ### Secret Scanning
 
-The `scan --secrets` command searches source code for accidentally committed credentials.
+The `analyze secrets` command searches source code for accidentally committed credentials.
 
 ```bash
-fext analyze --secrets <file>
+fext analyze secrets <file>
 ```
 
 **Detects:**
@@ -98,7 +98,7 @@ fext analyze --secrets <file>
 To understand where an extension is sending data, use the domain extractor. It parses JavaScript, HTML, CSS, and JSON files to find all URLs and domains.
 
 ```bash
-fext analyze --domains <file>
+fext analyze domains <file>
 ```
 
 This is useful for identifying tracking endpoints, C2 servers, or external dependencies.

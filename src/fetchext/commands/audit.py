@@ -42,37 +42,34 @@ def register(subparsers):
 
     # Analyze subcommand
     analyze_parser = subparsers.add_parser("analyze", help="Analyze extension code")
-    analyze_parser.add_argument("file", help="Path to the .crx or .xpi file")
-    analyze_parser.add_argument(
-        "--complexity",
-        action="store_true",
-        help="Calculate cyclomatic complexity of JS files"
-    )
-    analyze_parser.add_argument(
-        "--entropy",
-        action="store_true",
-        help="Calculate entropy of files to detect obfuscation/packing"
-    )
-    analyze_parser.add_argument(
-        "--domains",
-        action="store_true",
-        help="Extract domains and URLs from source code"
-    )
-    analyze_parser.add_argument(
-        "--secrets",
-        action="store_true",
-        help="Scan for potential secrets (API keys, tokens)"
-    )
-    analyze_parser.add_argument(
-        "--yara",
-        type=Path,
-        help="Path to YARA rules file or directory to scan against"
-    )
-    analyze_parser.add_argument(
-        "--json",
-        action="store_true",
-        help="Output results as JSON"
-    )
+    analyze_subparsers = analyze_parser.add_subparsers(dest="analysis_type", required=True, help="Type of analysis")
+
+    # Complexity
+    complexity_parser = analyze_subparsers.add_parser("complexity", help="Calculate cyclomatic complexity")
+    complexity_parser.add_argument("file", help="Path to the .crx or .xpi file")
+    complexity_parser.add_argument("--json", action="store_true", help="Output results as JSON")
+
+    # Entropy
+    entropy_parser = analyze_subparsers.add_parser("entropy", help="Calculate entropy")
+    entropy_parser.add_argument("file", help="Path to the .crx or .xpi file")
+    entropy_parser.add_argument("--json", action="store_true", help="Output results as JSON")
+
+    # Domains
+    domains_parser = analyze_subparsers.add_parser("domains", help="Extract domains and URLs")
+    domains_parser.add_argument("file", help="Path to the .crx or .xpi file")
+    domains_parser.add_argument("--json", action="store_true", help="Output results as JSON")
+
+    # Secrets
+    secrets_parser = analyze_subparsers.add_parser("secrets", help="Scan for potential secrets")
+    secrets_parser.add_argument("file", help="Path to the .crx or .xpi file")
+    secrets_parser.add_argument("--json", action="store_true", help="Output results as JSON")
+
+    # Yara
+    yara_parser = analyze_subparsers.add_parser("yara", help="Scan against YARA rules")
+    yara_parser.add_argument("rules", type=Path, help="Path to YARA rules file or directory")
+    yara_parser.add_argument("file", help="Path to the .crx or .xpi file")
+    yara_parser.add_argument("--json", action="store_true", help="Output results as JSON")
+
     analyze_parser.set_defaults(func=handle_analyze)
 
     # Report subcommand
@@ -119,7 +116,7 @@ def handle_report(args, show_progress=True):
         core.generate_report(args.file, args.output)
 
 def handle_analyze(args, show_progress=True):
-    if args.complexity:
+    if args.analysis_type == "complexity":
         from ..analysis.complexity import analyze_complexity
         from rich.table import Table
         
@@ -152,7 +149,7 @@ def handle_analyze(args, show_progress=True):
             else:
                 console.print("\n[green]No high complexity functions found.[/green]")
     
-    elif args.entropy:
+    elif args.analysis_type == "entropy":
         from ..analysis.entropy import analyze_entropy
         from rich.table import Table
         
@@ -191,7 +188,7 @@ def handle_analyze(args, show_progress=True):
             if len(sorted_files) > 20:
                 console.print(f"\n... and {len(sorted_files) - 20} more files.")
     
-    elif args.domains:
+    elif args.analysis_type == "domains":
         from ..analysis.domains import analyze_domains
         from rich.table import Table
         
@@ -219,7 +216,7 @@ def handle_analyze(args, show_progress=True):
             else:
                 console.print("  [yellow]No URLs found.[/yellow]")
     
-    elif args.secrets:
+    elif args.analysis_type == "secrets":
         from ..secrets import SecretScanner
         from rich.table import Table
         
@@ -252,19 +249,19 @@ def handle_analyze(args, show_progress=True):
             else:
                 console.print("\n[green]No secrets found.[/green]")
 
-    elif args.yara:
+    elif args.analysis_type == "yara":
         from ..analysis.yara import YaraScanner
         from rich.table import Table
         
         try:
-            scanner = YaraScanner(args.yara)
+            scanner = YaraScanner(args.rules)
             results = scanner.scan_archive(Path(args.file))
             
             if args.json:
                 console.print_json(data=results)
             else:
                 console.print(f"[bold]YARA Scan for {args.file}[/bold]")
-                console.print(f"Rules: {args.yara}")
+                console.print(f"Rules: {args.rules}")
                 
                 if results:
                     for filename, matches in results.items():
