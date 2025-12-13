@@ -272,6 +272,56 @@
 - [x] **Scalable History**: Performance (Core).
   - [x] Migrate `history` tracking to an optional SQLite backend to support repositories with thousands of extensions.
 
+## 🔍 v2.3.0: Deep Inspection & Developer Tools
+
+*Focus: Robustness, accessibility, and deeper analysis capabilities.*
+
+- [ ] **Refactor ExtensionInspector**: Robustness (Fix).
+  - [ ] Make `ExtensionInspector` resilient to malformed manifests, returning partial data with warnings instead of crashing.
+- [ ] **Network Error Handling**: Reliability (Fix).
+  - [ ] Implement specific handling for HTTP 403 (Cloudflare) and 429 (Rate Limit) errors with actionable user feedback.
+- [ ] **Visual Diff**: Visual Analysis (New).
+  - [ ] Add `fext diff --visual` to generate an HTML report showing side-by-side comparisons of modified images.
+- [ ] **Permission Matrix**: Auditing (New).
+  - [ ] Add `fext analyze --permissions` to output a matrix showing permission usage across multiple extensions.
+- [ ] **Property-Based Testing**: Quality (Test).
+  - [ ] Introduce `hypothesis` to fuzz test the `CrxDecoder` with thousands of valid and invalid header combinations.
+- [ ] **Performance Benchmarks**: Quality (Test).
+  - [ ] Add a `benchmarks/` suite to measure and track extraction and analysis speed over time.
+- [ ] **TUI Mouse Support**: Accessibility (Improve).
+  - [ ] Enable mouse support in `fext ui` for clicking rows, tabs, and buttons to improve usability.
+- [ ] **Parallel Grep**: Performance (Improve).
+  - [ ] Optimize `fext grep` to use `ProcessPoolExecutor` for multi-threaded searching of large repositories.
+- [ ] **JS Sandbox**: Security (Innovate).
+  - [ ] Introduce `fext sandbox <file.js>` (experimental) to execute extension code in a secure, isolated runtime (e.g., Deno).
+- [ ] **Interactive Dependency Graph**: Visualization (Innovate).
+  - [ ] Add `fext graph --interactive` to generate a dynamic HTML/D3.js visualization of internal file dependencies.
+
+## 🤝 v2.4.0: Ecosystem & Collaboration
+
+*Focus: Sharing, automation, and expanding platform support.*
+
+- [ ] **History Concurrency**: Reliability (Fix).
+  - [ ] Implement file locking or WAL mode for SQLite to prevent race conditions during concurrent `fext` runs.
+- [ ] **CLI Output Standardization**: UX (Fix).
+  - [ ] Create a central `Theme` class to enforce consistent colors and formatting across all CLI commands.
+- [ ] **Report Sharing**: Collaboration (New).
+  - [ ] Add `fext share <report.html>` to automatically upload reports to a configured destination (S3/Gist) and generate a link.
+- [ ] **Directory Watcher**: Automation (New).
+  - [ ] Add `fext watch <dir>` to monitor a folder and automatically trigger analysis workflows on new CRX files.
+- [ ] **TUI E2E Testing**: Quality (Test).
+  - [ ] Implement automated end-to-end tests for the TUI using `textual`'s `Pilot` testing harness.
+- [ ] **Migration Regression Tests**: Quality (Test).
+  - [ ] Add "golden" tests for `fext migrate` to verify MV2->MV3 conversion accuracy against known good outputs.
+- [ ] **Complexity in Reports**: Reporting (Improve).
+  - [ ] Integrate `lizard` complexity metrics into the HTML report with visualization charts.
+- [ ] **Firefox Signature Verification**: Security (Improve).
+  - [ ] Implement XPI signature verification (PKCS#7/CMS) to support Firefox extension integrity checking.
+- [ ] **Local AI (Ollama)**: Privacy (Innovate).
+  - [ ] Add an `ollama` provider to the AI module to support offline, private extension summarization.
+- [ ] **SQL Query Interface**: Power User (Innovate).
+  - [ ] Add `fext query <sql>` to allow running direct SQL queries against the local extension metadata repository.
+
 ## ✅ Completed
 
 - [x] **Extract Command**: Add `fext extract <file>` subcommand.

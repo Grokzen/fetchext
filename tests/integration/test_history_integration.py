@@ -1,7 +1,6 @@
 from unittest.mock import MagicMock
 from pathlib import Path
 from fetchext import core
-from fetchext.history import HistoryManager
 
 def test_download_updates_history(fs, mocker):
     # Mock downloader
