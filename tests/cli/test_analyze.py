@@ -72,3 +72,19 @@ class TestAnalyzeCLI:
             assert excinfo.value.code == 0
             MockScanner.assert_called_once()
             mock_instance.scan_archive.assert_called_once()
+
+    def test_analyze_permissions(self):
+        with patch.object(sys, 'argv', ['fext', 'analyze', 'permissions', 'downloads/']), \
+             patch('fetchext.analysis.permissions.PermissionMatrixGenerator') as MockGenerator:
+            
+            mock_instance = MockGenerator.return_value
+            mock_instance.generate.return_value = {
+                "permissions": [],
+                "extensions": [],
+                "matrix": {}
+            }
+            
+            with pytest.raises(SystemExit) as excinfo:
+                main()
+            assert excinfo.value.code == 0
+            mock_instance.generate.assert_called_once()

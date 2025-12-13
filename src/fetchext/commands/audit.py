@@ -85,6 +85,12 @@ def register(subparsers):
     summary_parser.add_argument("file", help="Path to the .crx or .xpi file")
     summary_parser.add_argument("--json", action="store_true", help="Output results as JSON")
 
+    # Permissions
+    permissions_parser = analyze_subparsers.add_parser("permissions", help="Generate permission matrix")
+    permissions_parser.add_argument("directory", type=Path, help="Directory containing extensions")
+    permissions_parser.add_argument("--json", action="store_true", help="Output results as JSON")
+    permissions_parser.add_argument("--csv", action="store_true", help="Output results as CSV")
+
     analyze_parser.set_defaults(func=handle_analyze)
 
     # Report subcommand
@@ -390,3 +396,49 @@ def handle_analyze(args, show_progress=True):
         except Exception as e:
             console.print(f"[red]Error generating summary: {e}[/red]")
             sys.exit(1)
+
+    elif args.analysis_type == "permissions":
+        from ..analysis.permissions import PermissionMatrixGenerator
+        from rich.table import Table
+        
+        generator = PermissionMatrixGenerator()
+        results = generator.generate(args.directory)
+        
+        if args.json:
+            console.print_json(data=results)
+        elif args.csv:
+            import csv
+            
+            writer = csv.writer(sys.stdout)
+            # Header: Filename, Perm1, Perm2, ...
+            header = ["Filename"] + results["permissions"]
+            writer.writerow(header)
+            
+            for ext in results["extensions"]:
+                filename = ext["filename"]
+                row = [filename]
+                matrix_row = results["matrix"][filename]
+                for p in results["permissions"]:
+                    row.append("X" if matrix_row[p] else "")
+                writer.writerow(row)
+        else:
+            console.print(f"[bold]Permission Matrix for {args.directory}[/bold]")
+            
+            if not results["extensions"]:
+                console.print("[yellow]No extensions found.[/yellow]")
+                return
+
+            table = Table(show_header=True, header_style="bold magenta")
+            table.add_column("Extension")
+            for p in results["permissions"]:
+                table.add_column(p, justify="center")
+            
+            for ext in results["extensions"]:
+                filename = ext["filename"]
+                matrix_row = results["matrix"][filename]
+                row_data = [filename]
+                for p in results["permissions"]:
+                    row_data.append("[green]●[/green]" if matrix_row[p] else "")
+                table.add_row(*row_data)
+            
+            console.print(table)

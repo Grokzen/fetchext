@@ -278,10 +278,10 @@
 
 - [x] **Refactor ExtensionInspector**: Robustness (Fix).
   - [x] Make `ExtensionInspector` resilient to malformed manifests, returning partial data with warnings instead of crashing.
-- [ ] **Network Error Handling**: Reliability (Fix).
-  - [ ] Implement specific handling for HTTP 403 (Cloudflare) and 429 (Rate Limit) errors with actionable user feedback.
-- [ ] **Visual Diff**: Visual Analysis (New).
-  - [ ] Add `fext diff --visual` to generate an HTML report showing side-by-side comparisons of modified images.
+- [x] **Network Error Handling**: Reliability (Fix).
+  - [x] Implement specific handling for HTTP 403 (Cloudflare) and 429 (Rate Limit) errors with actionable user feedback.
+- [x] **Visual Diff**: Visual Analysis (New).
+  - [x] Add `fext diff --visual` to generate an HTML report showing side-by-side comparisons of modified images.
 - [ ] **Permission Matrix**: Auditing (New).
   - [ ] Add `fext analyze --permissions` to output a matrix showing permission usage across multiple extensions.
 - [ ] **Property-Based Testing**: Quality (Test).
