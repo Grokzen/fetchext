@@ -1,9 +1,71 @@
 from textual import work
 from textual.app import App, ComposeResult
-from textual.containers import Horizontal
-from textual.widgets import Header, Footer, Input, DataTable, RadioSet, RadioButton, Label
-from fetchext.core import search_extension, download_extension
+from textual.containers import Horizontal, Container
+from textual.widgets import Header, Footer, Input, DataTable, RadioSet, RadioButton, Label, TabbedContent, TabPane, Static, Markdown
+from fetchext.core import search_extension, download_extension, get_repo_stats
+from fetchext.history import HistoryManager
 import logging
+from pathlib import Path
+
+class Dashboard(Static):
+    """Dashboard widget showing repository statistics."""
+
+    def compose(self) -> ComposeResult:
+        yield Label("Repository Statistics", classes="header")
+        yield Container(id="stats_container")
+        yield Label("Recent Activity", classes="header")
+        yield DataTable(id="history_table")
+
+    def on_mount(self) -> None:
+        self.load_data()
+
+    @work(thread=True)
+    def load_data(self) -> None:
+        # Load Stats
+        try:
+            stats = get_repo_stats(Path("."))
+            self.app.call_from_thread(self.update_stats, stats)
+        except Exception as e:
+            self.app.call_from_thread(self.notify, f"Failed to load stats: {e}", severity="error")
+
+        # Load History
+        try:
+            history = HistoryManager().get_entries(limit=10)
+            self.app.call_from_thread(self.update_history, history)
+        except Exception as e:
+            self.app.call_from_thread(self.notify, f"Failed to load history: {e}", severity="error")
+
+    def update_stats(self, stats) -> None:
+        container = self.query_one("#stats_container")
+        container.remove_children()
+        
+        # Create summary cards
+        total_size_mb = stats.total_size_bytes / (1024 * 1024)
+        
+        summary = f"""
+        **Total Extensions:** {stats.total_extensions}
+        **Total Size:** {total_size_mb:.2f} MB
+        **MV3 Extensions:** {stats.mv3_count} ({stats.mv3_count / stats.total_extensions * 100 if stats.total_extensions else 0:.1f}%)
+        """
+        container.mount(Markdown(summary))
+        
+        # Risk Distribution
+        risk_md = "**Risk Distribution:**\n\n"
+        for level, count in stats.risk_distribution.items():
+            risk_md += f"- **{level}:** {count}\n"
+        container.mount(Markdown(risk_md))
+
+    def update_history(self, entries) -> None:
+        table = self.query_one("#history_table", DataTable)
+        table.clear()
+        table.add_columns("Time", "Action", "ID", "Status")
+        for entry in entries:
+            table.add_row(
+                entry.get("timestamp", "")[:19].replace("T", " "),
+                entry.get("action", ""),
+                entry.get("id", ""),
+                entry.get("status", "")
+            )
 
 class ExtensionApp(App):
     """A Textual app to browse and download extensions."""
@@ -11,6 +73,20 @@ class ExtensionApp(App):
     CSS = """
     Screen {
         layout: vertical;
+    }
+    .header {
+        text-align: center;
+        text-style: bold;
+        margin: 1;
+    }
+    #stats_container {
+        height: auto;
+        margin: 1;
+        border: solid blue;
+    }
+    #history_table {
+        height: 1fr;
+        border: solid green;
     }
     Input {
         dock: top;
@@ -21,7 +97,7 @@ class ExtensionApp(App):
         margin: 1;
         border: solid blue;
     }
-    DataTable {
+    #search_table {
         height: 1fr;
         border: solid green;
     }
@@ -31,20 +107,22 @@ class ExtensionApp(App):
 
     def compose(self) -> ComposeResult:
         yield Header()
-        yield Input(placeholder="Search extensions (e.g. 'adblock')...")
-        
-        yield Label("Select Browser:")
-        with Horizontal(id="browser_select"):
-            with RadioSet():
-                yield RadioButton("Chrome", value=True, id="chrome")
-                yield RadioButton("Firefox", id="firefox")
-                yield RadioButton("Edge", id="edge")
-        
-        yield DataTable()
+        with TabbedContent():
+            with TabPane("Dashboard", id="dashboard"):
+                yield Dashboard()
+            with TabPane("Browser", id="browser"):
+                yield Input(placeholder="Search extensions (e.g. 'adblock')...")
+                yield Label("Select Browser:")
+                with Horizontal(id="browser_select"):
+                    with RadioSet():
+                        yield RadioButton("Chrome", value=True, id="chrome")
+                        yield RadioButton("Firefox", id="firefox")
+                        yield RadioButton("Edge", id="edge")
+                yield DataTable(id="search_table")
         yield Footer()
 
     def on_mount(self) -> None:
-        table = self.query_one(DataTable)
+        table = self.query_one("#search_table", DataTable)
         table.add_columns("Name", "ID", "Version", "Browser")
         table.cursor_type = "row"
 
@@ -57,7 +135,7 @@ class ExtensionApp(App):
             self.call_from_thread(self.notify, f"Search failed: {e}", severity="error")
 
     def update_table(self, results, browser):
-        table = self.query_one(DataTable)
+        table = self.query_one("#search_table", DataTable)
         table.clear()
         for r in results:
             table.add_row(r["name"], r["id"], r.get("version", "?"), browser)
@@ -85,42 +163,33 @@ class ExtensionApp(App):
     @work(thread=True)
     def download_worker(self, browser: str, ext_id: str, name: str) -> None:
         try:
-            # Construct a URL based on ID
-            # Note: This logic might need to be smarter for different browsers
-            # But core.download_extension usually takes a URL or ID?
-            # core.download_extension takes (browser, url_or_id, ...)
-            # Let's assume it handles ID if we pass it, or we construct URL.
-            
-            # For now, let's try passing ID directly if the downloader supports it,
-            # or construct URL.
             url = ext_id
             if browser == "chrome":
                 url = f"https://chromewebstore.google.com/detail/{ext_id}"
             elif browser == "edge":
                 url = f"https://microsoftedge.microsoft.com/addons/detail/{ext_id}"
             elif browser == "firefox":
-                # Firefox search returns URL usually?
-                # If search_extension returns full URL in 'id' or 'url' field?
-                # Let's check search implementation.
                 pass
 
-            # We might need the full URL from search results.
-            # But search results only give ID/Name usually.
-            
             download_extension(browser, url, ".", show_progress=False)
             self.call_from_thread(self.notify, f"Successfully downloaded {name}!", severity="information")
+            
+            # Refresh dashboard if it's active?
+            # Ideally yes, but for now let's keep it simple.
+            
         except Exception as e:
             self.call_from_thread(self.notify, f"Download failed: {e}", severity="error")
 
     def on_data_table_row_selected(self, event: DataTable.RowSelected) -> None:
-        table = self.query_one(DataTable)
-        row = table.get_row(event.row_key)
-        name = row[0]
-        ext_id = row[1]
-        browser = row[3]
-        
-        self.notify(f"Downloading {name}...")
-        self.download_worker(browser, ext_id, name)
+        if event.data_table.id == "search_table":
+            table = event.data_table
+            row = table.get_row(event.row_key)
+            name = row[0]
+            ext_id = row[1]
+            browser = row[3]
+            
+            self.notify(f"Downloading {name}...")
+            self.download_worker(browser, ext_id, name)
 
 def run_tui():
     # Disable logging to stderr/stdout as it messes up TUI

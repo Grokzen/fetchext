@@ -22,6 +22,10 @@ async def test_tui_search_submission():
         
         app = ExtensionApp()
         async with app.run_test() as pilot:
+            # Switch to Browser tab
+            app.query_one("TabbedContent").active = "browser"
+            await pilot.pause()
+
             input_widget = app.query_one(Input)
             input_widget.focus()
             input_widget.value = "test"
@@ -45,6 +49,10 @@ async def test_tui_browser_selection():
         
         app = ExtensionApp()
         async with app.run_test() as pilot:
+            # Switch to Browser tab
+            app.query_one("TabbedContent").active = "browser"
+            await pilot.pause()
+
             # Select Firefox
             await pilot.click("#firefox")
             
