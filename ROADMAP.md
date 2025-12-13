@@ -282,8 +282,8 @@
   - [x] Implement specific handling for HTTP 403 (Cloudflare) and 429 (Rate Limit) errors with actionable user feedback.
 - [x] **Visual Diff**: Visual Analysis (New).
   - [x] Add `fext diff --visual` to generate an HTML report showing side-by-side comparisons of modified images.
-- [ ] **Permission Matrix**: Auditing (New).
-  - [ ] Add `fext analyze --permissions` to output a matrix showing permission usage across multiple extensions.
+- [x] **Permission Matrix**: Auditing (New).
+  - [x] Add `fext analyze --permissions` to output a matrix showing permission usage across multiple extensions.
 - [ ] **Property-Based Testing**: Quality (Test).
   - [ ] Introduce `hypothesis` to fuzz test the `CrxDecoder` with thousands of valid and invalid header combinations.
 - [ ] **Performance Benchmarks**: Quality (Test).
