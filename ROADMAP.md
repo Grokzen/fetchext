@@ -227,10 +227,8 @@
 
 ## 🧠 v2.0.0: Intelligence & Insight
 
-*Focus: AI integration, deeper understanding, and visual improvements.*
+*Focus: Deeper understanding and visual improvements.*
 
-- [x] **AI Summarizer**: Code intent analysis (Analysis).
-  - [x] Add `fext analyze --summary <file>` to generate a natural language summary of the extension's functionality using a local LLM or API.
 - [x] **Code Beautifier**: Deobfuscation helper (Core).
   - [x] Add `fext beautify <file>` to format minified JavaScript and JSON files for better readability.
 - [x] **Similarity Search**: Code reuse detection (Analysis).
@@ -317,8 +315,6 @@
   - [ ] Integrate `lizard` complexity metrics directly into the HTML report with visualization charts (e.g., complexity vs. line count scatter plot) to highlight maintenance hotspots.
 - [ ] **Firefox Signature Verification**: Security (Improve).
   - [ ] Implement XPI signature verification (PKCS#7/CMS) to support Firefox extension integrity checking, matching the capability currently available for Chrome CRX files.
-- [ ] **Local AI (Ollama)**: Privacy (Innovate).
-  - [ ] Add an `ollama` provider to the AI module to support offline, private extension summarization and code analysis without sending data to external APIs.
 - [ ] **SQL Query Interface**: Power User (Innovate).
   - [ ] Add `fext query <sql>` to allow running direct SQL queries against the local extension metadata repository (`history.db`), enabling complex ad-hoc data analysis.
 
@@ -328,8 +324,6 @@
 
 - [ ] **Unified Network Client**: Architecture (Fix).
   - [ ] Refactor all downloader modules to use a single, centralized `NetworkClient` class that handles rate limiting, retries, user-agent rotation, and proxying consistently.
-- [ ] **Strict Typing**: Code Quality (Fix).
-  - [ ] Audit the entire codebase to enforce strict type checking (`mypy --strict`), removing `Any` types and ensuring full type safety for better maintainability.
 - [ ] **Dynamic Analysis Sandbox**: Analysis (New).
   - [ ] Add `fext analyze --dynamic <file>` using `playwright` to launch the extension in a headless browser, capturing screenshots, console logs, and network requests during installation.
 - [ ] **Export to STIX**: Interoperability (New).

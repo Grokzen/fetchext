@@ -80,11 +80,6 @@ def register(subparsers):
     yara_parser.add_argument("file", help="Path to the .crx or .xpi file")
     yara_parser.add_argument("--json", action="store_true", help="Output results as JSON")
 
-    # Summary (AI)
-    summary_parser = analyze_subparsers.add_parser("summary", help="Generate AI summary of extension")
-    summary_parser.add_argument("file", help="Path to the .crx or .xpi file")
-    summary_parser.add_argument("--json", action="store_true", help="Output results as JSON")
-
     # Permissions
     permissions_parser = analyze_subparsers.add_parser("permissions", help="Generate permission matrix")
     permissions_parser.add_argument("directory", type=Path, help="Directory containing extensions")
@@ -375,26 +370,6 @@ def handle_analyze(args, show_progress=True):
             sys.exit(1)
         except Exception as e:
             console.print(f"[red]Error during YARA scan: {e}[/red]")
-            sys.exit(1)
-
-    elif args.analysis_type == "summary":
-        from ..analysis.ai import summarize_extension
-        from rich.markdown import Markdown
-        
-        try:
-            summary = summarize_extension(Path(args.file), show_progress=show_progress)
-            
-            if args.json:
-                console.print_json(data={"summary": summary})
-            else:
-                console.print(f"[bold]AI Summary for {args.file}[/bold]\n")
-                console.print(Markdown(summary))
-                
-        except RuntimeError as e:
-            console.print(f"[red]{e}[/red]")
-            sys.exit(1)
-        except Exception as e:
-            console.print(f"[red]Error generating summary: {e}[/red]")
             sys.exit(1)
 
     elif args.analysis_type == "permissions":
