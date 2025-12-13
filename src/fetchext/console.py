@@ -18,6 +18,33 @@ class LazyConsole:
     def __exit__(self, exc_type, exc_val, exc_tb):
         return self._impl.__exit__(exc_type, exc_val, exc_tb)
 
+    def create_progress(self, transient=True):
+        """Creates a standard progress bar for counting items."""
+        from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn, TimeRemainingColumn
+        return Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            BarColumn(),
+            TaskProgressColumn(),
+            TimeRemainingColumn(),
+            console=self,
+            transient=transient
+        )
+
+    def create_download_progress(self, transient=True):
+        """Creates a progress bar optimized for file downloads (bytes)."""
+        from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn, DownloadColumn, TransferSpeedColumn
+        return Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            BarColumn(),
+            TaskProgressColumn(),
+            DownloadColumn(),
+            TransferSpeedColumn(),
+            console=self,
+            transient=transient
+        )
+
 console = LazyConsole()
 
 def print_manifest_table(manifest):

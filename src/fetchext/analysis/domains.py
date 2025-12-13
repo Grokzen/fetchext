@@ -4,6 +4,7 @@ from typing import Dict, List, Set
 from zipfile import ZipFile
 from urllib.parse import urlparse
 from fetchext.crx import CrxDecoder
+from ..console import console
 
 # Regex for finding URLs
 # Matches http, https, ws, wss, ftp
@@ -36,7 +37,7 @@ def extract_domains_from_text(text: str) -> Dict[str, Set[str]]:
             
     return {"urls": urls, "domains": domains}
 
-def analyze_domains(file_path: Path) -> Dict[str, List[str]]:
+def analyze_domains(file_path: Path, show_progress: bool = True) -> Dict[str, List[str]]:
     """
     Analyze an extension file to extract domains and URLs.
     
@@ -78,27 +79,56 @@ def analyze_domains(file_path: Path) -> Dict[str, List[str]]:
                 raise ValueError("Could not open file as CRX")
         
         with zf:
-            for info in zf.infolist():
-                if info.is_dir():
-                    continue
-                
-                ext = Path(info.filename).suffix.lower()
-                if ext in target_extensions:
-                    try:
-                        # Read and decode as text
-                        content_bytes = zf.read(info.filename)
-                        # Try UTF-8, fallback to Latin-1
-                        try:
-                            text = content_bytes.decode('utf-8')
-                        except UnicodeDecodeError:
-                            text = content_bytes.decode('latin-1')
-                            
-                        extracted = extract_domains_from_text(text)
-                        all_urls.update(extracted["urls"])
-                        all_domains.update(extracted["domains"])
-                    except Exception:
-                        # Skip files that can't be read/decoded
+            file_list = zf.infolist()
+            
+            if show_progress:
+                with console.create_progress() as progress:
+                    task = progress.add_task("Analyzing Domains", total=len(file_list))
+                    for info in file_list:
+                        if info.is_dir():
+                            progress.advance(task)
+                            continue
+                        
+                        ext = Path(info.filename).suffix.lower()
+                        if ext in target_extensions:
+                            try:
+                                # Read and decode as text
+                                content_bytes = zf.read(info.filename)
+                                # Try UTF-8, fallback to Latin-1
+                                try:
+                                    text = content_bytes.decode('utf-8')
+                                except UnicodeDecodeError:
+                                    text = content_bytes.decode('latin-1')
+                                    
+                                extracted = extract_domains_from_text(text)
+                                all_urls.update(extracted["urls"])
+                                all_domains.update(extracted["domains"])
+                            except Exception:
+                                # Skip files that can't be read/decoded
+                                pass
+                        progress.advance(task)
+            else:
+                for info in file_list:
+                    if info.is_dir():
                         continue
+                    
+                    ext = Path(info.filename).suffix.lower()
+                    if ext in target_extensions:
+                        try:
+                            # Read and decode as text
+                            content_bytes = zf.read(info.filename)
+                            # Try UTF-8, fallback to Latin-1
+                            try:
+                                text = content_bytes.decode('utf-8')
+                            except UnicodeDecodeError:
+                                text = content_bytes.decode('latin-1')
+                                
+                            extracted = extract_domains_from_text(text)
+                            all_urls.update(extracted["urls"])
+                            all_domains.update(extracted["domains"])
+                        except Exception:
+                            # Skip files that can't be read/decoded
+                            continue
         
         # Close file if needed (ZipFile context manager closes it if it owns it, but here we passed f)
         # See previous discussion: ZipFile(f) does not close f automatically in all versions.

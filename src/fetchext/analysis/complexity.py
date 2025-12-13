@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 from typing import Dict, Any, List
 from ..crx import CrxDecoder
+from ..console import console
 
 def _analyze_file_content(name: str, content: str) -> List[Dict[str, Any]]:
     """Helper function to run in a separate process."""
@@ -20,7 +21,7 @@ def _analyze_file_content(name: str, content: str) -> List[Dict[str, Any]]:
         })
     return results
 
-def analyze_complexity(file_path: Path) -> Dict[str, Any]:
+def analyze_complexity(file_path: Path, show_progress: bool = True) -> Dict[str, Any]:
     """
     Analyzes the cyclomatic complexity of JavaScript files in an extension.
     Uses parallel processing for performance.
@@ -55,12 +56,24 @@ def analyze_complexity(file_path: Path) -> Dict[str, Any]:
                                 executor.submit(_analyze_file_content, name, content)
                             )
                     
-                    for future in concurrent.futures.as_completed(futures):
-                        try:
-                            file_results = future.result()
-                            results.extend(file_results)
-                        except Exception:
-                            pass # Ignore errors in individual files
+                    if show_progress:
+                        with console.create_progress() as progress:
+                            task = progress.add_task("Analyzing Complexity", total=len(futures))
+                            for future in concurrent.futures.as_completed(futures):
+                                try:
+                                    file_results = future.result()
+                                    results.extend(file_results)
+                                except Exception:
+                                    pass # Ignore errors in individual files
+                                finally:
+                                    progress.advance(task)
+                    else:
+                        for future in concurrent.futures.as_completed(futures):
+                            try:
+                                file_results = future.result()
+                                results.extend(file_results)
+                            except Exception:
+                                pass # Ignore errors in individual files
 
         except zipfile.BadZipFile:
             raise ValueError("Invalid zip/crx file")

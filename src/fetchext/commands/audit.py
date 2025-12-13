@@ -120,7 +120,7 @@ def handle_analyze(args, show_progress=True):
         from ..analysis.complexity import analyze_complexity
         from rich.table import Table
         
-        results = analyze_complexity(Path(args.file))
+        results = analyze_complexity(Path(args.file), show_progress=show_progress)
         
         if args.json:
             console.print_json(data=results)
@@ -153,7 +153,7 @@ def handle_analyze(args, show_progress=True):
         from ..analysis.entropy import analyze_entropy
         from rich.table import Table
         
-        results = analyze_entropy(Path(args.file))
+        results = analyze_entropy(Path(args.file), show_progress=show_progress)
         
         if args.json:
             console.print_json(data=results)
@@ -192,7 +192,7 @@ def handle_analyze(args, show_progress=True):
         from ..analysis.domains import analyze_domains
         from rich.table import Table
         
-        results = analyze_domains(Path(args.file))
+        results = analyze_domains(Path(args.file), show_progress=show_progress)
         
         if args.json:
             console.print_json(data=results)

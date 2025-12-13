@@ -167,16 +167,7 @@ def download_file(url: str, output_path: Path, session: requests.Session = None,
 
         with output_path.open(file_mode) as f:
             if show_progress:
-                with Progress(
-                    SpinnerColumn(),
-                    TextColumn("[progress.description]{task.description}"),
-                    BarColumn(),
-                    TaskProgressColumn(),
-                    DownloadColumn(),
-                    TransferSpeedColumn(),
-                    console=console,
-                    transient=True
-                ) as progress:
+                with console.create_download_progress() as progress:
                     task = progress.add_task(output_path.name, total=total_size, completed=downloaded_bytes)
                     for chunk in response.iter_content(chunk_size=8192):
                         f.write(chunk)

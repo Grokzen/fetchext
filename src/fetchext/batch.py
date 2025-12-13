@@ -29,15 +29,7 @@ class BatchProcessor:
         logger.info(f"Processing {len(valid_lines)} items with {max_workers} workers...")
 
         if show_progress:
-            with Progress(
-                SpinnerColumn(),
-                TextColumn("[progress.description]{task.description}"),
-                BarColumn(),
-                TaskProgressColumn(),
-                TimeRemainingColumn(),
-                console=console,
-                transient=True
-            ) as progress:
+            with console.create_progress() as progress:
                 task_id = progress.add_task("Batch Progress", total=len(valid_lines))
                 self._run_threads(valid_lines, output_dir, max_workers, progress, task_id)
         else:

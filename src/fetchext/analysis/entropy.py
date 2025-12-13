@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Dict, List, Union
 from zipfile import ZipFile
 from fetchext.crx import CrxDecoder
+from ..console import console
 
 def calculate_shannon_entropy(data: bytes) -> float:
     """
@@ -37,7 +38,7 @@ def _process_file_entropy(filename: str, data: bytes, size: int) -> Dict[str, Un
         "size": size
     }
 
-def analyze_entropy(file_path: Path) -> Dict[str, Union[float, List[Dict[str, Union[str, float]]]]]:
+def analyze_entropy(file_path: Path, show_progress: bool = True) -> Dict[str, Union[float, List[Dict[str, Union[str, float]]]]]:
     """
     Analyze the entropy of files within an extension.
     Uses parallel processing for performance.
@@ -103,14 +104,28 @@ def analyze_entropy(file_path: Path) -> Dict[str, Union[float, List[Dict[str, Un
                     )
             
             # Collect results
-            for future in concurrent.futures.as_completed(futures):
-                try:
-                    res = future.result()
-                    results["files"].append(res)
-                    total_entropy += res["entropy"]
-                    file_count += 1
-                except Exception:
-                    pass # Ignore failures for individual files
+            if show_progress:
+                with console.create_progress() as progress:
+                    task = progress.add_task("Analyzing Entropy", total=len(futures))
+                    for future in concurrent.futures.as_completed(futures):
+                        try:
+                            res = future.result()
+                            results["files"].append(res)
+                            total_entropy += res["entropy"]
+                            file_count += 1
+                        except Exception:
+                            pass # Ignore failures for individual files
+                        finally:
+                            progress.advance(task)
+            else:
+                for future in concurrent.futures.as_completed(futures):
+                    try:
+                        res = future.result()
+                        results["files"].append(res)
+                        total_entropy += res["entropy"]
+                        file_count += 1
+                    except Exception:
+                        pass # Ignore failures for individual files
 
         if file_count > 0:
             results["average_entropy"] = total_entropy / file_count

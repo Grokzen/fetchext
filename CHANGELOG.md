@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Startup Time Optimization**: Implemented lazy loading for heavy dependencies (`rich`, `PIL`, `lizard`, `yara`, `textual`, `cryptography`) to significantly reduce CLI startup time.
 - **Memory Optimization**: Refactored `secrets` scanner to stream file content line-by-line and `yara` scanner to extract large files (>10MB) to temporary storage, reducing memory footprint during analysis of large extensions.
 - **TUI Polish**: Improved `fext ui` with asynchronous search and download operations (preventing UI freezes), added browser selection (Chrome, Firefox, Edge), and enhanced error handling.
+- **Progress Bars**: Standardized progress bar styles across all long-running commands (downloads, batch processing, complexity/entropy/domain analysis) using `rich`.
 
 ## [1.8.0] - 2025-12-10
 

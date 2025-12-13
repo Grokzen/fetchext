@@ -220,8 +220,8 @@
   - [x] Profile and reduce memory footprint during extraction and analysis of large archives.
 - [x] **TUI Polish**: UX (CLI).
   - [x] Improve `fext ui` responsiveness, error handling, and navigation.
-- [ ] **Progress Bars**: UX (CLI).
-  - [ ] Standardize progress bar styles and behavior across all long-running commands.
+- [x] **Progress Bars**: UX (CLI).
+  - [x] Standardize progress bar styles and behavior across all long-running commands.
 - [ ] **Dependency Review**: Maintenance (Core).
   - [ ] Audit and prune unused or redundant dependencies to keep the package lightweight.
 
