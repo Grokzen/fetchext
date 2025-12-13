@@ -225,9 +225,9 @@
 - [x] **Dependency Review**: Maintenance (Core).
   - [x] Audit and prune unused or redundant dependencies to keep the package lightweight.
 
-## 🌐 v2.0.0: Intelligence & Web
+## 🧠 v2.0.0: Intelligence & Insight
 
-*Focus: AI integration and web-based interaction.*
+*Focus: AI integration, deeper understanding, and visual improvements.*
 
 - [ ] **AI Summarizer**: Code intent analysis (Analysis).
   - [ ] Add `fext analyze --summary <file>` to generate a natural language summary of the extension's functionality using a local LLM or API.
@@ -235,25 +235,40 @@
   - [ ] Add `fext beautify <file>` to format minified JavaScript and JSON files for better readability.
 - [ ] **Similarity Search**: Code reuse detection (Analysis).
   - [ ] Add `fext similar <file>` to find other extensions in the local repository with high code similarity (using fuzzy hashing).
-- [ ] **Asset Diff**: Visual comparison (Analysis).
-  - [ ] Enhance `fext diff` to visually compare changed images and assets between versions.
-- [ ] **Badge Generator**: Status indicators (Docs).
-  - [ ] Add `fext badge <file>` to generate SVG badges for risk scores, version, and license for use in READMEs.
+- [ ] **Smart Diff**: Visual comparison (CLI).
+  - [ ] Enhance `fext diff` to visually compare changed images/assets and support "ignore whitespace" for code diffs.
+- [ ] **TUI Dashboard**: Visual Analytics (TUI).
+  - [ ] Add a "Home" screen to `fext ui` displaying repository statistics (disk usage, risk distribution) using charts.
 
-## 📦 v2.1.0: Lifecycle & Integration
+## 📦 v2.1.0: Lifecycle & Management
 
-*Focus: Full lifecycle management and external integration.*
+*Focus: Full lifecycle management and workflow automation.*
 
 - [ ] **Extension Packer**: CRX creation (Core).
   - [ ] Add `fext pack <dir>` to create a signed CRX file from a source directory (reverse of extract).
-- [ ] **License Scanner**: Legal compliance (Analysis).
-  - [ ] Add `fext scan --licenses` to identify open source licenses in extension files.
 - [ ] **Git Integration**: Version control (Workflow).
   - [ ] Add `fext git init` to automatically set up a git repo for a downloaded extension with proper `.gitignore`.
+- [ ] **Update All**: Bulk maintenance (Workflow).
+  - [ ] Add `fext update --all` to check and update all extensions currently tracked in the local repository/history.
+- [ ] **License Scanner**: Legal compliance (Analysis).
+  - [ ] Add `fext scan --licenses` to identify open source licenses in extension files.
 - [ ] **Remote Config**: Centralized management (Config).
-  - [ ] Add `fext config --remote <url>` to load configuration from a remote URL.
+  - [ ] Add `fext config --remote <url>` to load configuration from a remote URL (useful for teams).
+
+## 📊 v2.2.0: Reporting & Ecosystem
+
+*Focus: Advanced reporting, searching, and scalability.*
+
 - [ ] **HTML Report**: Rich reporting (Reporting).
   - [ ] Add `fext report --html` to generate a standalone, interactive HTML report with charts and graphs.
+- [ ] **Badge Generator**: Status indicators (Docs).
+  - [ ] Add `fext badge <file>` to generate SVG badges for risk scores, version, and license for use in READMEs.
+- [ ] **Repo Grep**: Deep search (Analysis).
+  - [ ] Add `fext grep <pattern>` to search for string patterns across the source code of *all* downloaded extensions.
+- [ ] **Custom Rules**: Lightweight analysis (Analysis).
+  - [ ] Support a YAML-based rules engine for defining custom scan patterns without writing full Python plugins.
+- [ ] **Scalable History**: Performance (Core).
+  - [ ] Migrate `history` tracking to an optional SQLite backend to support repositories with thousands of extensions.
 
 ## ✅ Completed
 
