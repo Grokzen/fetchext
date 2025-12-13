@@ -218,8 +218,8 @@
   - [x] Optimize import times by using lazy imports for heavy modules (e.g., `rich`, `Pillow`).
 - [x] **Memory Usage**: Performance (Core).
   - [x] Profile and reduce memory footprint during extraction and analysis of large archives.
-- [ ] **TUI Polish**: UX (CLI).
-  - [ ] Improve `fext ui` responsiveness, error handling, and navigation.
+- [x] **TUI Polish**: UX (CLI).
+  - [x] Improve `fext ui` responsiveness, error handling, and navigation.
 - [ ] **Progress Bars**: UX (CLI).
   - [ ] Standardize progress bar styles and behavior across all long-running commands.
 - [ ] **Dependency Review**: Maintenance (Core).
