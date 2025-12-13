@@ -136,6 +136,14 @@ Find similar extensions in a directory using fuzzy hashing:
 fext similar <target_file> <directory>
 ```
 
+### 🆚 Smart Diff
+
+Compare two extension versions with whitespace ignoring and image analysis:
+
+```bash
+fext diff old.crx new.crx --ignore-whitespace
+```
+
 ## 💻 Development
 
 ### 🧹 Linting and Formatting

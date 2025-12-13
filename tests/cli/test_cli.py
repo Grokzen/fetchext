@@ -58,7 +58,7 @@ class TestCLI:
             with pytest.raises(SystemExit) as excinfo:
                 main()
             assert excinfo.value.code == 0
-            mock_diff.assert_called_once_with('old.crx', 'new.crx', json_output=False)
+            mock_diff.assert_called_once_with('old.crx', 'new.crx', json_output=False, ignore_whitespace=False)
 
     def test_risk_command(self):
         with patch.object(sys, 'argv', ['fext', 'risk', 'test.crx']), \

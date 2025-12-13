@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **AI Configuration**: Added `[ai]` section to `config.toml` for configuring API keys, providers, and models.
 - **Code Beautifier**: Added `fext beautify <file>` command to format minified JavaScript and JSON files using `jsbeautifier`.
 - **Similarity Search**: Added `fext similar <target> <repo>` command to find similar extensions using fuzzy hashing (`ppdeep`).
+- **Smart Diff**: Enhanced `fext diff` with `--ignore-whitespace` flag and basic image comparison (dimensions, format).
 
 ### Changed
 

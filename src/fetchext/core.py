@@ -370,7 +370,7 @@ def audit_extension(file_path, json_output=False):
         logger.error(f"Audit failed: {e}")
         raise
 
-def diff_extensions(old_path, new_path, json_output=False):
+def diff_extensions(old_path, new_path, json_output=False, ignore_whitespace=False):
     """
     Compare two extension archives.
     """
@@ -384,7 +384,7 @@ def diff_extensions(old_path, new_path, json_output=False):
 
     differ = ExtensionDiffer()
     try:
-        report = differ.diff(old_path, new_path)
+        report = differ.diff(old_path, new_path, ignore_whitespace=ignore_whitespace)
         
         if json_output:
             from dataclasses import asdict
@@ -418,6 +418,11 @@ def diff_extensions(old_path, new_path, json_output=False):
                     console.print(f"  ~ {f}")
                 if len(report.modified_files) > 10:
                     console.print(f"  ... and {len(report.modified_files) - 10} more")
+
+            if report.image_changes:
+                console.print(f"\n[bold magenta]Image Changes ({len(report.image_changes)}):[/bold magenta]")
+                for img in report.image_changes:
+                    console.print(f"  * {img['file']}: {img['diff']}")
                     
         return report
     except Exception as e:

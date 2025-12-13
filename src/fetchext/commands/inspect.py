@@ -28,6 +28,11 @@ def register(subparsers):
         action="store_true",
         help="Output results as JSON"
     )
+    diff_parser.add_argument(
+        "-w", "--ignore-whitespace",
+        action="store_true",
+        help="Ignore whitespace changes in text files"
+    )
     diff_parser.set_defaults(func=handle_diff)
 
     # Verify subcommand
@@ -57,7 +62,12 @@ def handle_preview(args, show_progress=True):
     core.preview_extension(args.file)
 
 def handle_diff(args, show_progress=True):
-    core.diff_extensions(args.old_file, args.new_file, json_output=args.json)
+    core.diff_extensions(
+        args.old_file, 
+        args.new_file, 
+        json_output=args.json,
+        ignore_whitespace=args.ignore_whitespace
+    )
 
 def handle_verify(args, show_progress=True):
     if core.verify_signature(args.file, json_output=args.json):

@@ -235,8 +235,8 @@
   - [x] Add `fext beautify <file>` to format minified JavaScript and JSON files for better readability.
 - [x] **Similarity Search**: Code reuse detection (Analysis).
   - [x] Add `fext similar <file>` to find other extensions in the local repository with high code similarity (using fuzzy hashing).
-- [ ] **Smart Diff**: Visual comparison (CLI).
-  - [ ] Enhance `fext diff` to visually compare changed images/assets and support "ignore whitespace" for code diffs.
+- [x] **Smart Diff**: Visual comparison (CLI).
+  - [x] Enhance `fext diff` to visually compare changed images/assets and support "ignore whitespace" for code diffs.
 - [ ] **TUI Dashboard**: Visual Analytics (TUI).
   - [ ] Add a "Home" screen to `fext ui` displaying repository statistics (disk usage, risk distribution) using charts.
 
