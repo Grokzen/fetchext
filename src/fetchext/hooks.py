@@ -31,6 +31,10 @@ class HookManager:
             "post_extract": [],
             "pre_analysis": [],
             "post_analysis": [],
+            "pre_pack": [],
+            "post_pack": [],
+            "pre_migrate": [],
+            "post_migrate": [],
         }
         if self.hooks_dir and self.hooks_dir.exists():
             self._load_hooks()

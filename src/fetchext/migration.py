@@ -4,7 +4,8 @@ from pathlib import Path
 from typing import List, Dict, Any
 from dataclasses import dataclass, field
 from .exceptions import ExtensionError
-
+from .hooks import HookManager, HookContext
+from .config import get_config_path, load_config
 logger = logging.getLogger(__name__)
 
 @dataclass
@@ -25,6 +26,28 @@ class MV3Migrator:
     def migrate(self, dry_run: bool = False) -> MigrationReport:
         if not self.manifest_path.exists():
             raise ExtensionError(f"Manifest not found: {self.manifest_path}")
+
+        # Initialize hooks
+        config_dir = get_config_path().parent
+        hooks_dir = config_dir / "hooks"
+        hook_manager = HookManager(hooks_dir)
+        try:
+            config = load_config()
+        except Exception:
+            config = {}
+
+        # Run pre-migrate hook
+        ctx = HookContext(
+            extension_id="unknown",
+            browser="unknown",
+            file_path=self.source_dir,
+            config=config
+        )
+        hook_manager.run_hook("pre_migrate", ctx)
+        
+        if ctx.cancel:
+            logger.info("Migration cancelled by pre_migrate hook.")
+            return self.report
 
         try:
             with open(self.manifest_path, "r") as f:
@@ -60,6 +83,10 @@ class MV3Migrator:
             with open(self.manifest_path, "w") as f:
                 json.dump(new_manifest, f, indent=2)
             self.report.changes.append(f"Saved updated manifest to {self.manifest_path}")
+
+        # Run post-migrate hook
+        ctx.result = self.report
+        hook_manager.run_hook("post_migrate", ctx)
 
         return self.report
 

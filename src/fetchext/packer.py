@@ -9,6 +9,8 @@ from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.backends import default_backend
 from .protobuf import SimpleProtobuf
 from .exceptions import ExtensionError
+from .hooks import HookManager, HookContext
+from .config import get_config_path, load_config
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +68,28 @@ class ExtensionPacker:
         
         if not source_dir.exists() or not source_dir.is_dir():
             raise ExtensionError(f"Source directory not found: {source_dir}")
+
+        # Initialize hooks
+        config_dir = get_config_path().parent
+        hooks_dir = config_dir / "hooks"
+        hook_manager = HookManager(hooks_dir)
+        try:
+            config = load_config()
+        except Exception:
+            config = {}
+
+        # Run pre-pack hook
+        ctx = HookContext(
+            extension_id="unknown",
+            browser="unknown",
+            file_path=source_dir,
+            config=config
+        )
+        hook_manager.run_hook("pre_pack", ctx)
+        
+        if ctx.cancel:
+            logger.info("Packing cancelled by pre_pack hook.")
+            return None
             
         # Handle Key
         if key_path:
@@ -109,6 +133,11 @@ class ExtensionPacker:
         sha = hashlib.sha256(pub_bytes).digest()
         crx_id = sha[:16] # Raw bytes for SignedData
         
+        # Update context with ID
+        hex_str = crx_id.hex()
+        trans_map = str.maketrans("0123456789abcdef", "abcdefghijklmnop")
+        ctx.extension_id = hex_str.translate(trans_map)
+        
         # 3. Create SignedData
         # Field 1: crx_id (16 bytes)
         signed_data = SimpleProtobuf.encode({1: [crx_id]})
@@ -151,6 +180,11 @@ class ExtensionPacker:
             f.write(zip_data)
             
         logger.info(f"Packed extension to {output_path}")
+        
+        # Run post-pack hook
+        ctx.file_path = output_path
+        hook_manager.run_hook("post_pack", ctx)
+        
         return output_path
 
 def pack_extension(source_dir, output_path=None, key_path=None):
