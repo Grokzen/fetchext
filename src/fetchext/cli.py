@@ -20,7 +20,8 @@ from .commands import (
     plugin,
     beautify,
     similar,
-    pack
+    pack,
+    migrate
 )
 
 # Configure logging
@@ -79,6 +80,7 @@ def get_parser():
     beautify.register(subparsers)
     similar.register(subparsers)
     pack.register(subparsers)
+    migrate.register(subparsers)
 
     return parser
 

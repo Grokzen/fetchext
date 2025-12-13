@@ -152,7 +152,15 @@ Pack a directory into a signed CRX3 file:
 fext pack ./my-extension -o my-extension.crx
 ```
 
-### 🖥️ TUI Dashboard
+### � MV3 Migration
+
+Automatically migrate Manifest V2 extensions to Manifest V3:
+
+```bash
+fext migrate ./my-extension
+```
+
+### �🖥️ TUI Dashboard
 
 Launch the interactive dashboard to browse, download, and analyze extensions:
 

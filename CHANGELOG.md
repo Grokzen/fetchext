@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Extension Packer**: Added `fext pack <directory>` command to create signed CRX3 files from source code, automatically generating RSA keys if needed.
+- **MV3 Migration Assistant**: Added `fext migrate <directory>` command to automate the conversion of Manifest V2 extensions to Manifest V3 (updating manifest, permissions, background scripts, CSP).
 - **TUI Dashboard**: Added a comprehensive dashboard to `fext ui` featuring repository statistics, risk distribution charts, and recent activity history.
 - **AI Summarizer**: Added `fext analyze summary <file>` command to generate AI-powered summaries of extension functionality using OpenAI-compatible APIs.
 - **AI Configuration**: Added `[ai]` section to `config.toml` for configuring API keys, providers, and models.
