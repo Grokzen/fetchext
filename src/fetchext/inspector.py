@@ -43,3 +43,50 @@ class ExtensionInspector:
         except Exception as e:
             logger.error(f"Failed to generate timeline: {e}")
             raise ValueError("Could not read archive for timeline") from e
+
+    def inspect(self, file_path):
+        """
+        Robustly inspects an extension archive, returning partial data if possible.
+        """
+        result = {
+            "manifest": None,
+            "timeline": [],
+            "errors": [],
+            "valid": False
+        }
+        
+        try:
+            with open_extension_archive(file_path) as zf:
+                # 1. Timeline (always try to get file list)
+                try:
+                    timeline = []
+                    for info in zf.infolist():
+                        dt_tuple = info.date_time
+                        dt = datetime(*dt_tuple)
+                        timeline.append({
+                            "filename": info.filename,
+                            "datetime": dt,
+                            "size": info.file_size
+                        })
+                    timeline.sort(key=lambda x: x["datetime"])
+                    result["timeline"] = timeline
+                except Exception as e:
+                    result["errors"].append(f"Timeline extraction failed: {e}")
+
+                # 2. Manifest
+                if "manifest.json" in zf.namelist():
+                    try:
+                        with zf.open("manifest.json") as f:
+                            result["manifest"] = json.load(f)
+                            result["valid"] = True
+                    except json.JSONDecodeError as e:
+                        result["errors"].append(f"Manifest JSON invalid: {e}")
+                    except Exception as e:
+                        result["errors"].append(f"Manifest read failed: {e}")
+                else:
+                    result["errors"].append("manifest.json not found in archive")
+
+        except Exception as e:
+            result["errors"].append(f"Archive open failed: {e}")
+            
+        return result

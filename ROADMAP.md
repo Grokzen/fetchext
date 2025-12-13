@@ -276,8 +276,8 @@
 
 *Focus: Robustness, accessibility, and deeper analysis capabilities.*
 
-- [ ] **Refactor ExtensionInspector**: Robustness (Fix).
-  - [ ] Make `ExtensionInspector` resilient to malformed manifests, returning partial data with warnings instead of crashing.
+- [x] **Refactor ExtensionInspector**: Robustness (Fix).
+  - [x] Make `ExtensionInspector` resilient to malformed manifests, returning partial data with warnings instead of crashing.
 - [ ] **Network Error Handling**: Reliability (Fix).
   - [ ] Implement specific handling for HTTP 403 (Cloudflare) and 429 (Rate Limit) errors with actionable user feedback.
 - [ ] **Visual Diff**: Visual Analysis (New).

@@ -5,7 +5,6 @@ from datetime import datetime, timezone
 
 from .inspector import ExtensionInspector
 from .risk import RiskAnalyzer
-from .utils import open_extension_archive
 from .exceptions import ExtensionError
 
 class MarkdownReporter:
@@ -37,7 +36,12 @@ class MarkdownReporter:
 
     def generate(self) -> str:
         """Generate the Markdown report content."""
-        manifest = self.inspector.get_manifest(self.file_path)
+        inspection = self.inspector.inspect(self.file_path)
+        manifest = inspection["manifest"] or {}
+        
+        # If inspection failed completely, we might want to note that
+        errors = inspection.get("errors", [])
+        
         risk_report = self.risk_analyzer.analyze(self.file_path)
         
         # File Info
@@ -56,19 +60,15 @@ class MarkdownReporter:
         manifest_version = manifest.get("manifest_version", 2)
         
         # File Tree
-        try:
-            with open_extension_archive(self.file_path) as zf:
-                file_list = zf.namelist()
-            # Use the existing build_file_tree but capture its output (it returns a Tree object from rich)
-            # Since rich Tree objects aren't easily convertible to Markdown, we might need a simplified version
-            # or just list top-level files/dirs.
-            # Actually, let's just list the top 20 files or structure.
-            # For a report, a full tree might be too long. Let's do a summary.
+        file_count = 0
+        file_tree_summary = "Could not read file structure."
+        
+        if inspection["timeline"]:
+            file_list = [item["filename"] for item in inspection["timeline"]]
             file_count = len(file_list)
             file_tree_summary = self._generate_tree_text(file_list)
-        except Exception:
-            file_tree_summary = "Could not read file structure."
-            file_count = 0
+        elif errors:
+             file_tree_summary = f"Error reading archive: {'; '.join(errors)}"
 
         # Risk Color
         risk_emoji = {

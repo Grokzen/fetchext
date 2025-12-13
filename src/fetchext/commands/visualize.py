@@ -30,9 +30,18 @@ def handle_timeline(args, show_progress=True):
     from ..console import console
     from rich.table import Table
     import json
+    import sys
     
     inspector = ExtensionInspector()
-    timeline = inspector.get_timeline(args.file)
+    result = inspector.inspect(args.file)
+    
+    if result["errors"]:
+        for error in result["errors"]:
+            console.print(f"[red]Error: {error}[/red]")
+        if not result["timeline"]:
+            sys.exit(1)
+            
+    timeline = result["timeline"]
     
     if args.json:
         # Convert datetime objects to strings for JSON serialization
