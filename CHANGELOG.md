@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Property-Based Testing**: Implemented advanced fuzz testing for `CrxDecoder` using `hypothesis` to ensure robustness against malformed CRX headers.
 - **Performance Benchmarks**: Added a benchmarking suite (`benchmarks/run.py`) to track performance of critical operations (parsing, entropy, complexity, secrets).
 - **TUI Mouse Support**: Added mouse support to `fext ui` with a confirmation dialog for downloading extensions by clicking rows.
+- **Parallel Grep**: Optimized `fext grep` to use multi-core processing (`ProcessPoolExecutor`), significantly speeding up searches in large repositories.
 
 ### Fixed
 

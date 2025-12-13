@@ -290,8 +290,8 @@
   - [x] Add a `benchmarks/` suite to measure and track extraction and analysis speed over time.
 - [x] **TUI Mouse Support**: Accessibility (Improve).
   - [x] Enable mouse support in `fext ui` for clicking rows, tabs, and buttons to improve usability.
-- [ ] **Parallel Grep**: Performance (Improve).
-  - [ ] Optimize `fext grep` to use `ProcessPoolExecutor` for multi-threaded searching of large repositories.
+- [x] **Parallel Grep**: Performance (Improve).
+  - [x] Optimize `fext grep` to use `ProcessPoolExecutor` for multi-threaded searching of large repositories.
 - [ ] **JS Sandbox**: Security (Innovate).
   - [ ] Introduce `fext sandbox <file.js>` (experimental) to execute extension code in a secure, isolated runtime (e.g., Deno).
 - [ ] **Interactive Dependency Graph**: Visualization (Innovate).

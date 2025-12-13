@@ -9,6 +9,7 @@ from fetchext.crx import CrxDecoder
 from fetchext.analysis.entropy import calculate_shannon_entropy
 from fetchext.analysis.complexity import _analyze_file_content
 from fetchext.secrets import SecretScanner
+from fetchext.analysis.grep import search_directory
 
 console = Console()
 
@@ -81,6 +82,16 @@ def run_benchmarks():
     
     benchmarks.append(("Secret Scan (1MB)", bench_secrets, 20))
 
+    # 5. Grep (100 files)
+    grep_dir = Path(tempfile.mkdtemp())
+    for i in range(100):
+        (grep_dir / f"file_{i}.txt").write_text(f"some content with pattern_{i} inside")
+    
+    def bench_grep():
+        search_directory(grep_dir, "pattern_50")
+        
+    benchmarks.append(("Grep (100 files)", bench_grep, 10))
+
     # Run them
     for name, func, iterations in benchmarks:
         console.print(f"Running {name}...", end="\r")
@@ -101,6 +112,7 @@ def run_benchmarks():
     os.unlink(crx_path)
     os.unlink(entropy_file)
     os.unlink(js_file)
+    shutil.rmtree(grep_dir)
 
 if __name__ == "__main__":
     run_benchmarks()

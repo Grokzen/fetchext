@@ -1,3 +1,4 @@
+import os
 import re
 from pathlib import Path
 from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -75,7 +76,10 @@ class GrepSearcher:
             pass
         return matches
 
-def search_directory(directory: Path, pattern: str, ignore_case: bool = False, max_workers: int = 4):
+def search_directory(directory: Path, pattern: str, ignore_case: bool = False, max_workers: int = None):
+    if max_workers is None:
+        max_workers = os.cpu_count() or 4
+        
     searcher = GrepSearcher(pattern, ignore_case)
     results = []
     
