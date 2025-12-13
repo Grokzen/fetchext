@@ -22,6 +22,13 @@ SCHEMA = {
         "proxy": (str, None),
         "proxies": (dict, None),
         "rate_limit_delay": ((int, float), 0.0),
+    },
+    "ai": {
+        "enabled": (bool, False),
+        "provider": (str, "openai"),
+        "api_key": (str, None),
+        "base_url": (str, "https://api.openai.com/v1"),
+        "model": (str, "gpt-3.5-turbo"),
     }
 }
 

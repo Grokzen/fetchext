@@ -229,8 +229,8 @@
 
 *Focus: AI integration, deeper understanding, and visual improvements.*
 
-- [ ] **AI Summarizer**: Code intent analysis (Analysis).
-  - [ ] Add `fext analyze --summary <file>` to generate a natural language summary of the extension's functionality using a local LLM or API.
+- [x] **AI Summarizer**: Code intent analysis (Analysis).
+  - [x] Add `fext analyze --summary <file>` to generate a natural language summary of the extension's functionality using a local LLM or API.
 - [ ] **Code Beautifier**: Deobfuscation helper (Core).
   - [ ] Add `fext beautify <file>` to format minified JavaScript and JSON files for better readability.
 - [ ] **Similarity Search**: Code reuse detection (Analysis).

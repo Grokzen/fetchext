@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **AI Summarizer**: Added `fext analyze summary <file>` command to generate AI-powered summaries of extension functionality using OpenAI-compatible APIs.
+- **AI Configuration**: Added `[ai]` section to `config.toml` for configuring API keys, providers, and models.
+
 ### Changed
 
 - **CLI Breaking Change**: Refactored `fext analyze` to use positional arguments instead of flags.

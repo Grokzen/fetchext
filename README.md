@@ -104,6 +104,22 @@ For full documentation, including advanced usage, analysis tools, and deployment
 * [Deployment & Enterprise](docs/deployment.md)
 * [Installation](docs/installation.md)
 
+### 🧠 AI Analysis
+
+Enable AI-powered summaries in `~/.config/fext/config.toml`:
+
+```toml
+[ai]
+enabled = true
+api_key = "sk-..."
+```
+
+Then run:
+
+```bash
+fext analyze summary <file>
+```
+
 ## 💻 Development
 
 ### 🧹 Linting and Formatting

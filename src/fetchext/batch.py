@@ -1,7 +1,6 @@
 import logging
 import concurrent.futures
 from pathlib import Path
-from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn, TimeRemainingColumn
 from .console import console
 from .downloaders import ChromeDownloader, EdgeDownloader, FirefoxDownloader
 from .exceptions import ConfigError

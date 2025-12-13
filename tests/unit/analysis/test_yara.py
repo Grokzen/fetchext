@@ -68,6 +68,7 @@ def test_scan_archive(mock_yara_compile):
             # Mock infolist
             mock_info = MagicMock()
             mock_info.filename = "malware.js"
+            mock_info.file_size = 100  # Small file
             mock_info.is_dir.return_value = False
             mock_zip.infolist.return_value = [mock_info]
             

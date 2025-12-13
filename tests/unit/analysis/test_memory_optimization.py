@@ -1,5 +1,4 @@
-import pytest
-from unittest.mock import MagicMock, patch, mock_open
+from unittest.mock import MagicMock, patch
 from pathlib import Path
 from fetchext.analysis.yara import YaraScanner
 from fetchext.secrets import SecretScanner

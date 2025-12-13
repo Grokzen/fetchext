@@ -1,6 +1,6 @@
 import pytest
 import sys
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from fetchext.cli import main
 
 class TestAnalyzeCLI:
