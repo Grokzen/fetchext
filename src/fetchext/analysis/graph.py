@@ -1,5 +1,6 @@
 import re
 import logging
+import json
 from pathlib import Path
 from typing import Dict, Set
 from ..utils import open_extension_archive
@@ -112,3 +113,123 @@ def generate_dot(graph: Dict[str, Set[str]], title: str = "Dependency Graph") ->
 
 def _clean_id(name: str) -> str:
     return name.replace('"', '\\"')
+
+def generate_html(graph: Dict[str, Set[str]], title: str = "Dependency Graph") -> str:
+    """
+    Generates an interactive HTML string using vis-network.
+    """
+    nodes = []
+    edges = []
+    node_ids = set()
+    
+    # Collect all nodes
+    for source, targets in graph.items():
+        node_ids.add(source)
+        for target in targets:
+            node_ids.add(target)
+            
+    # Create node objects
+    for node_id in sorted(node_ids):
+        # Color by extension
+        color = "#97c2fc" # Default blue
+        if node_id.endswith(".js"):
+            color = "#ffff00" # Yellow
+        elif node_id.endswith(".html"):
+            color = "#fb7e81" # Red
+        elif node_id.endswith(".css"):
+            color = "#7be141" # Green
+        elif node_id.endswith(".json"):
+            color = "#6E6EFD" # Blue
+            
+        nodes.append({
+            "id": node_id,
+            "label": node_id,
+            "color": color
+        })
+        
+    # Create edges
+    for source, targets in graph.items():
+        for target in targets:
+            edges.append({
+                "from": source,
+                "to": target,
+                "arrows": "to"
+            })
+            
+    data = {
+        "nodes": nodes,
+        "edges": edges
+    }
+    
+    json_data = json.dumps(data)
+    
+    html = f"""
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{title}</title>
+  <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+  <style type="text/css">
+    #mynetwork {{
+      width: 100%;
+      height: 800px;
+      border: 1px solid lightgray;
+    }}
+    body {{
+        font-family: sans-serif;
+    }}
+  </style>
+</head>
+<body>
+  <h2>{title}</h2>
+  <div id="mynetwork"></div>
+  <script type="text/javascript">
+    var data = {json_data};
+    var container = document.getElementById('mynetwork');
+    var options = {{
+        nodes: {{
+            shape: 'box',
+            font: {{
+                size: 14
+            }}
+        }},
+        physics: {{
+            stabilization: false,
+            barnesHut: {{
+                gravitationalConstant: -8000,
+                springConstant: 0.04,
+                springLength: 95
+            }}
+        }}
+    }};
+    var network = new vis.Network(container, data, options);
+  </script>
+</body>
+</html>
+"""
+    return html
+
+def generate_graph(file_path: Path, output_path: Path = None, interactive: bool = False):
+    """
+    Generates a dependency graph for the given extension file.
+    """
+    graph = build_dependency_graph(file_path)
+    
+    if interactive or (output_path and output_path.suffix == ".html"):
+        content = generate_html(graph, title=f"Dependency Graph: {file_path.name}")
+        ext = ".html"
+    else:
+        content = generate_dot(graph, title=f"Dependency Graph: {file_path.name}")
+        ext = ".dot"
+        
+    if output_path:
+        output_path.write_text(content)
+        print(f"Graph saved to {output_path}")
+    else:
+        # Default output
+        if ext == ".html":
+            output_path = file_path.with_suffix(".html")
+            output_path.write_text(content)
+            print(f"Graph saved to {output_path}")
+        else:
+            print(content)

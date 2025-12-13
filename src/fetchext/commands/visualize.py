@@ -9,6 +9,11 @@ def register(subparsers):
         type=Path,
         help="Output file path (default: <filename>_graph.html)"
     )
+    graph_parser.add_argument(
+        "--interactive",
+        action="store_true",
+        help="Generate interactive HTML graph"
+    )
     graph_parser.set_defaults(func=handle_graph)
 
     # Timeline subcommand
@@ -23,7 +28,7 @@ def register(subparsers):
 
 def handle_graph(args, show_progress=True):
     from ..analysis.graph import generate_graph
-    generate_graph(args.file, args.output)
+    generate_graph(args.file, args.output, interactive=args.interactive)
 
 def handle_timeline(args, show_progress=True):
     from ..inspector import ExtensionInspector

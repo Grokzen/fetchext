@@ -53,3 +53,42 @@ def test_generate_dot():
     assert 'digraph "Test Graph" {' in dot
     assert '"main.js" -> "utils.js";' in dot
     assert '"main.js" -> "lib/helper.js";' in dot
+
+def test_generate_html():
+    from fetchext.analysis.graph import generate_html
+    graph = {
+        "main.js": {"utils.js"},
+        "utils.js": set()
+    }
+    html = generate_html(graph, "Test Graph")
+    
+    assert "<!DOCTYPE html>" in html
+    assert "vis.Network" in html
+    assert '"id": "main.js"' in html
+    assert '"id": "utils.js"' in html
+    assert '"from": "main.js", "to": "utils.js"' in html
+
+def test_generate_graph_dot(capsys):
+    from fetchext.analysis.graph import generate_graph
+    from pathlib import Path
+    with patch("fetchext.analysis.graph.build_dependency_graph") as mock_build:
+        mock_build.return_value = {"main.js": {"utils.js"}}
+        generate_graph(Path("dummy.crx"), None, interactive=False)
+        captured = capsys.readouterr()
+        assert 'digraph "Dependency Graph: dummy.crx" {' in captured.out
+
+def test_generate_graph_html():
+    from fetchext.analysis.graph import generate_graph
+    from pathlib import Path
+    with patch("fetchext.analysis.graph.build_dependency_graph") as mock_build:
+        mock_build.return_value = {"main.js": {"utils.js"}}
+        
+        # Mock Path.write_text to avoid writing to disk
+        with patch("pathlib.Path.write_text") as mock_write:
+            generate_graph(Path("dummy.crx"), None, interactive=True)
+            
+            # Check that write_text was called
+            assert mock_write.called
+            content = mock_write.call_args[0][0]
+            assert "<!DOCTYPE html>" in content
+            assert "vis.Network" in content

@@ -292,10 +292,10 @@
   - [x] Enable mouse support in `fext ui` for clicking rows, tabs, and buttons to improve usability.
 - [x] **Parallel Grep**: Performance (Improve).
   - [x] Optimize `fext grep` to use `ProcessPoolExecutor` for multi-threaded searching of large repositories.
+- [x] **Interactive Dependency Graph**: Visualization (Innovate).
+  - [x] Add `fext graph --interactive` to generate a dynamic HTML/D3.js visualization of internal file dependencies.
 - [ ] **JS Sandbox**: Security (Innovate).
   - [ ] Introduce `fext sandbox <file.js>` (experimental) to execute extension code in a secure, isolated runtime (e.g., Deno).
-- [ ] **Interactive Dependency Graph**: Visualization (Innovate).
-  - [ ] Add `fext graph --interactive` to generate a dynamic HTML/D3.js visualization of internal file dependencies.
 
 ## 🤝 v2.4.0: Ecosystem & Collaboration
 
