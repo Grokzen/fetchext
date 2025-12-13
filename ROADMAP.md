@@ -231,8 +231,8 @@
 
 - [x] **AI Summarizer**: Code intent analysis (Analysis).
   - [x] Add `fext analyze --summary <file>` to generate a natural language summary of the extension's functionality using a local LLM or API.
-- [ ] **Code Beautifier**: Deobfuscation helper (Core).
-  - [ ] Add `fext beautify <file>` to format minified JavaScript and JSON files for better readability.
+- [x] **Code Beautifier**: Deobfuscation helper (Core).
+  - [x] Add `fext beautify <file>` to format minified JavaScript and JSON files for better readability.
 - [ ] **Similarity Search**: Code reuse detection (Analysis).
   - [ ] Add `fext similar <file>` to find other extensions in the local repository with high code similarity (using fuzzy hashing).
 - [ ] **Smart Diff**: Visual comparison (CLI).

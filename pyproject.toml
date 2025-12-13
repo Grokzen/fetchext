@@ -25,6 +25,7 @@ dependencies = [
     "lizard",
     "tomli-w",
     "Pillow",
+    "jsbeautifier",
 ]
 
 [project.optional-dependencies]

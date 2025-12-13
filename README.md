@@ -120,6 +120,14 @@ Then run:
 fext analyze summary <file>
 ```
 
+### 💅 Code Beautifier
+
+Format minified JavaScript and JSON files:
+
+```bash
+fext beautify <file>
+```
+
 ## 💻 Development
 
 ### 🧹 Linting and Formatting

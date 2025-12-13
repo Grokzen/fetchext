@@ -17,7 +17,8 @@ from .commands import (
     info,
     visualize,
     tui,
-    plugin
+    plugin,
+    beautify
 )
 
 # Configure logging
@@ -73,6 +74,7 @@ def get_parser():
     visualize.register(subparsers)
     tui.register(subparsers)
     plugin.register(subparsers)
+    beautify.register(subparsers)
 
     return parser
 
