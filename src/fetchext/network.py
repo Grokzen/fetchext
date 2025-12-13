@@ -182,6 +182,20 @@ def download_file(url: str, output_path: Path, session: requests.Session = None,
 
         return output_path
 
+    except requests.HTTPError as e:
+        status_code = e.response.status_code
+        if status_code == 403:
+            msg = "Access Denied (403): Likely Cloudflare/WAF blocking. Try using a VPN or waiting."
+            logger.error(msg)
+            raise NetworkError(msg, original_exception=e)
+        elif status_code == 429:
+            msg = "Rate Limit Exceeded (429): Too many requests. Increase 'rate_limit_delay' in config."
+            logger.error(msg)
+            raise NetworkError(msg, original_exception=e)
+        else:
+            logger.error(f"HTTP Error: {e}")
+            raise NetworkError(f"HTTP Error: {e}", original_exception=e)
+
     except requests.RequestException as e:
         logger.error(f"Failed to download file: {e}")
         raise NetworkError(f"Failed to download file: {e}", original_exception=e)

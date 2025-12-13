@@ -32,7 +32,12 @@ class TestDownloadFlow:
         from fetchext.exceptions import NetworkError
         # Mock session to raise HTTPError
         mock_session = mocker.MagicMock()
-        mock_session.get.side_effect = requests.HTTPError("404 Not Found")
+        
+        mock_response = mocker.Mock()
+        mock_response.status_code = 404
+        error = requests.HTTPError("404 Not Found", response=mock_response)
+        
+        mock_session.get.side_effect = error
         mock_session.__enter__.return_value = mock_session
         mock_session.__exit__.return_value = None
         
