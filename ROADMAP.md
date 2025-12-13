@@ -307,8 +307,8 @@
   - [x] Add `fext share <report.html>` to automatically upload reports to a configured destination (e.g., GitHub Gist, S3, or a pastebin) and generate a shareable link for team collaboration.
 - [x] **Directory Watcher**: Automation (New).
   - [x] Add `fext watch <dir>` to monitor a folder for new `.crx` or `.xpi` files and automatically trigger analysis workflows (scan, report, extract) as they arrive.
-- [ ] **TUI E2E Testing**: Quality (Test).
-  - [ ] Implement automated end-to-end tests for the TUI using `textual`'s `Pilot` testing harness to verify user interactions and prevent UI regressions.
+- [x] **TUI E2E Testing**: Quality (Test).
+  - [x] Implement automated end-to-end tests for the TUI using `textual`'s `Pilot` testing harness to verify user interactions and prevent UI regressions.
 - [ ] **Migration Regression Tests**: Quality (Test).
   - [ ] Add a suite of "golden" tests for `fext migrate` to verify MV2->MV3 conversion accuracy against known good outputs, ensuring the migration logic remains stable.
 - [ ] **Complexity in Reports**: Reporting (Improve).
