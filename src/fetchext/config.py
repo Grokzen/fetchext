@@ -1,8 +1,5 @@
 import os
-try:
-    import tomllib
-except ImportError:
-    import tomli as tomllib
+import tomllib
 import tomli_w
 from pathlib import Path
 from typing import Any, Dict

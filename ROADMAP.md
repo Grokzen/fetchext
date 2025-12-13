@@ -222,8 +222,8 @@
   - [x] Improve `fext ui` responsiveness, error handling, and navigation.
 - [x] **Progress Bars**: UX (CLI).
   - [x] Standardize progress bar styles and behavior across all long-running commands.
-- [ ] **Dependency Review**: Maintenance (Core).
-  - [ ] Audit and prune unused or redundant dependencies to keep the package lightweight.
+- [x] **Dependency Review**: Maintenance (Core).
+  - [x] Audit and prune unused or redundant dependencies to keep the package lightweight.
 
 ## 🌐 v2.0.0: Intelligence & Web
 
