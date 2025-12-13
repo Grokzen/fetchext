@@ -879,3 +879,44 @@ def generate_html_report(file_path, output_path=None, yara_rules=None):
         logger.error(f"HTML Report generation failed: {e}")
         raise ExtensionError(f"HTML Report generation failed: {e}", original_exception=e)
 
+def share_report(file_path, provider=None, description=None):
+    """
+    Share a report file via a configured provider.
+    """
+    from .sharing import GistUploader
+    
+    file_path = Path(file_path)
+    if not file_path.exists():
+        raise ExtensionError(f"File not found: {file_path}")
+        
+    config = load_config()
+    sharing_config = config.get("sharing", {})
+    
+    # Determine provider
+    provider = provider or sharing_config.get("provider", "gist")
+    
+    if provider == "gist":
+        token = sharing_config.get("github_token")
+        if not token:
+            # Try env var
+            import os
+            token = os.environ.get("GITHUB_TOKEN")
+            
+        if not token:
+            raise ConfigError("GitHub token not found. Please set 'sharing.github_token' in config or GITHUB_TOKEN env var.")
+            
+        public = sharing_config.get("public", False)
+        uploader = GistUploader(token, public=public)
+    else:
+        raise ConfigError(f"Unsupported sharing provider: {provider}")
+        
+    try:
+        console.print_info(f"Uploading {file_path.name} to {provider}...")
+        url = uploader.upload(file_path, description)
+        console.print_success(f"Report shared successfully: [link={url}]{url}[/link]")
+        return url
+    except Exception as e:
+        console.print_error(f"Sharing failed: {e}")
+        raise ExtensionError(f"Sharing failed: {e}", original_exception=e)
+
+

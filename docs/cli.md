@@ -352,6 +352,19 @@ fext schema <type>
 
 **Types:** `config`, `audit`, `risk`, `history`, `scan`.
 
+### `share`
+
+Share a report file via a configured provider (e.g., GitHub Gist).
+
+```bash
+fext share <file> [--provider <provider>] [--description <text>]
+```
+
+**Options:**
+
+* `--provider`: Sharing provider (default: `gist`).
+* `--description`: Description for the shared file.
+
 ### `clean`
 
 Clean up cache and temporary files.

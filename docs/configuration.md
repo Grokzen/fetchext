@@ -39,6 +39,16 @@ retries = 3
 [network.proxies]
 http = "http://10.10.1.10:3128"
 https = "http://10.10.1.10:1080"
+
+[sharing]
+# Sharing provider (currently only "gist" is supported)
+provider = "gist"
+
+# GitHub Personal Access Token for Gist uploads
+github_token = "ghp_..."
+
+# Whether to create public Gists (default: false)
+public = false
 ```
 
 ## Environment Variables

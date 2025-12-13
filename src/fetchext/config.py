@@ -29,6 +29,11 @@ SCHEMA = {
         "api_key": (str, None),
         "base_url": (str, "https://api.openai.com/v1"),
         "model": (str, "gpt-3.5-turbo"),
+    },
+    "sharing": {
+        "provider": (str, "gist"),
+        "github_token": (str, None),
+        "public": (bool, False),
     }
 }
 

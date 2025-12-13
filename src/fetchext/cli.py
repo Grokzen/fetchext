@@ -26,7 +26,8 @@ from .commands import (
     update,
     badge,
     grep,
-    sandbox
+    sandbox,
+    share
 )
 
 # Configure logging
@@ -91,6 +92,7 @@ def get_parser():
     badge.register(subparsers)
     grep.register(subparsers)
     sandbox.register(subparsers)
+    share.register(subparsers)
 
     return parser
 
