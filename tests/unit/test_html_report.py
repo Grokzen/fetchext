@@ -80,4 +80,4 @@ def test_generate_html_report(tmp_path):
         generate_html_report(file_path, output_path)
 
         assert output_path.exists()
-        assert "Test" in output_path.read_text()
+        assert "Test" in output_path.read_text(encoding="utf-8")

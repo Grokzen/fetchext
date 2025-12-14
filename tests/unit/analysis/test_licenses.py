@@ -23,7 +23,11 @@ def test_scan_licenses_zip(fs):
     # Create a mock zip file
     import zipfile
 
-    zip_path = Path("/tmp/test.zip")
+    zip_path = Path.cwd() / "test.zip"
+    # Ensure parent directory exists
+    if not zip_path.parent.exists():
+        fs.create_dir(zip_path.parent)
+
     with zipfile.ZipFile(zip_path, "w") as zf:
         zf.writestr(
             "LICENSE",
@@ -47,7 +51,11 @@ def test_scan_licenses_zip(fs):
 def test_scan_licenses_package_json(fs):
     import zipfile
 
-    zip_path = Path("/tmp/test.zip")
+    zip_path = Path.cwd() / "test.zip"
+    # Ensure parent directory exists
+    if not zip_path.parent.exists():
+        fs.create_dir(zip_path.parent)
+
     with zipfile.ZipFile(zip_path, "w") as zf:
         zf.writestr("package.json", '{"license": "MIT"}')
 

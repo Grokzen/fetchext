@@ -27,7 +27,7 @@ def test_sync_clone_new(fs, mock_git_installed, mock_subprocess):
 
     # Verify git clone was called
     mock_subprocess.assert_called_with(
-        ["git", "clone", "https://example.com/rules.git", "/tmp/rules"],
+        ["git", "clone", "https://example.com/rules.git", str(Path("/tmp/rules"))],
         check=True,
         capture_output=True,
     )

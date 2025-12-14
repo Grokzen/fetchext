@@ -4,7 +4,8 @@ from fetchext.analysis.api_usage import analyze_api_usage
 
 def test_analyze_api_usage_directory(fs):
     """Test API usage analysis on a directory."""
-    fs.create_dir("/tmp/ext")
+    ext_dir = Path.cwd() / "ext"
+    fs.create_dir(ext_dir)
 
     js_content = """
     chrome.tabs.create({url: 'https://example.com'});
@@ -12,9 +13,9 @@ def test_analyze_api_usage_directory(fs):
     browser.storage.local.set({key: 'value'});
     """
 
-    fs.create_file("/tmp/ext/background.js", contents=js_content)
+    fs.create_file(ext_dir / "background.js", contents=js_content)
 
-    results = analyze_api_usage(Path("/tmp/ext"))
+    results = analyze_api_usage(ext_dir)
 
     assert results["total_calls"] == 3
     assert results["unique_apis"] == 3
@@ -31,10 +32,11 @@ def test_analyze_api_usage_directory(fs):
 
 def test_analyze_api_usage_no_matches(fs):
     """Test analysis with no API calls."""
-    fs.create_dir("/tmp/ext")
-    fs.create_file("/tmp/ext/script.js", contents="console.log('hello');")
+    ext_dir = Path.cwd() / "ext"
+    fs.create_dir(ext_dir)
+    fs.create_file(ext_dir / "script.js", contents="console.log('hello');")
 
-    results = analyze_api_usage(Path("/tmp/ext"))
+    results = analyze_api_usage(ext_dir)
 
     assert results["total_calls"] == 0
     assert results["unique_apis"] == 0
@@ -43,15 +45,16 @@ def test_analyze_api_usage_no_matches(fs):
 
 def test_analyze_api_usage_html(fs):
     """Test API usage in HTML files."""
-    fs.create_dir("/tmp/ext")
+    ext_dir = Path.cwd() / "ext"
+    fs.create_dir(ext_dir)
     html_content = """
     <script>
         chrome.windows.create();
     </script>
     """
-    fs.create_file("/tmp/ext/popup.html", contents=html_content)
+    fs.create_file(ext_dir / "popup.html", contents=html_content)
 
-    results = analyze_api_usage(Path("/tmp/ext"))
+    results = analyze_api_usage(ext_dir)
 
     assert results["total_calls"] == 1
     assert results["api_counts"]["chrome.windows.create"] == 1
@@ -61,7 +64,11 @@ def test_analyze_api_usage_archive(fs):
     """Test API usage analysis on a ZIP archive."""
     import zipfile
 
-    path = Path("/tmp/ext.zip")
+    path = Path.cwd() / "ext.zip"
+    # Ensure parent directory exists
+    if not path.parent.exists():
+        fs.create_dir(path.parent)
+
     with zipfile.ZipFile(path, "w") as zf:
         zf.writestr("script.js", "chrome.tabs.query({}, function() {});")
 

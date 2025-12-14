@@ -21,6 +21,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **MV3 Migration**: Improved `fext migrate` to intelligently merge `page_action` and `browser_action` instead of overwriting, and to use `content_scripts` matches for `web_accessible_resources` instead of defaulting to `<all_urls>`.
 - **Windows File Locking**: Fixed `PermissionError` on Windows in `YaraScanner` by ensuring temporary files are closed before being read by other processes or the same process.
 - **Test Stability**: Fixed a hang in `test_batch_parallel.py` by using the real filesystem instead of `pyfakefs` for parallel execution tests, avoiding concurrency issues.
+- **MacOS CI**: Fixed `ProcessPoolExecutor` failures in performance benchmarks (`test_benchmarks.py`) on MacOS by mocking the executor, avoiding spawn-related issues in the CI environment.
+- **Windows CI**: Fixed `OSError` in tests by replacing hardcoded `/tmp` paths with `pathlib.Path.cwd()` in `test_api_usage.py` and `test_licenses.py` to ensure compatibility with `pyfakefs` on all platforms.
+- **Windows CI**: Fixed `ModuleNotFoundError: No module named 'tomllib'` on Python 3.10 environments by adding a compatibility shim in `config.py` to use `tomli` as a fallback.
+- **Windows CI**: Fixed path separator issues in `graph.py` by normalizing paths to use forward slashes, ensuring consistent dependency graph generation across operating systems.
+- **Windows CI**: Fixed `AssertionError` in `test_rules.py` by using `pathlib.Path` for cross-platform path comparisons instead of hardcoded strings.
 
 ## [2.5.0] - 2025-12-10
 

@@ -90,7 +90,7 @@ def _resolve_path(current_file: str, import_path: str) -> str:
         if not str(full_path).startswith(str(fake_root)):
             return import_path  # Invalid relative path
 
-        return str(full_path.relative_to(fake_root))
+        return str(full_path.relative_to(fake_root)).replace("\\", "/")
     except Exception:
         return import_path
 

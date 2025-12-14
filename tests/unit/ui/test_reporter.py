@@ -95,7 +95,7 @@ class TestMarkdownReporter:
         reporter.save(output_path)
 
         assert output_path.exists()
-        content = output_path.read_text()
+        content = output_path.read_text(encoding="utf-8")
         assert "# Extension Report: Test" in content
 
     def test_tree_generation(self, fs):
