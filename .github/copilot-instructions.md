@@ -282,10 +282,11 @@ This project serves as a proof-of-concept for fully automated software developme
 
 ### 7. Python Environment Protocol
 
-- **Rule**: **USE `workon fetchext` IF PYTHON/PIP IS MISSING**.
-- **Context**: When operating in a terminal where `python3` or `pip3` executables are not found or appear incorrect.
+- **Rule**: **ALWAYS USE `workon fetchext` FOR PYTHON TASKS**.
+- **Context**: Whenever running Python scripts, installing dependencies, running tests, or encountering import/module errors.
 - **Action**:
-    1. Do not attempt to locate Python in the system.
-    2. Run `workon fetchext` to activate the pre-configured virtual environment.
-    3. Assume this virtual environment is always available and functional.
+    1. **ALWAYS** run `workon fetchext` before executing any Python command in a new terminal session.
+    2. If you encounter `ModuleNotFoundError` or `ImportError`, your first step MUST be to run `workon fetchext` and retry.
+    3. Do not attempt to create new virtual environments or locate system Python.
+    4. Assume `workon fetchext` is the ONLY valid way to interact with the project's Python environment.
 

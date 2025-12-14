@@ -31,6 +31,7 @@ Once the error is identified, follow this loop:
 
 1. **Reproduce Locally**:
    Attempt to reproduce the error using local tools (`make test`, `make lint`, etc.).
+   *Always run `workon fetchext` before running local tests to ensure the correct environment.*
    *If it passes locally but fails remotely, check for environment differences (Python version, dependencies).*
 
 2. **Implement Fix**:

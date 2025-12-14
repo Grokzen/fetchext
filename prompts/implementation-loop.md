@@ -20,6 +20,7 @@ Repeat these steps for every incomplete item:
     * Write the code.
     * Write unit tests (`pytest`).
     * **Verify**: Run the tests and manually execute the command to ensure it works.
+    * **Environment**: ALWAYS run `workon fetchext` before running tests or commands.
     * Verify the code by running both unit/integration tests via pytest, but you also should test all code via `make ci` command, and you should always test all features the way that a human would do via the terminal and calling the tool
 
 4. **Document**:
