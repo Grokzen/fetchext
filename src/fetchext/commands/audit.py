@@ -99,6 +99,11 @@ def register(subparsers):
     wasm_parser.add_argument("file", help="Path to the .wasm file")
     wasm_parser.add_argument("--json", action="store_true", help="Output results as JSON")
 
+    # API Usage
+    api_parser = analyze_subparsers.add_parser("api-usage", help="Analyze Chrome/Browser API usage")
+    api_parser.add_argument("file", help="Path to the extension file or directory")
+    api_parser.add_argument("--json", action="store_true", help="Output results as JSON")
+
     analyze_parser.set_defaults(func=handle_analyze)
 
     # Report subcommand
@@ -487,3 +492,36 @@ def handle_analyze(args, show_progress=True):
             
             if results["custom_sections"]:
                 console.print(f"\n[bold cyan]Custom Sections:[/bold cyan] {', '.join(results['custom_sections'])}")
+
+    elif args.analysis_type == "api-usage":
+        from ..analysis.api_usage import analyze_api_usage
+        from rich.table import Table
+        
+        results = analyze_api_usage(Path(args.file), show_progress=show_progress)
+        
+        if args.json:
+            console.print_json(data=results)
+        else:
+            if "error" in results:
+                console.print(f"[red]Error: {results['error']}[/red]")
+                return
+
+            console.print(f"[bold]API Usage Analysis for {args.file}[/bold]")
+            console.print(f"Total API Calls: {results['total_calls']}")
+            console.print(f"Unique APIs: {results['unique_apis']}")
+            
+            if results["api_counts"]:
+                console.print("\n[bold cyan]Top API Calls:[/bold cyan]")
+                table = Table(show_header=True, header_style="bold magenta")
+                table.add_column("API")
+                table.add_column("Count")
+                
+                # Show top 20
+                for api, count in list(results["api_counts"].items())[:20]:
+                    table.add_row(api, str(count))
+                console.print(table)
+                
+                if len(results["api_counts"]) > 20:
+                    console.print(f"... and {len(results['api_counts']) - 20} more.")
+            else:
+                console.print("\n[green]No API calls found.[/green]")

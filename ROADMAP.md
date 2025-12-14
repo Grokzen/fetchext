@@ -345,8 +345,8 @@
   - [x] Add support for detecting and analyzing WebAssembly (`.wasm`) modules within extensions, including disassembly (using `wasm2wat`) and basic stats.
 - [x] **Community Rules Sync**: Security (Innovate).
   - [x] Add `fext rules sync` to automatically download and update YARA rules and analysis signatures from a community-maintained git repository.
-- [ ] **API Usage Heatmap**: Analysis (New).
-  - [ ] Add `fext analyze api-usage <file>` to generate a frequency map of Chrome API calls (e.g., `chrome.tabs.create`), helping auditors focus on high-risk areas.
+- [x] **API Usage Heatmap**: Analysis (New).
+  - [x] Add `fext analyze api-usage <file>` to generate a frequency map of Chrome API calls (e.g., `chrome.tabs.create`), helping auditors focus on high-risk areas.
 - [ ] **Refactor Utils Module**: Architecture (Fix).
   - [ ] Split the growing `src/fetchext/utils.py` into smaller, focused modules (e.g., `fs_utils.py`, `string_utils.py`) to improve maintainability and testability.
 - [ ] **Performance Regression Suite**: Quality (Test).

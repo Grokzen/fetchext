@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **AST-Based Diff**: Added `--ast` flag to `fext diff` to compare JavaScript files using Abstract Syntax Trees (AST), ignoring whitespace and comments for more meaningful diffs.
 - **WASM Inspector**: Added `fext analyze wasm <file>` to analyze WebAssembly modules, extracting imports, exports, and section stats without external dependencies.
 - **Community Rules Sync**: Added `fext rules sync` to automatically download and update YARA rules and analysis signatures from a community-maintained git repository.
+- **API Usage Heatmap**: Added `fext analyze api-usage <file>` to generate a frequency map of Chrome/Browser API calls, helping auditors focus on high-risk areas.
 
 ## [2.5.0] - 2025-12-10
 

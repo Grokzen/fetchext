@@ -118,6 +118,20 @@ fext analyze wasm <file.wasm>
 - Lists exported functions (entry points).
 - Identifies custom sections (e.g., debug names).
 
+### API Usage Heatmap
+
+Generate a frequency map of Chrome/Browser API calls to identify high-risk areas.
+
+```bash
+fext analyze api-usage <file>
+```
+
+**Features:**
+
+- Scans JavaScript and HTML files.
+- Detects `chrome.*` and `browser.*` API calls.
+- Outputs total calls, unique APIs, and per-file usage.
+
 ## Visualization
 
 ### Timeline View
