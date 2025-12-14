@@ -138,10 +138,10 @@ fext similar <target_file> <directory>
 
 ### 🆚 Smart Diff
 
-Compare two extension versions with whitespace ignoring and image analysis:
+Compare two extension versions with whitespace ignoring, AST-based comparison, and image analysis:
 
 ```bash
-fext diff old.crx new.crx --ignore-whitespace
+fext diff old.crx new.crx --ignore-whitespace --ast
 ```
 
 ### 📦 Extension Packer

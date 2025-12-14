@@ -166,8 +166,13 @@ fext report <file> [options]
 Compare two extension versions.
 
 ```bash
-fext diff <old_file> <new_file> [--json]
+fext diff <old_file> <new_file> [--json] [--ast]
 ```
+
+**Options:**
+
+* `--json`: Output results as JSON.
+* `--ast`: Use AST-based comparison for JavaScript files (ignores whitespace and comments).
 
 ### `verify`
 

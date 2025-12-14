@@ -34,6 +34,11 @@ def register(subparsers):
         help="Ignore whitespace changes in text files"
     )
     diff_parser.add_argument(
+        "--ast",
+        action="store_true",
+        help="Perform AST-based semantic diff for JS files"
+    )
+    diff_parser.add_argument(
         "--visual",
         action="store_true",
         help="Generate a visual HTML diff report"
@@ -77,6 +82,7 @@ def handle_diff(args, show_progress=True):
         args.new_file, 
         json_output=args.json,
         ignore_whitespace=args.ignore_whitespace,
+        ast_diff=args.ast,
         visual=args.visual,
         output_path=args.output
     )

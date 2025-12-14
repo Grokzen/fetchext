@@ -334,12 +334,56 @@
   - [x] Implement snapshot testing (using `pytest-snapshot`) for CLI output and TUI screens to detect unintended visual changes or formatting regressions.
 - [x] **TUI Themes**: UX (Improve).
   - [x] Add support for user-configurable color schemes (themes) in `config.toml` for the TUI, allowing users to match their terminal aesthetics.
-- [ ] **AST-Based Diff**: Analysis (Improve).
-  - [ ] Enhance `fext diff` to perform semantic, AST-based comparisons for JavaScript files (ignoring formatting/comments) to highlight actual logic changes more clearly.
+
+## 🔬 v2.6.0: Deep Code Insight
+
+*Focus: Advanced static analysis and developer efficiency.*
+
+- [x] **AST-Based Diff**: Analysis (Improve).
+  - [x] Enhance `fext diff` to perform semantic, AST-based comparisons for JavaScript files (ignoring formatting/comments) to highlight actual logic changes more clearly.
 - [ ] **WASM Inspector**: Analysis (Innovate).
   - [ ] Add support for detecting and analyzing WebAssembly (`.wasm`) modules within extensions, including disassembly (using `wasm2wat`) and basic stats.
 - [ ] **Community Rules Sync**: Security (Innovate).
   - [ ] Add `fext rules sync` to automatically download and update YARA rules and analysis signatures from a community-maintained git repository.
+- [ ] **API Usage Heatmap**: Analysis (New).
+  - [ ] Add `fext analyze api-usage <file>` to generate a frequency map of Chrome API calls (e.g., `chrome.tabs.create`), helping auditors focus on high-risk areas.
+- [ ] **Refactor Utils Module**: Architecture (Fix).
+  - [ ] Split the growing `src/fetchext/utils.py` into smaller, focused modules (e.g., `fs_utils.py`, `string_utils.py`) to improve maintainability and testability.
+- [ ] **Performance Regression Suite**: Quality (Test).
+  - [ ] Integrate `pytest-benchmark` to track the speed of critical operations (parsing, hashing) over time and fail CI if performance degrades significantly.
+- [ ] **Enhanced Search Cache**: Performance (Improve).
+  - [ ] Implement a persistent, time-to-live (TTL) cache for `fext search` results to reduce Web Store API calls and speed up repeated queries.
+- [ ] **Manifest V3 Migration Fixes**: Core (Fix).
+  - [ ] Address edge cases in `fext migrate` where complex `web_accessible_resources` patterns are not correctly converted to the new MV3 format.
+- [ ] **TUI Keyboard Shortcuts**: UX (Improve).
+  - [ ] Add configurable keyboard shortcuts to the TUI (e.g., `Ctrl+D` to download, `/` to search) to improve power user efficiency.
+- [ ] **PII Scanner**: Security (New).
+  - [ ] Add `fext scan --pii` to detect potential Personally Identifiable Information (PII) collection patterns (e.g., "email", "phone", "credit card" regexes in variable names or comments).
+
+## 🛡️ v2.7.0: Ecosystem & Resilience
+
+*Focus: System stability and ecosystem visualization.*
+
+- [ ] **Dependency Tree Visualization**: Analysis (Innovate).
+  - [ ] Add `fext graph --tree` to visualize the internal module dependency tree (CommonJS/ESM imports) as an interactive ASCII tree in the terminal.
+- [ ] **Dead Code Detection**: Analysis (New).
+  - [ ] Add `fext analyze dead-code <file>` to identify JavaScript functions or files that are never imported or called, helping to reduce extension size and audit surface.
+- [ ] **Mutation Testing**: Quality (Test).
+  - [ ] Introduce `mutmut` or similar to perform mutation testing on the security scanners (`secrets`, `yara`), ensuring tests actually catch broken logic.
+- [ ] **Batch Retry Logic**: Reliability (Fix).
+  - [ ] Improve `fext batch` to handle partial failures more gracefully, generating a `failed_downloads.txt` file that can be fed back into the tool for retries.
+- [ ] **Config Reset Command**: CLI (New).
+  - [ ] Add `fext config reset` to restore the configuration file to its factory defaults, useful for debugging or recovering from bad configs.
+- [ ] **TUI Filter Bar**: UX (Improve).
+  - [ ] Add a real-time filter bar to the TUI file browser and search results, allowing users to narrow down lists by name or ID instantly.
+- [ ] **Network Map Generator**: Analysis (Innovate).
+  - [ ] Add `fext analyze network-map <file>` to statically analyze code for network endpoints (fetch, XHR) and generate a graph of external domains the extension communicates with.
+- [ ] **Error Telemetry (Local)**: Core (Fix).
+  - [ ] Implement a local error log (`~/.config/fext/errors.log`) with stack traces for unhandled exceptions, aiding in debugging user-reported issues.
+- [ ] **Report Metadata Expansion**: Reporting (Improve).
+  - [ ] Expand `fext report` to include "First Seen" and "Last Updated" dates from the Web Store (if available) to provide better context on extension age.
+- [ ] **Cross-Browser Compatibility Check**: Analysis (Test).
+  - [ ] Add `fext check --compat` to analyze manifest and code for APIs that are not supported in Firefox or Edge, aiding developers in cross-browser porting.
 
 ## ✅ Completed
 
