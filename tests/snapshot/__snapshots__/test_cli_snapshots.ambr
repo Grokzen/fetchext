@@ -2,13 +2,13 @@
 # name: test_cli_help_snapshot
   '''
   usage: fext [-h] [--version] [-v | -q]
-              {download,d,batch,b,search,s,inspect,i,preview,p,diff,verify,locales,audit,a,risk,r,scan,analyze,report,serve,update-manifest,um,mirror,extract,x,tutorial,optimize,clean,schema,convert,config,setup,info,explain,history,stats,graph,timeline,ui,plugin,beautify,fmt,similar,pack,migrate,git,update,badge,grep,sandbox,share,watch,query,export}
+              {download,d,batch,b,search,s,inspect,i,preview,p,diff,verify,locales,audit,a,risk,r,scan,analyze,report,serve,update-manifest,um,mirror,extract,x,tutorial,optimize,clean,schema,convert,config,setup,info,explain,history,stats,graph,timeline,ui,plugin,beautify,fmt,similar,pack,migrate,git,update,badge,grep,sandbox,share,watch,query,export,rules}
               ...
   
   Download or search for browser extensions.
   
   positional arguments:
-    {download,d,batch,b,search,s,inspect,i,preview,p,diff,verify,locales,audit,a,risk,r,scan,analyze,report,serve,update-manifest,um,mirror,extract,x,tutorial,optimize,clean,schema,convert,config,setup,info,explain,history,stats,graph,timeline,ui,plugin,beautify,fmt,similar,pack,migrate,git,update,badge,grep,sandbox,share,watch,query,export}
+    {download,d,batch,b,search,s,inspect,i,preview,p,diff,verify,locales,audit,a,risk,r,scan,analyze,report,serve,update-manifest,um,mirror,extract,x,tutorial,optimize,clean,schema,convert,config,setup,info,explain,history,stats,graph,timeline,ui,plugin,beautify,fmt,similar,pack,migrate,git,update,badge,grep,sandbox,share,watch,query,export,rules}
                           Command to execute
       download (d)        Download an extension
       batch (b)           Download extensions from a batch file
@@ -56,6 +56,7 @@
       watch               Monitor a directory for new extensions.
       query               Execute SQL query against history database
       export              Export analysis data to external formats
+      rules               Manage analysis rules
   
   options:
     -h, --help            show this help message and exit

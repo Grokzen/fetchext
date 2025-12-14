@@ -63,6 +63,7 @@ class TestCLI:
                 'new.crx', 
                 json_output=False, 
                 ignore_whitespace=False,
+                ast_diff=False,
                 visual=False,
                 output_path=None
             )
