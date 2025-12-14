@@ -94,6 +94,11 @@ def register(subparsers):
     dynamic_parser.add_argument("--duration", type=int, default=10, help="Duration to run in seconds (default: 10)")
     dynamic_parser.add_argument("-o", "--output", type=Path, default=Path("analysis_output"), help="Output directory")
 
+    # WASM Analysis
+    wasm_parser = analyze_subparsers.add_parser("wasm", help="Analyze WebAssembly file")
+    wasm_parser.add_argument("file", help="Path to the .wasm file")
+    wasm_parser.add_argument("--json", action="store_true", help="Output results as JSON")
+
     analyze_parser.set_defaults(func=handle_analyze)
 
     # Report subcommand
@@ -437,3 +442,48 @@ def handle_analyze(args, show_progress=True):
         except Exception as e:
             console.print(f"[red]Dynamic analysis failed: {e}[/red]")
             sys.exit(1)
+
+    elif args.analysis_type == "wasm":
+        from ..analysis.wasm import analyze_wasm
+        from rich.table import Table
+        
+        results = analyze_wasm(Path(args.file))
+        
+        if args.json:
+            console.print_json(data=results)
+        else:
+            if "error" in results:
+                console.print(f"[red]Error: {results['error']}[/red]")
+                return
+
+            console.print(f"[bold]WASM Analysis for {args.file}[/bold]")
+            console.print(f"Size: {results['size']} bytes")
+            console.print(f"Version: {results['version']}")
+            console.print(f"Functions: {results['functions_count']}")
+            
+            if results["imports"]:
+                console.print(f"\n[bold cyan]Imports ({len(results['imports'])}):[/bold cyan]")
+                table = Table(show_header=True, header_style="bold magenta")
+                table.add_column("Module")
+                table.add_column("Field")
+                table.add_column("Kind")
+                
+                for imp in results["imports"]:
+                    kind_map = {0: "Func", 1: "Table", 2: "Mem", 3: "Global"}
+                    table.add_row(imp["module"], imp["field"], kind_map.get(imp["kind"], str(imp["kind"])))
+                console.print(table)
+
+            if results["exports"]:
+                console.print(f"\n[bold cyan]Exports ({len(results['exports'])}):[/bold cyan]")
+                table = Table(show_header=True, header_style="bold magenta")
+                table.add_column("Name")
+                table.add_column("Kind")
+                table.add_column("Index")
+                
+                for exp in results["exports"]:
+                    kind_map = {0: "Func", 1: "Table", 2: "Mem", 3: "Global"}
+                    table.add_row(exp["name"], kind_map.get(exp["kind"], str(exp["kind"])), str(exp["index"]))
+                console.print(table)
+            
+            if results["custom_sections"]:
+                console.print(f"\n[bold cyan]Custom Sections:[/bold cyan] {', '.join(results['custom_sections'])}")

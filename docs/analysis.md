@@ -103,6 +103,21 @@ fext analyze domains <file>
 
 This is useful for identifying tracking endpoints, C2 servers, or external dependencies.
 
+### WASM Analysis
+
+Analyze WebAssembly (`.wasm`) modules to extract metadata, imports, and exports.
+
+```bash
+fext analyze wasm <file.wasm>
+```
+
+**Features:**
+
+- Parses WASM binary header and sections.
+- Lists imported functions and modules.
+- Lists exported functions (entry points).
+- Identifies custom sections (e.g., debug names).
+
 ## Visualization
 
 ### Timeline View

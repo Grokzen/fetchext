@@ -341,8 +341,8 @@
 
 - [x] **AST-Based Diff**: Analysis (Improve).
   - [x] Enhance `fext diff` to perform semantic, AST-based comparisons for JavaScript files (ignoring formatting/comments) to highlight actual logic changes more clearly.
-- [ ] **WASM Inspector**: Analysis (Innovate).
-  - [ ] Add support for detecting and analyzing WebAssembly (`.wasm`) modules within extensions, including disassembly (using `wasm2wat`) and basic stats.
+- [x] **WASM Inspector**: Analysis (Innovate).
+  - [x] Add support for detecting and analyzing WebAssembly (`.wasm`) modules within extensions, including disassembly (using `wasm2wat`) and basic stats.
 - [ ] **Community Rules Sync**: Security (Innovate).
   - [ ] Add `fext rules sync` to automatically download and update YARA rules and analysis signatures from a community-maintained git repository.
 - [ ] **API Usage Heatmap**: Analysis (New).

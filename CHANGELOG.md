@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **AST-Based Diff**: Added `--ast` flag to `fext diff` to compare JavaScript files using Abstract Syntax Trees (AST), ignoring whitespace and comments for more meaningful diffs.
+- **WASM Inspector**: Added `fext analyze wasm <file>` to analyze WebAssembly modules, extracting imports, exports, and section stats without external dependencies.
 
 ## [2.5.0] - 2025-12-10
 
