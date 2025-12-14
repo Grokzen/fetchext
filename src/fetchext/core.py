@@ -15,6 +15,7 @@ from .risk import RiskAnalyzer
 from .verifier import CrxVerifier, XpiVerifier
 from .hooks import HookManager, HookContext
 from .config import get_config_path, load_config
+from .cache import SearchCache
 from .history import HistoryManager
 from .exceptions import ExtensionError, ConfigError, IntegrityError
 
@@ -141,7 +142,7 @@ def download_extension(browser, url, output_dir, save_metadata=False, extract=Fa
 
     return output_path
 
-def search_extension(browser, query, json_output=False, csv_output=False):
+def search_extension(browser, query, json_output=False, csv_output=False, refresh=False):
     """
     Search for an extension.
     """
@@ -152,7 +153,17 @@ def search_extension(browser, query, json_output=False, csv_output=False):
     if not hasattr(downloader, 'search'):
          raise ConfigError(f"Search not supported for {browser}")
     
-    results = downloader.search(query)
+    cache = SearchCache()
+    results = None
+    
+    if not refresh:
+        results = cache.get(browser, query)
+        if results and not json_output and not csv_output:
+             console.print_info("Using cached results.")
+
+    if results is None:
+        results = downloader.search(query)
+        cache.set(browser, query, results)
     
     if json_output:
         console.print_json(data=results)

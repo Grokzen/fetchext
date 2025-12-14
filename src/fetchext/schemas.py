@@ -129,6 +129,20 @@ CONFIG_SCHEMA = {
             "properties": {
                 "workers": {"type": "integer", "minimum": 1}
             }
+        },
+        "cache": {
+            "type": "object",
+            "properties": {
+                "enabled": {"type": "boolean"},
+                "ttl": {"type": "integer", "minimum": 0}
+            }
+        },
+        "rules": {
+            "type": "object",
+            "properties": {
+                "repo_url": {"type": "string"},
+                "repo_dir": {"type": "string"}
+            }
         }
     }
 }

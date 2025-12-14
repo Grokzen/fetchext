@@ -20,7 +20,12 @@ def register(subparsers):
         action="store_true",
         help="Output results as CSV"
     )
+    search_parser.add_argument(
+        "--refresh",
+        action="store_true",
+        help="Ignore cache and fetch fresh results"
+    )
     search_parser.set_defaults(func=handle_search)
 
 def handle_search(args, show_progress=True):
-    core.search_extension(args.browser, args.query, json_output=args.json, csv_output=args.csv)
+    core.search_extension(args.browser, args.query, json_output=args.json, csv_output=args.csv, refresh=args.refresh)
