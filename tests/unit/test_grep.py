@@ -1,3 +1,5 @@
+import concurrent.futures
+from unittest.mock import patch
 from fetchext.analysis.grep import GrepSearcher, search_directory
 
 def test_grep_searcher_text(tmp_path):
@@ -28,10 +30,12 @@ def test_search_directory(tmp_path):
     (tmp_path / "d2").mkdir()
     (tmp_path / "d2/f2.txt").write_text("no match", encoding="utf-8")
     
-    results = search_directory(tmp_path, "match")
+    with patch("fetchext.analysis.grep.ProcessPoolExecutor", concurrent.futures.ThreadPoolExecutor):
+        results = search_directory(tmp_path, "match")
     
     assert len(results) == 2 # "match me" and "no match" both contain "match"
     
-    results = search_directory(tmp_path, "me")
+    with patch("fetchext.analysis.grep.ProcessPoolExecutor", concurrent.futures.ThreadPoolExecutor):
+        results = search_directory(tmp_path, "me")
     assert len(results) == 1
     assert results[0]["file"] == str(tmp_path / "d1/f1.txt")

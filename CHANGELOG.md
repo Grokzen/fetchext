@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - **Windows CI**: Fixed `UnicodeDecodeError` on Windows by explicitly setting `encoding="utf-8"` in all file `open()` calls across the codebase (CLI, analysis, reporting, scripts).
+- **MacOS CI**: Fixed `ProcessPoolExecutor` failures in unit tests on MacOS by mocking the executor in `test_grep.py`, avoiding spawn-related issues in the test environment.
 - **MV3 Migration**: Improved `fext migrate` to intelligently merge `page_action` and `browser_action` instead of overwriting, and to use `content_scripts` matches for `web_accessible_resources` instead of defaulting to `<all_urls>`.
 
 ## [2.5.0] - 2025-12-10
