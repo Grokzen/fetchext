@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Community Rules Sync**: Added `fext rules sync` to automatically download and update YARA rules and analysis signatures from a community-maintained git repository.
 - **API Usage Heatmap**: Added `fext analyze api-usage <file>` to generate a frequency map of Chrome/Browser API calls, helping auditors focus on high-risk areas.
 
+### Changed
+
+- **Source Refactor**: Major architectural refactor moving from a flat `src/fetchext/` structure to modular sub-packages (`core`, `network`, `data`, `security`, `interface`, `workflow`). This improves code organization, reduces circular dependencies, and prepares the codebase for future scalability.
+
 ### Fixed
 
 - **Windows CI**: Fixed `UnicodeDecodeError` on Windows by explicitly setting `encoding="utf-8"` in all file `open()` calls across the codebase (CLI, analysis, reporting, scripts).
