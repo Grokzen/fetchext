@@ -30,7 +30,8 @@ from .commands import (
     share,
     watch,
     query,
-    export
+    export,
+    rules
 )
 
 # Configure logging
@@ -99,6 +100,7 @@ def get_parser():
     watch.register(subparsers)
     query.register(subparsers)
     export.register(subparsers)
+    rules.register(subparsers)
 
     return parser
 

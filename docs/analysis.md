@@ -75,6 +75,20 @@ fext analyze yara /path/to/rules/ <file>
 
 You can provide a single `.yar` file or a directory containing multiple rule files.
 
+#### Community Rules Sync
+
+You can automatically download and update community-maintained YARA rules using the `rules` command.
+
+```bash
+# Sync rules from the default repository (or configured repo)
+fext rules sync
+
+# List installed rules
+fext rules list
+```
+
+By default, rules are stored in `~/.local/share/fetchext/rules`. You can configure the repository URL and storage directory in `config.toml`.
+
 ### Secret Scanning
 
 The `analyze secrets` command searches source code for accidentally committed credentials.

@@ -343,8 +343,8 @@
   - [x] Enhance `fext diff` to perform semantic, AST-based comparisons for JavaScript files (ignoring formatting/comments) to highlight actual logic changes more clearly.
 - [x] **WASM Inspector**: Analysis (Innovate).
   - [x] Add support for detecting and analyzing WebAssembly (`.wasm`) modules within extensions, including disassembly (using `wasm2wat`) and basic stats.
-- [ ] **Community Rules Sync**: Security (Innovate).
-  - [ ] Add `fext rules sync` to automatically download and update YARA rules and analysis signatures from a community-maintained git repository.
+- [x] **Community Rules Sync**: Security (Innovate).
+  - [x] Add `fext rules sync` to automatically download and update YARA rules and analysis signatures from a community-maintained git repository.
 - [ ] **API Usage Heatmap**: Analysis (New).
   - [ ] Add `fext analyze api-usage <file>` to generate a frequency map of Chrome API calls (e.g., `chrome.tabs.create`), helping auditors focus on high-risk areas.
 - [ ] **Refactor Utils Module**: Architecture (Fix).
