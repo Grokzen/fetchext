@@ -1,108 +1,82 @@
-import sys
-import shutil
 import subprocess
-import logging
+import shutil
 from pathlib import Path
 from ..console import console
 from ..config import load_config, get_config_value
-
-logger = logging.getLogger(__name__)
-
-DEFAULT_RULES_REPO = "https://github.com/Yara-Rules/rules.git"
-DEFAULT_RULES_DIR = Path.home() / ".local" / "share" / "fetchext" / "rules"
+from ..constants import ExitCode
 
 def register(subparsers):
-    rules_parser = subparsers.add_parser("rules", help="Manage analysis rules")
-    rules_subparsers = rules_parser.add_subparsers(dest="rules_command", required=True, help="Rules action")
+    parser = subparsers.add_parser("rules", help="Manage analysis rules")
+    rules_subparsers = parser.add_subparsers(dest="rules_command", required=True)
 
-    # Sync subcommand
-    sync_parser = rules_subparsers.add_parser("sync", help="Sync rules from a git repository")
+    # Sync command
+    sync_parser = rules_subparsers.add_parser("sync", help="Sync community rules")
     sync_parser.add_argument(
-        "--repo",
-        help=f"Git repository URL (default: {DEFAULT_RULES_REPO})"
+        "--url",
+        help="Git repository URL (overrides config)"
     )
     sync_parser.add_argument(
         "--dir",
         type=Path,
-        help=f"Directory to store rules (default: {DEFAULT_RULES_DIR})"
+        help="Local directory to sync to (overrides config)"
     )
-    sync_parser.set_defaults(func=handle_sync)
+    
+    parser.set_defaults(func=handle_rules)
 
-    # List subcommand
-    list_parser = rules_subparsers.add_parser("list", help="List installed rules")
-    list_parser.add_argument(
-        "--dir",
-        type=Path,
-        help=f"Directory to store rules (default: {DEFAULT_RULES_DIR})"
-    )
-    list_parser.set_defaults(func=handle_list)
+def handle_rules(args, show_progress=True):
+    if args.rules_command == "sync":
+        handle_sync(args)
 
-def get_rules_config(args):
+def handle_sync(args):
     config = load_config()
     
-    repo = args.repo or get_config_value(config, "rules.repo") or DEFAULT_RULES_REPO
+    # Determine URL
+    repo_url = args.url or get_config_value(config, "rules.repo_url") or "https://github.com/fetchext/community-rules.git"
     
-    rules_dir = args.dir
-    if not rules_dir:
-        config_dir = get_config_value(config, "rules.dir")
-        if config_dir:
-            rules_dir = Path(config_dir)
+    # Determine Directory
+    repo_dir_str = args.dir or get_config_value(config, "rules.repo_dir")
+    if repo_dir_str:
+        repo_dir = Path(repo_dir_str).expanduser().resolve()
+    else:
+        # Default to XDG_DATA_HOME or ~/.local/share
+        import os
+        xdg_data_home = os.environ.get("XDG_DATA_HOME")
+        if xdg_data_home:
+            base_dir = Path(xdg_data_home)
         else:
-            rules_dir = DEFAULT_RULES_DIR
-            
-    return repo, rules_dir
-
-def handle_sync(args, show_progress=True):
-    if not shutil.which("git"):
-        console.print("[red]Error: 'git' is not installed. Please install git to sync rules.[/red]")
-        sys.exit(1)
-
-    repo_url, rules_dir = get_rules_config(args)
-    
-    if not rules_dir.exists():
-        console.print(f"[bold]Cloning rules from {repo_url} to {rules_dir}...[/bold]")
-        try:
-            rules_dir.parent.mkdir(parents=True, exist_ok=True)
-            subprocess.run(
-                ["git", "clone", repo_url, str(rules_dir)],
-                check=True,
-                stdout=subprocess.PIPE if not show_progress else None,
-                stderr=subprocess.PIPE if not show_progress else None
-            )
-            console.print("[green]Rules cloned successfully.[/green]")
-        except subprocess.CalledProcessError as e:
-            console.print(f"[red]Failed to clone rules: {e}[/red]")
-            sys.exit(1)
-    else:
-        console.print(f"[bold]Updating rules in {rules_dir}...[/bold]")
-        try:
-            subprocess.run(
-                ["git", "-C", str(rules_dir), "pull"],
-                check=True,
-                stdout=subprocess.PIPE if not show_progress else None,
-                stderr=subprocess.PIPE if not show_progress else None
-            )
-            console.print("[green]Rules updated successfully.[/green]")
-        except subprocess.CalledProcessError as e:
-            console.print(f"[red]Failed to update rules: {e}[/red]")
-            sys.exit(1)
-
-def handle_list(args, show_progress=True):
-    _, rules_dir = get_rules_config(args)
-    
-    if not rules_dir.exists():
-        console.print(f"[yellow]Rules directory {rules_dir} does not exist. Run 'fext rules sync' first.[/yellow]")
-        return
-
-    console.print(f"[bold]Rules in {rules_dir}:[/bold]")
-    
-    # Simple tree walk
-    count = 0
-    for path in rules_dir.rglob("*.yar*"):
-        console.print(f"  - {path.relative_to(rules_dir)}")
-        count += 1
+            base_dir = Path.home() / ".local" / "share"
         
-    if count == 0:
-        console.print("[yellow]No .yar or .yara files found.[/yellow]")
-    else:
-        console.print(f"\n[green]Found {count} rule files.[/green]")
+        repo_dir = base_dir / "fext" / "rules"
+
+    if not shutil.which("git"):
+        console.print("[red]Git is not installed or not in PATH.[/red]")
+        raise SystemExit(ExitCode.DEPENDENCY)
+
+    console.print(f"Syncing rules from [cyan]{repo_url}[/cyan] to [cyan]{repo_dir}[/cyan]...")
+
+    try:
+        if repo_dir.exists():
+            if (repo_dir / ".git").exists():
+                # git pull
+                console.print("Updating existing repository...")
+                subprocess.run(["git", "pull"], cwd=repo_dir, check=True, capture_output=True)
+                console.print("[green]Rules updated successfully.[/green]")
+            else:
+                console.print(f"[red]Directory {repo_dir} exists but is not a git repository.[/red]")
+                console.print("Please remove it or specify a different directory.")
+                raise SystemExit(ExitCode.IO)
+        else:
+            # git clone
+            console.print("Cloning new repository...")
+            repo_dir.parent.mkdir(parents=True, exist_ok=True)
+            subprocess.run(["git", "clone", repo_url, str(repo_dir)], check=True, capture_output=True)
+            console.print("[green]Rules cloned successfully.[/green]")
+
+    except subprocess.CalledProcessError as e:
+        console.print(f"[red]Git command failed: {e}[/red]")
+        if e.stderr:
+            console.print(f"[red]{e.stderr.decode()}[/red]")
+        raise SystemExit(ExitCode.ERROR)
+    except Exception as e:
+        console.print(f"[red]Error: {e}[/red]")
+        raise SystemExit(ExitCode.ERROR)

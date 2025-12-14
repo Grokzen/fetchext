@@ -34,6 +34,10 @@ SCHEMA = {
         "provider": (str, "gist"),
         "github_token": (str, None),
         "public": (bool, False),
+    },
+    "rules": {
+        "repo_url": (str, "https://github.com/fetchext/community-rules.git"),
+        "repo_dir": (str, None),
     }
 }
 

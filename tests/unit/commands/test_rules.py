@@ -1,77 +1,78 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from fetchext.commands.rules import handle_sync, handle_list, DEFAULT_RULES_REPO, DEFAULT_RULES_DIR
+from pathlib import Path
+from fetchext.commands.rules import handle_sync
+from fetchext.constants import ExitCode
 
 @pytest.fixture
-def mock_args():
+def mock_git_installed():
+    with patch("shutil.which", return_value="/usr/bin/git"):
+        yield
+
+@pytest.fixture
+def mock_subprocess():
+    with patch("subprocess.run") as mock:
+        yield mock
+
+def test_sync_clone_new(fs, mock_git_installed, mock_subprocess):
+    """Test cloning a new repository."""
     args = MagicMock()
-    args.repo = None
+    args.url = "https://example.com/rules.git"
+    args.dir = Path("/tmp/rules")
+    
+    handle_sync(args)
+    
+    # Verify git clone was called
+    mock_subprocess.assert_called_with(
+        ["git", "clone", "https://example.com/rules.git", "/tmp/rules"],
+        check=True,
+        capture_output=True
+    )
+    
+    # Verify parent dir created
+    assert Path("/tmp").exists()
+
+def test_sync_pull_existing(fs, mock_git_installed, mock_subprocess):
+    """Test pulling an existing repository."""
+    args = MagicMock()
+    args.url = None
+    args.dir = Path("/tmp/rules")
+    
+    # Create existing git repo structure
+    fs.create_dir("/tmp/rules/.git")
+    
+    handle_sync(args)
+    
+    # Verify git pull was called
+    mock_subprocess.assert_called_with(
+        ["git", "pull"],
+        cwd=Path("/tmp/rules"),
+        check=True,
+        capture_output=True
+    )
+
+def test_sync_existing_not_git(fs, mock_git_installed, mock_subprocess):
+    """Test error when directory exists but is not a git repo."""
+    args = MagicMock()
+    args.url = None
+    args.dir = Path("/tmp/rules")
+    
+    # Create directory without .git
+    fs.create_dir("/tmp/rules")
+    
+    with pytest.raises(SystemExit) as exc:
+        handle_sync(args)
+    
+    assert exc.value.code == ExitCode.IO
+
+def test_git_not_installed(fs):
+    """Test error when git is not installed."""
+    args = MagicMock()
+    args.url = None
     args.dir = None
-    return args
-
-@patch("fetchext.commands.rules.shutil.which")
-@patch("fetchext.commands.rules.subprocess.run")
-def test_sync_clone(mock_run, mock_which, mock_args, fs):
-    mock_which.return_value = "/usr/bin/git"
     
-    # Ensure directory does not exist
-    if fs.exists(DEFAULT_RULES_DIR):
-        import shutil
-        shutil.rmtree(DEFAULT_RULES_DIR)
-        
-    handle_sync(mock_args)
+    with patch("shutil.which", return_value=None):
+        with pytest.raises(SystemExit) as exc:
+            handle_sync(args)
     
-    mock_run.assert_called_with(
-        ["git", "clone", DEFAULT_RULES_REPO, str(DEFAULT_RULES_DIR)],
-        check=True,
-        stdout=None,
-        stderr=None
-    )
-
-@patch("fetchext.commands.rules.shutil.which")
-@patch("fetchext.commands.rules.subprocess.run")
-def test_sync_pull(mock_run, mock_which, mock_args, fs):
-    mock_which.return_value = "/usr/bin/git"
-    
-    # Create directory to simulate existing repo
-    fs.create_dir(DEFAULT_RULES_DIR)
-    
-    handle_sync(mock_args)
-    
-    mock_run.assert_called_with(
-        ["git", "-C", str(DEFAULT_RULES_DIR), "pull"],
-        check=True,
-        stdout=None,
-        stderr=None
-    )
-
-@patch("fetchext.commands.rules.shutil.which")
-def test_sync_no_git(mock_which, mock_args):
-    mock_which.return_value = None
-    
-    with pytest.raises(SystemExit) as e:
-        handle_sync(mock_args)
-    assert e.value.code == 1
-
-def test_list_rules(mock_args, fs, capsys):
-    fs.create_dir(DEFAULT_RULES_DIR)
-    fs.create_file(DEFAULT_RULES_DIR / "rule1.yar")
-    fs.create_file(DEFAULT_RULES_DIR / "subdir" / "rule2.yara")
-    
-    handle_list(mock_args)
-    
-    captured = capsys.readouterr()
-    assert "rule1.yar" in captured.out
-    assert "subdir/rule2.yara" in captured.out
-    assert "Found 2 rule files" in captured.out
-
-def test_list_no_dir(mock_args, fs, capsys):
-    # Ensure dir doesn't exist
-    if fs.exists(DEFAULT_RULES_DIR):
-        import shutil
-        shutil.rmtree(DEFAULT_RULES_DIR)
-        
-    handle_list(mock_args)
-    
-    captured = capsys.readouterr()
-    assert "does not exist" in captured.out
+    assert exc.value.code == ExitCode.DEPENDENCY

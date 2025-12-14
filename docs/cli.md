@@ -384,6 +384,23 @@ fext watch <directory> [--extract] [--report] [--scan]
 * `--report`: Automatically generate reports.
 * `--scan`: Automatically scan for vulnerabilities.
 
+### `rules`
+
+Manage analysis rules.
+
+```bash
+fext rules sync [--url <url>] [--dir <dir>]
+```
+
+**Subcommands:**
+
+* `sync`: Download or update community rules from a git repository.
+
+**Options:**
+
+* `--url`: Git repository URL (overrides config).
+* `--dir`: Local directory to sync to (overrides config).
+
 ### `clean`
 
 Clean up cache and temporary files.
