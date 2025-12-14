@@ -1,8 +1,10 @@
 from fetchext.theme import Theme
 
+
 def test_theme_constants():
     assert Theme.ICON_SUCCESS == "✅"
     assert Theme.COLOR_SUCCESS == "green"
+
 
 def test_theme_formatting():
     msg = Theme.format_success("Done")

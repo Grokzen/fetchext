@@ -7,6 +7,7 @@ from zipfile import ZipFile
 from fetchext.crx import CrxDecoder
 from ..console import console
 
+
 def calculate_shannon_entropy(data: bytes) -> float:
     """
     Calculate the Shannon entropy of a byte sequence.
@@ -14,57 +15,56 @@ def calculate_shannon_entropy(data: bytes) -> float:
     """
     if not data:
         return 0.0
-    
+
     entropy = 0
     length = len(data)
     counts = [0] * 256
-    
+
     for byte in data:
         counts[byte] += 1
-        
+
     for count in counts:
         if count > 0:
             p = count / length
             entropy -= p * math.log2(p)
-            
+
     return entropy
 
-def _process_file_entropy(filename: str, data: bytes, size: int) -> Dict[str, Union[str, float, int]]:
+
+def _process_file_entropy(
+    filename: str, data: bytes, size: int
+) -> Dict[str, Union[str, float, int]]:
     """Helper function to run in a separate process."""
     entropy = calculate_shannon_entropy(data)
-    return {
-        "filename": filename,
-        "entropy": entropy,
-        "size": size
-    }
+    return {"filename": filename, "entropy": entropy, "size": size}
 
-def analyze_entropy(file_path: Path, show_progress: bool = True) -> Dict[str, Union[float, List[Dict[str, Union[str, float]]]]]:
+
+def analyze_entropy(
+    file_path: Path, show_progress: bool = True
+) -> Dict[str, Union[float, List[Dict[str, Union[str, float]]]]]:
     """
     Analyze the entropy of files within an extension.
     Uses parallel processing for performance.
-    
+
     Returns:
         Dict containing average entropy and a list of file details.
     """
-    results = {
-        "average_entropy": 0.0,
-        "files": []
-    }
-    
+    results = {"average_entropy": 0.0, "files": []}
+
     total_entropy = 0.0
     file_count = 0
-    
+
     try:
         # Determine offset
         offset = 0
-        if file_path.suffix.lower() == '.crx':
+        if file_path.suffix.lower() == ".crx":
             offset = CrxDecoder.get_zip_offset(file_path)
-            
+
         # Open as ZipFile
         f = open(file_path, "rb")
         if offset > 0:
             f.seek(offset)
-            
+
         try:
             zf = ZipFile(f)
         except Exception:
@@ -84,25 +84,29 @@ def analyze_entropy(file_path: Path, show_progress: bool = True) -> Dict[str, Un
                     raise ValueError("Could not open file as ZIP")
             else:
                 raise ValueError("Could not open file as CRX")
-        
+
         # Use ProcessPoolExecutor for CPU-bound entropy calculation
         # We read files in the main thread (I/O bound) and send data to workers
         max_workers = os.cpu_count() or 4
-        with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
+        with concurrent.futures.ProcessPoolExecutor(
+            max_workers=max_workers
+        ) as executor:
             futures = []
             with zf:
                 for info in zf.infolist():
                     if info.is_dir():
                         continue
-                    
+
                     # Read data in main thread
                     data = zf.read(info.filename)
-                    
+
                     # Submit to pool
                     futures.append(
-                        executor.submit(_process_file_entropy, info.filename, data, info.file_size)
+                        executor.submit(
+                            _process_file_entropy, info.filename, data, info.file_size
+                        )
                     )
-            
+
             # Collect results
             if show_progress:
                 with console.create_progress() as progress:
@@ -114,7 +118,7 @@ def analyze_entropy(file_path: Path, show_progress: bool = True) -> Dict[str, Un
                             total_entropy += res["entropy"]
                             file_count += 1
                         except Exception:
-                            pass # Ignore failures for individual files
+                            pass  # Ignore failures for individual files
                         finally:
                             progress.advance(task)
             else:
@@ -125,15 +129,15 @@ def analyze_entropy(file_path: Path, show_progress: bool = True) -> Dict[str, Un
                         total_entropy += res["entropy"]
                         file_count += 1
                     except Exception:
-                        pass # Ignore failures for individual files
+                        pass  # Ignore failures for individual files
 
         if file_count > 0:
             results["average_entropy"] = total_entropy / file_count
-            
+
     except Exception as e:
         raise ValueError(f"Error analyzing entropy: {e}")
     finally:
-        if 'f' in locals() and not f.closed:
+        if "f" in locals() and not f.closed:
             f.close()
 
     return results

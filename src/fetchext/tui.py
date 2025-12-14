@@ -1,13 +1,27 @@
 from textual import work
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Container, Grid
-from textual.widgets import Header, Footer, Input, DataTable, RadioSet, RadioButton, Label, TabbedContent, TabPane, Static, Markdown, Button
+from textual.widgets import (
+    Header,
+    Footer,
+    Input,
+    DataTable,
+    RadioSet,
+    RadioButton,
+    Label,
+    TabbedContent,
+    TabPane,
+    Static,
+    Markdown,
+    Button,
+)
 from textual.screen import ModalScreen
 from fetchext.core import search_extension, download_extension, get_repo_stats
 from fetchext.history import HistoryManager
 from fetchext.ui.theme import apply_theme
 import logging
 from pathlib import Path
+
 
 class ConfirmationScreen(ModalScreen[bool]):
     """Screen for confirming an action."""
@@ -58,6 +72,7 @@ class ConfirmationScreen(ModalScreen[bool]):
         else:
             self.dismiss(False)
 
+
 class Dashboard(Static):
     """Dashboard widget showing repository statistics."""
 
@@ -77,29 +92,33 @@ class Dashboard(Static):
             stats = get_repo_stats(Path("."))
             self.app.call_from_thread(self.update_stats, stats)
         except Exception as e:
-            self.app.call_from_thread(self.notify, f"Failed to load stats: {e}", severity="error")
+            self.app.call_from_thread(
+                self.notify, f"Failed to load stats: {e}", severity="error"
+            )
 
         # Load History
         try:
             history = HistoryManager().get_entries(limit=10)
             self.app.call_from_thread(self.update_history, history)
         except Exception as e:
-            self.app.call_from_thread(self.notify, f"Failed to load history: {e}", severity="error")
+            self.app.call_from_thread(
+                self.notify, f"Failed to load history: {e}", severity="error"
+            )
 
     def update_stats(self, stats) -> None:
         container = self.query_one("#stats_container")
         container.remove_children()
-        
+
         # Create summary cards
         total_size_mb = stats.total_size_bytes / (1024 * 1024)
-        
+
         summary = f"""
         **Total Extensions:** {stats.total_extensions}
         **Total Size:** {total_size_mb:.2f} MB
         **MV3 Extensions:** {stats.mv3_count} ({stats.mv3_count / stats.total_extensions * 100 if stats.total_extensions else 0:.1f}%)
         """
         container.mount(Markdown(summary))
-        
+
         # Risk Distribution
         risk_md = "**Risk Distribution:**\n\n"
         for level, count in stats.risk_distribution.items():
@@ -115,8 +134,9 @@ class Dashboard(Static):
                 entry.get("timestamp", "")[:19].replace("T", " "),
                 entry.get("action", ""),
                 entry.get("id", ""),
-                entry.get("status", "")
+                entry.get("status", ""),
             )
+
 
 class ExtensionApp(App):
     """A Textual app to browse and download extensions."""
@@ -200,7 +220,7 @@ class ExtensionApp(App):
         table.clear()
         for r in results:
             table.add_row(r["name"], r["id"], r.get("version", "?"), browser)
-            
+
         if not results:
             self.notify("No results found.", severity="warning")
         else:
@@ -210,13 +230,13 @@ class ExtensionApp(App):
         query = event.value
         if not query:
             return
-        
+
         # Get selected browser
         radio_set = self.query_one(RadioSet)
         if radio_set.pressed_button:
             browser = radio_set.pressed_button.id
         else:
-            browser = "chrome" # Default
+            browser = "chrome"  # Default
 
         self.notify(f"Searching {browser} for '{query}'...")
         self.search_worker(browser, query)
@@ -233,13 +253,17 @@ class ExtensionApp(App):
                 pass
 
             download_extension(browser, url, ".", show_progress=False)
-            self.call_from_thread(self.notify, f"Successfully downloaded {name}!", severity="information")
-            
+            self.call_from_thread(
+                self.notify, f"Successfully downloaded {name}!", severity="information"
+            )
+
             # Refresh dashboard if it's active?
             # Ideally yes, but for now let's keep it simple.
-            
+
         except Exception as e:
-            self.call_from_thread(self.notify, f"Download failed: {e}", severity="error")
+            self.call_from_thread(
+                self.notify, f"Download failed: {e}", severity="error"
+            )
 
     def on_data_table_row_selected(self, event: DataTable.RowSelected) -> None:
         if event.data_table.id == "search_table":
@@ -248,13 +272,14 @@ class ExtensionApp(App):
             name = row[0]
             ext_id = row[1]
             browser = row[3]
-            
+
             def check_confirm(confirm: bool) -> None:
                 if confirm:
                     self.notify(f"Downloading {name}...")
                     self.download_worker(browser, ext_id, name)
-            
+
             self.push_screen(ConfirmationScreen(f"Download {name}?"), check_confirm)
+
 
 def run_tui():
     # Disable logging to stderr/stdout as it messes up TUI

@@ -6,6 +6,7 @@ from .crx import CrxDecoder
 
 logger = logging.getLogger(__name__)
 
+
 class FormatConverter:
     """
     Converts between extension formats.
@@ -31,7 +32,7 @@ class FormatConverter:
             FormatConverter._crx_to_zip(input_path, output_path)
         else:
             raise ValueError("Input must be a file or directory")
-            
+
         return output_path
 
     @staticmethod
@@ -40,14 +41,14 @@ class FormatConverter:
         Extract ZIP payload from CRX.
         """
         offset = CrxDecoder.get_zip_offset(input_path)
-        
+
         logger.info(f"Converting CRX to ZIP (Offset: {offset})...")
-        
+
         with input_path.open("rb") as fin:
             fin.seek(offset)
             with output_path.open("wb") as fout:
                 shutil.copyfileobj(fin, fout)
-        
+
         logger.info(f"Saved to {output_path}")
 
     @staticmethod
@@ -56,12 +57,12 @@ class FormatConverter:
         Pack directory into ZIP.
         """
         logger.info(f"Packing directory {input_path} to {output_path}...")
-        
+
         with zipfile.ZipFile(output_path, "w", zipfile.ZIP_DEFLATED) as zf:
             for file in input_path.rglob("*"):
                 if file.is_file():
                     # Archive name should be relative to input_path
                     arcname = file.relative_to(input_path)
                     zf.write(file, arcname)
-                    
+
         logger.info(f"Saved to {output_path}")

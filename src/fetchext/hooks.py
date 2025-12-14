@@ -7,9 +7,11 @@ from typing import Any, Callable, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class HookContext:
     """Context passed to hooks."""
+
     extension_id: str
     browser: str
     version: Optional[str] = None
@@ -19,6 +21,7 @@ class HookContext:
     args: Optional[Any] = None
     cancel: bool = False
     result: Any = None
+
 
 class HookManager:
     """Manages loading and execution of plugin hooks."""
@@ -45,7 +48,7 @@ class HookManager:
         for hook_file in self.hooks_dir.glob("*.py"):
             if hook_file.name.startswith("_"):
                 continue
-            
+
             try:
                 self._load_module(hook_file)
             except Exception as e:
@@ -57,7 +60,7 @@ class HookManager:
         spec = importlib.util.spec_from_file_location(module_name, file_path)
         if not spec or not spec.loader:
             return
-        
+
         module = importlib.util.module_from_spec(spec)
         sys.modules[module_name] = module
         spec.loader.exec_module(module)
@@ -83,5 +86,5 @@ class HookManager:
                     break
             except Exception as e:
                 logger.error(f"Error in hook {hook_name}: {e}")
-        
+
         return context

@@ -38,8 +38,9 @@ SCHEMA = {
     "rules": {
         "repo_url": (str, "https://github.com/fetchext/community-rules.git"),
         "repo_dir": (str, None),
-    }
+    },
 }
+
 
 def validate_config(config: Dict[str, Any]) -> None:
     """
@@ -49,21 +50,26 @@ def validate_config(config: Dict[str, Any]) -> None:
     for section, section_config in config.items():
         if section not in SCHEMA:
             continue
-            
+
         if not isinstance(section_config, dict):
-             raise ConfigError(f"Invalid config: Section '{section}' must be a dictionary.")
+            raise ConfigError(
+                f"Invalid config: Section '{section}' must be a dictionary."
+            )
 
         for key, value in section_config.items():
             if key not in SCHEMA[section]:
                 continue
-            
+
             expected_type, _ = SCHEMA[section][key]
             if not isinstance(value, expected_type):
                 if isinstance(expected_type, tuple):
                     type_name = " or ".join([t.__name__ for t in expected_type])
                 else:
                     type_name = expected_type.__name__
-                raise ConfigError(f"Invalid config: '{section}.{key}' must be of type {type_name}, got {type(value).__name__}")
+                raise ConfigError(
+                    f"Invalid config: '{section}.{key}' must be of type {type_name}, got {type(value).__name__}"
+                )
+
 
 def get_config_path() -> Path:
     """
@@ -75,8 +81,9 @@ def get_config_path() -> Path:
         base_dir = Path(xdg_config_home)
     else:
         base_dir = Path.home() / ".config"
-    
+
     return base_dir / "fext" / "config.toml"
+
 
 def load_config() -> Dict[str, Any]:
     """
@@ -86,7 +93,7 @@ def load_config() -> Dict[str, Any]:
     config_path = get_config_path()
     if not config_path.exists():
         return {}
-    
+
     try:
         with open(config_path, "rb") as f:
             config = tomllib.load(f)
@@ -95,7 +102,11 @@ def load_config() -> Dict[str, Any]:
     except ConfigError:
         raise
     except Exception as e:
-        raise ConfigError(f"Failed to load configuration from {config_path}: {e}", original_exception=e)
+        raise ConfigError(
+            f"Failed to load configuration from {config_path}: {e}",
+            original_exception=e,
+        )
+
 
 def save_config(config: Dict[str, Any]) -> None:
     """
@@ -103,9 +114,10 @@ def save_config(config: Dict[str, Any]) -> None:
     """
     config_path = get_config_path()
     config_path.parent.mkdir(parents=True, exist_ok=True)
-    
+
     with open(config_path, "wb") as f:
         tomli_w.dump(config, f)
+
 
 def get_config_value(config: Dict[str, Any], key_path: str) -> Any:
     """
@@ -114,14 +126,15 @@ def get_config_value(config: Dict[str, Any], key_path: str) -> Any:
     """
     keys = key_path.split(".")
     current = config
-    
+
     for key in keys:
         if isinstance(current, dict) and key in current:
             current = current[key]
         else:
             return None
-            
+
     return current
+
 
 def set_config_value(config: Dict[str, Any], key_path: str, value: Any) -> None:
     """
@@ -130,11 +143,10 @@ def set_config_value(config: Dict[str, Any], key_path: str, value: Any) -> None:
     """
     keys = key_path.split(".")
     current = config
-    
+
     for i, key in enumerate(keys[:-1]):
         if key not in current or not isinstance(current[key], dict):
             current[key] = {}
         current = current[key]
-    
-    current[keys[-1]] = value
 
+    current[keys[-1]] = value

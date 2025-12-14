@@ -25,11 +25,13 @@ USER_AGENTS = [
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15",
 ]
 
+
 class RateLimitedSession(requests.Session):
     """
     A requests Session that enforces a minimum delay between requests.
     Thread-safe for use with ThreadPoolExecutor.
     """
+
     _lock = threading.Lock()
     _last_request_time = 0.0
 
@@ -44,18 +46,22 @@ class RateLimitedSession(requests.Session):
                 if elapsed < self.delay:
                     time.sleep(self.delay - elapsed)
                 RateLimitedSession._last_request_time = time.time()
-        
+
         # Debug Logging
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(f"Request: {method} {url}")
             # Merge session headers with request headers for logging
             merged_headers = self.merge_environment_settings(url, {}, None, None, None)
-            merged_headers = requests.sessions.merge_setting(merged_headers, self.headers, dict_class=dict)
-            merged_headers = requests.sessions.merge_setting(merged_headers, kwargs.get('headers'), dict_class=dict)
-            
+            merged_headers = requests.sessions.merge_setting(
+                merged_headers, self.headers, dict_class=dict
+            )
+            merged_headers = requests.sessions.merge_setting(
+                merged_headers, kwargs.get("headers"), dict_class=dict
+            )
+
             safe_headers = merged_headers.copy()
-            if 'Authorization' in safe_headers:
-                safe_headers['Authorization'] = 'REDACTED'
+            if "Authorization" in safe_headers:
+                safe_headers["Authorization"] = "REDACTED"
             logger.debug(f"Request Headers: {safe_headers}")
 
         response = super().request(method, url, *args, **kwargs)
@@ -66,10 +72,11 @@ class RateLimitedSession(requests.Session):
 
         return response
 
+
 def get_session(
     retries: int = 3,
     backoff_factor: float = 1.0,
-    status_forcelist: tuple = (500, 502, 503, 504)
+    status_forcelist: tuple = (500, 502, 503, 504),
 ) -> requests.Session:
     """
     Creates a requests Session with retry logic configured and a random User-Agent.
@@ -80,31 +87,36 @@ def get_session(
     proxies = network_config.get("proxies", {})
 
     session = RateLimitedSession(delay=float(delay))
-    
+
     if proxies:
         session.proxies.update(proxies)
-    
+
     # Set a random User-Agent
-    session.headers.update({
-        "User-Agent": random.choice(USER_AGENTS)
-    })
-    
+    session.headers.update({"User-Agent": random.choice(USER_AGENTS)})
+
     retry = Retry(
         total=retries,
         read=retries,
         connect=retries,
         backoff_factor=backoff_factor,
         status_forcelist=status_forcelist,
-        allowed_methods=frozenset(['GET', 'HEAD', 'OPTIONS'])
+        allowed_methods=frozenset(["GET", "HEAD", "OPTIONS"]),
     )
-    
+
     adapter = HTTPAdapter(max_retries=retry)
     session.mount("http://", adapter)
     session.mount("https://", adapter)
-    
+
     return session
 
-def download_file(url: str, output_path: Path, session: requests.Session = None, show_progress: bool = True, params: dict = None) -> Path:
+
+def download_file(
+    url: str,
+    output_path: Path,
+    session: requests.Session = None,
+    show_progress: bool = True,
+    params: dict = None,
+) -> Path:
     """
     Downloads a file from a URL to a local path, supporting resumable downloads.
     """
@@ -128,18 +140,22 @@ def download_file(url: str, output_path: Path, session: requests.Session = None,
         # Make request
         headers = session.headers.copy()
         headers.update(resume_header)
-        
+
         response = session.get(url, stream=True, headers=headers, params=params)
-        
+
         # Handle 416 Range Not Satisfiable (file might be complete or server doesn't support range)
         if response.status_code == 416:
-            logger.warning("Server returned 416 Range Not Satisfiable. Restarting download.")
+            logger.warning(
+                "Server returned 416 Range Not Satisfiable. Restarting download."
+            )
             downloaded_bytes = 0
             file_mode = "wb"
             # Create a new headers dict for the retry to avoid modifying the one used in the previous call
             retry_headers = headers.copy()
             retry_headers.pop("Range", None)
-            response = session.get(url, stream=True, headers=retry_headers, params=params)
+            response = session.get(
+                url, stream=True, headers=retry_headers, params=params
+            )
 
         response.raise_for_status()
 
@@ -153,11 +169,11 @@ def download_file(url: str, output_path: Path, session: requests.Session = None,
             with output_path.open("wb") as f:
                 pass
 
-        total_size = int(response.headers.get('content-length', 0)) + downloaded_bytes
-        
+        total_size = int(response.headers.get("content-length", 0)) + downloaded_bytes
+
         # If content-length is missing, we can't show a proper progress bar total
-        if total_size == downloaded_bytes and 'content-length' not in response.headers:
-             total_size = None
+        if total_size == downloaded_bytes and "content-length" not in response.headers:
+            total_size = None
 
         # Check disk space if total size is known
         if total_size:
@@ -167,7 +183,9 @@ def download_file(url: str, output_path: Path, session: requests.Session = None,
         with output_path.open(file_mode) as f:
             if show_progress:
                 with console.create_download_progress() as progress:
-                    task = progress.add_task(output_path.name, total=total_size, completed=downloaded_bytes)
+                    task = progress.add_task(
+                        output_path.name, total=total_size, completed=downloaded_bytes
+                    )
                     for chunk in response.iter_content(chunk_size=8192):
                         f.write(chunk)
                         progress.update(task, advance=len(chunk))

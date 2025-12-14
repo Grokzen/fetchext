@@ -76,25 +76,33 @@ HTML_TEMPLATE = """
 </html>
 """
 
+
 class VisualDiffGenerator:
-    def generate(self, report: DiffReport, old_path: Path, new_path: Path, output_path: Path):
+    def generate(
+        self, report: DiffReport, old_path: Path, new_path: Path, output_path: Path
+    ):
         content_parts = []
 
-        with open_extension_archive(old_path) as old_zf, \
-             open_extension_archive(new_path) as new_zf:
-            
+        with (
+            open_extension_archive(old_path) as old_zf,
+            open_extension_archive(new_path) as new_zf,
+        ):
             for filename in report.modified_files:
                 try:
                     old_bytes = old_zf.read(filename)
                     new_bytes = new_zf.read(filename)
-                    
+
                     if self._is_image(filename):
-                        diff_html = self._generate_image_diff(filename, old_bytes, new_bytes)
+                        diff_html = self._generate_image_diff(
+                            filename, old_bytes, new_bytes
+                        )
                     elif self._is_text(filename):
-                        diff_html = self._generate_text_diff(filename, old_bytes, new_bytes)
+                        diff_html = self._generate_text_diff(
+                            filename, old_bytes, new_bytes
+                        )
                     else:
                         diff_html = f"<div class='diff-content'><p>Binary file modified (size: {len(old_bytes)} -> {len(new_bytes)} bytes)</p></div>"
-                    
+
                     content_parts.append(f"""
                     <div class="file-diff">
                         <div class="file-header">{filename}</div>
@@ -115,27 +123,45 @@ class VisualDiffGenerator:
             added_count=len(report.added_files),
             removed_count=len(report.removed_files),
             modified_count=len(report.modified_files),
-            content="\n".join(content_parts)
+            content="\n".join(content_parts),
         )
 
         output_path.write_text(html, encoding="utf-8")
 
     def _is_image(self, filename: str) -> bool:
         mime, _ = mimetypes.guess_type(filename)
-        return mime and mime.startswith('image/')
+        return mime and mime.startswith("image/")
 
     def _is_text(self, filename: str) -> bool:
         mime, _ = mimetypes.guess_type(filename)
-        if mime and (mime.startswith('text/') or mime in ['application/json', 'application/javascript', 'application/xml']):
+        if mime and (
+            mime.startswith("text/")
+            or mime in ["application/json", "application/javascript", "application/xml"]
+        ):
             return True
         # Fallback for common extensions
-        return filename.lower().endswith(('.js', '.css', '.html', '.json', '.txt', '.md', '.xml', '.ts', '.jsx', '.tsx'))
+        return filename.lower().endswith(
+            (
+                ".js",
+                ".css",
+                ".html",
+                ".json",
+                ".txt",
+                ".md",
+                ".xml",
+                ".ts",
+                ".jsx",
+                ".tsx",
+            )
+        )
 
-    def _generate_image_diff(self, filename: str, old_bytes: bytes, new_bytes: bytes) -> str:
-        old_b64 = base64.b64encode(old_bytes).decode('ascii')
-        new_b64 = base64.b64encode(new_bytes).decode('ascii')
+    def _generate_image_diff(
+        self, filename: str, old_bytes: bytes, new_bytes: bytes
+    ) -> str:
+        old_b64 = base64.b64encode(old_bytes).decode("ascii")
+        new_b64 = base64.b64encode(new_bytes).decode("ascii")
         mime, _ = mimetypes.guess_type(filename)
-        mime = mime or 'image/png'
+        mime = mime or "image/png"
 
         return f"""
         <div class="diff-content">
@@ -154,13 +180,20 @@ class VisualDiffGenerator:
         </div>
         """
 
-    def _generate_text_diff(self, filename: str, old_bytes: bytes, new_bytes: bytes) -> str:
+    def _generate_text_diff(
+        self, filename: str, old_bytes: bytes, new_bytes: bytes
+    ) -> str:
         try:
-            old_text = old_bytes.decode('utf-8', errors='replace').splitlines()
-            new_text = new_bytes.decode('utf-8', errors='replace').splitlines()
-            
+            old_text = old_bytes.decode("utf-8", errors="replace").splitlines()
+            new_text = new_bytes.decode("utf-8", errors="replace").splitlines()
+
             diff = difflib.HtmlDiff(wrapcolumn=80).make_table(
-                old_text, new_text, fromdesc="Old", todesc="New", context=True, numlines=5
+                old_text,
+                new_text,
+                fromdesc="Old",
+                todesc="New",
+                context=True,
+                numlines=5,
             )
             return f"<div class='diff-content'>{diff}</div>"
         except Exception as e:

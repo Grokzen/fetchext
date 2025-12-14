@@ -7,6 +7,7 @@ from typing import Dict, List
 
 try:
     from playwright.async_api import async_playwright, Page
+
     PLAYWRIGHT_AVAILABLE = True
 except ImportError:
     PLAYWRIGHT_AVAILABLE = False
@@ -17,6 +18,7 @@ from ..exceptions import AnalysisError
 
 logger = logging.getLogger(__name__)
 
+
 class DynamicAnalyzer:
     def __init__(self, extension_path: Path, output_dir: Path):
         self.extension_path = extension_path
@@ -24,13 +26,15 @@ class DynamicAnalyzer:
         self.screenshots_dir = output_dir / "screenshots"
         self.logs_file = output_dir / "logs.json"
         self.network_file = output_dir / "network.json"
-        
+
         self.logs: List[Dict] = []
         self.network_activity: List[Dict] = []
 
     async def run(self, headless: bool = True, duration: int = 10):
         if not PLAYWRIGHT_AVAILABLE:
-            raise AnalysisError("Playwright is not installed. Install it with 'pip install fetchext[dynamic]'")
+            raise AnalysisError(
+                "Playwright is not installed. Install it with 'pip install fetchext[dynamic]'"
+            )
 
         if not self.extension_path.exists():
             raise AnalysisError(f"Extension path not found: {self.extension_path}")
@@ -39,7 +43,7 @@ class DynamicAnalyzer:
         self.screenshots_dir.mkdir(parents=True, exist_ok=True)
 
         logger.info(f"Starting dynamic analysis for {self.extension_path}")
-        
+
         async with async_playwright() as p:
             # Launch browser with extension loaded
             # Note: Extensions only work in persistent contexts or with specific args
@@ -47,7 +51,7 @@ class DynamicAnalyzer:
                 f"--disable-extensions-except={self.extension_path.absolute()}",
                 f"--load-extension={self.extension_path.absolute()}",
             ]
-            
+
             context = await p.chromium.launch_persistent_context(
                 user_data_dir=self.output_dir / "user_data",
                 headless=headless,
@@ -82,20 +86,30 @@ class DynamicAnalyzer:
             logger.info("Dynamic analysis complete.")
 
     def _monitor_console(self, page: "Page"):
-        page.on("console", lambda msg: self.logs.append({
-            "type": msg.type,
-            "text": msg.text,
-            "location": msg.location,
-            "timestamp": time.time()
-        }))
+        page.on(
+            "console",
+            lambda msg: self.logs.append(
+                {
+                    "type": msg.type,
+                    "text": msg.text,
+                    "location": msg.location,
+                    "timestamp": time.time(),
+                }
+            ),
+        )
 
     def _monitor_network(self, page: "Page"):
-        page.on("request", lambda request: self.network_activity.append({
-            "url": request.url,
-            "method": request.method,
-            "resource_type": request.resource_type,
-            "timestamp": time.time()
-        }))
+        page.on(
+            "request",
+            lambda request: self.network_activity.append(
+                {
+                    "url": request.url,
+                    "method": request.method,
+                    "resource_type": request.resource_type,
+                    "timestamp": time.time(),
+                }
+            ),
+        )
 
     async def _capture_screenshot(self, page: "Page", name: str):
         path = self.screenshots_dir / f"{name}.png"
@@ -105,6 +119,6 @@ class DynamicAnalyzer:
     def _save_data(self):
         with open(self.logs_file, "w", encoding="utf-8") as f:
             json.dump(self.logs, f, indent=2)
-        
+
         with open(self.network_file, "w", encoding="utf-8") as f:
             json.dump(self.network_activity, f, indent=2)

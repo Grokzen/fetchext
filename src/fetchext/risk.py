@@ -4,12 +4,14 @@ from typing import List
 from pathlib import Path
 from .utils import open_extension_archive
 
+
 @dataclass
 class PermissionRisk:
     permission: str
     score: int
-    level: str # Critical, High, Medium, Low
+    level: str  # Critical, High, Medium, Low
     description: str
+
 
 @dataclass
 class RiskReport:
@@ -17,6 +19,7 @@ class RiskReport:
     max_level: str
     risky_permissions: List[PermissionRisk] = field(default_factory=list)
     safe_permissions: List[str] = field(default_factory=list)
+
 
 class RiskAnalyzer:
     # Define risk database
@@ -30,7 +33,6 @@ class RiskAnalyzer:
         "pageCapture": (9, "Capture page content"),
         "declarativeNetRequest": (8, "Block or modify network requests (MV3)"),
         "scripting": (8, "Execute scripts on pages"),
-        
         # High
         "tabs": (7, "Access browser tabs and navigation"),
         "activeTab": (6, "Access content of the active tab"),
@@ -42,7 +44,6 @@ class RiskAnalyzer:
         "webNavigation": (7, "Monitor navigation events"),
         "clipboardRead": (6, "Read data from clipboard"),
         "clipboardWrite": (5, "Write data to clipboard"),
-        
         # Medium
         "storage": (4, "Store data locally"),
         "unlimitedStorage": (4, "Store unlimited data"),
@@ -51,7 +52,6 @@ class RiskAnalyzer:
         "downloads": (5, "Manage downloads"),
         "geolocation": (5, "Access location"),
         "webRequest": (5, "Observe network requests"),
-        
         # Low
         "alarms": (1, "Schedule alarms"),
         "idle": (1, "Detect idle state"),
@@ -62,41 +62,36 @@ class RiskAnalyzer:
     # Toxic combinations that amplify risk
     RISK_COMBINATIONS = [
         (
-            {"tabs", "cookies", "<all_urls_normalized>"}, 
-            20, 
-            "Critical", 
-            "Session Hijacking Risk (Tabs + Cookies + All URLs)"
+            {"tabs", "cookies", "<all_urls_normalized>"},
+            20,
+            "Critical",
+            "Session Hijacking Risk (Tabs + Cookies + All URLs)",
         ),
         (
-            {"webRequest", "webRequestBlocking", "<all_urls_normalized>"}, 
-            20, 
-            "Critical", 
-            "Man-in-the-Middle Risk (Intercept + Block + All URLs)"
+            {"webRequest", "webRequestBlocking", "<all_urls_normalized>"},
+            20,
+            "Critical",
+            "Man-in-the-Middle Risk (Intercept + Block + All URLs)",
         ),
         (
             {"declarativeNetRequest", "<all_urls_normalized>"},
             15,
             "Critical",
-            "Ad Injection / Traffic Modification Risk"
+            "Ad Injection / Traffic Modification Risk",
         ),
         (
             {"scripting", "<all_urls_normalized>"},
             15,
             "Critical",
-            "Arbitrary Code Execution on All Pages"
+            "Arbitrary Code Execution on All Pages",
         ),
         (
-            {"clipboardRead", "clipboardWrite"}, 
-            10, 
-            "High", 
-            "Full Clipboard Access (Read + Write)"
-        ),
-        (
-            {"history", "tabs"},
+            {"clipboardRead", "clipboardWrite"},
             10,
             "High",
-            "Comprehensive Browsing Activity Tracking"
-        )
+            "Full Clipboard Access (Read + Write)",
+        ),
+        ({"history", "tabs"}, 10, "High", "Comprehensive Browsing Activity Tracking"),
     ]
 
     def analyze(self, file_path: Path) -> RiskReport:
@@ -110,11 +105,11 @@ class RiskAnalyzer:
             # Also check host permissions in MV3
             host_permissions = manifest.get("host_permissions", [])
             all_perms = set(permissions + host_permissions)
-            
+
             risky_perms = []
             safe_perms = []
             total_score = 0
-            
+
             # Normalize permissions for combination checking
             normalized_perms = set(all_perms)
             for perm in all_perms:
@@ -147,18 +142,20 @@ class RiskAnalyzer:
                     score = 0
                     level = "Safe"
                     desc = "Unknown or safe permission"
-                
+
                 if score > 0:
                     total_score += score
                     risky_perms.append(PermissionRisk(perm, score, level, desc))
                 else:
                     safe_perms.append(perm)
-            
+
             # Check for toxic combinations
             for req_perms, bonus_score, level, desc in self.RISK_COMBINATIONS:
                 if req_perms.issubset(normalized_perms):
                     total_score += bonus_score
-                    risky_perms.append(PermissionRisk("COMBINATION", bonus_score, level, desc))
+                    risky_perms.append(
+                        PermissionRisk("COMBINATION", bonus_score, level, desc)
+                    )
 
             # Determine max level
             max_level = "Safe"
@@ -170,8 +167,8 @@ class RiskAnalyzer:
                 max_level = "Medium"
             elif any(p.level == "Low" for p in risky_perms):
                 max_level = "Low"
-                
+
             # Sort risky permissions by score descending
             risky_perms.sort(key=lambda x: x.score, reverse=True)
-            
+
             return RiskReport(total_score, max_level, risky_perms, safe_perms)

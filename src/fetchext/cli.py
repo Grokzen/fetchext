@@ -31,7 +31,7 @@ from .commands import (
     watch,
     query,
     export,
-    rules
+    rules,
 )
 
 # Configure logging
@@ -39,41 +39,44 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(message)s",
     datefmt="[%X]",
-    handlers=[RichHandler(console=console, rich_tracebacks=True)]
+    handlers=[RichHandler(console=console, rich_tracebacks=True)],
 )
 logger = logging.getLogger("fetchext")
+
 
 def get_parser():
     """
     Constructs and returns the argument parser.
     """
-    parser = argparse.ArgumentParser(description="Download or search for browser extensions.")
-    
+    parser = argparse.ArgumentParser(
+        description="Download or search for browser extensions."
+    )
+
     try:
         ver = version("fetchext")
     except PackageNotFoundError:
         ver = "unknown"
 
-    parser.add_argument(
-        "--version",
-        action="version",
-        version=f"%(prog)s {ver}"
-    )
-    
+    parser.add_argument("--version", action="version", version=f"%(prog)s {ver}")
+
     # Global logging flags
     logging_group = parser.add_mutually_exclusive_group()
     logging_group.add_argument(
-        "-v", "--verbose",
+        "-v",
+        "--verbose",
         action="store_true",
-        help="Enable verbose logging (DEBUG level)"
+        help="Enable verbose logging (DEBUG level)",
     )
     logging_group.add_argument(
-        "-q", "--quiet",
+        "-q",
+        "--quiet",
         action="store_true",
-        help="Enable quiet mode (ERROR level only, no progress bars)"
+        help="Enable quiet mode (ERROR level only, no progress bars)",
     )
 
-    subparsers = parser.add_subparsers(dest="command", required=True, help="Command to execute")
+    subparsers = parser.add_subparsers(
+        dest="command", required=True, help="Command to execute"
+    )
 
     # Register commands from modules
     download.register(subparsers)
@@ -104,6 +107,7 @@ def get_parser():
 
     return parser
 
+
 def main():
     """
     Main entry point of the script.
@@ -118,7 +122,7 @@ def main():
     elif args.quiet:
         logger.setLevel(logging.ERROR)
         logging.getLogger().setLevel(logging.ERROR)
-    
+
     # Determine if progress bars should be shown
     show_progress = not args.quiet
 
@@ -153,6 +157,7 @@ def main():
         if args.verbose:
             logger.exception(e)
         sys.exit(ExitCode.ERROR)
+
 
 if __name__ == "__main__":
     main()

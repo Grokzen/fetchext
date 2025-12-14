@@ -4,13 +4,14 @@ import zipfile
 import random
 import string
 
+
 @pytest.fixture(scope="session")
 def large_extension_crx(tmp_path_factory):
     """
     Generates a 10MB dummy CRX file with random content.
     """
     fn = tmp_path_factory.mktemp("data") / "large.crx"
-    
+
     # Create a zip file first
     zip_path = fn.with_suffix(".zip")
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_STORED) as zf:
@@ -18,13 +19,13 @@ def large_extension_crx(tmp_path_factory):
         for i in range(100):
             content = "".join(random.choices(string.ascii_letters, k=100 * 1024))
             zf.writestr(f"file_{i}.js", content)
-            
+
     # Add CRX header (mock)
     # We'll just prepend some bytes to simulate a CRX3 header
     # Real CRX3 header is complex, but for parsing speed of *our* decoder (which finds zip offset),
     # we just need a valid-looking structure or just the zip appended.
     # Our CrxDecoder looks for 'Cr24' magic.
-    
+
     with open(zip_path, "rb") as f_in, open(fn, "wb") as f_out:
         # Magic
         f_out.write(b"Cr24")
@@ -36,8 +37,9 @@ def large_extension_crx(tmp_path_factory):
         f_out.write(os.urandom(100))
         # Zip content
         f_out.write(f_in.read())
-        
+
     return fn
+
 
 @pytest.fixture(scope="session")
 def large_extension_dir(tmp_path_factory):

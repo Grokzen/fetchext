@@ -7,6 +7,7 @@ from ..exceptions import NetworkError, ExtensionError
 
 logger = logging.getLogger(__name__)
 
+
 class ChromeDownloader(BaseDownloader):
     def extract_id(self, url):
         # Check if the input is already a valid ID (32 lowercase letters)
@@ -29,9 +30,9 @@ class ChromeDownloader(BaseDownloader):
         params = {
             "x": f"id={extension_id}&uc",
             "prodversion": "131.0",
-            "acceptformat": "crx2,crx3"
+            "acceptformat": "crx2,crx3",
         }
-        
+
         try:
             response = self.client.get(url, params=params)
             response.raise_for_status()
@@ -56,8 +57,12 @@ class ChromeDownloader(BaseDownloader):
         output_path = output_dir / f"{extension_id}.crx"
 
         try:
-            return self.client.download_file(download_url, output_path, show_progress=show_progress)
+            return self.client.download_file(
+                download_url, output_path, show_progress=show_progress
+            )
 
         except requests.RequestException as e:
             logger.error(f"Failed to download extension: {e}")
-            raise NetworkError(f"Failed to download extension: {e}", original_exception=e)
+            raise NetworkError(
+                f"Failed to download extension: {e}", original_exception=e
+            )

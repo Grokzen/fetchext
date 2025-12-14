@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from ..client import NetworkClient
 
+
 class BaseDownloader(ABC):
     def __init__(self):
         self.client = NetworkClient()

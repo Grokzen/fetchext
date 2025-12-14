@@ -7,6 +7,7 @@ from .exceptions import ConfigError
 
 logger = logging.getLogger(__name__)
 
+
 class BatchProcessor:
     def process(self, file_path, output_dir, max_workers=4, show_progress=True):
         path = Path(file_path)
@@ -16,21 +17,26 @@ class BatchProcessor:
         if not output_dir.exists():
             output_dir.mkdir(parents=True, exist_ok=True)
 
-        with path.open('r') as f:
+        with path.open("r") as f:
             lines = f.readlines()
 
         # Filter valid lines first
         valid_lines = [
-            line.strip() for line in lines
+            line.strip()
+            for line in lines
             if line.strip() and not line.strip().startswith("#")
         ]
 
-        logger.info(f"Processing {len(valid_lines)} items with {max_workers} workers...")
+        logger.info(
+            f"Processing {len(valid_lines)} items with {max_workers} workers..."
+        )
 
         if show_progress:
             with console.create_progress() as progress:
                 task_id = progress.add_task("Batch Progress", total=len(valid_lines))
-                self._run_threads(valid_lines, output_dir, max_workers, progress, task_id)
+                self._run_threads(
+                    valid_lines, output_dir, max_workers, progress, task_id
+                )
         else:
             self._run_threads(valid_lines, output_dir, max_workers, None, None)
 
@@ -41,7 +47,7 @@ class BatchProcessor:
                 executor.submit(self._process_line, line, output_dir)
                 for line in valid_lines
             ]
-            
+
             for future in concurrent.futures.as_completed(futures):
                 try:
                     future.result()
@@ -55,7 +61,9 @@ class BatchProcessor:
         # Format: <browser> <url_or_id>
         parts = line.split(maxsplit=1)
         if len(parts) != 2:
-            logger.warning(f"Invalid line format: '{line}'. Expected '<browser> <url_or_id>'")
+            logger.warning(
+                f"Invalid line format: '{line}'. Expected '<browser> <url_or_id>'"
+            )
             return
 
         browser, url_or_id = parts

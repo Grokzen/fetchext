@@ -1,11 +1,12 @@
 from typing import Dict, List, Tuple
 
+
 class SimpleProtobuf:
     """
     A minimal Protobuf decoder for CRX3 headers.
     Only supports Length-Delimited (Type 2) fields.
     """
-    
+
     @staticmethod
     def parse(data: bytes) -> Dict[int, List[bytes]]:
         """
@@ -14,15 +15,15 @@ class SimpleProtobuf:
         result = {}
         i = 0
         n = len(data)
-        
+
         while i < n:
             # Read key (varint)
             key, new_i = SimpleProtobuf._read_varint(data, i)
             i = new_i
-            
+
             wire_type = key & 0x07
             field_id = key >> 3
-            
+
             if wire_type != 2:
                 # We only expect Length Delimited (2) for CRX3 header fields
                 # If we encounter others, we might need to skip them, but for now let's raise or break
@@ -39,19 +40,19 @@ class SimpleProtobuf:
                 else:
                     raise ValueError(f"Unsupported wire type: {wire_type}")
                 continue
-                
+
             # Read length (varint)
             length, new_i = SimpleProtobuf._read_varint(data, i)
             i = new_i
-            
+
             # Read value
             value = data[i : i + length]
             i += length
-            
+
             if field_id not in result:
                 result[field_id] = []
             result[field_id].append(value)
-            
+
         return result
 
     @staticmethod

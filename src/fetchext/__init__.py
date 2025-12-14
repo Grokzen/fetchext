@@ -7,7 +7,7 @@ from .core import (
     batch_download,
     generate_report,
     convert_extension,
-    get_repo_stats
+    get_repo_stats,
 )
 
 __all__ = [
@@ -19,5 +19,5 @@ __all__ = [
     "batch_download",
     "generate_report",
     "convert_extension",
-    "get_repo_stats"
+    "get_repo_stats",
 ]

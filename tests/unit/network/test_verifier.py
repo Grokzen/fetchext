@@ -5,11 +5,13 @@ from fetchext.verifier import CrxVerifier
 # We can't easily mock the full crypto verification without generating real keys and signatures.
 # But we can test the structure parsing logic.
 
+
 def test_verify_invalid_magic():
     with patch("builtins.open", mock_open(read_data=b"BADM")):
         verifier = CrxVerifier()
         with pytest.raises(ValueError, match="Not a CRX file"):
             verifier.verify("test.crx")
+
 
 def test_verify_invalid_version():
     # Magic Cr24, Version 2 (unsupported)
@@ -18,6 +20,7 @@ def test_verify_invalid_version():
         verifier = CrxVerifier()
         with pytest.raises(ValueError, match="Unsupported CRX version"):
             verifier.verify("test.crx")
+
 
 def test_verify_missing_header_fields():
     # Magic Cr24, Version 3, Header Len 0, Empty Header

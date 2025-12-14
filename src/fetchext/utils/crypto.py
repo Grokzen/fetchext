@@ -2,7 +2,10 @@ import hashlib
 from pathlib import Path
 from ..exceptions import IntegrityError
 
-def verify_file_hash(file_path: Path, expected_hash: str, algorithm: str = "sha256") -> bool:
+
+def verify_file_hash(
+    file_path: Path, expected_hash: str, algorithm: str = "sha256"
+) -> bool:
     """
     Verifies that the file at file_path matches the expected hash.
     Raises IntegrityError if the hash does not match.
@@ -19,7 +22,7 @@ def verify_file_hash(file_path: Path, expected_hash: str, algorithm: str = "sha2
         # Read in chunks to avoid memory issues with large files
         for chunk in iter(lambda: f.read(65536), b""):
             hasher.update(chunk)
-    
+
     calculated_hash = hasher.hexdigest().lower()
     expected_hash = expected_hash.lower()
 
@@ -29,5 +32,5 @@ def verify_file_hash(file_path: Path, expected_hash: str, algorithm: str = "sha2
             f"Expected ({algorithm}): {expected_hash}\n"
             f"Calculated ({algorithm}): {calculated_hash}"
         )
-    
+
     return True

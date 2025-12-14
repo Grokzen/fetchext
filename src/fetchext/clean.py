@@ -5,24 +5,27 @@ from rich.prompt import Confirm
 
 console = Console()
 
+
 def get_size(path: Path) -> int:
     """Calculate the size of a file or directory."""
     total = 0
     if path.is_file():
         return path.stat().st_size
     if path.is_dir():
-        for p in path.rglob('*'):
+        for p in path.rglob("*"):
             if p.is_file():
                 total += p.stat().st_size
     return total
 
+
 def format_size(size: int) -> str:
     """Format size in bytes to human readable string."""
-    for unit in ['B', 'KB', 'MB', 'GB']:
+    for unit in ["B", "KB", "MB", "GB"]:
         if size < 1024:
             return f"{size:.2f} {unit}"
         size /= 1024
     return f"{size:.2f} TB"
+
 
 def clean_artifacts(
     base_dir: Path,
@@ -30,29 +33,31 @@ def clean_artifacts(
     clean_downloads: bool = False,
     download_dir: Path = None,
     dry_run: bool = False,
-    force: bool = False
+    force: bool = False,
 ) -> None:
     """
     Clean up artifacts and caches.
     """
     targets = []
-    
+
     if clean_cache:
         # Standard Python/Build artifacts
-        targets.extend([
-            base_dir / "build",
-            base_dir / "dist",
-            base_dir / ".pytest_cache",
-            base_dir / ".mypy_cache",
-            base_dir / ".ruff_cache",
-            base_dir / ".tox",
-            base_dir / ".venv",
-            base_dir / "venv",
-        ])
-        
+        targets.extend(
+            [
+                base_dir / "build",
+                base_dir / "dist",
+                base_dir / ".pytest_cache",
+                base_dir / ".mypy_cache",
+                base_dir / ".ruff_cache",
+                base_dir / ".tox",
+                base_dir / ".venv",
+                base_dir / "venv",
+            ]
+        )
+
         # Egg info
         targets.extend(base_dir.rglob("*.egg-info"))
-        
+
         # Pycache
         targets.extend(base_dir.rglob("__pycache__"))
 
@@ -61,14 +66,16 @@ def clean_artifacts(
 
     # Filter existing targets
     existing_targets = [t for t in targets if t.exists()]
-    
+
     if not existing_targets:
         console.print("[yellow]Nothing to clean.[/yellow]")
         return
 
     total_size = sum(get_size(t) for t in existing_targets)
-    
-    console.print(f"[bold]Found {len(existing_targets)} items to clean ({format_size(total_size)}):[/bold]")
+
+    console.print(
+        f"[bold]Found {len(existing_targets)} items to clean ({format_size(total_size)}):[/bold]"
+    )
     for target in existing_targets:
         console.print(f"  - {target} ({format_size(get_size(target))})")
 
@@ -94,4 +101,6 @@ def clean_artifacts(
         except Exception as e:
             console.print(f"[red]Failed to delete {target}: {e}[/red]")
 
-    console.print(f"[bold green]Clean complete. Reclaimed {format_size(reclaimed)}.[/bold green]")
+    console.print(
+        f"[bold green]Clean complete. Reclaimed {format_size(reclaimed)}.[/bold green]"
+    )

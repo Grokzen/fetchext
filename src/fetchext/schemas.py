@@ -1,5 +1,6 @@
 from typing import Dict, Any
 
+
 def get_schema(schema_type: str) -> Dict[str, Any]:
     if schema_type == "config":
         return CONFIG_SCHEMA
@@ -13,6 +14,7 @@ def get_schema(schema_type: str) -> Dict[str, Any]:
         return SCAN_SCHEMA
     else:
         raise ValueError(f"Unknown schema type: {schema_type}")
+
 
 # JSON Schema Draft 7 definitions
 
@@ -29,10 +31,10 @@ HISTORY_SCHEMA = {
             "browser": {"type": "string"},
             "version": {"type": ["string", "null"]},
             "status": {"type": "string"},
-            "path": {"type": ["string", "null"]}
+            "path": {"type": ["string", "null"]},
         },
-        "required": ["timestamp", "action", "id", "browser", "status"]
-    }
+        "required": ["timestamp", "action", "id", "browser", "status"],
+    },
 }
 
 AUDIT_SCHEMA = {
@@ -46,16 +48,19 @@ AUDIT_SCHEMA = {
             "items": {
                 "type": "object",
                 "properties": {
-                    "severity": {"type": "string", "enum": ["error", "warning", "info"]},
+                    "severity": {
+                        "type": "string",
+                        "enum": ["error", "warning", "info"],
+                    },
                     "message": {"type": "string"},
                     "file": {"type": "string"},
-                    "line": {"type": ["integer", "null"]}
+                    "line": {"type": ["integer", "null"]},
                 },
-                "required": ["severity", "message", "file"]
-            }
-        }
+                "required": ["severity", "message", "file"],
+            },
+        },
     },
-    "required": ["manifest_version", "issues"]
+    "required": ["manifest_version", "issues"],
 }
 
 RISK_SCHEMA = {
@@ -64,7 +69,10 @@ RISK_SCHEMA = {
     "type": "object",
     "properties": {
         "total_score": {"type": "integer"},
-        "max_level": {"type": "string", "enum": ["Critical", "High", "Medium", "Low", "Safe"]},
+        "max_level": {
+            "type": "string",
+            "enum": ["Critical", "High", "Medium", "Low", "Safe"],
+        },
         "risky_permissions": {
             "type": "array",
             "items": {
@@ -73,17 +81,14 @@ RISK_SCHEMA = {
                     "permission": {"type": "string"},
                     "score": {"type": "integer"},
                     "level": {"type": "string"},
-                    "description": {"type": "string"}
+                    "description": {"type": "string"},
                 },
-                "required": ["permission", "score", "level", "description"]
-            }
+                "required": ["permission", "score", "level", "description"],
+            },
         },
-        "safe_permissions": {
-            "type": "array",
-            "items": {"type": "string"}
-        }
+        "safe_permissions": {"type": "array", "items": {"type": "string"}},
     },
-    "required": ["total_score", "max_level", "risky_permissions", "safe_permissions"]
+    "required": ["total_score", "max_level", "risky_permissions", "safe_permissions"],
 }
 
 SCAN_SCHEMA = {
@@ -101,13 +106,13 @@ SCAN_SCHEMA = {
                     "version": {"type": "string"},
                     "path": {"type": "string"},
                     "vulnerable": {"type": "boolean"},
-                    "advisory": {"type": ["string", "null"]}
+                    "advisory": {"type": ["string", "null"]},
                 },
-                "required": ["name", "version", "path", "vulnerable"]
-            }
-        }
+                "required": ["name", "version", "path", "vulnerable"],
+            },
+        },
     },
-    "required": ["file", "libraries"]
+    "required": ["file", "libraries"],
 }
 
 CONFIG_SCHEMA = {
@@ -121,28 +126,26 @@ CONFIG_SCHEMA = {
                 "download_dir": {"type": "string"},
                 "save_metadata": {"type": "boolean"},
                 "extract": {"type": "boolean"},
-                "rate_limit_delay": {"type": "number"}
-            }
+                "rate_limit_delay": {"type": "number"},
+            },
         },
         "batch": {
             "type": "object",
-            "properties": {
-                "workers": {"type": "integer", "minimum": 1}
-            }
+            "properties": {"workers": {"type": "integer", "minimum": 1}},
         },
         "cache": {
             "type": "object",
             "properties": {
                 "enabled": {"type": "boolean"},
-                "ttl": {"type": "integer", "minimum": 0}
-            }
+                "ttl": {"type": "integer", "minimum": 0},
+            },
         },
         "rules": {
             "type": "object",
             "properties": {
                 "repo_url": {"type": "string"},
-                "repo_dir": {"type": "string"}
-            }
-        }
-    }
+                "repo_dir": {"type": "string"},
+            },
+        },
+    },
 }

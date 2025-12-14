@@ -1,6 +1,7 @@
 from rich.theme import Theme as RichTheme
 from rich.style import Style
 
+
 class Theme:
     """Centralized theme configuration for the CLI."""
 
@@ -28,23 +29,27 @@ class Theme:
     COLOR_VERSION = "bold green"
 
     # Rich Theme
-    RICH_THEME = RichTheme({
-        "success": Style(color="green", bold=True),
-        "error": Style(color="red", bold=True),
-        "warning": Style(color="yellow", bold=True),
-        "info": Style(color="blue"),
-        "highlight": Style(color="cyan", bold=True),
-        "muted": Style(color="white", dim=True),
-        "path": Style(color="magenta"),
-        "id": Style(color="cyan", bold=True),
-        "version": Style(color="green", bold=True),
-        "key": Style(color="cyan"),
-        "value": Style(color="white"),
-    })
+    RICH_THEME = RichTheme(
+        {
+            "success": Style(color="green", bold=True),
+            "error": Style(color="red", bold=True),
+            "warning": Style(color="yellow", bold=True),
+            "info": Style(color="blue"),
+            "highlight": Style(color="cyan", bold=True),
+            "muted": Style(color="white", dim=True),
+            "path": Style(color="magenta"),
+            "id": Style(color="cyan", bold=True),
+            "version": Style(color="green", bold=True),
+            "key": Style(color="cyan"),
+            "value": Style(color="white"),
+        }
+    )
 
     @classmethod
     def format_success(cls, message: str) -> str:
-        return f"[{cls.COLOR_SUCCESS}]{cls.ICON_SUCCESS} {message}[/{cls.COLOR_SUCCESS}]"
+        return (
+            f"[{cls.COLOR_SUCCESS}]{cls.ICON_SUCCESS} {message}[/{cls.COLOR_SUCCESS}]"
+        )
 
     @classmethod
     def format_error(cls, message: str) -> str:
@@ -52,7 +57,9 @@ class Theme:
 
     @classmethod
     def format_warning(cls, message: str) -> str:
-        return f"[{cls.COLOR_WARNING}]{cls.ICON_WARNING} {message}[/{cls.COLOR_WARNING}]"
+        return (
+            f"[{cls.COLOR_WARNING}]{cls.ICON_WARNING} {message}[/{cls.COLOR_WARNING}]"
+        )
 
     @classmethod
     def format_info(cls, message: str) -> str:

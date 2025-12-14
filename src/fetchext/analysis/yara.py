@@ -14,8 +14,10 @@ class YaraScanner:
         try:
             import yara
         except ImportError:
-            raise ImportError("yara-python is not installed. Install with 'pip install fetchext[security]'")
-        
+            raise ImportError(
+                "yara-python is not installed. Install with 'pip install fetchext[security]'"
+            )
+
         self.rules_path = rules_path
         if not self.rules_path.exists():
             raise FileNotFoundError(f"YARA rules file not found: {rules_path}")
@@ -24,18 +26,22 @@ class YaraScanner:
             if self.rules_path.is_dir():
                 filepaths = {}
                 # Find .yar and .yara files recursively
-                rule_files = list(self.rules_path.glob("**/*.yar")) + list(self.rules_path.glob("**/*.yara"))
-                
+                rule_files = list(self.rules_path.glob("**/*.yar")) + list(
+                    self.rules_path.glob("**/*.yara")
+                )
+
                 for rule_file in rule_files:
-                    # Use filename as namespace to avoid collisions if possible, 
+                    # Use filename as namespace to avoid collisions if possible,
                     # but simple stem is usually enough for display.
                     # To be safe against duplicates in different dirs, we could use the full path hash or similar,
                     # but let's stick to stem for readability in results.
                     filepaths[rule_file.stem] = str(rule_file)
-                
+
                 if not filepaths:
-                    raise FileNotFoundError(f"No .yar or .yara files found in directory: {rules_path}")
-                
+                    raise FileNotFoundError(
+                        f"No .yar or .yara files found in directory: {rules_path}"
+                    )
+
                 self.rules = yara.compile(filepaths=filepaths)
             else:
                 self.rules = yara.compile(filepath=str(rules_path))
@@ -49,16 +55,18 @@ class YaraScanner:
         try:
             yara_matches = self.rules.match(data=content)
             for match in yara_matches:
-                matches.append({
-                    "rule": match.rule,
-                    "tags": match.tags,
-                    "meta": match.meta,
-                    "strings": match.strings,
-                    "filename": filename
-                })
+                matches.append(
+                    {
+                        "rule": match.rule,
+                        "tags": match.tags,
+                        "meta": match.meta,
+                        "strings": match.strings,
+                        "filename": filename,
+                    }
+                )
         except Exception as e:
             logger.error(f"Error scanning content for {filename}: {e}")
-        
+
         return matches
 
     def scan_file(self, file_path: Path) -> List[Dict[str, Any]]:
@@ -67,13 +75,15 @@ class YaraScanner:
             yara_matches = self.rules.match(filepath=str(file_path))
             matches = []
             for match in yara_matches:
-                matches.append({
-                    "rule": match.rule,
-                    "tags": match.tags,
-                    "meta": match.meta,
-                    "strings": match.strings,
-                    "filename": str(file_path)
-                })
+                matches.append(
+                    {
+                        "rule": match.rule,
+                        "tags": match.tags,
+                        "meta": match.meta,
+                        "strings": match.strings,
+                        "filename": str(file_path),
+                    }
+                )
             return matches
         except Exception as e:
             logger.error(f"Error scanning file {file_path}: {e}")
@@ -82,18 +92,18 @@ class YaraScanner:
     def scan_archive(self, file_path: Path) -> Dict[str, List[Dict[str, Any]]]:
         """Scan all files within a CRX/XPI/ZIP archive."""
         results = {}
-        
+
         f = None
         try:
             # Determine offset
             offset = 0
-            if file_path.suffix.lower() == '.crx':
+            if file_path.suffix.lower() == ".crx":
                 offset = CrxDecoder.get_zip_offset(file_path)
-                
+
             f = open(file_path, "rb")
             if offset > 0:
                 f.seek(offset)
-                
+
             try:
                 zf = ZipFile(f)
             except Exception:
@@ -105,7 +115,7 @@ class YaraScanner:
                         offset = CrxDecoder.get_zip_offset(file_path)
                     except Exception:
                         offset = 0
-                    
+
                     if offset > 0:
                         f.seek(offset)
                         zf = ZipFile(f)
@@ -119,12 +129,14 @@ class YaraScanner:
                 for info in zf.infolist():
                     if info.is_dir():
                         continue
-                    
+
                     # Memory optimization: For large files (>10MB), extract to temp file
                     # instead of reading into memory.
                     if info.file_size > 10 * 1024 * 1024:  # 10MB
-                        with tempfile.NamedTemporaryFile(delete=False) as tmp:
-                            try:
+                        tmp_name = None
+                        try:
+                            with tempfile.NamedTemporaryFile(delete=False) as tmp:
+                                tmp_name = tmp.name
                                 # Stream copy from zip to temp file
                                 with zf.open(info.filename) as source:
                                     while True:
@@ -132,25 +144,28 @@ class YaraScanner:
                                         if not chunk:
                                             break
                                         tmp.write(chunk)
-                                tmp.close()
-                                
-                                # Scan file on disk
-                                matches = self.scan_file(Path(tmp.name))
-                                # Fix filename in matches
-                                for m in matches:
-                                    m["filename"] = info.filename
-                                
-                                if matches:
-                                    results[info.filename] = matches
-                            finally:
-                                os.unlink(tmp.name)
+
+                            # Scan file on disk (file is closed now)
+                            matches = self.scan_file(Path(tmp_name))
+                            # Fix filename in matches
+                            for m in matches:
+                                m["filename"] = info.filename
+
+                            if matches:
+                                results[info.filename] = matches
+                        finally:
+                            if tmp_name and os.path.exists(tmp_name):
+                                try:
+                                    os.unlink(tmp_name)
+                                except OSError:
+                                    pass
                     else:
                         # Read file content
                         content = zf.read(info.filename)
-                        
+
                         # Scan content
                         matches = self.scan_content(content, filename=info.filename)
-                        
+
                         if matches:
                             results[info.filename] = matches
 
@@ -160,5 +175,5 @@ class YaraScanner:
         finally:
             if f and not f.closed:
                 f.close()
-                
+
         return results

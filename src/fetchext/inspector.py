@@ -5,6 +5,7 @@ from .utils import open_extension_archive
 
 logger = logging.getLogger(__name__)
 
+
 class ExtensionInspector:
     def get_manifest(self, file_path):
         try:
@@ -30,12 +31,14 @@ class ExtensionInspector:
                     # ZipInfo.date_time is a tuple (year, month, day, hour, min, sec)
                     dt_tuple = info.date_time
                     dt = datetime(*dt_tuple)
-                    timeline.append({
-                        "filename": info.filename,
-                        "datetime": dt,
-                        "size": info.file_size
-                    })
-            
+                    timeline.append(
+                        {
+                            "filename": info.filename,
+                            "datetime": dt,
+                            "size": info.file_size,
+                        }
+                    )
+
             # Sort by datetime
             timeline.sort(key=lambda x: x["datetime"])
             return timeline
@@ -48,13 +51,8 @@ class ExtensionInspector:
         """
         Robustly inspects an extension archive, returning partial data if possible.
         """
-        result = {
-            "manifest": None,
-            "timeline": [],
-            "errors": [],
-            "valid": False
-        }
-        
+        result = {"manifest": None, "timeline": [], "errors": [], "valid": False}
+
         try:
             with open_extension_archive(file_path) as zf:
                 # 1. Timeline (always try to get file list)
@@ -63,11 +61,13 @@ class ExtensionInspector:
                     for info in zf.infolist():
                         dt_tuple = info.date_time
                         dt = datetime(*dt_tuple)
-                        timeline.append({
-                            "filename": info.filename,
-                            "datetime": dt,
-                            "size": info.file_size
-                        })
+                        timeline.append(
+                            {
+                                "filename": info.filename,
+                                "datetime": dt,
+                                "size": info.file_size,
+                            }
+                        )
                     timeline.sort(key=lambda x: x["datetime"])
                     result["timeline"] = timeline
                 except Exception as e:
@@ -88,5 +88,5 @@ class ExtensionInspector:
 
         except Exception as e:
             result["errors"].append(f"Archive open failed: {e}")
-            
+
         return result

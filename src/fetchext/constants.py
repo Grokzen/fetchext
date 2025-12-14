@@ -1,12 +1,15 @@
 """
 Global constants for fetchext.
 """
+
 from enum import IntEnum
+
 
 class ExitCode(IntEnum):
     """
     Standard exit codes for the CLI.
     """
+
     SUCCESS = 0
     ERROR = 1
     USAGE = 2

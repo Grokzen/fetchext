@@ -7,6 +7,7 @@ from ..utils import sanitize_filename
 
 logger = logging.getLogger(__name__)
 
+
 class FirefoxDownloader(BaseDownloader):
     def extract_id(self, url):
         # Example: https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/
@@ -21,7 +22,9 @@ class FirefoxDownloader(BaseDownloader):
         except ValueError:
             pass
 
-        raise ExtensionError("Could not extract extension slug from Firefox Add-ons URL")
+        raise ExtensionError(
+            "Could not extract extension slug from Firefox Add-ons URL"
+        )
 
     def download(self, extension_id, output_dir, show_progress=True):
         # Use AMO API to get the download URL
@@ -47,11 +50,15 @@ class FirefoxDownloader(BaseDownloader):
             logger.info(f"Downloading from {download_url}...")
 
             output_path = output_dir / filename
-            return self.client.download_file(download_url, output_path, show_progress=show_progress)
+            return self.client.download_file(
+                download_url, output_path, show_progress=show_progress
+            )
 
         except Exception as e:
             logger.error(f"Failed to download extension: {e}")
-            raise NetworkError(f"Failed to download extension: {e}", original_exception=e)
+            raise NetworkError(
+                f"Failed to download extension: {e}", original_exception=e
+            )
 
     def get_latest_version(self, extension_id):
         api_url = f"https://addons.mozilla.org/api/v5/addons/addon/{extension_id}/"
@@ -78,4 +85,6 @@ class FirefoxDownloader(BaseDownloader):
 
         except Exception as e:
             logger.error(f"Failed to search for extension: {e}")
-            raise NetworkError(f"Failed to search for extension: {e}", original_exception=e)
+            raise NetworkError(
+                f"Failed to search for extension: {e}", original_exception=e
+            )

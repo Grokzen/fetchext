@@ -6,6 +6,7 @@ from ..exceptions import NetworkError, ExtensionError
 
 logger = logging.getLogger(__name__)
 
+
 class EdgeDownloader(BaseDownloader):
     def extract_id(self, url):
         # Check if the input is already a valid ID (32 lowercase letters)
@@ -30,9 +31,9 @@ class EdgeDownloader(BaseDownloader):
         params = {
             "x": f"id={extension_id}&installsource=ondemand&uc",
             "prod": "chromiumcrx",
-            "prodchannel": ""
+            "prodchannel": "",
         }
-        
+
         try:
             response = self.client.get(url, params=params)
             response.raise_for_status()
@@ -57,8 +58,12 @@ class EdgeDownloader(BaseDownloader):
         output_path = output_dir / f"{extension_id}.crx"
 
         try:
-            return self.client.download_file(download_url, output_path, show_progress=show_progress)
+            return self.client.download_file(
+                download_url, output_path, show_progress=show_progress
+            )
 
         except Exception as e:
             logger.error(f"Failed to download extension: {e}")
-            raise NetworkError(f"Failed to download extension: {e}", original_exception=e)
+            raise NetworkError(
+                f"Failed to download extension: {e}", original_exception=e
+            )

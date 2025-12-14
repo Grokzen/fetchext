@@ -5,16 +5,21 @@ from ..inspector import ExtensionInspector
 from ..risk import RiskAnalyzer
 from ..analysis.licenses import scan_licenses
 
+
 def register(subparsers):
-    badge_parser = subparsers.add_parser("badge", help="Generate SVG badges for extension")
+    badge_parser = subparsers.add_parser(
+        "badge", help="Generate SVG badges for extension"
+    )
     badge_parser.add_argument("file", type=Path, help="Path to extension file")
     badge_parser.add_argument(
-        "-o", "--output-dir",
+        "-o",
+        "--output-dir",
         type=Path,
         default=Path("."),
-        help="Output directory for badges"
+        help="Output directory for badges",
     )
     badge_parser.set_defaults(func=handle_badge)
+
 
 def handle_badge(args, show_progress=True):
     file_path = args.file
@@ -24,7 +29,7 @@ def handle_badge(args, show_progress=True):
 
     output_dir = args.output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
-    
+
     base_name = file_path.stem
 
     # 1. Version Badge
@@ -32,7 +37,7 @@ def handle_badge(args, show_progress=True):
         inspector = ExtensionInspector()
         manifest = inspector.get_manifest(file_path)
         version = manifest.get("version", "unknown")
-        
+
         svg = BadgeGenerator.generate("version", version, "blue")
         out = output_dir / f"{base_name}_version.svg"
         out.write_text(svg, encoding="utf-8")
@@ -44,16 +49,16 @@ def handle_badge(args, show_progress=True):
     try:
         analyzer = RiskAnalyzer()
         report = analyzer.analyze(file_path)
-        
+
         color_map = {
             "Critical": "red",
             "High": "orange",
             "Medium": "yellow",
             "Low": "blue",
-            "Safe": "brightgreen"
+            "Safe": "brightgreen",
         }
         color = color_map.get(report.max_level, "grey")
-        
+
         svg = BadgeGenerator.generate("risk", report.max_level, color)
         out = output_dir / f"{base_name}_risk.svg"
         out.write_text(svg, encoding="utf-8")
@@ -69,7 +74,7 @@ def handle_badge(args, show_progress=True):
             lic_name = list(licenses.keys())[0]
             if len(licenses) > 1:
                 lic_name += "+"
-            
+
             svg = BadgeGenerator.generate("license", lic_name, "green")
             out = output_dir / f"{base_name}_license.svg"
             out.write_text(svg, encoding="utf-8")

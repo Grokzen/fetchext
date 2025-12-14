@@ -2,6 +2,7 @@ from hypothesis import given, strategies as st
 import pytest
 from fetchext.protobuf import SimpleProtobuf
 
+
 @given(st.binary())
 def test_fuzz_protobuf_parse(data):
     """

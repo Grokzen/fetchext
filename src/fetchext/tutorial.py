@@ -12,7 +12,7 @@ This tutorial will guide you through the main features of the tool.
 - Press **Next** to proceed.
 - Press **Previous** to go back.
 - Press **Quit** or `q` to exit.
-"""
+""",
     },
     {
         "title": "Downloading Extensions",
@@ -34,7 +34,7 @@ fext download <browser> <url_or_id>
 **Flags:**
 - `-x` / `--extract`: Automatically unzip the extension.
 - `-m` / `--save-metadata`: Save details to a JSON file.
-"""
+""",
     },
     {
         "title": "Searching",
@@ -51,7 +51,7 @@ fext search firefox "adblock"
 **Output:**
 - Displays a table of results with IDs, names, and users.
 - Use `--json` for machine-readable output.
-"""
+""",
     },
     {
         "title": "Inspecting & Analyzing",
@@ -66,7 +66,7 @@ fext search firefox "adblock"
 - `fext risk <file>`: Analyze permission risks.
 - `fext audit <file>`: Check for Manifest V3 compatibility.
 - `fext scan <file>`: Scan for vulnerable dependencies.
-"""
+""",
     },
     {
         "title": "Advanced Features",
@@ -78,7 +78,7 @@ fext search firefox "adblock"
 - **Serve**: `fext serve` - Host a local update server.
 - **Optimize**: `fext optimize <dir>` - Compress images.
 - **Mirror**: `fext mirror <list>` - Sync a local repository.
-"""
+""",
     },
     {
         "title": "Configuration",
@@ -95,7 +95,7 @@ fext config set general.download_dir /path/to/downloads
 
 **Setup Wizard:**
 Run `fext setup` to interactively configure the tool.
-"""
+""",
     },
     {
         "title": "Conclusion",
@@ -110,9 +110,10 @@ fext --help
 ```
 
 Happy hacking!
-"""
-    }
+""",
+    },
 ]
+
 
 def get_tutorial_classes():
     from textual.app import App, ComposeResult
@@ -176,9 +177,9 @@ def get_tutorial_classes():
                     Button("Previous", id="btn-prev", variant="primary"),
                     Button("Next", id="btn-next", variant="success"),
                     Button("Quit", id="btn-quit", variant="error"),
-                    id="buttons"
+                    id="buttons",
                 ),
-                id="main-container"
+                id="main-container",
             )
             yield Footer()
 
@@ -189,12 +190,14 @@ def get_tutorial_classes():
             content_container = self.query_one("#content")
             content_container.remove_children()
             content_container.mount(TutorialStep(self.current_step))
-            
-            self.title = f"fext Tutorial - {self.current_step + 1}/{len(TUTORIAL_STEPS)}"
-            
+
+            self.title = (
+                f"fext Tutorial - {self.current_step + 1}/{len(TUTORIAL_STEPS)}"
+            )
+
             # Update button states
             self.query_one("#btn-prev").disabled = self.current_step == 0
-            
+
             next_btn = self.query_one("#btn-next")
             if self.current_step == len(TUTORIAL_STEPS) - 1:
                 next_btn.label = "Finish"
@@ -224,6 +227,7 @@ def get_tutorial_classes():
                 self.exit()
 
     return TutorialApp, TutorialStep
+
 
 def run_tutorial():
     TutorialApp, _ = get_tutorial_classes()

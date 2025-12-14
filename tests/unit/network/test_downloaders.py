@@ -4,6 +4,7 @@ from fetchext.downloaders.edge import EdgeDownloader
 from fetchext.downloaders.firefox import FirefoxDownloader
 from fetchext.exceptions import ExtensionError
 
+
 class TestChromeDownloader:
     def test_extract_id_from_url(self):
         downloader = ChromeDownloader()
@@ -20,6 +21,7 @@ class TestChromeDownloader:
         with pytest.raises(ExtensionError):
             downloader.extract_id("https://google.com")
 
+
 class TestEdgeDownloader:
     def test_extract_id_from_url(self):
         downloader = EdgeDownloader()
@@ -35,6 +37,7 @@ class TestEdgeDownloader:
         downloader = EdgeDownloader()
         with pytest.raises(ExtensionError):
             downloader.extract_id("https://microsoft.com")
+
 
 class TestFirefoxDownloader:
     def test_extract_id_from_url(self):

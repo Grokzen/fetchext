@@ -7,6 +7,7 @@ from .utils import open_extension_archive
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class DetectedLibrary:
     name: str
@@ -15,10 +16,12 @@ class DetectedLibrary:
     vulnerable: bool = False
     advisory: Optional[str] = None
 
+
 @dataclass
 class ScanReport:
     file: str
     libraries: List[DetectedLibrary] = field(default_factory=list)
+
 
 class DependencyScanner:
     # Regex patterns to detect libraries in file content (header comments)
@@ -48,13 +51,13 @@ class DependencyScanner:
             raise FileNotFoundError(f"File not found: {file_path}")
 
         report = ScanReport(file=file_path.name)
-        
+
         try:
             with open_extension_archive(file_path) as zf:
                 for filename in zf.namelist():
                     if not filename.endswith(".js"):
                         continue
-                        
+
                     # Read first 1KB for header detection
                     with zf.open(filename) as f:
                         try:
@@ -71,7 +74,9 @@ class DependencyScanner:
 
         return report
 
-    def _detect_library(self, filename: str, content_head: str) -> Optional[DetectedLibrary]:
+    def _detect_library(
+        self, filename: str, content_head: str
+    ) -> Optional[DetectedLibrary]:
         # 1. Check content signatures
         for pattern, name in self.SIGNATURES:
             match = re.search(pattern, content_head, re.IGNORECASE)
@@ -85,24 +90,27 @@ class DependencyScanner:
             match = re.search(r"jquery[-._]?([0-9.]+[0-9])", filename, re.IGNORECASE)
             if match:
                 return self._create_library("jquery", match.group(1), filename)
-                
+
         return None
 
     def _create_library(self, name: str, version: str, path: str) -> DetectedLibrary:
         vuln = False
         advisory = None
-        
+
         if name in self.VULNERABILITIES:
             safe_ver, msg = self.VULNERABILITIES[name]
             if self._is_version_less(version, safe_ver):
                 vuln = True
                 advisory = msg
-                
-        return DetectedLibrary(name=name, version=version, path=path, vulnerable=vuln, advisory=advisory)
+
+        return DetectedLibrary(
+            name=name, version=version, path=path, vulnerable=vuln, advisory=advisory
+        )
 
     def _is_version_less(self, v1: str, v2: str) -> bool:
         try:
             from packaging import version
+
             return version.parse(v1) < version.parse(v2)
         except ImportError:
             return v1 < v2

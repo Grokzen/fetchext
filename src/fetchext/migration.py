@@ -6,7 +6,9 @@ from dataclasses import dataclass, field
 from .exceptions import ExtensionError
 from .hooks import HookManager, HookContext
 from .config import get_config_path, load_config
+
 logger = logging.getLogger(__name__)
+
 
 @dataclass
 class MigrationReport:
@@ -14,10 +16,12 @@ class MigrationReport:
     warnings: List[str] = field(default_factory=list)
     errors: List[str] = field(default_factory=list)
 
+
 class MV3Migrator:
     """
     Migrates Manifest V2 extensions to Manifest V3.
     """
+
     def __init__(self, source_dir: Path):
         self.source_dir = Path(source_dir)
         self.manifest_path = self.source_dir / "manifest.json"
@@ -41,10 +45,10 @@ class MV3Migrator:
             extension_id="unknown",
             browser="unknown",
             file_path=self.source_dir,
-            config=config
+            config=config,
         )
         hook_manager.run_hook("pre_migrate", ctx)
-        
+
         if ctx.cancel:
             logger.info("Migration cancelled by pre_migrate hook.")
             return self.report
@@ -74,7 +78,7 @@ class MV3Migrator:
 
         # 4. CSP
         self._migrate_csp(new_manifest)
-        
+
         # 5. Web Accessible Resources
         self._migrate_war(new_manifest)
 
@@ -82,7 +86,9 @@ class MV3Migrator:
         if not dry_run:
             with open(self.manifest_path, "w", encoding="utf-8") as f:
                 json.dump(new_manifest, f, indent=2)
-            self.report.changes.append(f"Saved updated manifest to {self.manifest_path}")
+            self.report.changes.append(
+                f"Saved updated manifest to {self.manifest_path}"
+            )
 
         # Run post-migrate hook
         ctx.result = self.report
@@ -104,20 +110,24 @@ class MV3Migrator:
         if host_permissions:
             manifest["permissions"] = new_permissions
             manifest["host_permissions"] = host_permissions
-            self.report.changes.append(f"Moved {len(host_permissions)} host permissions to 'host_permissions'")
+            self.report.changes.append(
+                f"Moved {len(host_permissions)} host permissions to 'host_permissions'"
+            )
 
     def _migrate_action(self, manifest: Dict[str, Any]):
         action = {}
-        
+
         if "browser_action" in manifest:
             action.update(manifest.pop("browser_action"))
             self.report.changes.append("Renamed 'browser_action' to 'action'")
-        
+
         if "page_action" in manifest:
             action.update(manifest.pop("page_action"))
             self.report.changes.append("Renamed 'page_action' to 'action'")
-            self.report.warnings.append("Merged 'page_action' into 'action'. Check logic for enabling/disabling.")
-            
+            self.report.warnings.append(
+                "Merged 'page_action' into 'action'. Check logic for enabling/disabling."
+            )
+
         if action:
             manifest["action"] = action
 
@@ -137,23 +147,31 @@ class MV3Migrator:
                 wrapper_content = ""
                 for s in scripts:
                     wrapper_content += f"importScripts('{s}');\n"
-                
+
                 if not dry_run:
                     wrapper_path = self.source_dir / wrapper_name
                     try:
                         with open(wrapper_path, "w", encoding="utf-8") as f:
                             f.write(wrapper_content)
-                        self.report.changes.append(f"Created '{wrapper_name}' to import multiple background scripts")
+                        self.report.changes.append(
+                            f"Created '{wrapper_name}' to import multiple background scripts"
+                        )
                     except Exception as e:
-                        self.report.errors.append(f"Failed to create wrapper script: {e}")
-                
+                        self.report.errors.append(
+                            f"Failed to create wrapper script: {e}"
+                        )
+
                 bg["service_worker"] = wrapper_name
-                self.report.warnings.append(f"Multiple background scripts found. Created '{wrapper_name}' (if not dry-run).")
-            
+                self.report.warnings.append(
+                    f"Multiple background scripts found. Created '{wrapper_name}' (if not dry-run)."
+                )
+
             if "persistent" in bg:
                 del bg["persistent"]
-                self.report.changes.append("Removed 'background.persistent' (Service Workers are ephemeral)")
-            
+                self.report.changes.append(
+                    "Removed 'background.persistent' (Service Workers are ephemeral)"
+                )
+
             manifest["background"] = bg
             self.report.changes.append("Converted background scripts to service_worker")
 
@@ -161,18 +179,18 @@ class MV3Migrator:
         csp = manifest.get("content_security_policy")
         if isinstance(csp, str):
             # MV2 string format -> MV3 object format
-            new_csp = {
-                "extension_pages": csp
-            }
+            new_csp = {"extension_pages": csp}
             manifest["content_security_policy"] = new_csp
             self.report.changes.append("Converted CSP string to object format")
-            self.report.warnings.append("Review CSP: 'script-src' must not allow 'unsafe-eval' or remote sources.")
+            self.report.warnings.append(
+                "Review CSP: 'script-src' must not allow 'unsafe-eval' or remote sources."
+            )
 
     def _migrate_war(self, manifest: Dict[str, Any]):
         war = manifest.get("web_accessible_resources")
         if war and isinstance(war, list) and len(war) > 0 and isinstance(war[0], str):
             # MV2 list of strings -> MV3 list of objects
-            
+
             # Try to find matches from content_scripts
             matches = set()
             content_scripts = manifest.get("content_scripts", [])
@@ -180,12 +198,11 @@ class MV3Migrator:
                 for script in content_scripts:
                     if isinstance(script, dict) and "matches" in script:
                         matches.update(script["matches"])
-            
+
             final_matches = sorted(list(matches)) if matches else ["<all_urls>"]
-            
-            new_war = [{
-                "resources": war,
-                "matches": final_matches
-            }]
+
+            new_war = [{"resources": war, "matches": final_matches}]
             manifest["web_accessible_resources"] = new_war
-            self.report.changes.append("Converted web_accessible_resources to object format")
+            self.report.changes.append(
+                "Converted web_accessible_resources to object format"
+            )

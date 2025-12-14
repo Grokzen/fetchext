@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+
 class HistoryManager:
     def __init__(self):
         self.base_dir = self._get_base_dir()
@@ -45,62 +46,85 @@ class HistoryManager:
                     path TEXT
                 )
             """)
-            conn.execute("CREATE INDEX IF NOT EXISTS idx_timestamp ON history(timestamp DESC)")
-            conn.execute("CREATE INDEX IF NOT EXISTS idx_ext_id ON history(extension_id)")
+            conn.execute(
+                "CREATE INDEX IF NOT EXISTS idx_timestamp ON history(timestamp DESC)"
+            )
+            conn.execute(
+                "CREATE INDEX IF NOT EXISTS idx_ext_id ON history(extension_id)"
+            )
 
     def _migrate_json(self):
         if self.json_path.exists():
             try:
                 with open(self.json_path, "r", encoding="utf-8") as f:
                     data = json.load(f)
-                
+
                 if data:
                     with self._get_connection() as conn:
                         # Check if DB is empty to avoid double migration
                         cursor = conn.execute("SELECT count(*) FROM history")
                         if cursor.fetchone()[0] == 0:
                             for entry in data:
-                                conn.execute("""
+                                conn.execute(
+                                    """
                                     INSERT INTO history (timestamp, action, extension_id, browser, version, status, path)
                                     VALUES (?, ?, ?, ?, ?, ?, ?)
-                                """, (
-                                    entry.get("timestamp"),
-                                    entry.get("action"),
-                                    entry.get("id"),
-                                    entry.get("browser"),
-                                    entry.get("version"),
-                                    entry.get("status"),
-                                    entry.get("path")
-                                ))
-                
+                                """,
+                                    (
+                                        entry.get("timestamp"),
+                                        entry.get("action"),
+                                        entry.get("id"),
+                                        entry.get("browser"),
+                                        entry.get("version"),
+                                        entry.get("status"),
+                                        entry.get("path"),
+                                    ),
+                                )
+
                 # Rename JSON file to indicate migration done
                 self.json_path.rename(self.json_path.with_suffix(".json.bak"))
             except Exception:
                 pass
 
-    def add_entry(self, 
-                  action: str, 
-                  extension_id: str, 
-                  browser: str, 
-                  version: Optional[str] = None, 
-                  status: str = "success", 
-                  path: Optional[str] = None) -> None:
+    def add_entry(
+        self,
+        action: str,
+        extension_id: str,
+        browser: str,
+        version: Optional[str] = None,
+        status: str = "success",
+        path: Optional[str] = None,
+    ) -> None:
         timestamp = datetime.now(timezone.utc).isoformat()
         with self._get_connection() as conn:
-            conn.execute("""
+            conn.execute(
+                """
                 INSERT INTO history (timestamp, action, extension_id, browser, version, status, path)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
-            """, (timestamp, action, extension_id, browser, version, status, str(path) if path else None))
+            """,
+                (
+                    timestamp,
+                    action,
+                    extension_id,
+                    browser,
+                    version,
+                    status,
+                    str(path) if path else None,
+                ),
+            )
 
     def get_entries(self, limit: int = 20) -> List[Dict[str, Any]]:
         with self._get_connection() as conn:
             conn.row_factory = sqlite3.Row
-            cursor = conn.execute("""
+            cursor = conn.execute(
+                """
                 SELECT timestamp, action, extension_id as id, browser, version, status, path
                 FROM history
                 ORDER BY timestamp DESC
                 LIMIT ?
-            """, (limit,))
+            """,
+                (limit,),
+            )
             return [dict(row) for row in cursor.fetchall()]
 
     def get_all_entries(self) -> List[Dict[str, Any]]:

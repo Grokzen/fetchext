@@ -280,3 +280,12 @@ This project serves as a proof-of-concept for fully automated software developme
     2. If the version folder does not exist, create it.
     3. Do not clutter the root `plans/` directory.
 
+### 7. Python Environment Protocol
+
+- **Rule**: **USE `workon fetchext` IF PYTHON/PIP IS MISSING**.
+- **Context**: When operating in a terminal where `python3` or `pip3` executables are not found or appear incorrect.
+- **Action**:
+    1. Do not attempt to locate Python in the system.
+    2. Run `workon fetchext` to activate the pre-configured virtual environment.
+    3. Assume this virtual environment is always available and functional.
+

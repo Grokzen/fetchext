@@ -155,3 +155,7 @@ cython_debug/
 # IDEs
 .vscode/
 .idea/
+
+# Logs
+failure_log.txt
+full_log.txt

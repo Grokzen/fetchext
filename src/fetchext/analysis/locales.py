@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Dict, Any
 from ..crx import CrxDecoder
 
+
 def inspect_locales(file_path: Path) -> Dict[str, Any]:
     """
     Inspects the _locales directory of an extension.
@@ -44,13 +45,13 @@ def inspect_locales(file_path: Path) -> Dict[str, Any]:
                                     messages = json.load(msg_file)
                                     locales[locale_code] = {
                                         "message_count": len(messages),
-                                        "path": name
+                                        "path": name,
                                     }
                             except (json.JSONDecodeError, Exception):
                                 locales[locale_code] = {
                                     "message_count": 0,
                                     "error": "Failed to parse messages.json",
-                                    "path": name
+                                    "path": name,
                                 }
         except zipfile.BadZipFile:
             raise ValueError("Invalid zip/crx file")
@@ -58,5 +59,5 @@ def inspect_locales(file_path: Path) -> Dict[str, Any]:
     return {
         "default_locale": default_locale,
         "supported_locales": list(locales.keys()),
-        "details": locales
+        "details": locales,
     }

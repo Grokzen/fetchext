@@ -5,6 +5,7 @@ from datetime import datetime
 
 try:
     from stix2 import Bundle, Indicator, Malware, File, DomainName, URL
+
     STIX_AVAILABLE = True
 except ImportError:
     STIX_AVAILABLE = False
@@ -13,6 +14,7 @@ from ..exceptions import AnalysisError
 
 logger = logging.getLogger(__name__)
 
+
 class StixGenerator:
     def __init__(self, extension_path: Path):
         self.extension_path = extension_path
@@ -20,14 +22,14 @@ class StixGenerator:
 
     def generate(self, analysis_results: Dict) -> str:
         if not STIX_AVAILABLE:
-            raise AnalysisError("stix2 is not installed. Install it with 'pip install fetchext[stix]'")
+            raise AnalysisError(
+                "stix2 is not installed. Install it with 'pip install fetchext[stix]'"
+            )
 
         # Create File object for the extension
         ext_file = File(
             name=self.extension_path.name,
-            hashes={
-                "SHA-256": analysis_results.get("hash", "")
-            }
+            hashes={"SHA-256": analysis_results.get("hash", "")},
         )
         self.objects.append(ext_file)
 
@@ -49,15 +51,12 @@ class StixGenerator:
                     name=f"YARA Match: {match['rule']}",
                     pattern=f"[file:name = '{filename}']",
                     pattern_type="stix",
-                    valid_from=datetime.now()
+                    valid_from=datetime.now(),
                 )
                 self.objects.append(indicator)
-                
+
                 # Create Malware object
-                malware = Malware(
-                    name=match['rule'],
-                    is_family=False
-                )
+                malware = Malware(name=match["rule"], is_family=False)
                 self.objects.append(malware)
 
         # Create Bundle
