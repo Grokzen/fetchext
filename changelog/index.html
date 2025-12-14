@@ -1,0 +1,2419 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A Python CLI tool to download browser extensions (Chrome, Edge, Firefox) directly from their respective web stores.">
+      
+      
+      
+        <link rel="canonical" href="https://fetchext.grok.nu/changelog/">
+      
+      
+        <link rel="prev" href="../contributing/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Changelog - fetchext</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#changelog" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="fetchext" class="md-header__button md-logo" aria-label="fetchext" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            fetchext
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Changelog
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/grokzen/fetchext" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    grok/fetchext
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../installation/" class="md-tabs__link">
+          
+  
+  
+  User Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../analysis/" class="md-tabs__link">
+          
+  
+  
+  Features
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../contributing/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Contributing
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Changelog
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="fetchext" class="md-nav__button md-logo" aria-label="fetchext" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    fetchext
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/grokzen/fetchext" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    grok/fetchext
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    User Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Features
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis & Forensics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#260-2025-12-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [2.6.0] - 2025-12-10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[2.6.0] - 2025-12-10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fixed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fixed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#250-2025-12-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [2.5.0] - 2025-12-10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[2.5.0] - 2025-12-10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#240-2025-12-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [2.4.0] - 2025-12-10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[2.4.0] - 2025-12-10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#230-2025-12-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [2.3.0] - 2025-12-10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[2.3.0] - 2025-12-10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fixed_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fixed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#220-2025-12-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [2.2.0] - 2025-12-10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[2.2.0] - 2025-12-10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#210-2025-12-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [2.1.0] - 2025-12-10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[2.1.0] - 2025-12-10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#200-2025-12-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [2.0.0] - 2025-12-10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[2.0.0] - 2025-12-10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#190-2025-12-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [1.9.0] - 2025-12-10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[1.9.0] - 2025-12-10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#changed_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#180-2025-12-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [1.8.0] - 2025-12-10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[1.8.0] - 2025-12-10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#170-2025-12-07" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [1.7.0] - 2025-12-07
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[1.7.0] - 2025-12-07">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#160-2025-12-07" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [1.6.0] - 2025-12-07
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[1.6.0] - 2025-12-07">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fixed_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fixed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#150-2025-12-07" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [1.5.0] - 2025-12-07
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[1.5.0] - 2025-12-07">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#changed_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#140-2025-12-07" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [1.4.0] - 2025-12-07
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[1.4.0] - 2025-12-07">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#130-2025-12-06" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [1.3.0] - 2025-12-06
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[1.3.0] - 2025-12-06">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#070-2025-12-06" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.7.0] - 2025-12-06
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.7.0] - 2025-12-06">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fixed_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fixed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#060-2025-12-05" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.6.0] - 2025-12-05
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.6.0] - 2025-12-05">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#050-2025-12-05" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.5.0] - 2025-12-05
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.5.0] - 2025-12-05">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#030-2025-12-04" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.3.0] - 2025-12-04
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.3.0] - 2025-12-04">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#010-2025-12-04" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.1.0] - 2025-12-04
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.1.0] - 2025-12-04">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#260-2025-12-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [2.6.0] - 2025-12-10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[2.6.0] - 2025-12-10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fixed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fixed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#250-2025-12-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [2.5.0] - 2025-12-10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[2.5.0] - 2025-12-10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#240-2025-12-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [2.4.0] - 2025-12-10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[2.4.0] - 2025-12-10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#230-2025-12-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [2.3.0] - 2025-12-10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[2.3.0] - 2025-12-10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fixed_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fixed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#220-2025-12-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [2.2.0] - 2025-12-10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[2.2.0] - 2025-12-10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#210-2025-12-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [2.1.0] - 2025-12-10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[2.1.0] - 2025-12-10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#200-2025-12-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [2.0.0] - 2025-12-10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[2.0.0] - 2025-12-10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#190-2025-12-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [1.9.0] - 2025-12-10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[1.9.0] - 2025-12-10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#changed_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#180-2025-12-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [1.8.0] - 2025-12-10
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[1.8.0] - 2025-12-10">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#170-2025-12-07" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [1.7.0] - 2025-12-07
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[1.7.0] - 2025-12-07">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#160-2025-12-07" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [1.6.0] - 2025-12-07
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[1.6.0] - 2025-12-07">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fixed_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fixed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#150-2025-12-07" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [1.5.0] - 2025-12-07
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[1.5.0] - 2025-12-07">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#changed_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#140-2025-12-07" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [1.4.0] - 2025-12-07
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[1.4.0] - 2025-12-07">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#130-2025-12-06" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [1.3.0] - 2025-12-06
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[1.3.0] - 2025-12-06">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#070-2025-12-06" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.7.0] - 2025-12-06
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.7.0] - 2025-12-06">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fixed_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fixed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#060-2025-12-05" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.6.0] - 2025-12-05
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.6.0] - 2025-12-05">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#050-2025-12-05" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.5.0] - 2025-12-05
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.5.0] - 2025-12-05">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#030-2025-12-04" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.3.0] - 2025-12-04
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.3.0] - 2025-12-04">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changed_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#010-2025-12-04" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        [0.1.0] - 2025-12-04
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[0.1.0] - 2025-12-04">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#added_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Added
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<!-- markdownlint-disable MD041 -->
+<h1 id="changelog">Changelog</h1>
+<p>All notable changes to this project will be documented in this file.</p>
+<p>The format is based on <a href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>,
+and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
+<h2 id="260-2025-12-10">[2.6.0] - 2025-12-10</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li><strong>AST-Based Diff</strong>: Added <code>--ast</code> flag to <code>fext diff</code> to compare JavaScript files using Abstract Syntax Trees (AST), ignoring whitespace and comments for more meaningful diffs.</li>
+<li><strong>WASM Inspector</strong>: Added <code>fext analyze wasm &lt;file&gt;</code> to analyze WebAssembly modules, extracting imports, exports, and section stats without external dependencies.</li>
+<li><strong>Community Rules Sync</strong>: Added <code>fext rules sync</code> to automatically download and update YARA rules and analysis signatures from a community-maintained git repository.</li>
+<li><strong>API Usage Heatmap</strong>: Added <code>fext analyze api-usage &lt;file&gt;</code> to generate a frequency map of Chrome/Browser API calls, helping auditors focus on high-risk areas.</li>
+</ul>
+<h3 id="changed">Changed</h3>
+<ul>
+<li><strong>Source Refactor</strong>: Major architectural refactor moving from a flat <code>src/fetchext/</code> structure to modular sub-packages (<code>core</code>, <code>network</code>, <code>data</code>, <code>security</code>, <code>interface</code>, <code>workflow</code>). This improves code organization, reduces circular dependencies, and prepares the codebase for future scalability.</li>
+</ul>
+<h3 id="fixed">Fixed</h3>
+<ul>
+<li><strong>Windows CI</strong>: Fixed <code>UnicodeDecodeError</code> on Windows by explicitly setting <code>encoding="utf-8"</code> in all file <code>open()</code> calls across the codebase (CLI, analysis, reporting, scripts).</li>
+<li><strong>MacOS CI</strong>: Fixed <code>ProcessPoolExecutor</code> failures in unit tests on MacOS by mocking the executor in <code>test_grep.py</code>, avoiding spawn-related issues in the test environment.</li>
+<li><strong>MV3 Migration</strong>: Improved <code>fext migrate</code> to intelligently merge <code>page_action</code> and <code>browser_action</code> instead of overwriting, and to use <code>content_scripts</code> matches for <code>web_accessible_resources</code> instead of defaulting to <code>&lt;all_urls&gt;</code>.</li>
+<li><strong>Windows File Locking</strong>: Fixed <code>PermissionError</code> on Windows in <code>YaraScanner</code> by ensuring temporary files are closed before being read by other processes or the same process.</li>
+<li><strong>Test Stability</strong>: Fixed a hang in <code>test_batch_parallel.py</code> by using the real filesystem instead of <code>pyfakefs</code> for parallel execution tests, avoiding concurrency issues.</li>
+<li><strong>MacOS CI</strong>: Fixed <code>ProcessPoolExecutor</code> failures in performance benchmarks (<code>test_benchmarks.py</code>) on MacOS by mocking the executor, avoiding spawn-related issues in the CI environment.</li>
+<li><strong>Windows CI</strong>: Fixed <code>OSError</code> in tests by replacing hardcoded <code>/tmp</code> paths with <code>pathlib.Path.cwd()</code> in <code>test_api_usage.py</code> and <code>test_licenses.py</code> to ensure compatibility with <code>pyfakefs</code> on all platforms.</li>
+<li><strong>Windows CI</strong>: Fixed <code>ModuleNotFoundError: No module named 'tomllib'</code> on Python 3.10 environments by adding a compatibility shim in <code>config.py</code> to use <code>tomli</code> as a fallback.</li>
+<li><strong>Windows CI</strong>: Fixed path separator issues in <code>graph.py</code> by normalizing paths to use forward slashes, ensuring consistent dependency graph generation across operating systems.</li>
+<li><strong>Windows CI</strong>: Fixed <code>AssertionError</code> in <code>test_rules.py</code> by using <code>pathlib.Path</code> for cross-platform path comparisons instead of hardcoded strings.</li>
+</ul>
+<h2 id="250-2025-12-10">[2.5.0] - 2025-12-10</h2>
+<h3 id="added_1">Added</h3>
+<ul>
+<li><strong>Dynamic Analysis Sandbox</strong>: Added <code>fext analyze dynamic &lt;file&gt;</code> to launch the extension in a headless browser (using Playwright) and capture screenshots, console logs, and network activity during runtime.</li>
+<li><strong>STIX Export</strong>: Added <code>fext export --stix &lt;file&gt;</code> to generate STIX 2.1 Threat Intelligence bundles containing indicators (hashes, domains, URLs) and YARA matches for integration with security platforms.</li>
+<li><strong>Cross-Platform CI</strong>: Expanded GitHub Actions workflow to run tests on Windows and macOS in addition to Linux, ensuring broader compatibility.</li>
+<li><strong>Snapshot Testing</strong>: Implemented snapshot testing for CLI output using <code>syrupy</code> to detect unintended visual changes or regressions in command output.</li>
+<li><strong>TUI Themes</strong>: Added support for user-configurable color schemes in <code>config.toml</code> for the TUI, allowing users to customize the interface appearance.</li>
+</ul>
+<h3 id="changed_1">Changed</h3>
+<ul>
+<li><strong>Unified Network Client</strong>: Refactored the networking layer to use a centralized <code>NetworkClient</code> class, consolidating session management, retries, proxy configuration, and rate limiting across all downloaders (Chrome, Edge, Firefox). This improves maintainability and consistency in network behavior.</li>
+</ul>
+<h2 id="240-2025-12-10">[2.4.0] - 2025-12-10</h2>
+<h3 id="added_2">Added</h3>
+<ul>
+<li><strong>Directory Watcher</strong>: Added <code>fext watch &lt;dir&gt;</code> command to monitor a folder for new extensions and automatically trigger extraction, reporting, or scanning.</li>
+<li><strong>Report Sharing</strong>: Added <code>fext share &lt;report.html&gt;</code> command to upload reports to GitHub Gist (requires <code>GITHUB_TOKEN</code>) and generate shareable links.</li>
+<li><strong>TUI E2E Testing</strong>: Implemented automated end-to-end tests for the TUI using <code>textual.pilot</code> to verify search, download, and navigation flows.</li>
+<li><strong>Migration Regression Tests</strong>: Added a suite of "golden" tests for <code>fext migrate</code> to verify MV2-&gt;MV3 conversion accuracy against known good outputs, ensuring the migration logic remains stable.</li>
+<li><strong>Complexity in Reports</strong>: Integrated cyclomatic complexity metrics (average, max, top complex functions) into HTML reports generated by <code>fext report --html</code>.</li>
+<li><strong>Firefox Signature Verification</strong>: Added <code>XpiVerifier</code> to verify the integrity of Firefox extensions (<code>.xpi</code>) by validating <code>META-INF/manifest.mf</code> hashes and checking for signature presence.</li>
+<li><strong>SQL Query Interface</strong>: Added <code>fext query &lt;sql&gt;</code> command to execute raw SQL queries against the local history database (<code>history.db</code>), supporting JSON, CSV, and table output.</li>
+<li><strong>History Concurrency</strong>: Enabled SQLite WAL (Write-Ahead Logging) mode for the history database to support high-concurrency scenarios (e.g., parallel batch downloads) without locking errors.</li>
+<li><strong>CLI Theming</strong>: Introduced a centralized <code>Theme</code> system to enforce consistent colors, emojis, and formatting across all CLI commands, improving visual coherence.</li>
+</ul>
+<h2 id="230-2025-12-10">[2.3.0] - 2025-12-10</h2>
+<h3 id="added_3">Added</h3>
+<ul>
+<li><strong>Visual Diff</strong>: Added <code>fext diff --visual</code> to generate interactive HTML reports showing side-by-side comparisons of modified files and images.</li>
+<li><strong>Permission Matrix</strong>: Added <code>fext analyze permissions &lt;directory&gt;</code> to generate a cross-reference matrix of permissions across multiple extensions (JSON/CSV/Table).</li>
+<li><strong>Property-Based Testing</strong>: Implemented advanced fuzz testing for <code>CrxDecoder</code> using <code>hypothesis</code> to ensure robustness against malformed CRX headers.</li>
+<li><strong>Performance Benchmarks</strong>: Added a benchmarking suite (<code>benchmarks/run.py</code>) to track performance of critical operations (parsing, entropy, complexity, secrets).</li>
+<li><strong>TUI Mouse Support</strong>: Added mouse support to <code>fext ui</code> with a confirmation dialog for downloading extensions by clicking rows.</li>
+<li><strong>Parallel Grep</strong>: Optimized <code>fext grep</code> to use multi-core processing (<code>ProcessPoolExecutor</code>), significantly speeding up searches in large repositories.</li>
+<li><strong>JS Sandbox</strong>: Added <code>fext sandbox &lt;file.js&gt;</code> to execute JavaScript files in a secure, isolated environment using Deno (requires Deno installation).</li>
+</ul>
+<h3 id="fixed_1">Fixed</h3>
+<ul>
+<li><strong>Inspector Robustness</strong>: Refactored <code>ExtensionInspector</code> to gracefully handle malformed manifests and corrupt archives, preventing crashes in reporting and visualization tools.</li>
+<li><strong>Network Error Handling</strong>: Improved handling of HTTP 403 (Access Denied) and 429 (Rate Limit) errors with actionable user feedback (e.g., suggesting VPN or config changes).</li>
+</ul>
+<h2 id="220-2025-12-10">[2.2.0] - 2025-12-10</h2>
+<h3 id="added_4">Added</h3>
+<ul>
+<li><strong>HTML Reports</strong>: Added <code>fext report --html</code> to generate interactive HTML reports with Chart.js visualizations for risk, complexity, and file distribution.</li>
+<li><strong>Badge Generator</strong>: Added <code>fext badge</code> command to generate SVG badges (Shields.io style) for version, risk score, and license, suitable for READMEs.</li>
+<li><strong>Repository Grep</strong>: Added <code>fext grep &lt;pattern&gt;</code> command to search for regex patterns across all downloaded extensions, including content within compressed archives (CRX/ZIP).</li>
+<li><strong>Custom Rules</strong>: Added <code>fext scan --custom &lt;rules.yaml&gt;</code> to run user-defined regex rules against extension source code for specialized auditing.</li>
+<li><strong>Scalable History</strong>: Migrated history tracking from a flat JSON file to a SQLite database (<code>history.db</code>) to support thousands of records and advanced querying.</li>
+</ul>
+<h2 id="210-2025-12-10">[2.1.0] - 2025-12-10</h2>
+<h3 id="added_5">Added</h3>
+<ul>
+<li><strong>Git Integration</strong>: Added <code>fext git init</code> command to initialize a git repository in an extension directory with a tailored <code>.gitignore</code>.</li>
+<li><strong>Update All</strong>: Added <code>fext update --all</code> command to check and update all previously downloaded extensions in parallel.</li>
+<li><strong>License Scanner</strong>: Added <code>fext audit scan --licenses</code> to detect open source licenses (MIT, Apache, GPL, etc.) in extension files.</li>
+<li><strong>Remote Config</strong>: Added <code>fext config remote &lt;url&gt;</code> command to fetch and apply configuration from a remote URL.</li>
+</ul>
+<h2 id="200-2025-12-10">[2.0.0] - 2025-12-10</h2>
+<h3 id="added_6">Added</h3>
+<ul>
+<li><strong>Extension Packer</strong>: Added <code>fext pack &lt;directory&gt;</code> command to create signed CRX3 files from source code, automatically generating RSA keys if needed.</li>
+<li><strong>MV3 Migration Assistant</strong>: Added <code>fext migrate &lt;directory&gt;</code> command to automate the conversion of Manifest V2 extensions to Manifest V3 (updating manifest, permissions, background scripts, CSP).</li>
+<li><strong>Plugin System Enhancements</strong>: Added <code>pre_pack</code>, <code>post_pack</code>, <code>pre_migrate</code>, and <code>post_migrate</code> hooks to the plugin system, allowing custom logic during packing and migration.</li>
+<li><strong>TUI Dashboard</strong>: Added a comprehensive dashboard to <code>fext ui</code> featuring repository statistics, risk distribution charts, and recent activity history.</li>
+<li><strong>AI Summarizer</strong>: Added <code>fext analyze summary &lt;file&gt;</code> command to generate AI-powered summaries of extension functionality using OpenAI-compatible APIs.</li>
+<li><strong>AI Configuration</strong>: Added <code>[ai]</code> section to <code>config.toml</code> for configuring API keys, providers, and models.</li>
+<li><strong>Code Beautifier</strong>: Added <code>fext beautify &lt;file&gt;</code> command to format minified JavaScript and JSON files using <code>jsbeautifier</code>.</li>
+<li><strong>Similarity Search</strong>: Added <code>fext similar &lt;target&gt; &lt;repo&gt;</code> command to find similar extensions using fuzzy hashing (<code>ppdeep</code>).</li>
+<li><strong>Smart Diff</strong>: Enhanced <code>fext diff</code> with <code>--ignore-whitespace</code> flag and basic image comparison (dimensions, format).</li>
+</ul>
+<h3 id="changed_2">Changed</h3>
+<ul>
+<li><strong>CLI Breaking Change</strong>: Refactored <code>fext analyze</code> to use positional arguments instead of flags.</li>
+<li>Old: <code>fext analyze --complexity &lt;file&gt;</code></li>
+<li>New: <code>fext analyze complexity &lt;file&gt;</code></li>
+<li>Affected subcommands: <code>complexity</code>, <code>entropy</code>, <code>domains</code>, <code>secrets</code>, <code>yara</code>.</li>
+</ul>
+<h2 id="190-2025-12-10">[1.9.0] - 2025-12-10</h2>
+<h3 id="changed_3">Changed</h3>
+<ul>
+<li><strong>Startup Time Optimization</strong>: Implemented lazy loading for heavy dependencies (<code>rich</code>, <code>PIL</code>, <code>lizard</code>, <code>yara</code>, <code>textual</code>, <code>cryptography</code>) to significantly reduce CLI startup time.</li>
+<li><strong>Memory Optimization</strong>: Refactored <code>secrets</code> scanner to stream file content line-by-line and <code>yara</code> scanner to extract large files (&gt;10MB) to temporary storage, reducing memory footprint during analysis of large extensions.</li>
+<li><strong>TUI Polish</strong>: Improved <code>fext ui</code> with asynchronous search and download operations (preventing UI freezes), added browser selection (Chrome, Firefox, Edge), and enhanced error handling.</li>
+<li><strong>Progress Bars</strong>: Standardized progress bar styles across all long-running commands (downloads, batch processing, complexity/entropy/domain analysis) using <code>rich</code>.</li>
+<li><strong>Dependency Review</strong>: Removed <code>tomli</code> dependency as the project now requires Python 3.11+ (which includes <code>tomllib</code>).</li>
+</ul>
+<h2 id="180-2025-12-10">[1.8.0] - 2025-12-10</h2>
+<h3 id="added_7">Added</h3>
+<ul>
+<li><strong>Plugin System v2</strong>: Enhanced plugin system with richer context (<code>config</code>, <code>args</code>) and control flow (cancellation, result modification).</li>
+<li><strong>New Hooks</strong>: Added <code>post_extract</code>, <code>pre_analysis</code>, and <code>post_analysis</code> hooks.</li>
+<li><strong>Debug Mode</strong>: Enhanced <code>-v</code> / <code>--verbose</code> output to include full HTTP request/response headers and status codes (with sensitive data redaction).</li>
+<li><strong>API Documentation</strong>: Added <code>make docs-api</code> to generate HTML API documentation using <code>pdoc</code>.</li>
+<li><strong>Shell Completion</strong>: Added generation of Bash and Zsh completion scripts (<code>docs/completions/</code>).</li>
+<li><strong>Exit Codes</strong>: Standardized CLI exit codes (0=Success, 3=Network, 4=IO, etc.) for better scripting support.</li>
+</ul>
+<h2 id="170-2025-12-07">[1.7.0] - 2025-12-07</h2>
+<h3 id="added_8">Added</h3>
+<ul>
+<li><strong>CLI Version Flag</strong>: Added <code>--version</code> flag to the CLI to display the current version of the tool.</li>
+<li><strong>Resumable Downloads</strong>: Implemented support for resuming interrupted downloads using HTTP <code>Range</code> headers.</li>
+<li><strong>Network Resilience</strong>: Enhanced <code>download_file</code> to handle <code>416 Range Not Satisfiable</code> errors by automatically restarting the download.</li>
+<li><strong>Integrity Checking</strong>: Added <code>--verify-hash &lt;sha256&gt;</code> flag to <code>download</code> command to verify file integrity after download.</li>
+<li><strong>Proxy Configuration</strong>: Added support for configuring HTTP/HTTPS proxies via <code>[network.proxies]</code> in <code>config.toml</code>.</li>
+<li><strong>Disk Space Safety</strong>: Added pre-flight checks to ensure sufficient disk space before downloading or extracting extensions.</li>
+<li><strong>Filename Sanitization</strong>: Implemented filename sanitization to ensure cross-platform compatibility (Windows/macOS/Linux) by stripping illegal characters.</li>
+</ul>
+<h2 id="160-2025-12-07">[1.6.0] - 2025-12-07</h2>
+<h3 id="added_9">Added</h3>
+<ul>
+<li><strong>Docs Deployment</strong>: Added GitHub Actions workflow to automatically build and deploy documentation to GitHub Pages.</li>
+<li><strong>Unified Audit Report</strong>: Added <code>fext report --json</code> to generate a comprehensive JSON report aggregating metadata, risk analysis, MV3 audit, complexity, entropy, domains, and secrets.</li>
+<li><strong>Documentation Refactor</strong>: Split documentation into a slim <code>README.md</code> (Quick Start) and detailed <code>docs/</code> site (MkDocs).</li>
+</ul>
+<h3 id="changed_4">Changed</h3>
+<ul>
+<li><strong>Performance Optimization</strong>: Parallelized entropy and complexity analysis using <code>ProcessPoolExecutor</code> to improve performance on multi-core systems.</li>
+<li><strong>YARA Integration</strong>: Updated <code>fext analyze --yara</code> to accept a directory of rule files, compiling them all for the scan.</li>
+<li><strong>Risk Scoring Tuning</strong>: Refined risk analysis to detect and penalize dangerous permission combinations (e.g., <code>tabs</code> + <code>cookies</code> + <code>&lt;all_urls&gt;</code>).</li>
+<li><strong>False Positive Reduction</strong>: Improved <code>SecretScanner</code> accuracy by filtering out common placeholders, low-entropy strings, and URLs from "Generic API Key" matches.</li>
+<li><strong>Python Compatibility</strong>: Added <code>tomli</code> fallback for Python 3.10 compatibility (while maintaining 3.11+ target).</li>
+</ul>
+<h3 id="fixed_2">Fixed</h3>
+<ul>
+<li><strong>Testing</strong>: Fixed test suite hangs/deadlocks in complexity and entropy tests by mocking <code>ProcessPoolExecutor</code> when using <code>pyfakefs</code>.</li>
+</ul>
+<h2 id="150-2025-12-07">[1.5.0] - 2025-12-07</h2>
+<h3 id="changed_5">Changed</h3>
+<ul>
+<li><strong>CLI Modularization</strong>: Refactored the monolithic <code>cli.py</code> into a modular command structure under <code>src/fetchext/commands/</code>. This improves maintainability and extensibility.</li>
+</ul>
+<h2 id="140-2025-12-07">[1.4.0] - 2025-12-07</h2>
+<h3 id="added_10">Added</h3>
+<ul>
+<li><strong>Timeline View</strong>: Added <code>fext timeline &lt;file&gt;</code> command to visualize file modification times within an extension archive for forensic analysis.</li>
+<li><strong>Local Server</strong>: Added <code>fext serve</code> command to host the local repository as a Chrome Update Server (HTTP).</li>
+<li><strong>Dependency Graph</strong>: Added <code>fext graph &lt;file&gt;</code> command to generate DOT graphs of internal file dependencies.</li>
+<li><strong>Image Optimizer</strong>: Added <code>fext optimize &lt;directory&gt;</code> command to losslessly compress PNG and JPEG images within an extension to reduce size.</li>
+<li><strong>Interactive Tutorial</strong>: Added <code>fext tutorial</code> command to launch a TUI-based interactive guide for new users.</li>
+</ul>
+<h2 id="130-2025-12-06">[1.3.0] - 2025-12-06</h2>
+<h3 id="added_11">Added</h3>
+<ul>
+<li><strong>Format Converter</strong>: Added <code>fext convert</code> command to convert between extension formats (CRX -&gt; ZIP, Directory -&gt; ZIP).</li>
+<li><strong>Configuration Wizard</strong>: Added <code>fext setup</code> command to interactively create or update the user configuration file.</li>
+<li><strong>Markdown Reports</strong>: Added <code>fext report &lt;file&gt;</code> command to generate comprehensive Markdown reports including metadata, risk analysis, and file structure.</li>
+<li><strong>Local Update Server</strong>: Added <code>fext update-manifest</code> command to generate <code>update.xml</code> (Chrome/Edge) and <code>updates.json</code> (Firefox) for self-hosted extensions.</li>
+<li><strong>Mirror Mode</strong>: Added <code>fext mirror</code> command to synchronize a local directory with a list of extension IDs, supporting updates and pruning.</li>
+<li><strong>Dependency Scanner</strong>: Added <code>fext scan</code> command to detect known vulnerable libraries (e.g., jQuery, Lodash) within extension source code.</li>
+<li><strong>Plugin Hooks</strong>: Added support for Python-based pre/post-download hooks in <code>~/.config/fext/hooks</code>.</li>
+<li><strong>Rate Limiting</strong>: Added <code>rate_limit_delay</code> configuration option to throttle network requests and prevent IP bans.</li>
+<li><strong>Interactive TUI</strong>: Added <code>fext ui</code> command to launch a terminal-based user interface for browsing and downloading extensions.</li>
+<li><strong>Repository Statistics</strong>: Added <code>fext stats</code> command to analyze local repository metrics (count, size, permissions, MV2/MV3 breakdown).</li>
+<li><strong>CSV Export</strong>: Added <code>--csv</code> flag to <code>search</code> and <code>scan</code> commands for exporting results to spreadsheet-friendly format.</li>
+<li><strong>Man Page Generation</strong>: Added <code>make docs</code> to generate standard man pages (<code>docs/man/fext.1</code>).</li>
+<li><strong>Shell Completion</strong>: Added generation of Bash and Zsh completion scripts (<code>docs/completions/</code>).</li>
+<li><strong>Fuzz Testing</strong>: Added <code>make fuzz</code> to run hypothesis-based fuzz tests for robust parsing.</li>
+<li><strong>Documentation Site</strong>: Added MkDocs-based documentation site configuration and <code>make docs-build</code> target.</li>
+<li><strong>Signed Releases</strong>: Added infrastructure for GPG signing of releases (<code>make sign</code>, <code>make release</code>).</li>
+<li><strong>Complexity Analysis</strong>: Added <code>fext analyze --complexity</code> to calculate cyclomatic complexity of JavaScript files.</li>
+<li><strong>Locale Inspector</strong>: Added <code>fext locales</code> command to inspect supported locales and message counts.</li>
+<li><strong>Docker Image</strong>: Added <code>Dockerfile</code> and GitHub Actions workflow for containerized deployment.</li>
+<li><strong>Pre-commit Hook</strong>: Added <code>.pre-commit-hooks.yaml</code> for integration with pre-commit.</li>
+<li><strong>Permission Explainer</strong>: Added <code>fext explain &lt;permission&gt;</code> command to provide detailed descriptions and risk assessments for extension permissions.</li>
+<li><strong>Entropy Analysis</strong>: Added <code>fext analyze --entropy &lt;file&gt;</code> to calculate Shannon entropy of files within an extension to detect obfuscation or packing.</li>
+<li><strong>Domain Extractor</strong>: Added <code>fext analyze --domains &lt;file&gt;</code> to extract all URLs and domains from extension source code for network forensics.</li>
+<li><strong>YARA Rules</strong>: Added <code>fext analyze --yara &lt;rules_file&gt;</code> to scan extension files against YARA rules for malware detection.</li>
+<li><strong>Config Management</strong>: Added <code>fext config</code> subcommand to get, set, and list configuration values in <code>~/.config/fext/config.toml</code>.</li>
+<li><strong>Cache Management</strong>: Added <code>fext clean</code> subcommand to remove build artifacts, caches, and temporary files.</li>
+<li><strong>CSP Auditor</strong>: Added Content Security Policy analysis to <code>fext audit</code> to detect weak security configurations.</li>
+<li><strong>Secret Scanner</strong>: Added <code>fext scan --secrets</code> to detect API keys and tokens (AWS, Google, Slack, Stripe) in extension source code.</li>
+<li><strong>History Tracking</strong>: Added <code>fext history</code> command to view a log of downloaded and extracted extensions.</li>
+<li><strong>JSON Schema</strong>: Added <code>fext schema &lt;type&gt;</code> command to output JSON schemas for configuration and reports.</li>
+<li><strong>Plugin Manager</strong>: Added <code>fext plugin</code> command to list, install, enable, and disable Python-based hooks.</li>
+</ul>
+<h2 id="070-2025-12-06">[0.7.0] - 2025-12-06</h2>
+<h3 id="added_12">Added</h3>
+<ul>
+<li><strong>Source Preview</strong>: Added <code>fext preview &lt;file&gt;</code> command to list extension contents without extracting.</li>
+<li><strong>Manifest V3 Auditor</strong>: Added <code>fext audit &lt;file&gt;</code> command to check for MV3 compatibility and deprecated APIs.</li>
+<li><strong>Diff Command</strong>: Added <code>fext diff &lt;old&gt; &lt;new&gt;</code> command to compare two extension versions.</li>
+<li><strong>Risk Analysis</strong>: Added <code>fext risk &lt;file&gt;</code> command to analyze permission risks and assign a privacy score.</li>
+<li><strong>Signature Verification</strong>: Added <code>fext verify &lt;file&gt;</code> command to cryptographically verify CRX3 signatures.</li>
+</ul>
+<h3 id="fixed_3">Fixed</h3>
+<ul>
+<li><strong>Build System</strong>: Fixed <code>TypeError: canonicalize_version()</code> build error by upgrading <code>setuptools</code> requirement to <code>&gt;=77.0</code>.</li>
+<li><strong>CI/CD</strong>: Fixed CI test failures by adding missing <code>pytest-asyncio</code> dependency and fixing TUI test focus logic.</li>
+<li><strong>Logging</strong>: Fixed a regression where the TUI module globally disabled logging, causing test failures in other modules.</li>
+<li><strong>Deprecations</strong>: Resolved <code>setuptools</code> deprecation warnings by updating <code>pyproject.toml</code> to use SPDX license expression and removing deprecated classifiers.</li>
+</ul>
+<h2 id="060-2025-12-05">[0.6.0] - 2025-12-05</h2>
+<h3 id="added_13">Added</h3>
+<ul>
+<li><strong>Update Checker</strong>: Added <code>check</code> subcommand to check for updates of local extension files against the Web Store.</li>
+<li><strong>JSON Output</strong>: Added <code>--json</code> flag to <code>search</code> and <code>inspect</code> commands to output machine-readable JSON.</li>
+<li><strong>PyPI Publishing</strong>: Added GitHub Actions workflow to automatically publish releases to PyPI on tag creation.</li>
+</ul>
+<h3 id="changed_6">Changed</h3>
+<ul>
+<li><strong>Library Mode</strong>: Refactored core logic into <code>src/fetchext/core.py</code> to allow programmatic usage of <code>fetchext</code> as a library.</li>
+<li><strong>Public API</strong>: Exposed <code>download_extension</code>, <code>search_extension</code>, <code>inspect_extension</code>, <code>extract_extension</code>, and <code>batch_download</code> in <code>src/fetchext/__init__.py</code>.</li>
+</ul>
+<h2 id="050-2025-12-05">[0.5.0] - 2025-12-05</h2>
+<h3 id="added_14">Added</h3>
+<ul>
+<li><strong>Proper CRX Parsing</strong>: Implemented a robust CRX3 parser (<code>CrxDecoder</code>) and <code>PartialFileReader</code> to handle CRX files without loading them entirely into memory.</li>
+<li><strong>Network Resilience</strong>: Added automatic retries with exponential backoff for network requests to handle transient failures (5xx errors, connection issues).</li>
+<li><strong>Config File</strong>: Added support for a user configuration file (<code>~/.config/fext/config.toml</code>) to set default values for download directory, worker count, and flags.</li>
+<li><strong>Verbose/Quiet Mode</strong>: Added <code>-v</code> / <code>--verbose</code> (DEBUG level) and <code>-q</code> / <code>--quiet</code> (ERROR level, no progress bars) flags for global logging control.</li>
+<li><strong>User-Agent Rotation</strong>: Implemented random User-Agent rotation for network requests to avoid blocking by Web Stores.</li>
+</ul>
+<h2 id="030-2025-12-04">[0.3.0] - 2025-12-04</h2>
+<h3 id="added_15">Added</h3>
+<ul>
+<li><strong>Extract Command</strong>: Added <code>fext extract</code> subcommand to unzip existing extension files.</li>
+<li><strong>Auto-Extraction</strong>: Added <code>--extract</code> / <code>-x</code> flag to <code>download</code> command to automatically unzip the downloaded extension.</li>
+<li><strong>Metadata Sidecars</strong>: Added <code>--save-metadata</code> / <code>-m</code> flag to <code>download</code> command to save extension details (ID, name, version, source, timestamp) to a JSON file.</li>
+<li><strong>Rich Output</strong>: Replaced <code>tqdm</code> and standard logging with <code>rich</code> for beautiful console output, progress bars, and tables.</li>
+<li><strong>Progress Bars</strong>: Integrated <code>tqdm</code> to display progress bars for file downloads and batch processing.</li>
+<li><strong>Dependencies</strong>: Added <code>rich</code> to <code>pyproject.toml</code> and <code>requirements-dev.txt</code>.</li>
+<li><strong>Parallel Batch Downloading</strong>: <code>fext batch</code> now supports downloading multiple extensions simultaneously.</li>
+<li><strong>CLI Argument</strong>: Added <code>-w</code> / <code>--workers</code> flag to <code>fext batch</code> to control the number of concurrent downloads (default: 4).</li>
+<li><strong>Makefile Target</strong>: Added <code>make test-batch-cli</code> for smoke testing batch downloads without pytest.</li>
+<li><strong>Integration Tests</strong>: Added <code>tests/integration/test_batch_parallel.py</code> to verify parallel execution performance.</li>
+<li><strong>Testing</strong>: Added <code>pyfakefs</code> to <code>requirements-dev.txt</code> and integrated it into unit and integration tests to mock file system operations.</li>
+</ul>
+<h3 id="changed_7">Changed</h3>
+<ul>
+<li><strong>Dependencies</strong>: Replaced <code>tqdm</code> with <code>rich</code> in <code>pyproject.toml</code> and <code>requirements-dev.txt</code>.</li>
+<li><strong>Inspector</strong>: Updated <code>inspect</code> command to display manifest data in a formatted table.</li>
+<li><strong>Search</strong>: Updated <code>search</code> command (Firefox) to display results in a formatted table.</li>
+<li><strong>Batch Processing</strong>: Updated <code>BatchProcessor</code> to show a main "Batch Progress" bar and disable individual file download bars during batch operations.</li>
+<li><strong>Downloaders</strong>: Updated <code>ChromeDownloader</code>, <code>EdgeDownloader</code>, and <code>FirefoxDownloader</code> to support an optional <code>show_progress</code> argument.</li>
+<li><strong>Performance</strong>: Refactored <code>BatchProcessor</code> to use <code>concurrent.futures.ThreadPoolExecutor</code> for improved speed when processing large batch files.</li>
+<li><strong>Documentation</strong>: Updated <code>README.md</code> and <code>ROADMAP.md</code> to reflect parallel batch capabilities.</li>
+<li><strong>Testing</strong>: Refactored unit and integration tests to use <code>pyfakefs</code> instead of real temporary files, improving test isolation and speed.</li>
+</ul>
+<h2 id="010-2025-12-04">[0.1.0] - 2025-12-04</h2>
+<h3 id="added_16">Added</h3>
+<ul>
+<li><strong>Multi-Browser Support</strong>: Core functionality to download extensions from Chrome Web Store, Microsoft Edge Add-ons, and Firefox Add-ons.</li>
+<li><strong>CLI</strong>: Unified <code>fext</code> command-line interface with <code>download</code>, <code>batch</code>, and <code>inspect</code> subcommands.</li>
+<li><strong>Project Structure</strong>: Adopted <code>src/</code> layout for better packaging and import isolation.</li>
+<li><strong>Testing</strong>: Implemented a 4-level testing strategy (Unit, CLI, Integration, Live) using <code>pytest</code>.</li>
+<li><strong>CI/CD</strong>: GitHub Actions workflow for automated linting, building, and testing on Python 3.11+.</li>
+<li><strong>Development Tools</strong>: <code>Makefile</code> for common tasks (<code>setup</code>, <code>test</code>, <code>lint</code>, <code>format</code>, <code>build</code>).</li>
+<li><strong>Linting</strong>: Enforced strict code quality with <code>ruff</code> (Python) and <code>markdownlint</code> (Markdown).</li>
+<li><strong>Inspector</strong>: Basic <code>ExtensionInspector</code> to parse and display manifest data from downloaded <code>.crx</code> and <code>.xpi</code> files.</li>
+<li><strong>Documentation</strong>: Comprehensive <code>README.md</code> and <code>copilot-instructions.md</code> for project context and agent guidelines.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "content.code.copy"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
