@@ -28,7 +28,9 @@ from .commands import (
     grep,
     sandbox,
     share,
-    watch
+    watch,
+    query,
+    export
 )
 
 # Configure logging
@@ -95,6 +97,8 @@ def get_parser():
     sandbox.register(subparsers)
     share.register(subparsers)
     watch.register(subparsers)
+    query.register(subparsers)
+    export.register(subparsers)
 
     return parser
 

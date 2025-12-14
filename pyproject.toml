@@ -35,6 +35,12 @@ dependencies = [
 security = [
     "yara-python",
 ]
+dynamic = [
+    "playwright",
+]
+stix = [
+    "stix2",
+]
 
 [project.scripts]
 fext = "fetchext.cli:main"

@@ -2,7 +2,6 @@ import re
 import logging
 import requests
 from urllib.parse import urlparse
-from ..network import get_session, download_file
 from .base import BaseDownloader
 from ..exceptions import NetworkError, ExtensionError
 
@@ -25,11 +24,6 @@ class ChromeDownloader(BaseDownloader):
         raise ExtensionError("Could not extract extension ID from Chrome Web Store URL")
 
     def get_latest_version(self, extension_id):
-        # Chrome doesn't have a simple JSON API for version checking without downloading XML
-        # We can use the update URL to get the XML and parse it, but that's complex.
-        # Alternatively, we can HEAD the download URL and check if it redirects or exists, 
-        # but that doesn't give the version number easily without parsing the CRX header or XML.
-        
         # Using the update check XML API
         url = "https://clients2.google.com/service/update2/crx"
         params = {
@@ -39,15 +33,14 @@ class ChromeDownloader(BaseDownloader):
         }
         
         try:
-            with get_session() as session:
-                response = session.get(url, params=params)
-                response.raise_for_status()
-                # Simple regex to find version in XML response
-                # <updatecheck codebase="..." version="1.2.3" />
-                match = re.search(r'version="([0-9.]+)"', response.text)
-                if match:
-                    return match.group(1)
-                return None
+            response = self.client.get(url, params=params)
+            response.raise_for_status()
+            # Simple regex to find version in XML response
+            # <updatecheck codebase="..." version="1.2.3" />
+            match = re.search(r'version="([0-9.]+)"', response.text)
+            if match:
+                return match.group(1)
+            return None
         except requests.RequestException as e:
             logger.warning(f"Failed to check version for {extension_id}: {e}")
             return None
@@ -63,8 +56,7 @@ class ChromeDownloader(BaseDownloader):
         output_path = output_dir / f"{extension_id}.crx"
 
         try:
-            with get_session() as session:
-                return download_file(download_url, output_path, session=session, show_progress=show_progress)
+            return self.client.download_file(download_url, output_path, show_progress=show_progress)
 
         except requests.RequestException as e:
             logger.error(f"Failed to download extension: {e}")

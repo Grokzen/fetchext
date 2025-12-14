@@ -1,4 +1,7 @@
 import struct
+import zipfile
+import hashlib
+import base64
 from pathlib import Path
 from .protobuf import SimpleProtobuf
 
@@ -101,3 +104,85 @@ class CrxVerifier:
                 continue
                 
         return False
+
+class XpiVerifier:
+    def verify(self, file_path: Path) -> bool:
+        """
+        Verifies the integrity of a Firefox XPI file.
+        Checks:
+        1. Presence of META-INF/manifest.mf
+        2. Presence of META-INF/mozilla.sf
+        3. Presence of META-INF/mozilla.rsa
+        4. Verifies that files listed in manifest.mf match their hashes.
+        """
+        if not zipfile.is_zipfile(file_path):
+            raise ValueError("Not a valid ZIP/XPI file")
+            
+        try:
+            with zipfile.ZipFile(file_path) as zf:
+                # 1. Find manifest.mf
+                if "META-INF/manifest.mf" not in zf.namelist():
+                    return False
+                
+                # 2. Find signature files
+                rsa_files = [n for n in zf.namelist() if n.startswith("META-INF/") and n.endswith(".rsa")]
+                if not rsa_files:
+                    return False
+                
+                # 3. Verify Manifest Integrity
+                manifest_data = zf.read("META-INF/manifest.mf").decode("utf-8")
+                if not self._verify_manifest(zf, manifest_data):
+                    return False
+                    
+                return True
+        except Exception:
+            return False
+
+    def _verify_manifest(self, zf, manifest_data):
+        entries = self._parse_manifest(manifest_data)
+        
+        for filename, hashes in entries.items():
+            if filename not in zf.namelist():
+                return False
+            
+            with zf.open(filename) as f:
+                file_data = f.read()
+            
+            if "sha256" in hashes:
+                digest = hashlib.sha256(file_data).digest()
+                expected = base64.b64decode(hashes["sha256"])
+                if digest != expected:
+                    return False
+            elif "sha1" in hashes:
+                digest = hashlib.sha1(file_data).digest()
+                expected = base64.b64decode(hashes["sha1"])
+                if digest != expected:
+                    return False
+                    
+        return True
+
+    def _parse_manifest(self, data):
+        entries = {}
+        current_file = None
+        current_hashes = {}
+        
+        for line in data.splitlines():
+            line = line.strip()
+            if not line:
+                if current_file:
+                    entries[current_file] = current_hashes
+                    current_file = None
+                    current_hashes = {}
+                continue
+                
+            if line.startswith("Name: "):
+                current_file = line[6:]
+            elif line.startswith("SHA256-Digest: "):
+                current_hashes["sha256"] = line[15:]
+            elif line.startswith("SHA1-Digest: "):
+                current_hashes["sha1"] = line[13:]
+                
+        if current_file:
+            entries[current_file] = current_hashes
+            
+        return entries

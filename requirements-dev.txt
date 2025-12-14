@@ -16,3 +16,6 @@ mkdocstrings[python]
 twine
 lizard
 pdoc
+playwright
+stix2
+syrupy

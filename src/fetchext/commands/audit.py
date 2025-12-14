@@ -86,6 +86,14 @@ def register(subparsers):
     permissions_parser.add_argument("--json", action="store_true", help="Output results as JSON")
     permissions_parser.add_argument("--csv", action="store_true", help="Output results as CSV")
 
+    # Dynamic Analysis
+    dynamic_parser = analyze_subparsers.add_parser("dynamic", help="Run dynamic analysis (headless browser)")
+    dynamic_parser.add_argument("file", type=Path, help="Path to the extension directory (unpacked)")
+    dynamic_parser.add_argument("--headless", action="store_true", default=True, help="Run in headless mode (default)")
+    dynamic_parser.add_argument("--no-headless", action="store_false", dest="headless", help="Run in headed mode")
+    dynamic_parser.add_argument("--duration", type=int, default=10, help="Duration to run in seconds (default: 10)")
+    dynamic_parser.add_argument("-o", "--output", type=Path, default=Path("analysis_output"), help="Output directory")
+
     analyze_parser.set_defaults(func=handle_analyze)
 
     # Report subcommand
@@ -417,3 +425,15 @@ def handle_analyze(args, show_progress=True):
                 table.add_row(*row_data)
             
             console.print(table)
+
+    elif args.analysis_type == "dynamic":
+        from ..analysis.dynamic import DynamicAnalyzer
+        import asyncio
+        
+        analyzer = DynamicAnalyzer(args.file, args.output)
+        try:
+            asyncio.run(analyzer.run(headless=args.headless, duration=args.duration))
+            console.print(f"[green]Dynamic analysis complete. Results saved to {args.output}[/green]")
+        except Exception as e:
+            console.print(f"[red]Dynamic analysis failed: {e}[/red]")
+            sys.exit(1)

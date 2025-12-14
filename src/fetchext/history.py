@@ -114,6 +114,19 @@ class HistoryManager:
             """)
             return [dict(row) for row in cursor.fetchall()]
 
+    def execute_query(self, sql: str) -> List[Dict[str, Any]]:
+        """Execute a raw SQL query."""
+        try:
+            with self._get_connection() as conn:
+                conn.row_factory = sqlite3.Row
+                cursor = conn.execute(sql)
+                # If it's a SELECT (or returns rows), fetch results
+                if cursor.description:
+                    return [dict(row) for row in cursor.fetchall()]
+                return []
+        except sqlite3.Error as e:
+            raise e
+
     def clear(self) -> None:
         with self._get_connection() as conn:
             conn.execute("DELETE FROM history")

@@ -1,8 +1,6 @@
 import re
 import logging
-import requests
 from urllib.parse import urlparse
-from ..network import get_session, download_file
 from .base import BaseDownloader
 from ..exceptions import NetworkError, ExtensionError
 
@@ -36,15 +34,14 @@ class EdgeDownloader(BaseDownloader):
         }
         
         try:
-            with get_session() as session:
-                response = session.get(url, params=params)
-                response.raise_for_status()
-                # Simple regex to find version in XML response
-                match = re.search(r'version="([0-9.]+)"', response.text)
-                if match:
-                    return match.group(1)
-                return None
-        except requests.RequestException as e:
+            response = self.client.get(url, params=params)
+            response.raise_for_status()
+            # Simple regex to find version in XML response
+            match = re.search(r'version="([0-9.]+)"', response.text)
+            if match:
+                return match.group(1)
+            return None
+        except Exception as e:
             logger.warning(f"Failed to check version for {extension_id}: {e}")
             return None
 
@@ -60,9 +57,8 @@ class EdgeDownloader(BaseDownloader):
         output_path = output_dir / f"{extension_id}.crx"
 
         try:
-            with get_session() as session:
-                return download_file(download_url, output_path, session=session, show_progress=show_progress)
+            return self.client.download_file(download_url, output_path, show_progress=show_progress)
 
-        except requests.RequestException as e:
+        except Exception as e:
             logger.error(f"Failed to download extension: {e}")
             raise NetworkError(f"Failed to download extension: {e}", original_exception=e)

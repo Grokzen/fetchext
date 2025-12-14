@@ -5,6 +5,7 @@ from textual.widgets import Header, Footer, Input, DataTable, RadioSet, RadioBut
 from textual.screen import ModalScreen
 from fetchext.core import search_extension, download_extension, get_repo_stats
 from fetchext.history import HistoryManager
+from fetchext.ui.theme import apply_theme
 import logging
 from pathlib import Path
 
@@ -172,6 +173,16 @@ class ExtensionApp(App):
         yield Footer()
 
     def on_mount(self) -> None:
+        # Apply theme
+        theme_css = apply_theme(self)
+        if theme_css:
+            try:
+                # Inject CSS variables into the app's stylesheet
+                # This allows dynamic theming based on config
+                self.stylesheet.add_source(theme_css)
+            except Exception as e:
+                self.notify(f"Failed to apply theme: {e}", severity="warning")
+
         table = self.query_one("#search_table", DataTable)
         table.add_columns("Name", "ID", "Version", "Browser")
         table.cursor_type = "row"

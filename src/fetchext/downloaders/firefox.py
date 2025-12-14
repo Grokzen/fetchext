@@ -1,8 +1,6 @@
 import logging
-import requests
 from pathlib import Path
 from urllib.parse import urlparse
-from ..network import get_session, download_file
 from .base import BaseDownloader
 from ..exceptions import NetworkError, ExtensionError
 from ..utils import sanitize_filename
@@ -33,40 +31,38 @@ class FirefoxDownloader(BaseDownloader):
         logger.info(f"Fetching metadata for Firefox extension {extension_id}...")
 
         try:
-            with get_session() as session:
-                # Get metadata
-                meta_response = session.get(api_url)
-                meta_response.raise_for_status()
-                data = meta_response.json()
+            # Get metadata
+            meta_response = self.client.get(api_url)
+            meta_response.raise_for_status()
+            data = meta_response.json()
 
-                # Get the latest version file URL
-                if "current_version" in data and "file" in data["current_version"]:
-                    download_url = data["current_version"]["file"]["url"]
-                    raw_filename = Path(urlparse(download_url).path).name
-                    filename = sanitize_filename(raw_filename)
-                else:
-                    raise NetworkError("Could not find download URL in metadata")
+            # Get the latest version file URL
+            if "current_version" in data and "file" in data["current_version"]:
+                download_url = data["current_version"]["file"]["url"]
+                raw_filename = Path(urlparse(download_url).path).name
+                filename = sanitize_filename(raw_filename)
+            else:
+                raise NetworkError("Could not find download URL in metadata")
 
-                logger.info(f"Downloading from {download_url}...")
+            logger.info(f"Downloading from {download_url}...")
 
-                output_path = output_dir / filename
-                return download_file(download_url, output_path, session=session, show_progress=show_progress)
+            output_path = output_dir / filename
+            return self.client.download_file(download_url, output_path, show_progress=show_progress)
 
-        except requests.RequestException as e:
+        except Exception as e:
             logger.error(f"Failed to download extension: {e}")
             raise NetworkError(f"Failed to download extension: {e}", original_exception=e)
 
     def get_latest_version(self, extension_id):
         api_url = f"https://addons.mozilla.org/api/v5/addons/addon/{extension_id}/"
         try:
-            with get_session() as session:
-                response = session.get(api_url)
-                response.raise_for_status()
-                data = response.json()
-                if "current_version" in data:
-                    return data["current_version"]["version"]
-                return None
-        except requests.RequestException as e:
+            response = self.client.get(api_url)
+            response.raise_for_status()
+            data = response.json()
+            if "current_version" in data:
+                return data["current_version"]["version"]
+            return None
+        except Exception as e:
             logger.warning(f"Failed to check version for {extension_id}: {e}")
             return None
 
@@ -75,12 +71,11 @@ class FirefoxDownloader(BaseDownloader):
         params = {"q": query, "app": "firefox", "type": "extension"}
 
         try:
-            with get_session() as session:
-                response = session.get(url, params=params)
-                response.raise_for_status()
+            response = self.client.get(url, params=params)
+            response.raise_for_status()
 
-                return response.json().get("results", [])
+            return response.json().get("results", [])
 
-        except requests.RequestException as e:
+        except Exception as e:
             logger.error(f"Failed to search for extension: {e}")
             raise NetworkError(f"Failed to search for extension: {e}", original_exception=e)

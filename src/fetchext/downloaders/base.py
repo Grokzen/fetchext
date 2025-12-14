@@ -1,6 +1,10 @@
 from abc import ABC, abstractmethod
+from ..client import NetworkClient
 
 class BaseDownloader(ABC):
+    def __init__(self):
+        self.client = NetworkClient()
+
     @abstractmethod
     def extract_id(self, url):
         """Extract the extension ID or slug from the URL."""

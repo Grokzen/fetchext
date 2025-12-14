@@ -12,7 +12,7 @@ from .preview import build_file_tree
 from .auditor import ExtensionAuditor
 from .diff import ExtensionDiffer
 from .risk import RiskAnalyzer
-from .verifier import CrxVerifier
+from .verifier import CrxVerifier, XpiVerifier
 from .hooks import HookManager, HookContext
 from .config import get_config_path, load_config
 from .history import HistoryManager
@@ -193,6 +193,24 @@ def inspect_extension(file_path, show_progress=True, json_output=False):
             console.print_success("Inspection finished successfully.")
     
     return manifest
+
+def get_extension_info(file_path):
+    """
+    Get basic info about an extension file.
+    """
+    file_path = Path(file_path)
+    if not file_path.exists():
+        raise ExtensionError(f"File not found: {file_path}")
+
+    inspector = ExtensionInspector()
+    manifest = inspector.get_manifest(file_path)
+    
+    return {
+        "id": "unknown", # Hard to get ID from file alone reliably without metadata
+        "version": manifest.get("version", "unknown"),
+        "name": manifest.get("name", "unknown"),
+        "manifest": manifest
+    }
 
 def check_update(file_path, json_output=False):
     """
@@ -491,27 +509,33 @@ def analyze_risk(file_path, json_output=False):
 
 def verify_signature(file_path, json_output=False):
     """
-    Verify the cryptographic signature of a CRX file.
+    Verify the cryptographic signature of a CRX or XPI file.
     """
     file_path = Path(file_path)
     if not file_path.exists():
         raise ExtensionError(f"File not found: {file_path}")
         
-    verifier = CrxVerifier()
+    if file_path.suffix.lower() in [".xpi", ".zip"]:
+        verifier = XpiVerifier()
+        algo = "Manifest Integrity"
+    else:
+        verifier = CrxVerifier()
+        algo = "RSA-SHA256"
+
     try:
         is_valid = verifier.verify(file_path)
         
         result = {
             "file": str(file_path),
             "verified": is_valid,
-            "algorithm": "RSA-SHA256"
+            "algorithm": algo
         }
         
         if json_output:
             console.print_json(data=result)
         else:
             if is_valid:
-                console.print_success("Signature Verified (RSA-SHA256)")
+                console.print_success(f"Signature Verified ({algo})")
             else:
                 console.print_error("Verification Failed")
                 

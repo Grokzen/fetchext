@@ -36,3 +36,7 @@ class NotFoundError(FetchextError):
     """Resource not found."""
     exit_code = ExitCode.NOT_FOUND
 
+class AnalysisError(FetchextError):
+    """Analysis related errors."""
+    exit_code = ExitCode.ERROR
+

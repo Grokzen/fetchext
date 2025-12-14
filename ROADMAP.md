@@ -311,29 +311,29 @@
   - [x] Implement automated end-to-end tests for the TUI using `textual`'s `Pilot` testing harness to verify user interactions and prevent UI regressions.
 - [x] **Migration Regression Tests**: Quality (Test).
   - [x] Add a suite of "golden" tests for `fext migrate` to verify MV2->MV3 conversion accuracy against known good outputs, ensuring the migration logic remains stable.
-- [ ] **Complexity in Reports**: Reporting (Improve).
-  - [ ] Integrate `lizard` complexity metrics directly into the HTML report with visualization charts (e.g., complexity vs. line count scatter plot) to highlight maintenance hotspots.
-- [ ] **Firefox Signature Verification**: Security (Improve).
-  - [ ] Implement XPI signature verification (PKCS#7/CMS) to support Firefox extension integrity checking, matching the capability currently available for Chrome CRX files.
-- [ ] **SQL Query Interface**: Power User (Innovate).
-  - [ ] Add `fext query <sql>` to allow running direct SQL queries against the local extension metadata repository (`history.db`), enabling complex ad-hoc data analysis.
+- [x] **Complexity in Reports**: Reporting (Improve).
+  - [x] Integrate `lizard` complexity metrics directly into the HTML report with visualization charts (e.g., complexity vs. line count scatter plot) to highlight maintenance hotspots.
+- [x] **Firefox Signature Verification**: Security (Improve).
+  - [x] Implement XPI signature verification (PKCS#7/CMS) to support Firefox extension integrity checking, matching the capability currently available for Chrome CRX files.
+- [x] **SQL Query Interface**: Power User (Innovate).
+  - [x] Add `fext query <sql>` to allow running direct SQL queries against the local extension metadata repository (`history.db`), enabling complex ad-hoc data analysis.
 
 ## 🕵️ v2.5.0: Dynamic Analysis & Hardening
 
 *Focus: Runtime behavior analysis and architectural hardening.*
 
-- [ ] **Unified Network Client**: Architecture (Fix).
-  - [ ] Refactor all downloader modules to use a single, centralized `NetworkClient` class that handles rate limiting, retries, user-agent rotation, and proxying consistently.
-- [ ] **Dynamic Analysis Sandbox**: Analysis (New).
-  - [ ] Add `fext analyze --dynamic <file>` using `playwright` to launch the extension in a headless browser, capturing screenshots, console logs, and network requests during installation.
-- [ ] **Export to STIX**: Interoperability (New).
-  - [ ] Add `fext export --stix <file>` to generate Threat Intelligence objects (STIX 2.1) for detected indicators (hashes, domains, IPs) to integrate with security platforms.
-- [ ] **Cross-Platform CI**: Quality (Test).
-  - [ ] Expand GitHub Actions workflow to include Windows and macOS runners, ensuring path handling and file operations work correctly across all supported operating systems.
-- [ ] **Snapshot Testing**: Quality (Test).
-  - [ ] Implement snapshot testing (using `pytest-snapshot`) for CLI output and TUI screens to detect unintended visual changes or formatting regressions.
-- [ ] **TUI Themes**: UX (Improve).
-  - [ ] Add support for user-configurable color schemes (themes) in `config.toml` for the TUI, allowing users to match their terminal aesthetics.
+- [x] **Unified Network Client**: Architecture (Fix).
+  - [x] Refactor all downloader modules to use a single, centralized `NetworkClient` class that handles rate limiting, retries, user-agent rotation, and proxying consistently.
+- [x] **Dynamic Analysis Sandbox**: Analysis (New).
+  - [x] Add `fext analyze --dynamic <file>` using `playwright` to launch the extension in a headless browser, capturing screenshots, console logs, and network requests during installation.
+- [x] **Export to STIX**: Interoperability (New).
+  - [x] Add `fext export --stix <file>` to generate Threat Intelligence objects (STIX 2.1) for detected indicators (hashes, domains, IPs) to integrate with security platforms.
+- [x] **Cross-Platform CI**: Quality (Test).
+  - [x] Expand GitHub Actions workflow to include Windows and macOS runners, ensuring path handling and file operations work correctly across all supported operating systems.
+- [x] **Snapshot Testing**: Quality (Test).
+  - [x] Implement snapshot testing (using `pytest-snapshot`) for CLI output and TUI screens to detect unintended visual changes or formatting regressions.
+- [x] **TUI Themes**: UX (Improve).
+  - [x] Add support for user-configurable color schemes (themes) in `config.toml` for the TUI, allowing users to match their terminal aesthetics.
 - [ ] **AST-Based Diff**: Analysis (Improve).
   - [ ] Enhance `fext diff` to perform semantic, AST-based comparisons for JavaScript files (ignoring formatting/comments) to highlight actual logic changes more clearly.
 - [ ] **WASM Inspector**: Analysis (Innovate).

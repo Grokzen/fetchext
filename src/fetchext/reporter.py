@@ -200,6 +200,41 @@ class HtmlReporter:
         risk_score = risk.get("total_score", 0)
         risk_class = f"risk-{risk_level.lower()}"
 
+        # Complexity Data
+        complexity = self.data.get("complexity", {})
+        avg_complexity = complexity.get("average_complexity", 0)
+        max_complexity = complexity.get("max_complexity", 0)
+        total_functions = complexity.get("total_functions", 0)
+        high_complexity_funcs = complexity.get("high_complexity_functions", [])
+
+        # Prepare Complexity Table
+        complexity_rows = ""
+        for func in high_complexity_funcs[:20]:  # Limit to top 20
+            complexity_rows += f"""
+            <tr>
+                <td>{func['file']}</td>
+                <td><code>{func['function']}</code></td>
+                <td>{func['complexity']}</td>
+                <td>{func['length']}</td>
+            </tr>
+            """
+        
+        complexity_table = f"""
+        <table>
+            <thead>
+                <tr>
+                    <th>File</th>
+                    <th>Function</th>
+                    <th>Complexity</th>
+                    <th>Length</th>
+                </tr>
+            </thead>
+            <tbody>
+                {complexity_rows if complexity_rows else '<tr><td colspan="4">No high complexity functions found.</td></tr>'}
+            </tbody>
+        </table>
+        """
+
         # Prepare Risk Table
         risk_rows = ""
         for p in risk.get("risky_permissions", []):
@@ -282,6 +317,11 @@ class HtmlReporter:
         # Sort and limit file exts
         sorted_exts = dict(sorted(file_exts.items(), key=lambda item: item[1], reverse=True)[:10])
 
+        # Complexity Chart Data
+        top_complex = sorted(high_complexity_funcs, key=lambda x: x['complexity'], reverse=True)[:10]
+        complex_labels = [f"{f['function']} ({Path(f['file']).name})" for f in top_complex]
+        complex_data = [f['complexity'] for f in top_complex]
+
         html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -343,6 +383,21 @@ class HtmlReporter:
 
         <div class="grid">
             <div class="card">
+                <div class="label">Avg Complexity</div>
+                <div class="stat">{avg_complexity:.2f}</div>
+            </div>
+            <div class="card">
+                <div class="label">Max Complexity</div>
+                <div class="stat">{max_complexity}</div>
+            </div>
+            <div class="card">
+                <div class="label">Total Functions</div>
+                <div class="stat">{total_functions}</div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
                 <h3>Risk Distribution</h3>
                 <div class="chart-container">
                     <canvas id="riskChart"></canvas>
@@ -354,10 +409,19 @@ class HtmlReporter:
                     <canvas id="fileChart"></canvas>
                 </div>
             </div>
+            <div class="card">
+                <h3>Top Complex Functions</h3>
+                <div class="chart-container">
+                    <canvas id="complexityChart"></canvas>
+                </div>
+            </div>
         </div>
 
         <h2>🛡️ Risk Analysis</h2>
         {risk_table}
+
+        <h2>🧠 Complexity Analysis</h2>
+        {complexity_table}
 
         <h2>🔐 Secrets Found</h2>
         {secrets_table}
@@ -397,6 +461,20 @@ class HtmlReporter:
                 }}]
             }},
             options: {{ maintainAspectRatio: false }}
+        }});
+
+        const complexityCtx = document.getElementById('complexityChart').getContext('2d');
+        new Chart(complexityCtx, {{
+            type: 'bar',
+            data: {{
+                labels: {json.dumps(complex_labels)},
+                datasets: [{{
+                    label: 'Cyclomatic Complexity',
+                    data: {json.dumps(complex_data)},
+                    backgroundColor: '#d73a49'
+                }}]
+            }},
+            options: {{ maintainAspectRatio: false, indexAxis: 'y' }}
         }});
     </script>
 </body>

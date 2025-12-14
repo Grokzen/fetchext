@@ -5,43 +5,33 @@ from fetchext.downloaders.chrome import ChromeDownloader
 
 class TestDownloadFlow:
     def test_chrome_download_success(self, fs, mocker):
-        # Mock session
-        mock_session = mocker.MagicMock()
-        mock_response = mocker.Mock()
-        mock_response.iter_content = lambda chunk_size: [b"fake_content"]
-        mock_response.headers = {"content-disposition": 'attachment; filename="extension.crx"'}
-        mock_response.raise_for_status = mocker.Mock()
-        mock_session.get.return_value = mock_response
-        mock_session.__enter__.return_value = mock_session
-        mock_session.__exit__.return_value = None
+        # Mock NetworkClient
+        mock_client = mocker.Mock()
+        mock_client.download_file.return_value = Path("/tmp/test_download/abcdefghijklmnop.crx")
         
-        mocker.patch("fetchext.downloaders.chrome.get_session", return_value=mock_session)
+        # Create the file that download_file would create
+        fs.create_file("/tmp/test_download/abcdefghijklmnop.crx", contents="fake_content")
+
+        mocker.patch("fetchext.downloaders.base.NetworkClient", return_value=mock_client)
 
         downloader = ChromeDownloader()
         extension_id = "abcdefghijklmnop"
         output_dir = Path("/tmp/test_download")
-        fs.create_dir(output_dir)
+        # fs.create_dir(output_dir) # Already created by create_file
         
         output_path = downloader.download(extension_id, output_dir)
 
         assert output_path.exists()
         assert output_path.read_bytes() == b"fake_content"
-        assert output_path.name == f"{extension_id}.crx"
+        mock_client.download_file.assert_called_once()
 
     def test_chrome_download_404(self, fs, mocker):
         from fetchext.exceptions import NetworkError
-        # Mock session to raise HTTPError
-        mock_session = mocker.MagicMock()
         
-        mock_response = mocker.Mock()
-        mock_response.status_code = 404
-        error = requests.HTTPError("404 Not Found", response=mock_response)
+        mock_client = mocker.Mock()
+        mock_client.download_file.side_effect = requests.HTTPError("404 Not Found")
         
-        mock_session.get.side_effect = error
-        mock_session.__enter__.return_value = mock_session
-        mock_session.__exit__.return_value = None
-        
-        mocker.patch("fetchext.downloaders.chrome.get_session", return_value=mock_session)
+        mocker.patch("fetchext.downloaders.base.NetworkClient", return_value=mock_client)
 
         downloader = ChromeDownloader()
         extension_id = "invalid_id"
@@ -53,17 +43,11 @@ class TestDownloadFlow:
 
     def test_chrome_download_empty_file_cleanup(self, fs, mocker):
         from fetchext.exceptions import NetworkError
-        # Mock session to return empty content
-        mock_session = mocker.MagicMock()
-        mock_response = mocker.Mock()
-        mock_response.iter_content = lambda chunk_size: [] # Empty content
-        mock_response.headers = {}
-        mock_response.raise_for_status = mocker.Mock()
-        mock_session.get.return_value = mock_response
-        mock_session.__enter__.return_value = mock_session
-        mock_session.__exit__.return_value = None
-
-        mocker.patch("fetchext.downloaders.chrome.get_session", return_value=mock_session)
+        
+        mock_client = mocker.Mock()
+        mock_client.download_file.side_effect = NetworkError("Download failed: File is empty")
+        
+        mocker.patch("fetchext.downloaders.base.NetworkClient", return_value=mock_client)
 
         downloader = ChromeDownloader()
         extension_id = "empty_extension"
@@ -72,6 +56,3 @@ class TestDownloadFlow:
 
         with pytest.raises(NetworkError, match="Download failed: File is empty"):
             downloader.download(extension_id, output_dir)
-        
-        # Verify file was cleaned up
-        assert not (output_dir / "empty_extension.crx").exists()

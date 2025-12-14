@@ -29,6 +29,14 @@ def sample_report_data():
             "files": [
                 {"filename": "script.js", "entropy": 5.0, "size": 500}
             ]
+        },
+        "complexity": {
+            "average_complexity": 5.5,
+            "max_complexity": 20,
+            "total_functions": 10,
+            "high_complexity_functions": [
+                {"file": "complex.js", "function": "doHardWork", "complexity": 20, "length": 100}
+            ]
         }
     }
 
@@ -44,6 +52,13 @@ def test_html_reporter_generate(sample_report_data):
     assert "AIza..." in html
     assert "riskChart" in html
     assert "new Chart" in html
+    
+    # Complexity assertions
+    assert "Complexity Analysis" in html
+    assert "complex.js" in html
+    assert "doHardWork" in html
+    assert "complexityChart" in html
+    assert "20" in html # Max complexity
 
 def test_generate_html_report(tmp_path):
     mock_data = {"metadata": {"manifest": {"name": "Test"}}}
