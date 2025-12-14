@@ -19,15 +19,17 @@ def test_search_csv_export():
     ]
     
     with patch("fetchext.core.get_downloader", return_value=mock_downloader):
-        with patch("sys.stdout", new=StringIO()) as fake_out:
-            search_extension("firefox", "query", csv_output=True)
-            
-            output = fake_out.getvalue().strip()
-            reader = csv.reader(StringIO(output))
-            rows = list(reader)
-            
-            assert rows[0] == ["id", "name", "version", "url", "description", "users", "rating"]
-            assert rows[1] == ["123", "Test Ext", "1.0", "http://example.com", "Desc", "100", "4.5"]
+        with patch("fetchext.core.SearchCache") as MockCache:
+            MockCache.return_value.get.return_value = None
+            with patch("sys.stdout", new=StringIO()) as fake_out:
+                search_extension("firefox", "query", csv_output=True)
+                
+                output = fake_out.getvalue().strip()
+                reader = csv.reader(StringIO(output))
+                rows = list(reader)
+                
+                assert rows[0] == ["id", "name", "version", "url", "description", "users", "rating"]
+                assert rows[1] == ["123", "Test Ext", "1.0", "http://example.com", "Desc", "100", "4.5"]
 
 def test_scan_csv_export(fs):
     fs.create_file("/ext.crx")

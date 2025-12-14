@@ -81,14 +81,14 @@ def generate_update_manifest(directory: Path, base_url: str, output_file: Option
     if crx_extensions:
         xml_content = _generate_chrome_xml(crx_extensions, base_url)
         out_path = output_file if output_file and output_file.suffix == ".xml" else directory / "update.xml"
-        with out_path.open("w") as f:
+        with out_path.open("w", encoding="utf-8") as f:
             f.write(xml_content)
         logger.info(f"Generated Chrome update manifest: {out_path}")
         
     if xpi_extensions:
         json_content = _generate_firefox_json(xpi_extensions, base_url)
         out_path = output_file if output_file and output_file.suffix == ".json" else directory / "updates.json"
-        with out_path.open("w") as f:
+        with out_path.open("w", encoding="utf-8") as f:
             f.write(json_content)
         logger.info(f"Generated Firefox update manifest: {out_path}")
 

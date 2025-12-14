@@ -28,6 +28,11 @@ def test_search_extension_call(mocker):
     mock_downloader.search.return_value = []  # Return empty list
     mocker.patch("fetchext.core.FirefoxDownloader", return_value=mock_downloader)
     
+    # Mock cache to always miss
+    mock_cache = mocker.Mock()
+    mock_cache.get.return_value = None
+    mocker.patch("fetchext.core.SearchCache", return_value=mock_cache)
+    
     fetchext.search_extension("firefox", "query")
     
     mock_downloader.search.assert_called_with("query")

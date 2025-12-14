@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Community Rules Sync**: Added `fext rules sync` to automatically download and update YARA rules and analysis signatures from a community-maintained git repository.
 - **API Usage Heatmap**: Added `fext analyze api-usage <file>` to generate a frequency map of Chrome/Browser API calls, helping auditors focus on high-risk areas.
 
+### Fixed
+
+- **Windows CI**: Fixed `UnicodeDecodeError` on Windows by explicitly setting `encoding="utf-8"` in all file `open()` calls across the codebase (CLI, analysis, reporting, scripts).
+- **MV3 Migration**: Improved `fext migrate` to intelligently merge `page_action` and `browser_action` instead of overwriting, and to use `content_scripts` matches for `web_accessible_resources` instead of defaulting to `<all_urls>`.
+
 ## [2.5.0] - 2025-12-10
 
 ### Added

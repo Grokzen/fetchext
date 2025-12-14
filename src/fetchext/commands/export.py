@@ -32,7 +32,7 @@ def handle_export(args, show_progress=True):
             stix_json = generator.generate(report)
             
             if args.output:
-                with open(args.output, "w") as f:
+                with open(args.output, "w", encoding="utf-8") as f:
                     f.write(stix_json)
                 console.print(f"[green]STIX bundle saved to {args.output}[/green]")
             else:

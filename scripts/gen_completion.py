@@ -21,7 +21,7 @@ def main():
         
         completion = shtab.complete(parser, shell=shell)
         
-        with open(output_file, "w") as f:
+        with open(output_file, "w", encoding="utf-8") as f:
             f.write(completion)
 
 if __name__ == "__main__":

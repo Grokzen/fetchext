@@ -46,7 +46,7 @@ class SearchCache:
         self.data = {}
         if self.cache_file.exists():
             try:
-                with self.cache_file.open("r") as f:
+                with self.cache_file.open("r", encoding="utf-8") as f:
                     self.data = json.load(f)
             except Exception as e:
                 logger.warning(f"Failed to load search cache: {e}")
@@ -55,7 +55,7 @@ class SearchCache:
 
     def _save_cache(self):
         try:
-            with self.cache_file.open("w") as f:
+            with self.cache_file.open("w", encoding="utf-8") as f:
                 json.dump(self.data, f)
         except Exception as e:
             logger.warning(f"Failed to save search cache: {e}")

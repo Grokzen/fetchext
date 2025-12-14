@@ -206,7 +206,7 @@ def handle_report(args, show_progress=True):
         report = core.generate_unified_report(args.file, yara_rules=args.yara)
         if args.output:
             import json
-            with args.output.open("w") as f:
+            with args.output.open("w", encoding="utf-8") as f:
                 json.dump(report, f, indent=2)
             if show_progress:
                 console.print(f"JSON report saved to {args.output}")

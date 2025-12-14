@@ -103,8 +103,8 @@ class DynamicAnalyzer:
         logger.info(f"Captured screenshot: {path}")
 
     def _save_data(self):
-        with open(self.logs_file, "w") as f:
+        with open(self.logs_file, "w", encoding="utf-8") as f:
             json.dump(self.logs, f, indent=2)
         
-        with open(self.network_file, "w") as f:
+        with open(self.network_file, "w", encoding="utf-8") as f:
             json.dump(self.network_activity, f, indent=2)

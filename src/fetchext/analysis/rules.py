@@ -24,7 +24,7 @@ class RuleEngine:
         if not path.exists():
             raise FileNotFoundError(f"Rules file not found: {path}")
             
-        with open(path, "r") as f:
+        with open(path, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f)
             
         if not data or "rules" not in data:

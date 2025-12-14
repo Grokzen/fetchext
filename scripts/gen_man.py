@@ -22,7 +22,7 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
     
     output_file = output_dir / "fext.1"
-    with open(output_file, "w") as f:
+    with open(output_file, "w", encoding="utf-8") as f:
         f.write(str(man))
         
     print(f"Man page generated at {output_file}")

@@ -108,7 +108,7 @@ def download_extension(browser, url, output_dir, save_metadata=False, extract=Fa
             # Save as <filename>.json (e.g. extension.crx.json)
             metadata_path = output_path.with_suffix(output_path.suffix + ".json")
             
-            with metadata_path.open("w") as f:
+            with metadata_path.open("w", encoding="utf-8") as f:
                 json.dump(metadata, f, indent=2)
                 
             if show_progress:
@@ -244,7 +244,7 @@ def check_update(file_path, json_output=False):
     
     if metadata_path.exists():
         try:
-            with metadata_path.open("r") as f:
+            with metadata_path.open("r", encoding="utf-8") as f:
                 metadata = json.load(f)
                 extension_id = metadata.get("id")
                 source_url = metadata.get("source_url", "")
@@ -606,7 +606,7 @@ def extract_extension(file_path, output_dir=None, show_progress=True):
             metadata_path = file_path.with_suffix(file_path.suffix + ".json")
             if metadata_path.exists():
                 try:
-                    with metadata_path.open("r") as f:
+                    with metadata_path.open("r", encoding="utf-8") as f:
                         meta = json.load(f)
                         extension_id = meta.get("id", "unknown")
                         source_url = meta.get("source_url", "")
@@ -638,7 +638,7 @@ def extract_extension(file_path, output_dir=None, show_progress=True):
             version = None
             
             if metadata_path.exists():
-                with metadata_path.open("r") as f:
+                with metadata_path.open("r", encoding="utf-8") as f:
                     meta = json.load(f)
                     extension_id = meta.get("id", "unknown")
                     source_url = meta.get("source_url", "")

@@ -50,7 +50,7 @@ class MV3Migrator:
             return self.report
 
         try:
-            with open(self.manifest_path, "r") as f:
+            with open(self.manifest_path, "r", encoding="utf-8") as f:
                 manifest = json.load(f)
         except json.JSONDecodeError as e:
             raise ExtensionError(f"Invalid manifest JSON: {e}")
@@ -80,7 +80,7 @@ class MV3Migrator:
 
         # Save changes
         if not dry_run:
-            with open(self.manifest_path, "w") as f:
+            with open(self.manifest_path, "w", encoding="utf-8") as f:
                 json.dump(new_manifest, f, indent=2)
             self.report.changes.append(f"Saved updated manifest to {self.manifest_path}")
 
@@ -107,14 +107,19 @@ class MV3Migrator:
             self.report.changes.append(f"Moved {len(host_permissions)} host permissions to 'host_permissions'")
 
     def _migrate_action(self, manifest: Dict[str, Any]):
+        action = {}
+        
         if "browser_action" in manifest:
-            manifest["action"] = manifest.pop("browser_action")
+            action.update(manifest.pop("browser_action"))
             self.report.changes.append("Renamed 'browser_action' to 'action'")
         
         if "page_action" in manifest:
-            manifest["action"] = manifest.pop("page_action")
+            action.update(manifest.pop("page_action"))
             self.report.changes.append("Renamed 'page_action' to 'action'")
             self.report.warnings.append("Merged 'page_action' into 'action'. Check logic for enabling/disabling.")
+            
+        if action:
+            manifest["action"] = action
 
     def _migrate_background(self, manifest: Dict[str, Any], dry_run: bool):
         bg = manifest.get("background", {})
@@ -136,7 +141,7 @@ class MV3Migrator:
                 if not dry_run:
                     wrapper_path = self.source_dir / wrapper_name
                     try:
-                        with open(wrapper_path, "w") as f:
+                        with open(wrapper_path, "w", encoding="utf-8") as f:
                             f.write(wrapper_content)
                         self.report.changes.append(f"Created '{wrapper_name}' to import multiple background scripts")
                     except Exception as e:
@@ -167,9 +172,20 @@ class MV3Migrator:
         war = manifest.get("web_accessible_resources")
         if war and isinstance(war, list) and len(war) > 0 and isinstance(war[0], str):
             # MV2 list of strings -> MV3 list of objects
+            
+            # Try to find matches from content_scripts
+            matches = set()
+            content_scripts = manifest.get("content_scripts", [])
+            if isinstance(content_scripts, list):
+                for script in content_scripts:
+                    if isinstance(script, dict) and "matches" in script:
+                        matches.update(script["matches"])
+            
+            final_matches = sorted(list(matches)) if matches else ["<all_urls>"]
+            
             new_war = [{
                 "resources": war,
-                "matches": ["<all_urls>"] # Default to all, but this is loose
+                "matches": final_matches
             }]
             manifest["web_accessible_resources"] = new_war
             self.report.changes.append("Converted web_accessible_resources to object format")

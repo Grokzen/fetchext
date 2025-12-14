@@ -36,7 +36,7 @@ def test_metadata_sidecar_creation(fs, mocker):
     metadata_path = output_dir / "test_id.crx.json"
     assert metadata_path.exists()
     
-    with open(metadata_path, "r") as f:
+    with open(metadata_path, "r", encoding="utf-8") as f:
         data = json.load(f)
         
     assert data["id"] == "test_id"
