@@ -1,5 +1,7 @@
 import time
 import shutil
+import concurrent.futures
+from unittest.mock import patch
 from fetchext.utils import open_extension_archive
 from fetchext.analysis.complexity import analyze_complexity
 from fetchext.analysis.entropy import analyze_entropy
@@ -53,7 +55,9 @@ def test_analysis_complexity_speed(large_extension_dir, tmp_path):
 
     start = time.perf_counter()
 
-    results = analyze_complexity(zip_path)
+    # Mock ProcessPoolExecutor to avoid spawn issues on MacOS/Windows in CI
+    with patch("fetchext.analysis.complexity.concurrent.futures.ProcessPoolExecutor", concurrent.futures.ThreadPoolExecutor):
+        results = analyze_complexity(zip_path)
 
     duration = time.perf_counter() - start
     print(f"\nComplexity Analysis Duration: {duration:.4f}s")
@@ -74,7 +78,9 @@ def test_analysis_entropy_speed(large_extension_dir, tmp_path):
 
     start = time.perf_counter()
 
-    results = analyze_entropy(zip_path)
+    # Mock ProcessPoolExecutor to avoid spawn issues on MacOS/Windows in CI
+    with patch("fetchext.analysis.entropy.concurrent.futures.ProcessPoolExecutor", concurrent.futures.ThreadPoolExecutor):
+        results = analyze_entropy(zip_path)
 
     duration = time.perf_counter() - start
     print(f"\nEntropy Analysis Duration: {duration:.4f}s")

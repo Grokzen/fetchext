@@ -28,14 +28,14 @@ def register(subparsers):
 
 
 def handle_graph(args, show_progress=True):
-    from ..analysis.graph import generate_graph
+    from fetchext.analysis .graph import generate_graph
 
     generate_graph(args.file, args.output, interactive=args.interactive)
 
 
 def handle_timeline(args, show_progress=True):
-    from ..inspector import ExtensionInspector
-    from ..console import console
+    from fetchext.security.inspector  import ExtensionInspector
+    from fetchext.interface.console  import console
     from rich.table import Table
     import json
     import sys

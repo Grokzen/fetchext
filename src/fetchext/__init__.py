@@ -1,5 +1,5 @@
 from .cli import main
-from .core import (
+from fetchext.core.core  import (
     download_extension,
     search_extension,
     inspect_extension,

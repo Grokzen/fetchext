@@ -2,7 +2,7 @@ import re
 import logging
 from urllib.parse import urlparse
 from .base import BaseDownloader
-from ..exceptions import NetworkError, ExtensionError
+from fetchext.core.exceptions  import NetworkError, ExtensionError
 
 logger = logging.getLogger(__name__)
 

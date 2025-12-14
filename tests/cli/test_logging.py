@@ -9,7 +9,7 @@ def test_verbose_flag(mocker):
     )
 
     # Mock core.download_extension to avoid actual work
-    mocker.patch("fetchext.core.download_extension")
+    mocker.patch("fetchext.core.core.download_extension")
 
     # Mock logger
     mock_logger = mocker.patch("fetchext.cli.logger")
@@ -27,7 +27,7 @@ def test_quiet_flag(mocker):
         "sys.argv", ["fext", "-q", "download", "chrome", "https://example.com/id"]
     )
 
-    mock_download = mocker.patch("fetchext.core.download_extension")
+    mock_download = mocker.patch("fetchext.core.core.download_extension")
 
     mock_logger = mocker.patch("fetchext.cli.logger")
 
@@ -56,7 +56,7 @@ def test_quiet_flag(mocker):
 def test_default_logging(mocker):
     mocker.patch("sys.argv", ["fext", "download", "chrome", "https://example.com/id"])
 
-    mock_download = mocker.patch("fetchext.core.download_extension")
+    mock_download = mocker.patch("fetchext.core.core.download_extension")
 
     mock_logger = mocker.patch("fetchext.cli.logger")
 

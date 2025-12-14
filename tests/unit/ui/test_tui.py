@@ -4,7 +4,7 @@ from unittest.mock import patch
 # Skip if textual is not installed
 textual = pytest.importorskip("textual")
 from textual.widgets import Input, DataTable  # noqa: E402
-from fetchext.tui import ExtensionApp, ConfirmationScreen  # noqa: E402
+from fetchext.ui.app import ExtensionApp, ConfirmationScreen  # noqa: E402
 
 
 @pytest.mark.asyncio
@@ -17,7 +17,7 @@ async def test_tui_app_structure():
 
 @pytest.mark.asyncio
 async def test_tui_search_submission():
-    with patch("fetchext.tui.search_extension") as mock_search:
+    with patch("fetchext.ui.app.search_extension") as mock_search:
         mock_search.return_value = [{"name": "Test Ext", "id": "abc", "version": "1.0"}]
 
         app = ExtensionApp()
@@ -45,7 +45,7 @@ async def test_tui_search_submission():
 
 @pytest.mark.asyncio
 async def test_tui_browser_selection():
-    with patch("fetchext.tui.search_extension") as mock_search:
+    with patch("fetchext.ui.app.search_extension") as mock_search:
         mock_search.return_value = []
 
         app = ExtensionApp()
@@ -70,8 +70,8 @@ async def test_tui_browser_selection():
 @pytest.mark.asyncio
 async def test_tui_download_confirmation():
     with (
-        patch("fetchext.tui.search_extension") as mock_search,
-        patch("fetchext.tui.download_extension") as mock_download,
+        patch("fetchext.ui.app.search_extension") as mock_search,
+        patch("fetchext.ui.app.download_extension") as mock_download,
     ):
         mock_search.return_value = [{"name": "Test Ext", "id": "abc", "version": "1.0"}]
 

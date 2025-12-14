@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
-from .. import core
-from ..console import console
+from fetchext.core import core
+from fetchext.interface.console  import console
 
 
 def register(subparsers):
@@ -97,7 +97,7 @@ def handle_verify(args, show_progress=True):
 
 
 def handle_locales(args, show_progress=True):
-    from ..analysis.locales import inspect_locales
+    from fetchext.analysis .locales import inspect_locales
     from rich.table import Table
 
     results = inspect_locales(Path(args.file))

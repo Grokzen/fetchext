@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch
 from fetchext.analysis.stix import StixGenerator
-from fetchext.exceptions import AnalysisError
+from fetchext.core.exceptions import AnalysisError
 
 
 @pytest.fixture

@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, mock_open
-from fetchext.verifier import CrxVerifier
+from fetchext.core.verifier import CrxVerifier
 
 # We can't easily mock the full crypto verification without generating real keys and signatures.
 # But we can test the structure parsing logic.

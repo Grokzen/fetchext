@@ -1,7 +1,7 @@
 import sys
 import csv
-from ..history import HistoryManager
-from ..console import console
+from fetchext.data.history  import HistoryManager
+from fetchext.interface.console  import console
 from rich.table import Table
 
 

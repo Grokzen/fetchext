@@ -1,6 +1,6 @@
 from pathlib import Path
-from ..beautify import CodeBeautifier
-from ..console import console
+from fetchext.workflow.beautify  import CodeBeautifier
+from fetchext.interface.console  import console
 
 
 def register(subparsers):

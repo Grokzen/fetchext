@@ -1,5 +1,5 @@
 from textual.app import App
-from fetchext.config import load_config
+from fetchext.data.config import load_config
 import logging
 
 logger = logging.getLogger(__name__)

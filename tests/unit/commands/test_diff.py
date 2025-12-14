@@ -1,6 +1,6 @@
 import json
 from unittest.mock import MagicMock, patch
-from fetchext.diff import ExtensionDiffer
+from fetchext.workflow.diff import ExtensionDiffer
 
 
 def create_mock_zip(manifest, files):
@@ -31,7 +31,7 @@ def test_diff_extensions():
     old_zf = create_mock_zip(old_manifest, old_files)
     new_zf = create_mock_zip(new_manifest, new_files)
 
-    with patch("fetchext.diff.open_extension_archive") as mock_open:
+    with patch("fetchext.workflow.diff.open_extension_archive") as mock_open:
         # Mock context managers
         mock_open.side_effect = [
             MagicMock(__enter__=lambda x: old_zf, __exit__=lambda x, y, z, w: None),

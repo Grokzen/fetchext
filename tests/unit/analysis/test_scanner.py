@@ -1,11 +1,11 @@
 import pytest
 from unittest.mock import Mock, MagicMock
-from fetchext.scanner import DependencyScanner
+from fetchext.security.scanner import DependencyScanner
 
 
 @pytest.fixture
 def mock_open_archive(mocker):
-    return mocker.patch("fetchext.scanner.open_extension_archive")
+    return mocker.patch("fetchext.security.scanner.open_extension_archive")
 
 
 def test_scan_jquery_vulnerable(tmp_path, mock_open_archive):

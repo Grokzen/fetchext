@@ -1,12 +1,12 @@
 import pytest
 import json
 from unittest.mock import patch
-from fetchext.history import HistoryManager
+from fetchext.data.history import HistoryManager
 
 
 @pytest.fixture
 def mock_base_dir(tmp_path):
-    with patch("fetchext.history.HistoryManager._get_base_dir", return_value=tmp_path):
+    with patch("fetchext.data.history.HistoryManager._get_base_dir", return_value=tmp_path):
         yield tmp_path
 
 

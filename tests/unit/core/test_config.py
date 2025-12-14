@@ -1,5 +1,5 @@
 from pathlib import Path
-from fetchext.config import load_config, get_config_path
+from fetchext.data.config import load_config, get_config_path
 
 
 def test_get_config_path_xdg(mocker):
@@ -68,7 +68,7 @@ def test_load_config_integration(fs, mocker):
 
 
 def test_load_config_invalid_toml(fs, mocker):
-    from fetchext.exceptions import ConfigError
+    from fetchext.core.exceptions import ConfigError
     import pytest
 
     mocker.patch.dict("os.environ", {"XDG_CONFIG_HOME": "/config"})
@@ -80,7 +80,7 @@ def test_load_config_invalid_toml(fs, mocker):
 
 
 def test_load_config_invalid_type(fs, mocker):
-    from fetchext.exceptions import ConfigError
+    from fetchext.core.exceptions import ConfigError
     import pytest
 
     config_content = """
@@ -96,7 +96,7 @@ def test_load_config_invalid_type(fs, mocker):
 
 
 def test_load_config_invalid_section(fs, mocker):
-    from fetchext.exceptions import ConfigError
+    from fetchext.core.exceptions import ConfigError
     import pytest
 
     # This is tricky because TOML parsers usually enforce structure.

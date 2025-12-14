@@ -2,7 +2,7 @@ import pytest
 from fetchext.downloaders.chrome import ChromeDownloader
 from fetchext.downloaders.edge import EdgeDownloader
 from fetchext.downloaders.firefox import FirefoxDownloader
-from fetchext.exceptions import ExtensionError
+from fetchext.core.exceptions import ExtensionError
 
 
 class TestChromeDownloader:

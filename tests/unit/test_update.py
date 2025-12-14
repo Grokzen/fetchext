@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch, MagicMock
 from fetchext.commands.update import handle_update
-from fetchext.constants import ExitCode
+from fetchext.core.constants import ExitCode
 
 
 @pytest.fixture

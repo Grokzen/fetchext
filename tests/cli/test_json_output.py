@@ -12,7 +12,7 @@ def test_search_json_output(mocker, capsys):
 
     mock_downloader = mocker.Mock()
     mock_downloader.search.return_value = mock_results
-    mocker.patch("fetchext.core.FirefoxDownloader", return_value=mock_downloader)
+    mocker.patch("fetchext.core.core.FirefoxDownloader", return_value=mock_downloader)
 
     with pytest.raises(SystemExit) as excinfo:
         main()
@@ -31,7 +31,7 @@ def test_inspect_json_output(mocker, capsys):
 
     mock_inspector = mocker.Mock()
     mock_inspector.get_manifest.return_value = mock_manifest
-    mocker.patch("fetchext.core.ExtensionInspector", return_value=mock_inspector)
+    mocker.patch("fetchext.core.core.ExtensionInspector", return_value=mock_inspector)
 
     with pytest.raises(SystemExit) as excinfo:
         main()

@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import patch, MagicMock
 from fetchext.cli import main
-from fetchext.constants import ExitCode
-from fetchext.exceptions import (
+from fetchext.core.constants import ExitCode
+from fetchext.core.exceptions import (
     NetworkError,
     ConfigError,
     SecurityError,

@@ -4,8 +4,8 @@ import os
 from pathlib import Path
 from typing import Dict, List, Union
 from zipfile import ZipFile
-from fetchext.crx import CrxDecoder
-from ..console import console
+from fetchext.core.crx import CrxDecoder
+from fetchext.interface.console  import console
 
 
 def calculate_shannon_entropy(data: bytes) -> float:

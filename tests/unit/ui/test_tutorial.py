@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
-from fetchext.tutorial import get_tutorial_classes, TUTORIAL_STEPS
+from fetchext.interface.tutorial import get_tutorial_classes, TUTORIAL_STEPS
 
 # Get classes dynamically
 TutorialApp, TutorialStep = get_tutorial_classes()

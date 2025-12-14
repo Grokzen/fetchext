@@ -2,7 +2,7 @@ import zipfile
 import hashlib
 import base64
 import io
-from fetchext.verifier import XpiVerifier
+from fetchext.core.verifier import XpiVerifier
 
 
 def test_xpi_verify_valid(fs):

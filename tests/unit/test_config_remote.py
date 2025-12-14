@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import Mock, patch
 from fetchext.commands.config import handle_config_remote
-from fetchext.constants import ExitCode
+from fetchext.core.constants import ExitCode
 
 
 @pytest.fixture
@@ -16,7 +16,7 @@ def test_handle_config_remote_success(mock_args, tmp_path):
 
     with (
         patch("requests.get") as mock_get,
-        patch("fetchext.config.get_config_path") as mock_get_path,
+        patch("fetchext.data.config.get_config_path") as mock_get_path,
     ):
         # Setup mocks
         mock_response = Mock()

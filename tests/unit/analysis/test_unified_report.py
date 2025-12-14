@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import patch
 from dataclasses import dataclass, field
-from fetchext.core import generate_unified_report
-from fetchext.exceptions import ExtensionError
+from fetchext.core.core import generate_unified_report
+from fetchext.core.exceptions import ExtensionError
 
 
 @dataclass
@@ -31,13 +31,13 @@ class MockSecret:
 @pytest.fixture
 def mock_components():
     with (
-        patch("fetchext.inspector.ExtensionInspector") as mock_inspector,
-        patch("fetchext.auditor.ExtensionAuditor") as mock_auditor,
-        patch("fetchext.risk.RiskAnalyzer") as mock_risk,
+        patch("fetchext.security.inspector.ExtensionInspector") as mock_inspector,
+        patch("fetchext.security.auditor.ExtensionAuditor") as mock_auditor,
+        patch("fetchext.security.risk.RiskAnalyzer") as mock_risk,
         patch("fetchext.analysis.complexity.analyze_complexity") as mock_complexity,
         patch("fetchext.analysis.entropy.analyze_entropy") as mock_entropy,
         patch("fetchext.analysis.domains.analyze_domains") as mock_domains,
-        patch("fetchext.secrets.SecretScanner") as mock_secrets,
+        patch("fetchext.security.secrets.SecretScanner") as mock_secrets,
         patch("fetchext.analysis.yara.YaraScanner") as mock_yara,
     ):
         yield {

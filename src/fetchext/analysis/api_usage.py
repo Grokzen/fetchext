@@ -3,7 +3,7 @@ import zipfile
 from pathlib import Path
 from typing import Dict, Any
 from collections import Counter
-from ..crx import CrxDecoder
+from fetchext.core.crx  import CrxDecoder
 
 
 def analyze_api_usage(file_path: Path, show_progress: bool = False) -> Dict[str, Any]:

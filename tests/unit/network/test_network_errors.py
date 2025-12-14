@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import MagicMock
 import requests
-from fetchext.network import download_file
-from fetchext.exceptions import NetworkError
+from fetchext.network.network import download_file
+from fetchext.core.exceptions import NetworkError
 
 
 def test_download_403_error(fs):

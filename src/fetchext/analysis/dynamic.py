@@ -14,7 +14,7 @@ except ImportError:
     async_playwright = None
     Page = None
 
-from ..exceptions import AnalysisError
+from fetchext.core.exceptions  import AnalysisError
 
 logger = logging.getLogger(__name__)
 

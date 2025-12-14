@@ -1,8 +1,8 @@
 import pytest
 from pathlib import Path
 from unittest.mock import MagicMock
-from fetchext.network import download_file
-from fetchext.exceptions import NetworkError
+from fetchext.network.network import download_file
+from fetchext.core.exceptions import NetworkError
 
 
 @pytest.fixture

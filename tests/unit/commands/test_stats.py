@@ -1,7 +1,7 @@
 import json
 import zipfile
 from pathlib import Path
-from fetchext.stats import RepoAnalyzer
+from fetchext.workflow.stats import RepoAnalyzer
 
 
 def create_dummy_extension(fs, path, manifest):

@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import patch
 from pathlib import Path
 from fetchext.utils import check_disk_space
-from fetchext.exceptions import InsufficientDiskSpaceError
+from fetchext.core.exceptions import InsufficientDiskSpaceError
 
 
 def test_check_disk_space_sufficient():

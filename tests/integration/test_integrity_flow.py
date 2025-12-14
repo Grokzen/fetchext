@@ -1,7 +1,7 @@
 import pytest
 from pathlib import Path
-from fetchext.core import download_extension
-from fetchext.exceptions import IntegrityError
+from fetchext.core.core import download_extension
+from fetchext.core.exceptions import IntegrityError
 
 
 class TestIntegrityIntegration:
@@ -11,7 +11,7 @@ class TestIntegrityIntegration:
         mock_downloader.extract_id.return_value = "abc"
         mock_downloader.download.return_value = Path("/tmp/abc.crx")
 
-        mocker.patch("fetchext.core.get_downloader", return_value=mock_downloader)
+        mocker.patch("fetchext.core.core.get_downloader", return_value=mock_downloader)
 
         # Create dummy file
         fs.create_file("/tmp/abc.crx", contents=b"content")
@@ -35,7 +35,7 @@ class TestIntegrityIntegration:
         mock_downloader.extract_id.return_value = "abc"
         mock_downloader.download.return_value = Path("/tmp/abc.crx")
 
-        mocker.patch("fetchext.core.get_downloader", return_value=mock_downloader)
+        mocker.patch("fetchext.core.core.get_downloader", return_value=mock_downloader)
 
         # Create dummy file
         fs.create_file("/tmp/abc.crx", contents=b"content")

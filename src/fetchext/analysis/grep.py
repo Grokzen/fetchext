@@ -2,7 +2,7 @@ import os
 import re
 from pathlib import Path
 from concurrent.futures import ProcessPoolExecutor, as_completed
-from ..utils import open_extension_archive
+from fetchext.utils  import open_extension_archive
 
 
 class GrepSearcher:

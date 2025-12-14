@@ -2,7 +2,7 @@ import ppdeep
 import logging
 from pathlib import Path
 from typing import List, Dict, Any, Union
-from ..utils import open_extension_archive
+from fetchext.utils  import open_extension_archive
 
 logger = logging.getLogger(__name__)
 

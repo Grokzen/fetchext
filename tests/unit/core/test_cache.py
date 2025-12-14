@@ -1,5 +1,5 @@
 import time
-from fetchext.cache import SearchCache
+from fetchext.data.cache import SearchCache
 
 
 def test_cache_init(tmp_path):

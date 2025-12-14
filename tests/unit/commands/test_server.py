@@ -1,16 +1,16 @@
 import pytest
 import json
-from fetchext.server import generate_update_manifest
+from fetchext.network.server import generate_update_manifest
 
 
 @pytest.fixture
 def mock_inspector(mocker):
-    return mocker.patch("fetchext.server.ExtensionInspector")
+    return mocker.patch("fetchext.network.server.ExtensionInspector")
 
 
 @pytest.fixture
 def mock_crx_decoder(mocker):
-    return mocker.patch("fetchext.server.CrxDecoder")
+    return mocker.patch("fetchext.network.server.CrxDecoder")
 
 
 def test_generate_update_manifest_chrome(tmp_path, mock_inspector, mock_crx_decoder):
@@ -103,11 +103,11 @@ def test_generate_update_manifest_mixed(tmp_path, mock_inspector, mock_crx_decod
 
 def test_run_server(tmp_path, mocker):
     # Mock socketserver.TCPServer
-    mock_server = mocker.patch("fetchext.server.socketserver.TCPServer")
+    mock_server = mocker.patch("fetchext.network.server.socketserver.TCPServer")
     mock_server_instance = mock_server.return_value
     mock_server_instance.__enter__.return_value = mock_server_instance
 
-    from fetchext.server import run_server
+    from fetchext.network.server import run_server
 
     # Create a dummy directory
     d = tmp_path / "serve_dir"

@@ -3,7 +3,7 @@ import pytest
 from pathlib import Path
 import struct
 import tempfile
-from fetchext.crx import CrxDecoder
+from fetchext.core.crx import CrxDecoder
 
 
 # Strategy for generating CRX components

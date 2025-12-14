@@ -1,4 +1,4 @@
-from ..watcher import DirectoryWatcher
+from fetchext.workflow.watcher  import DirectoryWatcher
 
 
 def register(subparsers):

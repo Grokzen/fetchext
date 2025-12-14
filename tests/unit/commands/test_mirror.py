@@ -1,11 +1,11 @@
 import pytest
-from fetchext.mirror import MirrorManager
+from fetchext.workflow.mirror import MirrorManager
 
 
 @pytest.fixture
 def mock_downloader(mocker):
     # Mock ChromeDownloader
-    mock = mocker.patch("fetchext.mirror.ChromeDownloader")
+    mock = mocker.patch("fetchext.workflow.mirror.ChromeDownloader")
     instance = mock.return_value
     instance.extract_id.side_effect = (
         lambda url: url if len(url) == 32 else "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -16,7 +16,7 @@ def mock_downloader(mocker):
 
 @pytest.fixture
 def mock_inspector(mocker):
-    return mocker.patch("fetchext.mirror.ExtensionInspector")
+    return mocker.patch("fetchext.workflow.mirror.ExtensionInspector")
 
 
 def test_sync_download_missing(tmp_path, mock_downloader):

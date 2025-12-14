@@ -1,12 +1,12 @@
 import pytest
 from unittest.mock import patch
 from pathlib import Path
-from fetchext.converter import FormatConverter
+from fetchext.core.converter import FormatConverter
 
 
 @pytest.fixture
 def mock_crx_decoder():
-    with patch("fetchext.converter.CrxDecoder") as mock:
+    with patch("fetchext.core.converter.CrxDecoder") as mock:
         yield mock
 
 

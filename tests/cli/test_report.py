@@ -10,7 +10,7 @@ def test_report_command(fs, capsys):
     fs.create_file(fake_crx, contents="fake content")
 
     # Mock core.generate_report
-    with patch("fetchext.core.generate_report") as mock_generate:
+    with patch("fetchext.core.core.generate_report") as mock_generate:
         with patch("sys.argv", ["fext", "report", "extension.crx"]):
             with pytest.raises(SystemExit) as excinfo:
                 main()
@@ -26,7 +26,7 @@ def test_report_command_with_output(fs, capsys):
     fake_crx = Path("extension.crx")
     fs.create_file(fake_crx, contents="fake content")
 
-    with patch("fetchext.core.generate_report") as mock_generate:
+    with patch("fetchext.core.core.generate_report") as mock_generate:
         with patch(
             "sys.argv", ["fext", "report", "extension.crx", "-o", "my_report.md"]
         ):

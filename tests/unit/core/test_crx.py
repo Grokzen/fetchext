@@ -3,7 +3,7 @@ import zipfile
 import io
 import pytest
 from pathlib import Path
-from fetchext.crx import CrxDecoder, PartialFileReader
+from fetchext.core.crx import CrxDecoder, PartialFileReader
 from fetchext.utils import open_extension_archive
 
 

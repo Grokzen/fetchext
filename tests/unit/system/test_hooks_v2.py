@@ -1,5 +1,5 @@
 import pytest
-from fetchext.hooks import HookManager, HookContext
+from fetchext.plugins.hooks import HookManager, HookContext
 
 
 @pytest.fixture

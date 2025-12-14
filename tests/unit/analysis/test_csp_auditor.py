@@ -1,5 +1,5 @@
 import pytest
-from fetchext.auditor import ExtensionAuditor, AuditReport
+from fetchext.security.auditor import ExtensionAuditor, AuditReport
 
 
 @pytest.fixture

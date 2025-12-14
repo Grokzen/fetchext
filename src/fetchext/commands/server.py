@@ -1,5 +1,5 @@
 from pathlib import Path
-from ..config import load_config
+from fetchext.data.config  import load_config
 
 
 def register(subparsers):
@@ -71,19 +71,19 @@ def register(subparsers):
 
 
 def handle_serve(args, show_progress=True):
-    from ..server import run_server
+    from fetchext.network.server  import run_server
 
     run_server(args.directory, args.host, args.port)
 
 
 def handle_update_manifest(args, show_progress=True):
-    from ..server import generate_update_manifest
+    from fetchext.network.server  import generate_update_manifest
 
     generate_update_manifest(args.directory, args.base_url, args.output)
 
 
 def handle_mirror(args, show_progress=True):
-    from ..mirror import MirrorManager
+    from fetchext.workflow.mirror  import MirrorManager
 
     manager = MirrorManager()
     manager.sync(

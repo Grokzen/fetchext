@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock, patch
 from pathlib import Path
-from fetchext.diff import ExtensionDiffer
+from fetchext.workflow.diff import ExtensionDiffer
 
 
 @pytest.fixture
@@ -9,7 +9,7 @@ def differ():
     return ExtensionDiffer()
 
 
-@patch("fetchext.diff.open_extension_archive")
+@patch("fetchext.workflow.diff.open_extension_archive")
 def test_diff_ignore_whitespace(mock_open, differ):
     # Setup mocks
     mock_old_zf = MagicMock()
@@ -62,8 +62,8 @@ def test_diff_ignore_whitespace(mock_open, differ):
     assert "script.js" not in report.modified_files
 
 
-@patch("fetchext.diff.open_extension_archive")
-@patch("fetchext.diff.Image.open")
+@patch("fetchext.workflow.diff.open_extension_archive")
+@patch("fetchext.workflow.diff.Image.open")
 def test_diff_images(mock_img_open, mock_open, differ):
     # Setup mocks
     mock_old_zf = MagicMock()

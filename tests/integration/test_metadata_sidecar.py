@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 def test_metadata_sidecar_creation(fs, mocker):
     # Mock downloader
-    mock_downloader_cls = mocker.patch("fetchext.core.ChromeDownloader")
+    mock_downloader_cls = mocker.patch("fetchext.core.core.ChromeDownloader")
     mock_downloader = mock_downloader_cls.return_value
     mock_downloader.extract_id.return_value = "test_id"
 
@@ -20,7 +20,7 @@ def test_metadata_sidecar_creation(fs, mocker):
     mock_downloader.download.return_value = fake_crx
 
     # Mock ExtensionInspector
-    mock_inspector_cls = mocker.patch("fetchext.core.ExtensionInspector")
+    mock_inspector_cls = mocker.patch("fetchext.core.core.ExtensionInspector")
     mock_inspector = mock_inspector_cls.return_value
     mock_inspector.get_manifest.return_value = {
         "name": "Test Extension",

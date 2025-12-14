@@ -2,12 +2,12 @@ import pytest
 import json
 from unittest.mock import MagicMock, patch
 from pathlib import Path
-from fetchext.risk import RiskAnalyzer
+from fetchext.security.risk import RiskAnalyzer
 
 
 @pytest.fixture
 def mock_extension_archive():
-    with patch("fetchext.risk.open_extension_archive") as mock_open:
+    with patch("fetchext.security.risk.open_extension_archive") as mock_open:
         mock_zf = MagicMock()
         mock_open.return_value.__enter__.return_value = mock_zf
         yield mock_zf

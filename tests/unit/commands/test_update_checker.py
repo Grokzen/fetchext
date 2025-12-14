@@ -13,7 +13,7 @@ def mock_downloader():
 
 @pytest.fixture
 def mock_get_downloader(mock_downloader):
-    with patch("fetchext.core.get_downloader") as mock:
+    with patch("fetchext.core.core.get_downloader") as mock:
         mock.return_value = mock_downloader
         yield mock
 
@@ -27,7 +27,7 @@ def test_check_update_with_metadata_file(fs, mock_get_downloader, capsys):
     )
 
     # Mock ExtensionInspector to avoid file parsing error
-    with patch("fetchext.core.ExtensionInspector") as MockInspector:
+    with patch("fetchext.core.core.ExtensionInspector") as MockInspector:
         mock_instance = MockInspector.return_value
         mock_instance.get_manifest.return_value = {
             "version": "1.0.0",
@@ -53,7 +53,7 @@ def test_check_update_no_update(fs, mock_get_downloader, capsys):
         contents='{"id": "test-id", "version": "2.0.0", "browser": "chrome"}',
     )
 
-    with patch("fetchext.core.ExtensionInspector") as MockInspector:
+    with patch("fetchext.core.core.ExtensionInspector") as MockInspector:
         mock_instance = MockInspector.return_value
         mock_instance.get_manifest.return_value = {"version": "2.0.0"}
 
@@ -74,7 +74,7 @@ def test_check_update_json_output(fs, mock_get_downloader, capsys):
         contents='{"id": "test-id", "version": "1.0.0", "browser": "chrome"}',
     )
 
-    with patch("fetchext.core.ExtensionInspector") as MockInspector:
+    with patch("fetchext.core.core.ExtensionInspector") as MockInspector:
         mock_instance = MockInspector.return_value
         mock_instance.get_manifest.return_value = {"version": "1.0.0"}
 
@@ -91,7 +91,7 @@ def test_check_update_infer_from_manifest(fs, mock_get_downloader, capsys):
     # Setup
     fs.create_file("extension.crx")
     # Mock ExtensionInspector to return manifest info
-    with patch("fetchext.core.ExtensionInspector") as MockInspector:
+    with patch("fetchext.core.core.ExtensionInspector") as MockInspector:
         mock_instance = MockInspector.return_value
         mock_instance.get_manifest.return_value = {
             "name": "Test Ext",
@@ -114,7 +114,7 @@ def test_check_update_cannot_determine_id(fs, capsys):
     fs.create_file("extension.crx")
 
     # Mock ExtensionInspector to return manifest without ID
-    with patch("fetchext.core.ExtensionInspector") as MockInspector:
+    with patch("fetchext.core.core.ExtensionInspector") as MockInspector:
         mock_instance = MockInspector.return_value
         mock_instance.get_manifest.return_value = {
             "name": "Test Ext",
@@ -141,7 +141,7 @@ def test_check_update_error_fetching_version(fs, mock_get_downloader, capsys):
         "Network error"
     )
 
-    with patch("fetchext.core.ExtensionInspector") as MockInspector:
+    with patch("fetchext.core.core.ExtensionInspector") as MockInspector:
         mock_instance = MockInspector.return_value
         mock_instance.get_manifest.return_value = {"version": "1.0.0"}
 

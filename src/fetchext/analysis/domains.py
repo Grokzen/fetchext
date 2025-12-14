@@ -3,8 +3,8 @@ from pathlib import Path
 from typing import Dict, List, Set
 from zipfile import ZipFile
 from urllib.parse import urlparse
-from fetchext.crx import CrxDecoder
-from ..console import console
+from fetchext.core.crx import CrxDecoder
+from fetchext.interface.console  import console
 
 # Regex for finding URLs
 # Matches http, https, ws, wss, ftp

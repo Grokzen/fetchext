@@ -17,7 +17,7 @@ def test_download_extension_call(mocker):
     mock_downloader.extract_id.return_value = "test_id"
     mock_downloader.download.return_value = Mock(name="path")
 
-    mocker.patch("fetchext.core.ChromeDownloader", return_value=mock_downloader)
+    mocker.patch("fetchext.core.core.ChromeDownloader", return_value=mock_downloader)
 
     fetchext.download_extension("chrome", "http://example.com", "/tmp")
 
@@ -29,12 +29,12 @@ def test_search_extension_call(mocker):
     """Verify search_extension calls the correct downloader."""
     mock_downloader = mocker.Mock()
     mock_downloader.search.return_value = []  # Return empty list
-    mocker.patch("fetchext.core.FirefoxDownloader", return_value=mock_downloader)
+    mocker.patch("fetchext.core.core.FirefoxDownloader", return_value=mock_downloader)
 
     # Mock cache to always miss
     mock_cache = mocker.Mock()
     mock_cache.get.return_value = None
-    mocker.patch("fetchext.core.SearchCache", return_value=mock_cache)
+    mocker.patch("fetchext.core.core.SearchCache", return_value=mock_cache)
 
     fetchext.search_extension("firefox", "query")
 

@@ -1,5 +1,5 @@
 from pathlib import Path
-from ..config import load_config
+from fetchext.data.config  import load_config
 
 
 def register(subparsers):
@@ -81,20 +81,20 @@ def register(subparsers):
 
 
 def handle_extract(args, show_progress=True):
-    from ..core import extract_extension
+    from fetchext.core.core  import extract_extension
 
     extract_extension(args.file, args.output_dir)
 
 
 def handle_tutorial(args, show_progress=True):
-    from ..tutorial import run_tutorial
+    from fetchext.interface.tutorial  import run_tutorial
 
     run_tutorial()
 
 
 def handle_optimize(args, show_progress=True):
-    from ..optimizer import optimize_extension
-    from ..console import console
+    from fetchext.workflow.optimizer  import optimize_extension
+    from fetchext.interface.console  import console
     import json
 
     results = optimize_extension(args.directory, quality=args.quality)
@@ -113,8 +113,8 @@ def handle_optimize(args, show_progress=True):
 
 
 def handle_clean(args, show_progress=True):
-    from ..clean import clean_artifacts
-    from ..config import get_config_value
+    from fetchext.workflow.clean  import clean_artifacts
+    from fetchext.data.config  import get_config_value
 
     # Determine what to clean
     clean_cache = args.cache
@@ -145,8 +145,8 @@ def handle_clean(args, show_progress=True):
 
 
 def handle_schema(args, show_progress=True):
-    from ..schemas import get_schema
-    from ..console import console
+    from fetchext.data.schemas  import get_schema
+    from fetchext.interface.console  import console
     import json
     import sys
 
@@ -159,6 +159,6 @@ def handle_schema(args, show_progress=True):
 
 
 def handle_convert(args, show_progress=True):
-    from ..core import convert_extension
+    from fetchext.core.core  import convert_extension
 
     convert_extension(args.input, args.output, to_format=args.to)

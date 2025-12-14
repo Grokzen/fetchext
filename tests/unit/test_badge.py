@@ -1,5 +1,5 @@
 from unittest.mock import Mock, patch
-from fetchext.reporter import BadgeGenerator
+from fetchext.interface.reporter import BadgeGenerator
 from fetchext.commands.badge import handle_badge
 
 

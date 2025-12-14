@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import patch, MagicMock
 from pathlib import Path
 from fetchext.commands.git import handle_init
-from fetchext.constants import ExitCode
+from fetchext.core.constants import ExitCode
 
 
 @pytest.fixture

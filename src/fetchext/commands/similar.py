@@ -1,7 +1,7 @@
 from pathlib import Path
-from ..analysis.similarity import SimilarityEngine
-from ..console import console
-from ..config import load_config
+from fetchext.analysis .similarity import SimilarityEngine
+from fetchext.interface.console  import console
+from fetchext.data.config  import load_config
 
 
 def register(subparsers):

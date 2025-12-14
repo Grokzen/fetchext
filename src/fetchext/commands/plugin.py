@@ -23,8 +23,8 @@ def register(subparsers):
 
 
 def handle_plugin(args, show_progress=True):
-    from ..plugins import PluginManager
-    from ..console import console
+    from fetchext.plugins.manager  import PluginManager
+    from fetchext.interface.console  import console
     from rich.table import Table
     import sys
 

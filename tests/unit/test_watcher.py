@@ -1,20 +1,20 @@
 import pytest
 from unittest.mock import Mock, patch
-from fetchext.watcher import DirectoryWatcher, ExtensionEventHandler
+from fetchext.workflow.watcher import DirectoryWatcher, ExtensionEventHandler
 
 
 @pytest.fixture
 def mock_observer():
-    with patch("fetchext.watcher.Observer") as mock:
+    with patch("fetchext.workflow.watcher.Observer") as mock:
         yield mock
 
 
 @pytest.fixture
 def mock_core():
     with (
-        patch("fetchext.watcher.extract_extension") as mock_extract,
-        patch("fetchext.watcher.generate_report") as mock_report,
-        patch("fetchext.watcher.scan_extension") as mock_scan,
+        patch("fetchext.workflow.watcher.extract_extension") as mock_extract,
+        patch("fetchext.workflow.watcher.generate_report") as mock_report,
+        patch("fetchext.workflow.watcher.scan_extension") as mock_scan,
     ):
         yield mock_extract, mock_report, mock_scan
 

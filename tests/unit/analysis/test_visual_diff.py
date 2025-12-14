@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import patch, MagicMock
 from pathlib import Path
 from fetchext.analysis.visual_diff import VisualDiffGenerator
-from fetchext.diff import DiffReport
+from fetchext.workflow.diff import DiffReport
 
 
 @pytest.fixture

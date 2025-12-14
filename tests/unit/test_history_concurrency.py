@@ -1,7 +1,7 @@
 import sqlite3
 import threading
 import time
-from fetchext.history import HistoryManager
+from fetchext.data.history import HistoryManager
 
 
 def test_wal_mode_enabled(tmp_path, monkeypatch):

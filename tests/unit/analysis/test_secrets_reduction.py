@@ -1,4 +1,4 @@
-from fetchext.secrets import SecretScanner
+from fetchext.security.secrets import SecretScanner
 
 
 def test_secret_scanner_false_positives():

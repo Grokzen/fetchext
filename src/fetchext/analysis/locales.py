@@ -2,7 +2,7 @@ import zipfile
 import json
 from pathlib import Path
 from typing import Dict, Any
-from ..crx import CrxDecoder
+from fetchext.core.crx  import CrxDecoder
 
 
 def inspect_locales(file_path: Path) -> Dict[str, Any]:

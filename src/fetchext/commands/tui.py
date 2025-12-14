@@ -5,6 +5,6 @@ def register(subparsers):
 
 
 def handle_ui(args, show_progress=True):
-    from ..tui import run_tui
+    from fetchext.ui.app  import run_tui
 
     run_tui()

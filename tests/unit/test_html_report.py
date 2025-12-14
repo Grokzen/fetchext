@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch
-from fetchext.reporter import HtmlReporter
-from fetchext.core import generate_html_report
+from fetchext.interface.reporter import HtmlReporter
+from fetchext.core.core import generate_html_report
 
 
 @pytest.fixture
@@ -72,7 +72,7 @@ def test_html_reporter_generate(sample_report_data):
 def test_generate_html_report(tmp_path):
     mock_data = {"metadata": {"manifest": {"name": "Test"}}}
 
-    with patch("fetchext.core.generate_unified_report", return_value=mock_data):
+    with patch("fetchext.core.core.generate_unified_report", return_value=mock_data):
         file_path = tmp_path / "test.crx"
         file_path.touch()
 

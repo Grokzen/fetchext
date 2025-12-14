@@ -40,7 +40,7 @@ class TestCLI:
     def test_preview_command(self):
         with (
             patch.object(sys, "argv", ["fext", "preview", "test.crx"]),
-            patch("fetchext.core.preview_extension") as mock_preview,
+            patch("fetchext.core.core.preview_extension") as mock_preview,
         ):
             with pytest.raises(SystemExit) as excinfo:
                 main()
@@ -50,7 +50,7 @@ class TestCLI:
     def test_audit_command(self):
         with (
             patch.object(sys, "argv", ["fext", "audit", "test.crx"]),
-            patch("fetchext.core.audit_extension") as mock_audit,
+            patch("fetchext.core.core.audit_extension") as mock_audit,
         ):
             with pytest.raises(SystemExit) as excinfo:
                 main()
@@ -60,7 +60,7 @@ class TestCLI:
     def test_diff_command(self):
         with (
             patch.object(sys, "argv", ["fext", "diff", "old.crx", "new.crx"]),
-            patch("fetchext.core.diff_extensions") as mock_diff,
+            patch("fetchext.core.core.diff_extensions") as mock_diff,
         ):
             with pytest.raises(SystemExit) as excinfo:
                 main()
@@ -90,7 +90,7 @@ class TestCLI:
                     "report.html",
                 ],
             ),
-            patch("fetchext.core.diff_extensions") as mock_diff,
+            patch("fetchext.core.core.diff_extensions") as mock_diff,
         ):
             with pytest.raises(SystemExit) as excinfo:
                 main()
@@ -106,7 +106,7 @@ class TestCLI:
     def test_risk_command(self):
         with (
             patch.object(sys, "argv", ["fext", "risk", "test.crx"]),
-            patch("fetchext.core.analyze_risk") as mock_risk,
+            patch("fetchext.core.core.analyze_risk") as mock_risk,
         ):
             with pytest.raises(SystemExit) as excinfo:
                 main()
@@ -116,7 +116,7 @@ class TestCLI:
     def test_verify_command(self):
         with (
             patch.object(sys, "argv", ["fext", "verify", "test.crx"]),
-            patch("fetchext.core.verify_signature") as mock_verify,
+            patch("fetchext.core.core.verify_signature") as mock_verify,
         ):
             mock_verify.return_value = True
             with pytest.raises(SystemExit) as excinfo:

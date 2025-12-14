@@ -1,9 +1,9 @@
 from pathlib import Path
-from ..console import console
-from ..reporter import BadgeGenerator
-from ..inspector import ExtensionInspector
-from ..risk import RiskAnalyzer
-from ..analysis.licenses import scan_licenses
+from fetchext.interface.console  import console
+from fetchext.interface.reporter  import BadgeGenerator
+from fetchext.security.inspector  import ExtensionInspector
+from fetchext.security.risk  import RiskAnalyzer
+from fetchext.analysis .licenses import scan_licenses
 
 
 def register(subparsers):

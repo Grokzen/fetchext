@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
-from ..console import console
-from .. import core
+from fetchext.interface.console  import console
+from fetchext.core import core
 
 
 def register(subparsers):
@@ -25,7 +25,7 @@ def register(subparsers):
 
 def handle_export(args, show_progress=True):
     if args.stix:
-        from ..analysis.stix import StixGenerator
+        from fetchext.analysis .stix import StixGenerator
 
         # We need to gather analysis data first
         # This might be expensive if we run everything

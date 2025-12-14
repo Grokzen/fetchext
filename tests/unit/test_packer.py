@@ -1,5 +1,5 @@
-from fetchext.packer import ExtensionPacker
-from fetchext.crx import CrxDecoder
+from fetchext.core.packer import ExtensionPacker
+from fetchext.core.crx import CrxDecoder
 
 
 def test_pack_extension(tmp_path):

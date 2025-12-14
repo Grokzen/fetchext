@@ -1,11 +1,11 @@
 from unittest.mock import patch, MagicMock
-from fetchext.core import search_extension
+from fetchext.core.core import search_extension
 
 
 def test_search_uses_cache():
     with (
-        patch("fetchext.core.SearchCache") as MockCache,
-        patch("fetchext.core.get_downloader") as mock_get_downloader,
+        patch("fetchext.core.core.SearchCache") as MockCache,
+        patch("fetchext.core.core.get_downloader") as mock_get_downloader,
     ):
         mock_downloader = MagicMock()
         mock_downloader.search.return_value = [{"id": "remote"}]
@@ -31,8 +31,8 @@ def test_search_uses_cache():
 
 def test_search_refresh_ignores_cache():
     with (
-        patch("fetchext.core.SearchCache") as MockCache,
-        patch("fetchext.core.get_downloader") as mock_get_downloader,
+        patch("fetchext.core.core.SearchCache") as MockCache,
+        patch("fetchext.core.core.get_downloader") as mock_get_downloader,
     ):
         mock_downloader = MagicMock()
         mock_downloader.search.return_value = [{"id": "remote"}]

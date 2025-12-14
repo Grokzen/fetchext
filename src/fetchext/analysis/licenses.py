@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 from typing import List, Dict
 from zipfile import ZipFile
-from ..crx import CrxDecoder
+from fetchext.core.crx  import CrxDecoder
 
 LICENSE_PATTERNS = {
     "MIT": [

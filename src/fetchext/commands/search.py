@@ -1,4 +1,4 @@
-from .. import core
+from fetchext.core import core
 
 
 def register(subparsers):

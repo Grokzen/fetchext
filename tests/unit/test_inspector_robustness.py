@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock, patch
 import json
-from fetchext.inspector import ExtensionInspector
+from fetchext.security.inspector import ExtensionInspector
 
 
 @pytest.fixture
@@ -28,7 +28,7 @@ def test_inspect_valid(inspector):
     mock_open_file.__enter__.return_value = mock_file
     mock_zip.open.return_value = mock_open_file
 
-    with patch("fetchext.inspector.open_extension_archive") as mock_open:
+    with patch("fetchext.security.inspector.open_extension_archive") as mock_open:
         mock_open.return_value.__enter__.return_value = mock_zip
         # Patch json.load to return a dict
         with patch("json.load", return_value={"name": "Test"}):
@@ -45,7 +45,7 @@ def test_inspect_missing_manifest(inspector):
     mock_zip.infolist.return_value = []
     mock_zip.namelist.return_value = ["other.js"]
 
-    with patch("fetchext.inspector.open_extension_archive") as mock_open:
+    with patch("fetchext.security.inspector.open_extension_archive") as mock_open:
         mock_open.return_value.__enter__.return_value = mock_zip
 
         result = inspector.inspect("dummy.crx")
@@ -65,7 +65,7 @@ def test_inspect_invalid_manifest_json(inspector):
     mock_open_file.__enter__.return_value = mock_file
     mock_zip.open.return_value = mock_open_file
 
-    with patch("fetchext.inspector.open_extension_archive") as mock_open:
+    with patch("fetchext.security.inspector.open_extension_archive") as mock_open:
         mock_open.return_value.__enter__.return_value = mock_zip
 
         # json.load raises JSONDecodeError
@@ -81,7 +81,7 @@ def test_inspect_invalid_manifest_json(inspector):
 
 def test_inspect_corrupt_archive(inspector):
     with patch(
-        "fetchext.inspector.open_extension_archive", side_effect=Exception("Corrupt")
+        "fetchext.security.inspector.open_extension_archive", side_effect=Exception("Corrupt")
     ):
         result = inspector.inspect("bad.crx")
 

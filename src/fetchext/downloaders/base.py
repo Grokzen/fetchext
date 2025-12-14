@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from ..client import NetworkClient
+from fetchext.network.client  import NetworkClient
 
 
 class BaseDownloader(ABC):

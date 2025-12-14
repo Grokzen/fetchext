@@ -1,22 +1,22 @@
 import pytest
 from unittest.mock import patch
-from fetchext.setup import run_setup
+from fetchext.interface.wizard import run_setup
 
 
 @pytest.fixture
 def mock_config_path(tmp_path):
     config_file = tmp_path / "config.toml"
-    with patch("fetchext.setup.get_config_path", return_value=config_file):
+    with patch("fetchext.interface.wizard.get_config_path", return_value=config_file):
         yield config_file
 
 
 @pytest.fixture
 def mock_prompts():
     with (
-        patch("fetchext.setup.Prompt.ask") as mock_prompt,
-        patch("fetchext.setup.Confirm.ask") as mock_confirm,
-        patch("fetchext.setup.IntPrompt.ask") as mock_int,
-        patch("fetchext.setup.FloatPrompt.ask") as mock_float,
+        patch("fetchext.interface.wizard.Prompt.ask") as mock_prompt,
+        patch("fetchext.interface.wizard.Confirm.ask") as mock_confirm,
+        patch("fetchext.interface.wizard.IntPrompt.ask") as mock_int,
+        patch("fetchext.interface.wizard.FloatPrompt.ask") as mock_float,
     ):
         yield mock_prompt, mock_confirm, mock_int, mock_float
 

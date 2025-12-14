@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch
-from fetchext.plugins import PluginManager
+from fetchext.plugins.manager import PluginManager
 
 
 @pytest.fixture
@@ -12,7 +12,7 @@ def mock_hooks_dir(tmp_path):
 
 @pytest.fixture
 def plugin_manager(mock_hooks_dir):
-    with patch("fetchext.plugins.get_config_path") as mock_config:
+    with patch("fetchext.plugins.manager.get_config_path") as mock_config:
         mock_config.return_value.parent = mock_hooks_dir.parent
         yield PluginManager()
 

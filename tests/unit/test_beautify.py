@@ -1,5 +1,5 @@
 import pytest
-from fetchext.beautify import CodeBeautifier
+from fetchext.workflow.beautify import CodeBeautifier
 
 
 @pytest.fixture

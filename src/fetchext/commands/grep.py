@@ -1,7 +1,7 @@
 from pathlib import Path
-from ..console import console
-from ..analysis.grep import search_directory
-from ..config import load_config
+from fetchext.interface.console  import console
+from fetchext.analysis .grep import search_directory
+from fetchext.data.config  import load_config
 
 
 def register(subparsers):

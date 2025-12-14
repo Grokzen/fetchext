@@ -1,4 +1,4 @@
-from fetchext.protobuf import SimpleProtobuf
+from fetchext.core.protobuf import SimpleProtobuf
 
 
 def test_read_varint():

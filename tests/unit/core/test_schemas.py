@@ -1,6 +1,6 @@
 import json
 import pytest
-from fetchext.schemas import get_schema
+from fetchext.data.schemas import get_schema
 
 
 def test_get_schema_valid():

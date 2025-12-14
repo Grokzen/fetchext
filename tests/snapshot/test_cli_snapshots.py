@@ -34,7 +34,7 @@ def test_cli_info_snapshot(capsys, snapshot, tmp_path):
     with (
         patch("sys.argv", ["fext", "info", str(ext_file)]),
         patch(
-            "fetchext.core.get_extension_info",
+            "fetchext.core.core.get_extension_info",
             return_value={"id": "abc", "version": "1.0"},
         ),
     ):

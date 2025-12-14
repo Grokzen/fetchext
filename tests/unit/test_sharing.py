@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import Mock, patch
 from fetchext.sharing.gist import GistUploader
-from fetchext.core import share_report
-from fetchext.exceptions import ConfigError
+from fetchext.core.core import share_report
+from fetchext.core.exceptions import ConfigError
 
 
 @pytest.fixture
@@ -44,7 +44,7 @@ def test_share_report_success(mock_requests, tmp_path):
     mock_response.json.return_value = {"html_url": "https://gist.github.com/123"}
     mock_requests.post.return_value = mock_response
 
-    with patch("fetchext.core.load_config") as mock_config:
+    with patch("fetchext.core.core.load_config") as mock_config:
         mock_config.return_value = {
             "sharing": {"provider": "gist", "github_token": "fake-token"}
         }
@@ -60,7 +60,7 @@ def test_share_report_no_token(tmp_path):
     file_path = tmp_path / "report.md"
     file_path.write_text("Report content")
 
-    with patch("fetchext.core.load_config") as mock_config:
+    with patch("fetchext.core.core.load_config") as mock_config:
         mock_config.return_value = {"sharing": {"provider": "gist"}}
 
         with patch.dict("os.environ", {}, clear=True):

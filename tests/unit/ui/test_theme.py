@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock, patch
 from fetchext.ui.theme import apply_theme, DEFAULT_THEME
-from fetchext.tui import ExtensionApp
+from fetchext.ui.app import ExtensionApp
 
 
 def test_apply_theme_default():
@@ -29,7 +29,7 @@ def test_app_on_mount_applies_theme():
     # Mock query_one to avoid errors when looking for the table
     app.query_one = MagicMock()
 
-    with patch("fetchext.tui.apply_theme", return_value="$var: red;") as mock_apply:
+    with patch("fetchext.ui.app.apply_theme", return_value="$var: red;") as mock_apply:
         app.on_mount()
 
         mock_apply.assert_called_once_with(app)

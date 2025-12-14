@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
-from fetchext.migration import MV3Migrator
-from fetchext.console import console
+from fetchext.workflow.migration import MV3Migrator
+from fetchext.interface.console import console
 
 logger = logging.getLogger(__name__)
 

@@ -10,7 +10,7 @@ try:
 except ImportError:
     STIX_AVAILABLE = False
 
-from ..exceptions import AnalysisError
+from fetchext.core.exceptions  import AnalysisError
 
 logger = logging.getLogger(__name__)
 

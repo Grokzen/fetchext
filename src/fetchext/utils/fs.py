@@ -1,7 +1,7 @@
 import shutil
 import re
 from pathlib import Path
-from ..exceptions import InsufficientDiskSpaceError
+from fetchext.core.exceptions  import InsufficientDiskSpaceError
 
 
 def sanitize_filename(filename: str, replacement: str = "_") -> str:

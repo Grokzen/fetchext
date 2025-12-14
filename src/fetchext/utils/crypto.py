@@ -1,6 +1,6 @@
 import hashlib
 from pathlib import Path
-from ..exceptions import IntegrityError
+from fetchext.core.exceptions  import IntegrityError
 
 
 def verify_file_hash(

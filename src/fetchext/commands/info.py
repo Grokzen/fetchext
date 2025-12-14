@@ -45,14 +45,14 @@ def register(subparsers):
 
 
 def handle_info(args, show_progress=True):
-    from ..inspector import show_info
+    from fetchext.security.inspector  import show_info
 
     show_info(args.file, as_json=args.json)
 
 
 def handle_explain(args, show_progress=True):
-    from ..analysis.explainer import explain_permission
-    from ..console import console
+    from fetchext.analysis .explainer import explain_permission
+    from fetchext.interface.console  import console
     import json
     from rich.panel import Panel
 
@@ -84,8 +84,8 @@ def handle_explain(args, show_progress=True):
 
 
 def handle_history(args, show_progress=True):
-    from ..history import HistoryManager
-    from ..console import console
+    from fetchext.data.history  import HistoryManager
+    from fetchext.interface.console  import console
     from rich.table import Table
     import json
 
@@ -126,6 +126,6 @@ def handle_history(args, show_progress=True):
 
 
 def handle_stats(args, show_progress=True):
-    from ..core import get_repo_stats
+    from fetchext.core.core  import get_repo_stats
 
     get_repo_stats(args.directory, json_output=args.json)

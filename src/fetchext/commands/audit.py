@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
-from .. import core
-from ..console import console
+from fetchext.core import core
+from fetchext.interface.console  import console
 
 
 def register(subparsers):
@@ -193,7 +193,7 @@ def handle_risk(args, show_progress=True):
 
 def handle_scan(args, show_progress=True):
     if args.custom:
-        from ..analysis.rules import RuleEngine
+        from fetchext.analysis .rules import RuleEngine
         from rich.table import Table
 
         try:
@@ -234,7 +234,7 @@ def handle_scan(args, show_progress=True):
             console.print(f"[red]Error during custom scan: {e}[/red]")
 
     elif args.licenses:
-        from ..analysis.licenses import scan_licenses
+        from fetchext.analysis .licenses import scan_licenses
         from rich.table import Table
 
         results = scan_licenses(Path(args.file))
@@ -277,7 +277,7 @@ def handle_report(args, show_progress=True):
 
 def handle_analyze(args, show_progress=True):
     if args.analysis_type == "complexity":
-        from ..analysis.complexity import analyze_complexity
+        from fetchext.analysis .complexity import analyze_complexity
         from rich.table import Table
 
         results = analyze_complexity(Path(args.file), show_progress=show_progress)
@@ -310,7 +310,7 @@ def handle_analyze(args, show_progress=True):
                 console.print("\n[green]No high complexity functions found.[/green]")
 
     elif args.analysis_type == "entropy":
-        from ..analysis.entropy import analyze_entropy
+        from fetchext.analysis .entropy import analyze_entropy
         from rich.table import Table
 
         results = analyze_entropy(Path(args.file), show_progress=show_progress)
@@ -351,7 +351,7 @@ def handle_analyze(args, show_progress=True):
                 console.print(f"\n... and {len(sorted_files) - 20} more files.")
 
     elif args.analysis_type == "domains":
-        from ..analysis.domains import analyze_domains
+        from fetchext.analysis .domains import analyze_domains
         from rich.table import Table
 
         results = analyze_domains(Path(args.file), show_progress=show_progress)
@@ -381,7 +381,7 @@ def handle_analyze(args, show_progress=True):
                 console.print("  [yellow]No URLs found.[/yellow]")
 
     elif args.analysis_type == "secrets":
-        from ..secrets import SecretScanner
+        from fetchext.security.secrets  import SecretScanner
         from rich.table import Table
 
         scanner = SecretScanner()
@@ -414,7 +414,7 @@ def handle_analyze(args, show_progress=True):
                 console.print("\n[green]No secrets found.[/green]")
 
     elif args.analysis_type == "yara":
-        from ..analysis.yara import YaraScanner
+        from fetchext.analysis .yara import YaraScanner
         from rich.table import Table
 
         try:
@@ -453,7 +453,7 @@ def handle_analyze(args, show_progress=True):
             sys.exit(1)
 
     elif args.analysis_type == "permissions":
-        from ..analysis.permissions import PermissionMatrixGenerator
+        from fetchext.analysis .permissions import PermissionMatrixGenerator
         from rich.table import Table
 
         generator = PermissionMatrixGenerator()
@@ -499,7 +499,7 @@ def handle_analyze(args, show_progress=True):
             console.print(table)
 
     elif args.analysis_type == "dynamic":
-        from ..analysis.dynamic import DynamicAnalyzer
+        from fetchext.analysis .dynamic import DynamicAnalyzer
         import asyncio
 
         analyzer = DynamicAnalyzer(args.file, args.output)
@@ -513,7 +513,7 @@ def handle_analyze(args, show_progress=True):
             sys.exit(1)
 
     elif args.analysis_type == "wasm":
-        from ..analysis.wasm import analyze_wasm
+        from fetchext.analysis .wasm import analyze_wasm
         from rich.table import Table
 
         results = analyze_wasm(Path(args.file))
@@ -572,7 +572,7 @@ def handle_analyze(args, show_progress=True):
                 )
 
     elif args.analysis_type == "api-usage":
-        from ..analysis.api_usage import analyze_api_usage
+        from fetchext.analysis .api_usage import analyze_api_usage
         from rich.table import Table
 
         results = analyze_api_usage(Path(args.file), show_progress=show_progress)

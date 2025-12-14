@@ -3,7 +3,7 @@ import logging
 import json
 from pathlib import Path
 from typing import Dict, Set
-from ..utils import open_extension_archive
+from fetchext.utils  import open_extension_archive
 
 logger = logging.getLogger(__name__)
 

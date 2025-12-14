@@ -1,5 +1,5 @@
 from unittest.mock import patch, MagicMock
-from fetchext.config import get_config_value, set_config_value
+from fetchext.data.config import get_config_value, set_config_value
 
 
 def test_get_config_value():
@@ -32,11 +32,11 @@ def test_set_config_value():
     assert config["batch"]["workers"] == 10
 
 
-@patch("fetchext.config.get_config_path")
+@patch("fetchext.data.config.get_config_path")
 @patch("builtins.open", new_callable=MagicMock)
-@patch("fetchext.config.tomli_w.dump")
+@patch("fetchext.data.config.tomli_w.dump")
 def test_save_config(mock_dump, mock_open, mock_get_path):
-    from fetchext.config import save_config
+    from fetchext.data.config import save_config
     from pathlib import Path
 
     mock_path = MagicMock(spec=Path)

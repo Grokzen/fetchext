@@ -1,6 +1,6 @@
 from hypothesis import given, strategies as st
 import pytest
-from fetchext.protobuf import SimpleProtobuf
+from fetchext.core.protobuf import SimpleProtobuf
 
 
 @given(st.binary())

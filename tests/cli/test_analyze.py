@@ -49,7 +49,7 @@ class TestAnalyzeCLI:
     def test_analyze_secrets(self):
         with (
             patch.object(sys, "argv", ["fext", "analyze", "secrets", "test.crx"]),
-            patch("fetchext.secrets.SecretScanner") as MockScanner,
+            patch("fetchext.security.secrets.SecretScanner") as MockScanner,
         ):
             mock_instance = MockScanner.return_value
             mock_instance.scan_extension.return_value = []

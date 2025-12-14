@@ -33,7 +33,7 @@ def register(subparsers):
 
 
 def handle_config_show(args, show_progress=True):
-    from ..config import load_config
+    from fetchext.data.config  import load_config
     import tomli_w
 
     config = load_config()
@@ -41,7 +41,7 @@ def handle_config_show(args, show_progress=True):
 
 
 def handle_config_init(args, show_progress=True):
-    from ..config import create_default_config
+    from fetchext.data.config  import create_default_config
 
     create_default_config(force=args.force)
 
@@ -54,9 +54,9 @@ def handle_config_remote(args, show_progress=True):
         import tomllib
     except ImportError:
         import tomli as tomllib
-    from ..config import get_config_path
-    from ..console import console
-    from ..constants import ExitCode
+    from fetchext.data.config  import get_config_path
+    from fetchext.interface.console  import console
+    from fetchext.core.constants  import ExitCode
 
     url = args.url
     console.print(f"Fetching config from {url}...")
@@ -90,6 +90,6 @@ def handle_config_remote(args, show_progress=True):
 
 
 def handle_setup(args, show_progress=True):
-    from ..setup import run_setup
+    from fetchext.interface.wizard  import run_setup
 
     run_setup()

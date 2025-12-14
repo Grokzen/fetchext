@@ -3,8 +3,8 @@ import concurrent.futures
 import os
 from pathlib import Path
 from typing import Dict, Any, List
-from ..crx import CrxDecoder
-from ..console import console
+from fetchext.core.crx  import CrxDecoder
+from fetchext.interface.console  import console
 
 
 def _analyze_file_content(name: str, content: str) -> List[Dict[str, Any]]:

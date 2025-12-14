@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, patch
 from pathlib import Path
-from fetchext.optimizer import optimize_image, optimize_extension
+from fetchext.workflow.optimizer import optimize_image, optimize_extension
 
 
 class TestOptimizer(unittest.TestCase):
@@ -87,7 +87,7 @@ class TestOptimizer(unittest.TestCase):
         temp_mock.replace.assert_not_called()
         temp_mock.unlink.assert_called()
 
-    @patch("fetchext.optimizer.optimize_image")
+    @patch("fetchext.workflow.optimizer.optimize_image")
     def test_optimize_extension(self, mock_optimize):
         # Setup
         mock_dir = MagicMock(spec=Path)

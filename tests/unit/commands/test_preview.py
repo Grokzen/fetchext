@@ -1,5 +1,5 @@
 from rich.tree import Tree
-from fetchext.preview import build_file_tree
+from fetchext.workflow.preview import build_file_tree
 
 
 def test_build_file_tree_simple():

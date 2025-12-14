@@ -1,8 +1,8 @@
 import csv
 from io import StringIO
 from unittest.mock import MagicMock, patch
-from fetchext.core import search_extension, scan_extension
-from fetchext.scanner import ScanReport, DetectedLibrary
+from fetchext.core.core import search_extension, scan_extension
+from fetchext.security.scanner import ScanReport, DetectedLibrary
 
 
 def test_search_csv_export():
@@ -19,8 +19,8 @@ def test_search_csv_export():
         }
     ]
 
-    with patch("fetchext.core.get_downloader", return_value=mock_downloader):
-        with patch("fetchext.core.SearchCache") as MockCache:
+    with patch("fetchext.core.core.get_downloader", return_value=mock_downloader):
+        with patch("fetchext.core.core.SearchCache") as MockCache:
             MockCache.return_value.get.return_value = None
             with patch("sys.stdout", new=StringIO()) as fake_out:
                 search_extension("firefox", "query", csv_output=True)
@@ -65,7 +65,7 @@ def test_scan_csv_export(fs):
         ],
     )
 
-    with patch("fetchext.scanner.DependencyScanner.scan", return_value=mock_report):
+    with patch("fetchext.security.scanner.DependencyScanner.scan", return_value=mock_report):
         with patch("sys.stdout", new=StringIO()) as fake_out:
             scan_extension("/ext.crx", csv_output=True)
 

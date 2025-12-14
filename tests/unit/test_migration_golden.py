@@ -2,7 +2,7 @@ import pytest
 import json
 import shutil
 from pathlib import Path
-from fetchext.migration import MV3Migrator
+from fetchext.workflow.migration import MV3Migrator
 
 CASES_DIR = Path(__file__).parent.parent.parent / "tests/data/migration/cases"
 

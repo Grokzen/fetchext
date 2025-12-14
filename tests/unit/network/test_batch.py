@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock, patch
 from pathlib import Path
-from fetchext.batch import BatchProcessor
+from fetchext.workflow.batch import BatchProcessor
 
 
 class TestBatchProcessor:
@@ -41,7 +41,7 @@ class TestBatchProcessor:
         fs.create_dir(tmp_path)
         processor = BatchProcessor()
 
-        with patch("fetchext.batch.ChromeDownloader") as MockDownloader:
+        with patch("fetchext.workflow.batch.ChromeDownloader") as MockDownloader:
             mock_instance = MockDownloader.return_value
             mock_instance.extract_id.return_value = "abc"
 

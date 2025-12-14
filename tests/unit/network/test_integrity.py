@@ -2,7 +2,7 @@ import pytest
 import hashlib
 from pathlib import Path
 from fetchext.utils import verify_file_hash
-from fetchext.exceptions import IntegrityError
+from fetchext.core.exceptions import IntegrityError
 
 
 def test_verify_file_hash_success(fs):

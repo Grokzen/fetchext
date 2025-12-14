@@ -1,5 +1,5 @@
 from unittest.mock import patch
-from fetchext.network import get_session
+from fetchext.network.network import get_session
 
 
 def test_get_session_with_proxies():
@@ -13,7 +13,7 @@ def test_get_session_with_proxies():
         }
     }
 
-    with patch("fetchext.network.load_config", return_value=mock_config):
+    with patch("fetchext.network.network.load_config", return_value=mock_config):
         session = get_session()
 
         assert session.proxies["http"] == "http://10.10.1.10:3128"
@@ -24,6 +24,6 @@ def test_get_session_no_proxies():
     """Test that get_session works without proxies."""
     mock_config = {"network": {}}
 
-    with patch("fetchext.network.load_config", return_value=mock_config):
+    with patch("fetchext.network.network.load_config", return_value=mock_config):
         session = get_session()
         assert session.proxies == {}

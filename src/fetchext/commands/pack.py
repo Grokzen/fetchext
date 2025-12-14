@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
-from fetchext.packer import pack_extension
-from fetchext.console import console
+from fetchext.core.packer import pack_extension
+from fetchext.interface.console import console
 
 logger = logging.getLogger(__name__)
 

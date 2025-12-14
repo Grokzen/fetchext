@@ -3,10 +3,10 @@ import logging
 import argparse
 from importlib.metadata import version, PackageNotFoundError
 from rich.logging import RichHandler
-from .console import console
-from .exceptions import FetchextError
-from .constants import ExitCode
-from .commands import (
+from fetchext.interface.console  import console
+from fetchext.core.exceptions  import FetchextError
+from fetchext.core.constants  import ExitCode
+from fetchext.commands  import (
     download,
     search,
     inspect,

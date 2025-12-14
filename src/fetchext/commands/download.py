@@ -1,6 +1,6 @@
 from pathlib import Path
-from .. import core
-from ..config import load_config
+from fetchext.core import core
+from fetchext.data.config  import load_config
 
 
 def register(subparsers):

@@ -1,16 +1,16 @@
 import pytest
 import asyncio
 from unittest.mock import patch, MagicMock
-from fetchext.tui import ExtensionApp, ConfirmationScreen
+from fetchext.ui.app import ExtensionApp, ConfirmationScreen
 
 
 @pytest.fixture
 def mock_core():
     with (
-        patch("fetchext.tui.search_extension") as mock_search,
-        patch("fetchext.tui.download_extension") as mock_download,
-        patch("fetchext.tui.get_repo_stats") as mock_stats,
-        patch("fetchext.tui.HistoryManager") as mock_history,
+        patch("fetchext.ui.app.search_extension") as mock_search,
+        patch("fetchext.ui.app.download_extension") as mock_download,
+        patch("fetchext.ui.app.get_repo_stats") as mock_stats,
+        patch("fetchext.ui.app.HistoryManager") as mock_history,
     ):
         # Setup default returns
         mock_search.return_value = [{"name": "Test Ext", "id": "abc", "version": "1.0"}]

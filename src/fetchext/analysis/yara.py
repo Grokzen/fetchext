@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 from typing import List, Dict, Any
 from zipfile import ZipFile
-from fetchext.crx import CrxDecoder
+from fetchext.core.crx import CrxDecoder
 
 logger = logging.getLogger(__name__)
 

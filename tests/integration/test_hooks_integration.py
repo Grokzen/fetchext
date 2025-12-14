@@ -1,13 +1,13 @@
 import pytest
 from unittest.mock import MagicMock, patch, ANY
 from pathlib import Path
-from fetchext.core import download_extension, extract_extension, generate_unified_report
-from fetchext.hooks import HookContext
+from fetchext.core.core import download_extension, extract_extension, generate_unified_report
+from fetchext.plugins.hooks import HookContext
 
 
 @pytest.fixture
 def mock_downloader():
-    with patch("fetchext.core.get_downloader") as mock:
+    with patch("fetchext.core.core.get_downloader") as mock:
         downloader = MagicMock()
         downloader.extract_id.return_value = "test_id"
         downloader.download.return_value = Path("test.crx")
@@ -17,7 +17,7 @@ def mock_downloader():
 
 @pytest.fixture
 def mock_hook_manager():
-    with patch("fetchext.core.HookManager") as mock:
+    with patch("fetchext.core.core.HookManager") as mock:
         manager = MagicMock()
         mock.return_value = manager
         yield manager
@@ -84,16 +84,16 @@ def test_analysis_hooks(mock_hook_manager, tmp_path):
 
     # Mock all the analysis functions to avoid real work
     with (
-        patch("fetchext.inspector.ExtensionInspector"),
-        patch("fetchext.auditor.ExtensionAuditor") as mock_auditor,
-        patch("fetchext.risk.RiskAnalyzer") as mock_risk,
+        patch("fetchext.security.inspector.ExtensionInspector"),
+        patch("fetchext.security.auditor.ExtensionAuditor") as mock_auditor,
+        patch("fetchext.security.risk.RiskAnalyzer") as mock_risk,
         patch("fetchext.analysis.complexity.analyze_complexity"),
         patch("fetchext.analysis.entropy.analyze_entropy"),
         patch(
             "fetchext.analysis.domains.analyze_domains",
             return_value={"domains": [], "urls": []},
         ),
-        patch("fetchext.secrets.SecretScanner") as mock_secrets,
+        patch("fetchext.security.secrets.SecretScanner") as mock_secrets,
     ):
         mock_auditor.return_value.audit.return_value = DummyReport()
         mock_risk.return_value.analyze.return_value = DummyReport()

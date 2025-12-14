@@ -1,6 +1,6 @@
 import zipfile
 from pathlib import Path
-from fetchext.diff import ExtensionDiffer
+from fetchext.workflow.diff import ExtensionDiffer
 
 
 def create_zip(path, files):

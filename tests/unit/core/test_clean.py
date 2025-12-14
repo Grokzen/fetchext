@@ -1,7 +1,7 @@
 import pytest
 from pathlib import Path
 from unittest.mock import patch
-from fetchext.clean import clean_artifacts
+from fetchext.workflow.clean import clean_artifacts
 
 
 @pytest.fixture

@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 def test_auto_extraction(fs, mocker):
     # Mock downloader
-    mock_downloader_cls = mocker.patch("fetchext.core.ChromeDownloader")
+    mock_downloader_cls = mocker.patch("fetchext.core.core.ChromeDownloader")
     mock_downloader = mock_downloader_cls.return_value
     mock_downloader.extract_id.return_value = "test_id"
 

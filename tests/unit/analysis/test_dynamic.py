@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock, patch, AsyncMock
 from fetchext.analysis.dynamic import DynamicAnalyzer
-from fetchext.exceptions import AnalysisError
+from fetchext.core.exceptions import AnalysisError
 
 
 @pytest.fixture

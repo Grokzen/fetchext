@@ -3,7 +3,7 @@ import yaml
 from pathlib import Path
 from dataclasses import dataclass
 from typing import List
-from ..utils import open_extension_archive
+from fetchext.utils  import open_extension_archive
 
 
 @dataclass

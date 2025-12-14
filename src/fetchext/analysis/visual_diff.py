@@ -2,8 +2,8 @@ import base64
 import difflib
 import mimetypes
 from pathlib import Path
-from ..diff import DiffReport
-from ..utils import open_extension_archive
+from fetchext.workflow.diff  import DiffReport
+from fetchext.utils  import open_extension_archive
 
 HTML_TEMPLATE = """
 <!DOCTYPE html>

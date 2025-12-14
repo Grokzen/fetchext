@@ -1,6 +1,6 @@
 import zipfile
 from pathlib import Path
-from ..crx import CrxDecoder, PartialFileReader
+from fetchext.core.crx  import CrxDecoder, PartialFileReader
 
 
 def open_extension_archive(file_path):

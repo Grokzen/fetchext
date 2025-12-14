@@ -1,6 +1,6 @@
 import json
 from unittest.mock import MagicMock, patch
-from fetchext.risk import RiskAnalyzer
+from fetchext.security.risk import RiskAnalyzer
 
 
 def create_mock_zip(manifest):
@@ -14,7 +14,7 @@ def create_mock_zip(manifest):
 def test_risk_analysis_critical():
     manifest = {"permissions": ["<all_urls>", "tabs", "storage"]}
 
-    with patch("fetchext.risk.open_extension_archive") as mock_open:
+    with patch("fetchext.security.risk.open_extension_archive") as mock_open:
         mock_open.return_value.__enter__.return_value = create_mock_zip(manifest)
 
         analyzer = RiskAnalyzer()
@@ -33,7 +33,7 @@ def test_risk_analysis_critical():
 def test_risk_analysis_safe():
     manifest = {"permissions": ["alarms", "idle"]}
 
-    with patch("fetchext.risk.open_extension_archive") as mock_open:
+    with patch("fetchext.security.risk.open_extension_archive") as mock_open:
         mock_open.return_value.__enter__.return_value = create_mock_zip(manifest)
 
         analyzer = RiskAnalyzer()
@@ -46,7 +46,7 @@ def test_risk_analysis_safe():
 def test_risk_analysis_host_permissions():
     manifest = {"host_permissions": ["*://*.google.com/*"]}
 
-    with patch("fetchext.risk.open_extension_archive") as mock_open:
+    with patch("fetchext.security.risk.open_extension_archive") as mock_open:
         mock_open.return_value.__enter__.return_value = create_mock_zip(manifest)
 
         analyzer = RiskAnalyzer()

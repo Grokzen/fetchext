@@ -1,4 +1,4 @@
-from ..core import share_report
+from fetchext.core.core  import share_report
 
 
 def register(subparsers):

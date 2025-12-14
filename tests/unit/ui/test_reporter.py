@@ -2,25 +2,25 @@ import pytest
 from unittest.mock import patch
 from pathlib import Path
 from datetime import datetime
-from fetchext.reporter import MarkdownReporter
-from fetchext.risk import RiskReport, PermissionRisk
+from fetchext.interface.reporter import MarkdownReporter
+from fetchext.security.risk import RiskReport, PermissionRisk
 
 
 @pytest.fixture
 def mock_inspector():
-    with patch("fetchext.reporter.ExtensionInspector") as mock:
+    with patch("fetchext.interface.reporter.ExtensionInspector") as mock:
         yield mock.return_value
 
 
 @pytest.fixture
 def mock_risk_analyzer():
-    with patch("fetchext.reporter.RiskAnalyzer") as mock:
+    with patch("fetchext.interface.reporter.RiskAnalyzer") as mock:
         yield mock.return_value
 
 
 class TestMarkdownReporter:
     def test_init_file_not_found(self):
-        from fetchext.exceptions import ExtensionError
+        from fetchext.core.exceptions import ExtensionError
 
         with pytest.raises(ExtensionError):
             MarkdownReporter(Path("non_existent.crx"))
@@ -107,8 +107,8 @@ class TestMarkdownReporter:
         # but we need to instantiate the class.
         # We can just patch the init to avoid side effects or use the mocks.
         with (
-            patch("fetchext.reporter.ExtensionInspector"),
-            patch("fetchext.reporter.RiskAnalyzer"),
+            patch("fetchext.interface.reporter.ExtensionInspector"),
+            patch("fetchext.interface.reporter.RiskAnalyzer"),
         ):
             reporter = MarkdownReporter(fake_file)
 

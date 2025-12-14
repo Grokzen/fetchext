@@ -1,6 +1,6 @@
 from pathlib import Path
 from typing import Dict, Set, Any
-from ..inspector import ExtensionInspector
+from fetchext.security.inspector  import ExtensionInspector
 
 
 class PermissionMatrixGenerator:

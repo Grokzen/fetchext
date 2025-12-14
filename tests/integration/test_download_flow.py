@@ -33,7 +33,7 @@ class TestDownloadFlow:
         mock_client.download_file.assert_called_once()
 
     def test_chrome_download_404(self, fs, mocker):
-        from fetchext.exceptions import NetworkError
+        from fetchext.core.exceptions import NetworkError
 
         mock_client = mocker.Mock()
         mock_client.download_file.side_effect = requests.HTTPError("404 Not Found")
@@ -51,7 +51,7 @@ class TestDownloadFlow:
             downloader.download(extension_id, output_dir)
 
     def test_chrome_download_empty_file_cleanup(self, fs, mocker):
-        from fetchext.exceptions import NetworkError
+        from fetchext.core.exceptions import NetworkError
 
         mock_client = mocker.Mock()
         mock_client.download_file.side_effect = NetworkError(

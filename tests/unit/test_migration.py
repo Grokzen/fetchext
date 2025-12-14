@@ -1,5 +1,5 @@
 import json
-from fetchext.migration import MV3Migrator
+from fetchext.workflow.migration import MV3Migrator
 
 
 def test_migrate_mv2_to_mv3(tmp_path):

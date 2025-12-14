@@ -1,7 +1,7 @@
 import pytest
 import json
 from unittest.mock import MagicMock, patch
-from fetchext.auditor import ExtensionAuditor
+from fetchext.security.auditor import ExtensionAuditor
 
 
 @pytest.fixture
@@ -23,7 +23,7 @@ def mock_zip_file():
 
 
 def test_audit_mv2_extension(mock_zip_file):
-    with patch("fetchext.auditor.open_extension_archive") as mock_open:
+    with patch("fetchext.security.auditor.open_extension_archive") as mock_open:
         mock_open.return_value.__enter__.return_value = mock_zip_file
 
         auditor = ExtensionAuditor()
@@ -58,7 +58,7 @@ def test_audit_mv3_extension():
     )
     zf.namelist.return_value = ["manifest.json", "sw.js"]
 
-    with patch("fetchext.auditor.open_extension_archive") as mock_open:
+    with patch("fetchext.security.auditor.open_extension_archive") as mock_open:
         mock_open.return_value.__enter__.return_value = zf
 
         auditor = ExtensionAuditor()
@@ -84,7 +84,7 @@ def test_audit_code_scan():
 
     zf.namelist.return_value = ["manifest.json", "script.js"]
 
-    with patch("fetchext.auditor.open_extension_archive") as mock_open:
+    with patch("fetchext.security.auditor.open_extension_archive") as mock_open:
         mock_open.return_value.__enter__.return_value = zf
 
         auditor = ExtensionAuditor()

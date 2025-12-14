@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock, patch
 from datetime import datetime
-from fetchext.inspector import ExtensionInspector
+from fetchext.security.inspector import ExtensionInspector
 
 
 @pytest.fixture
@@ -27,7 +27,7 @@ def test_get_timeline(inspector):
     mock_zip.infolist.return_value = [info2, info1]  # Unsorted
 
     # Mock open_extension_archive to return our mock zip
-    with patch("fetchext.inspector.open_extension_archive") as mock_open:
+    with patch("fetchext.security.inspector.open_extension_archive") as mock_open:
         mock_open.return_value.__enter__.return_value = mock_zip
 
         timeline = inspector.get_timeline("dummy.crx")
@@ -43,7 +43,7 @@ def test_get_timeline(inspector):
 
 def test_get_timeline_error(inspector):
     with patch(
-        "fetchext.inspector.open_extension_archive",
+        "fetchext.security.inspector.open_extension_archive",
         side_effect=Exception("Corrupt file"),
     ):
         with pytest.raises(ValueError, match="Could not read archive for timeline"):

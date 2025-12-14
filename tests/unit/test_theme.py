@@ -1,4 +1,4 @@
-from fetchext.theme import Theme
+from fetchext.interface.theme import Theme
 
 
 def test_theme_constants():

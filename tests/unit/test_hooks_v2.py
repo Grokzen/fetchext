@@ -1,11 +1,11 @@
 from unittest.mock import MagicMock, patch
-from fetchext.packer import ExtensionPacker
-from fetchext.migration import MV3Migrator
+from fetchext.core.packer import ExtensionPacker
+from fetchext.workflow.migration import MV3Migrator
 
 
 def test_packer_hooks(tmp_path):
     # Mock HookManager
-    with patch("fetchext.packer.HookManager") as MockHookManager:
+    with patch("fetchext.core.packer.HookManager") as MockHookManager:
         mock_manager = MagicMock()
         MockHookManager.return_value = mock_manager
 
@@ -28,7 +28,7 @@ def test_packer_hooks(tmp_path):
 
 def test_migrator_hooks(tmp_path):
     # Mock HookManager
-    with patch("fetchext.migration.HookManager") as MockHookManager:
+    with patch("fetchext.workflow.migration.HookManager") as MockHookManager:
         mock_manager = MagicMock()
         MockHookManager.return_value = mock_manager
 

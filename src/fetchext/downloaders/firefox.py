@@ -2,8 +2,8 @@ import logging
 from pathlib import Path
 from urllib.parse import urlparse
 from .base import BaseDownloader
-from ..exceptions import NetworkError, ExtensionError
-from ..utils import sanitize_filename
+from fetchext.core.exceptions  import NetworkError, ExtensionError
+from fetchext.utils  import sanitize_filename
 
 logger = logging.getLogger(__name__)
 

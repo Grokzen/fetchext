@@ -1,6 +1,6 @@
 import logging
 from unittest.mock import MagicMock, patch
-from fetchext.network import RateLimitedSession
+from fetchext.network.network import RateLimitedSession
 
 
 def test_debug_logging(caplog):

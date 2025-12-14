@@ -1,12 +1,12 @@
 import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
-from ..console import console
-from ..constants import ExitCode
-from ..history import HistoryManager
-from ..core import download_extension
-from ..downloaders import get_downloader_for_browser
-from ..config import load_config
+from fetchext.interface.console  import console
+from fetchext.core.constants  import ExitCode
+from fetchext.data.history  import HistoryManager
+from fetchext.core.core  import download_extension
+from fetchext.downloaders  import get_downloader_for_browser
+from fetchext.data.config  import load_config
 
 logger = logging.getLogger(__name__)
 

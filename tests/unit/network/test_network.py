@@ -2,7 +2,7 @@ import time
 import requests
 from unittest.mock import patch, MagicMock
 from requests.adapters import HTTPAdapter
-from fetchext.network import get_session, USER_AGENTS, RateLimitedSession
+from fetchext.network.network import get_session, USER_AGENTS, RateLimitedSession
 
 
 def test_get_session_defaults():
@@ -82,7 +82,7 @@ def test_rate_limited_session():
 
 
 def test_get_session_config():
-    with patch("fetchext.network.load_config") as mock_config:
+    with patch("fetchext.network.network.load_config") as mock_config:
         mock_config.return_value = {"network": {"rate_limit_delay": 0.5}}
 
         session = get_session()
@@ -91,7 +91,7 @@ def test_get_session_config():
 
 
 def test_get_session_default_delay():
-    with patch("fetchext.network.load_config") as mock_config:
+    with patch("fetchext.network.network.load_config") as mock_config:
         mock_config.return_value = {}
 
         session = get_session()

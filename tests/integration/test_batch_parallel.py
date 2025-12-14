@@ -1,6 +1,6 @@
 import time
 from unittest.mock import patch
-from fetchext.batch import BatchProcessor
+from fetchext.workflow.batch import BatchProcessor
 
 
 class TestBatchParallelism:
@@ -17,7 +17,7 @@ class TestBatchParallelism:
         processor = BatchProcessor()
 
         # Mock ChromeDownloader to sleep for 1 second instead of downloading
-        with patch("fetchext.batch.ChromeDownloader") as MockDownloader:
+        with patch("fetchext.workflow.batch.ChromeDownloader") as MockDownloader:
             mock_instance = MockDownloader.return_value
             mock_instance.extract_id.side_effect = lambda x: x  # Return ID as is
 

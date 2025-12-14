@@ -1,9 +1,9 @@
 import subprocess
 import shutil
 from pathlib import Path
-from ..console import console
-from ..config import load_config, get_config_value
-from ..constants import ExitCode
+from fetchext.interface.console  import console
+from fetchext.data.config  import load_config, get_config_value
+from fetchext.core.constants  import ExitCode
 
 
 def register(subparsers):

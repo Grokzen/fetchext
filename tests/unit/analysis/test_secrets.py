@@ -1,7 +1,7 @@
 import pytest
 from pathlib import Path
 from unittest.mock import MagicMock, patch
-from fetchext.secrets import SecretScanner
+from fetchext.security.secrets import SecretScanner
 
 
 @pytest.fixture
@@ -41,7 +41,7 @@ def test_scan_content_no_secrets(scanner):
     assert len(findings) == 0
 
 
-@patch("fetchext.secrets.open_extension_archive")
+@patch("fetchext.security.secrets.open_extension_archive")
 def test_scan_extension(mock_open, scanner):
     # Mock zip file
     mock_zf = MagicMock()

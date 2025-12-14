@@ -1,14 +1,14 @@
 import pytest
 from unittest.mock import MagicMock, patch
-from fetchext.tui import ExtensionApp, Dashboard
+from fetchext.ui.app import ExtensionApp, Dashboard
 
 
 @pytest.mark.asyncio
 async def test_dashboard_loads_data():
     # Mock dependencies
     with (
-        patch("fetchext.tui.get_repo_stats") as mock_stats,
-        patch("fetchext.tui.HistoryManager") as mock_history_cls,
+        patch("fetchext.ui.app.get_repo_stats") as mock_stats,
+        patch("fetchext.ui.app.HistoryManager") as mock_history_cls,
     ):
         # Setup mocks
         mock_stats_obj = MagicMock()

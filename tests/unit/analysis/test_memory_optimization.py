@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock, patch
 from pathlib import Path
 from fetchext.analysis.yara import YaraScanner
-from fetchext.secrets import SecretScanner
+from fetchext.security.secrets import SecretScanner
 
 
 class TestMemoryOptimization:
@@ -58,7 +58,7 @@ class TestMemoryOptimization:
             # Verify streaming read
             assert mock_source.read.call_count == 3
 
-    @patch("fetchext.secrets.open_extension_archive")
+    @patch("fetchext.security.secrets.open_extension_archive")
     def test_secrets_streaming(self, mock_open_archive):
         mock_zf = MagicMock()
         mock_open_archive.return_value.__enter__.return_value = mock_zf
